@@ -20,7 +20,7 @@ import "google/api/annotations.proto";
 import "protoc-gen-swagger/options/annotations.proto";
 
 // The hello world service definition.
-service HelloWorld {
+service Cluster {
     rpc HelloWorld (HelloWorldMsg) returns (HelloWorldReply) {
         option (google.api.http) = {
       post : "/v1/helloworld"

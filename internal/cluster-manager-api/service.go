@@ -7,6 +7,6 @@ import (
 
 type Server struct {}
 
-func (s *server) HellWorld(ctx context.Context, in *pb.HelloWorldMsg) (*pb.HelloWorldReply, error) {
+func (s *Server) HelloWorld(ctx context.Context, in *pb.HelloWorldMsg) (*pb.HelloWorldReply, error) {
 	return &pb.HelloWorldReply{Message: "Hello " + in.Name}, nil
 }

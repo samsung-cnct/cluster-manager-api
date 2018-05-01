@@ -9,7 +9,7 @@
   
   
   
-    - [HelloWorld](#cluster_manager_api.HelloWorld)
+    - [Cluster](#cluster_manager_api.Cluster)
   
 
 - [api.proto](#api.proto)
@@ -18,7 +18,7 @@
   
   
   
-    - [HelloWorld](#cluster_manager_api.HelloWorld)
+    - [Cluster](#cluster_manager_api.Cluster)
   
 
 - [Scalar Value Types](#scalar-value-types)
@@ -68,9 +68,9 @@ The response to Hello World
  
 
 
-<a name="cluster_manager_api.HelloWorld"/>
+<a name="cluster_manager_api.Cluster"/>
 
-### HelloWorld
+### Cluster
 The hello world service definition.
 
 | Method Name | Request Type | Response Type | Description |
@@ -124,9 +124,9 @@ The response to Hello World
  
 
 
-<a name="cluster_manager_api.HelloWorld"/>
+<a name="cluster_manager_api.Cluster"/>
 
-### HelloWorld
+### Cluster
 The hello world service definition.
 
 | Method Name | Request Type | Response Type | Description |

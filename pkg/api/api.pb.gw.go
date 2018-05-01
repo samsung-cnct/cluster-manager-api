@@ -28,7 +28,7 @@ var _ status.Status
 var _ = runtime.String
 var _ = utilities.NewDoubleArray
 
-func request_HelloWorld_HelloWorld_0(ctx context.Context, marshaler runtime.Marshaler, client HelloWorldClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Cluster_HelloWorld_0(ctx context.Context, marshaler runtime.Marshaler, client ClusterClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq HelloWorldMsg
 	var metadata runtime.ServerMetadata
 
@@ -41,9 +41,9 @@ func request_HelloWorld_HelloWorld_0(ctx context.Context, marshaler runtime.Mars
 
 }
 
-// RegisterHelloWorldHandlerFromEndpoint is same as RegisterHelloWorldHandler but
+// RegisterClusterHandlerFromEndpoint is same as RegisterClusterHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterHelloWorldHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterClusterHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -63,23 +63,23 @@ func RegisterHelloWorldHandlerFromEndpoint(ctx context.Context, mux *runtime.Ser
 		}()
 	}()
 
-	return RegisterHelloWorldHandler(ctx, mux, conn)
+	return RegisterClusterHandler(ctx, mux, conn)
 }
 
-// RegisterHelloWorldHandler registers the http handlers for service HelloWorld to "mux".
+// RegisterClusterHandler registers the http handlers for service Cluster to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterHelloWorldHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterHelloWorldHandlerClient(ctx, mux, NewHelloWorldClient(conn))
+func RegisterClusterHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterClusterHandlerClient(ctx, mux, NewClusterClient(conn))
 }
 
-// RegisterHelloWorldHandler registers the http handlers for service HelloWorld to "mux".
-// The handlers forward requests to the grpc endpoint over the given implementation of "HelloWorldClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "HelloWorldClient"
+// RegisterClusterHandler registers the http handlers for service Cluster to "mux".
+// The handlers forward requests to the grpc endpoint over the given implementation of "ClusterClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ClusterClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "HelloWorldClient" to call the correct interceptors.
-func RegisterHelloWorldHandlerClient(ctx context.Context, mux *runtime.ServeMux, client HelloWorldClient) error {
+// "ClusterClient" to call the correct interceptors.
+func RegisterClusterHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ClusterClient) error {
 
-	mux.Handle("POST", pattern_HelloWorld_HelloWorld_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Cluster_HelloWorld_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		if cn, ok := w.(http.CloseNotifier); ok {
@@ -97,14 +97,14 @@ func RegisterHelloWorldHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_HelloWorld_HelloWorld_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Cluster_HelloWorld_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_HelloWorld_HelloWorld_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Cluster_HelloWorld_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -112,9 +112,9 @@ func RegisterHelloWorldHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 }
 
 var (
-	pattern_HelloWorld_HelloWorld_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "helloworld"}, ""))
+	pattern_Cluster_HelloWorld_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "helloworld"}, ""))
 )
 
 var (
-	forward_HelloWorld_HelloWorld_0 = runtime.ForwardResponseMessage
+	forward_Cluster_HelloWorld_0 = runtime.ForwardResponseMessage
 )

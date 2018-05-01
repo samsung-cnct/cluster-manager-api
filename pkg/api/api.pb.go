@@ -82,64 +82,64 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// Client API for HelloWorld service
+// Client API for Cluster service
 
-type HelloWorldClient interface {
+type ClusterClient interface {
 	HelloWorld(ctx context.Context, in *HelloWorldMsg, opts ...grpc.CallOption) (*HelloWorldReply, error)
 }
 
-type helloWorldClient struct {
+type clusterClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewHelloWorldClient(cc *grpc.ClientConn) HelloWorldClient {
-	return &helloWorldClient{cc}
+func NewClusterClient(cc *grpc.ClientConn) ClusterClient {
+	return &clusterClient{cc}
 }
 
-func (c *helloWorldClient) HelloWorld(ctx context.Context, in *HelloWorldMsg, opts ...grpc.CallOption) (*HelloWorldReply, error) {
+func (c *clusterClient) HelloWorld(ctx context.Context, in *HelloWorldMsg, opts ...grpc.CallOption) (*HelloWorldReply, error) {
 	out := new(HelloWorldReply)
-	err := grpc.Invoke(ctx, "/cluster_manager_api.HelloWorld/HelloWorld", in, out, c.cc, opts...)
+	err := grpc.Invoke(ctx, "/cluster_manager_api.Cluster/HelloWorld", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// Server API for HelloWorld service
+// Server API for Cluster service
 
-type HelloWorldServer interface {
+type ClusterServer interface {
 	HelloWorld(context.Context, *HelloWorldMsg) (*HelloWorldReply, error)
 }
 
-func RegisterHelloWorldServer(s *grpc.Server, srv HelloWorldServer) {
-	s.RegisterService(&_HelloWorld_serviceDesc, srv)
+func RegisterClusterServer(s *grpc.Server, srv ClusterServer) {
+	s.RegisterService(&_Cluster_serviceDesc, srv)
 }
 
-func _HelloWorld_HelloWorld_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Cluster_HelloWorld_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(HelloWorldMsg)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(HelloWorldServer).HelloWorld(ctx, in)
+		return srv.(ClusterServer).HelloWorld(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/cluster_manager_api.HelloWorld/HelloWorld",
+		FullMethod: "/cluster_manager_api.Cluster/HelloWorld",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HelloWorldServer).HelloWorld(ctx, req.(*HelloWorldMsg))
+		return srv.(ClusterServer).HelloWorld(ctx, req.(*HelloWorldMsg))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _HelloWorld_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "cluster_manager_api.HelloWorld",
-	HandlerType: (*HelloWorldServer)(nil),
+var _Cluster_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "cluster_manager_api.Cluster",
+	HandlerType: (*ClusterServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "HelloWorld",
-			Handler:    _HelloWorld_HelloWorld_Handler,
+			Handler:    _Cluster_HelloWorld_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -149,7 +149,7 @@ var _HelloWorld_serviceDesc = grpc.ServiceDesc{
 func init() { proto.RegisterFile("api.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 217 bytes of a gzipped FileDescriptorProto
+	// 221 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4c, 0x2c, 0xc8, 0xd4,
 	0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x4e, 0xce, 0x29, 0x2d, 0x2e, 0x49, 0x2d, 0x8a, 0xcf,
 	0x4d, 0xcc, 0x4b, 0x4c, 0x4f, 0x2d, 0x8a, 0x4f, 0x2c, 0xc8, 0x94, 0x92, 0x49, 0xcf, 0xcf, 0x4f,
@@ -159,9 +159,9 @@ var fileDescriptor0 = []byte{
 	0x3d, 0x52, 0x73, 0x72, 0xf2, 0xc3, 0xf3, 0x8b, 0x72, 0x52, 0x7c, 0x8b, 0xd3, 0x85, 0x84, 0xb8,
 	0x58, 0xf2, 0x12, 0x73, 0x53, 0x25, 0x18, 0x15, 0x18, 0x35, 0x38, 0x83, 0xc0, 0x6c, 0x25, 0x6d,
 	0x2e, 0x7e, 0x84, 0xa2, 0xa0, 0xd4, 0x82, 0x9c, 0x4a, 0x21, 0x09, 0x2e, 0xf6, 0xdc, 0xd4, 0xe2,
-	0xe2, 0xc4, 0x74, 0x98, 0x4a, 0x18, 0xd7, 0xa8, 0x9e, 0x8b, 0x0b, 0xa1, 0x58, 0xa8, 0x10, 0x85,
-	0xa7, 0xa4, 0x87, 0xc5, 0x3f, 0x7a, 0x28, 0x0e, 0x90, 0x52, 0x21, 0xa0, 0x06, 0x6c, 0xbf, 0x92,
-	0x64, 0xd3, 0xe5, 0x27, 0x93, 0x99, 0x84, 0x95, 0xf8, 0xf4, 0xcb, 0x0c, 0xf5, 0x33, 0x40, 0x92,
-	0xe5, 0x20, 0x49, 0x2b, 0x46, 0xad, 0x24, 0x36, 0xb0, 0xcf, 0x8c, 0x01, 0x01, 0x00, 0x00, 0xff,
-	0xff, 0xf4, 0xe3, 0x15, 0x0d, 0x47, 0x01, 0x00, 0x00,
+	0xe2, 0xc4, 0x74, 0x98, 0x4a, 0x18, 0xd7, 0xa8, 0x86, 0x8b, 0xdd, 0x19, 0xe2, 0x68, 0xa1, 0x42,
+	0x2e, 0x2e, 0x84, 0x3e, 0x21, 0x25, 0x3d, 0x2c, 0x9e, 0xd1, 0x43, 0xb1, 0x5d, 0x4a, 0x85, 0x80,
+	0x1a, 0xb0, 0xe5, 0x4a, 0x92, 0x4d, 0x97, 0x9f, 0x4c, 0x66, 0x12, 0x56, 0xe2, 0xd3, 0x2f, 0x33,
+	0xd4, 0xcf, 0x00, 0x49, 0x96, 0x83, 0x24, 0xad, 0x18, 0xb5, 0x92, 0xd8, 0xc0, 0xde, 0x32, 0x06,
+	0x04, 0x00, 0x00, 0xff, 0xff, 0x8a, 0x9a, 0xed, 0xd5, 0x44, 0x01, 0x00, 0x00,
 }
