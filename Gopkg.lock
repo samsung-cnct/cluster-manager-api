@@ -2,10 +2,10 @@
 
 
 [[projects]]
-  branch = "master"
-  name = "github.com/golang/glog"
+  name = "github.com/elazarl/go-bindata-assetfs"
   packages = ["."]
-  revision = "23def4e6c14b4da8ac2ed8007337bc5eb5007998"
+  revision = "30f82fa23fd844bd5bb1e5f216db87fd77b5eb43"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/golang/protobuf"
@@ -19,8 +19,8 @@
     "ptypes/struct",
     "ptypes/timestamp"
   ]
-  revision = "925541529c1fa6821df4e44ce2723319eb2be768"
-  version = "v1.0.0"
+  revision = "b4deda0973fb4c70b50d226b1af49f3da59f5265"
+  version = "v1.1.0"
 
 [[projects]]
   name = "github.com/grpc-ecosystem/grpc-gateway"
@@ -32,6 +32,36 @@
   ]
   revision = "07f5e79768022f9a3265235f0db4ac8c3f675fec"
   version = "v1.3.1"
+
+[[projects]]
+  name = "github.com/inconshreveable/mousetrap"
+  packages = ["."]
+  revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
+  version = "v1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/philips/go-bindata-assetfs"
+  packages = ["."]
+  revision = "3dcc96556217539f50599357fb481ac0dc7439b9"
+
+[[projects]]
+  name = "github.com/soheilhy/cmux"
+  packages = ["."]
+  revision = "e09e9389d85d8492d313d73d1469c029e710623f"
+  version = "v0.1.4"
+
+[[projects]]
+  name = "github.com/spf13/cobra"
+  packages = ["."]
+  revision = "a1f051bc3eba734da4772d60e2d677f47cf93ef4"
+  version = "v0.0.2"
+
+[[projects]]
+  name = "github.com/spf13/pflag"
+  packages = ["."]
+  revision = "583c0c0531f06d5278b7d917446061adc344b5cd"
+  version = "v1.0.1"
 
 [[projects]]
   branch = "master"
@@ -111,6 +141,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d115266518b584ad76f3fb7186b63b1cd1944635d290e52a59fc95fa03e45e65"
+  inputs-digest = "40f68b126f3251621d8af1b9f79dc10335568cac8b886ef8430ff75e323b19fc"
   solver-name = "gps-cdcl"
   solver-version = 1
