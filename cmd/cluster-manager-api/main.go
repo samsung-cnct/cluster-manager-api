@@ -99,6 +99,7 @@ func serveSwagger(mux *http.ServeMux) {
 }
 
 func serveSwaggerJSON(mux *http.ServeMux) {
+	mime.AddExtensionType(".json", "application/json")
 
 	fileServer := http.FileServer(&assetfs.AssetFS{
 		Asset:    swaggerjson.Asset,
