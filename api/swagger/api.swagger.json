@@ -15,7 +15,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/helloworld": {
+    "/api/v1/helloworld": {
       "post": {
         "operationId": "HelloWorld",
         "responses": {

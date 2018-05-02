@@ -23,7 +23,7 @@ import "protoc-gen-swagger/options/annotations.proto";
 service Cluster {
     rpc HelloWorld (HelloWorldMsg) returns (HelloWorldReply) {
         option (google.api.http) = {
-      post : "/v1/helloworld"
+      post : "/api/v1/helloworld"
       body: "*"
     };
     }

@@ -16,9 +16,10 @@ import (
 	"github.com/soheilhy/cmux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/philips/go-bindata-assetfs"
-	"io"
-	"strings"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swagger"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swaggerjson"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/protobuf"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/homepage"
 )
 
 // serveCmd represents the serve command
@@ -62,20 +63,23 @@ func main() {
 	}()
 	go func() {
 		router := http.NewServeMux()
-		router.HandleFunc("/swagger.json", func(w http.ResponseWriter, req *http.Request) {
-			io.Copy(w, strings.NewReader(pb.APISwaggerJSON))
-		})
+		//router.HandleFunc("/swagger.json", func(w http.ResponseWriter, req *http.Request) {
+		//	io.Copy(w, strings.NewReader(pb.APISwaggerJSON))
+		//})
+		//router.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+		//	http.Redirect(w, req, "index.html", 301)
+		//})
 		serveSwagger(router)
+		serveSwaggerJSON(router)
+		serveProtoBuf(router)
+		serveHomepage(router)
 		gwmux := runtime.NewServeMux()
 		pb.RegisterClusterHandlerFromEndpoint(ctx, gwmux, "localhost:9050", dopts)
-		router.Handle("/", gwmux)
+		router.Handle("/api/", gwmux)
 		httpServer := http.Server{
 			Handler: router,
 		}
 		httpServer.Serve(httpListener)
-		//if err := http.Serve(httpListener, gwmux); err != nil {
-		//	log.Fatalln("Unable to start HTTP server")
-		//}
 	}()
 
 	tcpMux.Serve()
@@ -93,3 +97,34 @@ func serveSwagger(mux *http.ServeMux) {
 	prefix := "/swagger-ui/"
 	mux.Handle(prefix, http.StripPrefix(prefix, fileServer))
 }
+
+func serveSwaggerJSON(mux *http.ServeMux) {
+
+	fileServer := http.FileServer(&assetfs.AssetFS{
+		Asset:    swaggerjson.Asset,
+		AssetDir: swaggerjson.AssetDir,
+	})
+	prefix := "/swagger/"
+	mux.Handle(prefix, http.StripPrefix(prefix, fileServer))
+}
+
+func serveProtoBuf(mux *http.ServeMux) {
+
+	fileServer := http.FileServer(&assetfs.AssetFS{
+		Asset:    protobuf.Asset,
+		AssetDir: protobuf.AssetDir,
+	})
+	prefix := "/protobuf/"
+	mux.Handle(prefix, http.StripPrefix(prefix, fileServer))
+}
+
+func serveHomepage(mux *http.ServeMux) {
+
+	fileServer := http.FileServer(&assetfs.AssetFS{
+		Asset:    homepage.Asset,
+		AssetDir: homepage.AssetDir,
+	})
+	prefix := "/"
+	mux.Handle(prefix, http.StripPrefix("/", fileServer))
+}
+
