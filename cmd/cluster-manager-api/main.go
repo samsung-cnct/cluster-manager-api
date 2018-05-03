@@ -20,6 +20,36 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swaggerjson"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/protobuf"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/homepage"
+	"strings"
+	"flag"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
+	"os"
+	"path/filepath"
+	"github.com/venezia/redis-operator/pkg/util"
+
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
+	"github.com/juju/loggo"
+
+	"github.com/samsung-cnct/cluster-controller/pkg/client/clientset/versioned"
+	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
+
+
+	clusterController "github.com/samsung-cnct/cluster-manager-api/pkg/cluster-controller"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"strconv"
+)
+
+var (
+	logger loggo.Logger
+	config *rest.Config
+)
+
+const (
+	kubeconfigDir  = ".kube"
+	kubeconfigFile = "config"
 )
 
 // serveCmd represents the serve command
@@ -36,10 +66,54 @@ func newServer() *service.Server {
 }
 
 func main() {
-	port := 9050
+	var err error
+	logger := util.GetModuleLogger("cmd.redis-operator", loggo.INFO)
+	viperInit()
+
+	// get flags
+	portNumber := viper.GetInt("port")
+	kubeconfigLocation := viper.GetString("kubeconfig")
+
+	// Debug for now
+	logger.Infof("Parsed Variables: \n  Port: %d \n  Kubeconfig: %s", portNumber, kubeconfigLocation)
+
+	if kubeconfigLocation != "" {
+		config, err = clientcmd.BuildConfigFromFlags("", kubeconfigLocation)
+		if err != nil {
+			logErrorAndExit(err)
+		}
+	} else {
+		configPath := filepath.Join(homeDir(), kubeconfigDir, kubeconfigFile)
+		if _, err := os.Stat(configPath); err == nil {
+			config, err = clientcmd.BuildConfigFromFlags("", configPath)
+		} else {
+			config, err = rest.InClusterConfig()
+		}
+	}
+
+	// create the clientSet
+	clientSet, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		logErrorAndExit(err)
+	}
+
+	clusterControllerClient := clusterController.New(clusterController.Config{
+		KubeCli:    clientSet,
+		KubeExtCli: apiextensionsclient.NewForConfigOrDie(config),
+		KrakenCRCli: versioned.NewForConfigOrDie(config),
+	})
+
+	pods, _ := clusterControllerClient.KubeCli.CoreV1().Pods("").List(metav1.ListOptions{})
+	if err != nil {
+		logErrorAndExit(err)
+	}
+
+	logger.Infof("There are %d pods in the cluster", len(pods.Items))
+
+
 	ctx := context.Background()
 
-	conn, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+	conn, err := net.Listen("tcp", fmt.Sprintf(":%d", portNumber))
 	if err != nil {
 		panic(err)
 	}
@@ -74,7 +148,7 @@ func main() {
 		serveProtoBuf(router)
 		serveHomepage(router)
 		gwmux := runtime.NewServeMux()
-		pb.RegisterClusterHandlerFromEndpoint(ctx, gwmux, "localhost:9050", dopts)
+		pb.RegisterClusterHandlerFromEndpoint(ctx, gwmux, "localhost:"+strconv.Itoa(portNumber), dopts)
 		router.Handle("/api/", gwmux)
 		httpServer := http.Server{
 			Handler: router,
@@ -127,5 +201,33 @@ func serveHomepage(mux *http.ServeMux) {
 	})
 	prefix := "/"
 	mux.Handle(prefix, http.StripPrefix("/", fileServer))
+}
+
+func viperInit() {
+	viper.SetEnvPrefix("clustermanagerapi")
+	replacer := strings.NewReplacer("-", "_")
+	viper.SetEnvKeyReplacer(replacer)
+
+	// using standard library "flag" package
+	flag.Int("port", 9050, "Port to listen on")
+	flag.String("kubeconfig", "", "Location of kubeconfig file")
+
+	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+	pflag.Parse()
+	viper.BindPFlags(pflag.CommandLine)
+
+	viper.AutomaticEnv()
+}
+
+func logErrorAndExit(err error) {
+	logger.Criticalf("error: %s", err)
+	os.Exit(1)
+}
+
+func homeDir() string {
+	if h := os.Getenv("HOME"); h != "" {
+		return h
+	}
+	return os.Getenv("USERPROFILE") // windows
 }
 
