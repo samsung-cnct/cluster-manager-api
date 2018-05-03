@@ -1,0 +1,14 @@
+name: cluster-manager-api
+version: 0.1.0
+description: The Cluster Manager API
+keywords:
+- hybridstack
+- api
+home: https://github.com/samsung-cnct/cluster-manager-api
+sources:
+- https://github.com/samsung-cnct/cluster-manager-api
+maintainers:
+- name: Samsung CNCT
+  email: samsung.cloudnative@gmail.com
+icon: https://github.com/samsung-cnct/solas/docs/images/samsung-logo.svg
+engine: gotpl
