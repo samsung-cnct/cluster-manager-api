@@ -2,40 +2,39 @@ package main
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
+	"google.golang.org/grpc"
 	"log"
 	"mime"
 	"net"
 	"net/http"
-	"github.com/spf13/cobra"
-	"google.golang.org/grpc"
 
-	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
 	service "github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api"
+	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
 	"golang.org/x/net/context"
 
-	"github.com/soheilhy/cmux"
+	"flag"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/philips/go-bindata-assetfs"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/homepage"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/protobuf"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swagger"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swaggerjson"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/protobuf"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/homepage"
-	"strings"
-	"flag"
+	"github.com/soheilhy/cmux"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
+	"github.com/venezia/redis-operator/pkg/util"
 	"os"
 	"path/filepath"
-	"github.com/venezia/redis-operator/pkg/util"
+	"strings"
 
+	"github.com/juju/loggo"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	"github.com/juju/loggo"
 
 	"github.com/samsung-cnct/cluster-controller/pkg/client/clientset/versioned"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
-
 
 	clusterController "github.com/samsung-cnct/cluster-manager-api/pkg/cluster-controller"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -98,8 +97,8 @@ func main() {
 	}
 
 	clusterControllerClient := clusterController.New(clusterController.Config{
-		KubeCli:    clientSet,
-		KubeExtCli: apiextensionsclient.NewForConfigOrDie(config),
+		KubeCli:     clientSet,
+		KubeExtCli:  apiextensionsclient.NewForConfigOrDie(config),
 		KrakenCRCli: versioned.NewForConfigOrDie(config),
 	})
 
@@ -109,7 +108,6 @@ func main() {
 	}
 
 	logger.Infof("There are %d pods in the cluster", len(pods.Items))
-
 
 	ctx := context.Background()
 
@@ -230,4 +228,3 @@ func homeDir() string {
 	}
 	return os.Getenv("USERPROFILE") // windows
 }
-
