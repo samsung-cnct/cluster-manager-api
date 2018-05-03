@@ -4,6 +4,8 @@
 ## Table of Contents
 
 - [api.proto](#api.proto)
+    - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
+    - [GetPodCountReply](#cluster_manager_api.GetPodCountReply)
     - [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg)
     - [HelloWorldReply](#cluster_manager_api.HelloWorldReply)
   
@@ -13,6 +15,8 @@
   
 
 - [api.proto](#api.proto)
+    - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
+    - [GetPodCountReply](#cluster_manager_api.GetPodCountReply)
     - [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg)
     - [HelloWorldReply](#cluster_manager_api.HelloWorldReply)
   
@@ -32,6 +36,36 @@
 
 
 
+<a name="cluster_manager_api.GetPodCountMsg"/>
+
+### GetPodCountMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetPodCountReply"/>
+
+### GetPodCountReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| pods | [int32](#int32) |  |  |
+
+
+
+
+
+
 <a name="cluster_manager_api.HelloWorldMsg"/>
 
 ### HelloWorldMsg
@@ -76,6 +110,7 @@ The hello world service definition.
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | HelloWorld | [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg) | [HelloWorldReply](#cluster_manager_api.HelloWorldMsg) |  |
+| GetPodCount | [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg) | [GetPodCountReply](#cluster_manager_api.GetPodCountMsg) |  |
 
  
 
@@ -88,6 +123,36 @@ The hello world service definition.
 
 
 
+<a name="cluster_manager_api.GetPodCountMsg"/>
+
+### GetPodCountMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetPodCountReply"/>
+
+### GetPodCountReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| pods | [int32](#int32) |  |  |
+
+
+
+
+
+
 <a name="cluster_manager_api.HelloWorldMsg"/>
 
 ### HelloWorldMsg
@@ -132,6 +197,7 @@ The hello world service definition.
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | HelloWorld | [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg) | [HelloWorldReply](#cluster_manager_api.HelloWorldMsg) |  |
+| GetPodCount | [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg) | [GetPodCountReply](#cluster_manager_api.GetPodCountMsg) |  |
 
  
 

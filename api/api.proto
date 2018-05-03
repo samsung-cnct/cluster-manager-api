@@ -27,6 +27,12 @@ service Cluster {
       body: "*"
     };
     }
+    rpc GetPodCount (GetPodCountMsg) returns (GetPodCountReply) {
+        option (google.api.http) = {
+            post : "/api/v1/getpodcount"
+            body : "*"
+        };
+    }
 }
 
 // The Hello World request
@@ -38,3 +44,12 @@ message HelloWorldMsg {
 message HelloWorldReply {
     string message = 1;
 }
+
+message GetPodCountMsg {
+    string namespace = 1;
+}
+
+message GetPodCountReply {
+    int32 pods = 1;
+}
+

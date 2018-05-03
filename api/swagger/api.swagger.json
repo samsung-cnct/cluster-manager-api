@@ -15,6 +15,32 @@
     "application/json"
   ],
   "paths": {
+    "/api/v1/getpodcount": {
+      "post": {
+        "operationId": "GetPodCount",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiGetPodCountReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiGetPodCountMsg"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
     "/api/v1/helloworld": {
       "post": {
         "operationId": "HelloWorld",
@@ -43,6 +69,23 @@
     }
   },
   "definitions": {
+    "cluster_manager_apiGetPodCountMsg": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string"
+        }
+      }
+    },
+    "cluster_manager_apiGetPodCountReply": {
+      "type": "object",
+      "properties": {
+        "pods": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "cluster_manager_apiHelloWorldMsg": {
       "type": "object",
       "properties": {
