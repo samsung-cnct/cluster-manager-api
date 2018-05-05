@@ -14,6 +14,7 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 
 	ccapi "github.com/samsung-cnct/cluster-controller/pkg/apis/clustercontroller/v1alpha1"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/helmutil"
 )
 
 var (
@@ -101,6 +102,22 @@ func (s *Server) GetPodCount(ctx context.Context, in *pb.GetPodCountMsg) (*pb.Ge
 	} else if k8sutil.IsResourceAlreadyExistsError(err) {
 		logger.Infof("KrakenCluster -->%s<-- Already exists, cannot recreate", dummy.ObjectMeta.Name)
 	}
+
+	k8sutil.CreateNamespace(k8sutil.GenerateNamespace("test-tiller"), nil)
+	k8sutil.CreateServiceAccount(k8sutil.GenerateServiceAccount("tiller-sa"), "test-tiller", nil)
+	//k8sutil.CreateClusterRole(helmutil.GenerateClusterAdminRole("test-tiller-cadmin"), nil)
+	k8sutil.CreateRole(helmutil.GenerateAdminRole("test-tiller-admin"), "test-tiller", nil)
+	//k8sutil.CreateClusterRoleBinding(k8sutil.GenerateSingleClusterRolebinding("bob-cadmin-binding", "bob", "default","bob-cadmin" ), nil)
+	k8sutil.CreateRoleBinding(k8sutil.GenerateSingleRolebinding("test-tiller-binding", "tiller-sa", "test-tiller","test-tiller-admin"), "test-tiller", nil)
+
+	k8sutil.CreateJob(helmutil.GenerateTillerInitJob(
+		helmutil.TillerInitOptions{
+			BackoffLimit: 4,
+			Name: "tiller-install-job",
+			Namespace: "test-tiller",
+			ServiceAccount: "tiller-sa",
+			Version: "v2.8.2"}), "test-tiller", nil)
+
 
 	logger.Infof("Was asked to get pods on -->%s<-- namespace, answer was -->%d<--", in.Namespace, int32(len(pods.Items)))
 	return &pb.GetPodCountReply{Pods: int32(len(pods.Items))}, nil
