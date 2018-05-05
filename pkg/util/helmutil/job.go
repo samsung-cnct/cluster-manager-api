@@ -1,17 +1,17 @@
 package helmutil
 
-import(
-	batchv1 "k8s.io/api/batch/v1"
+import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 )
 
 type TillerInitOptions struct {
-	Name string
-	Namespace string
+	Name           string
+	Namespace      string
 	ServiceAccount string
-	Version string
-	BackoffLimit int32
+	Version        string
+	BackoffLimit   int32
 }
 
 func GenerateTillerInitJob(options TillerInitOptions) batchv1.Job {
@@ -34,7 +34,7 @@ func GenerateTillerInitJob(options TillerInitOptions) batchv1.Job {
 						},
 					},
 				},
-				RestartPolicy: corev1.RestartPolicyOnFailure,
+				RestartPolicy:      corev1.RestartPolicyOnFailure,
 				ServiceAccountName: options.ServiceAccount,
 			},
 		},

@@ -1,17 +1,17 @@
 package cluster_manager_api
 
 import (
-	"golang.org/x/net/context"
+	"github.com/samsung-cnct/cluster-controller/pkg/client/clientset/versioned"
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
-	"k8s.io/client-go/kubernetes"
-	"github.com/samsung-cnct/cluster-controller/pkg/client/clientset/versioned"
+	"golang.org/x/net/context"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
+	"k8s.io/client-go/kubernetes"
 
-	clusterController "github.com/samsung-cnct/cluster-manager-api/pkg/cluster-controller"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"github.com/juju/loggo"
+	clusterController "github.com/samsung-cnct/cluster-manager-api/pkg/cluster-controller"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	ccapi "github.com/samsung-cnct/cluster-controller/pkg/apis/clustercontroller/v1alpha1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/helmutil"
@@ -21,7 +21,7 @@ var (
 	logger loggo.Logger
 )
 
-type Server struct {}
+type Server struct{}
 
 func (s *Server) HelloWorld(ctx context.Context, in *pb.HelloWorldMsg) (*pb.HelloWorldReply, error) {
 	return &pb.HelloWorldReply{Message: "Hello " + in.Name}, nil
@@ -68,25 +68,25 @@ func (s *Server) GetPodCount(ctx context.Context, in *pb.GetPodCountMsg) (*pb.Ge
 				ClusterName: "my-test-cluster",
 				NodePools: []ccapi.NodeProperties{
 					{
-						Name: "worker",
-						PublicIPs: false,
-						Size: 1,
+						Name:        "worker",
+						PublicIPs:   false,
+						Size:        1,
 						MachineType: "m4.xlarge",
-						Os: "ubuntu:16:04",
+						Os:          "ubuntu:16:04",
 					},
 					{
-						Name: "master",
-						PublicIPs: false,
-						Size: 1,
+						Name:        "master",
+						PublicIPs:   false,
+						Size:        1,
 						MachineType: "m4.xlarge",
-						Os: "ubuntu:16:04",
+						Os:          "ubuntu:16:04",
 					},
 					{
-						Name: "etcd",
-						PublicIPs: false,
-						Size: 3,
+						Name:        "etcd",
+						PublicIPs:   false,
+						Size:        3,
 						MachineType: "m3.medium",
-						Os: "ubuntu:16:04",
+						Os:          "ubuntu:16:04",
 					},
 				},
 				Fabric: ccapi.FabricInfo{
@@ -108,16 +108,15 @@ func (s *Server) GetPodCount(ctx context.Context, in *pb.GetPodCountMsg) (*pb.Ge
 	//k8sutil.CreateClusterRole(helmutil.GenerateClusterAdminRole("test-tiller-cadmin"), nil)
 	k8sutil.CreateRole(helmutil.GenerateAdminRole("test-tiller-admin"), "test-tiller", nil)
 	//k8sutil.CreateClusterRoleBinding(k8sutil.GenerateSingleClusterRolebinding("bob-cadmin-binding", "bob", "default","bob-cadmin" ), nil)
-	k8sutil.CreateRoleBinding(k8sutil.GenerateSingleRolebinding("test-tiller-binding", "tiller-sa", "test-tiller","test-tiller-admin"), "test-tiller", nil)
+	k8sutil.CreateRoleBinding(k8sutil.GenerateSingleRolebinding("test-tiller-binding", "tiller-sa", "test-tiller", "test-tiller-admin"), "test-tiller", nil)
 
 	k8sutil.CreateJob(helmutil.GenerateTillerInitJob(
 		helmutil.TillerInitOptions{
-			BackoffLimit: 4,
-			Name: "tiller-install-job",
-			Namespace: "test-tiller",
+			BackoffLimit:   4,
+			Name:           "tiller-install-job",
+			Namespace:      "test-tiller",
 			ServiceAccount: "tiller-sa",
-			Version: "v2.8.2"}), "test-tiller", nil)
-
+			Version:        "v2.8.2"}), "test-tiller", nil)
 
 	logger.Infof("Was asked to get pods on -->%s<-- namespace, answer was -->%d<--", in.Namespace, int32(len(pods.Items)))
 	return &pb.GetPodCountReply{Pods: int32(len(pods.Items))}, nil

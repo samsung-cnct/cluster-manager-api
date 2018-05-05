@@ -1,26 +1,25 @@
 package main
 
 import (
-	"fmt"
-	"net"
 	"flag"
+	"fmt"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"github.com/soheilhy/cmux"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"net"
 	"strings"
 
 	"github.com/juju/loggo"
-	"k8s.io/client-go/rest"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/apiserver"
+	"k8s.io/client-go/rest"
 )
 
 var (
 	logger loggo.Logger
 	config *rest.Config
 )
-
 
 func main() {
 	var err error
@@ -42,7 +41,7 @@ func main() {
 	}
 
 	logger.Infof("Creating Web Server")
-	tcpMux := createWebServer(&apiserver.ServerOptions{ PortNumber: portNumber })
+	tcpMux := createWebServer(&apiserver.ServerOptions{PortNumber: portNumber})
 
 	logger.Infof("Starting to serve requests on port %d", portNumber)
 	tcpMux.Serve()
@@ -60,7 +59,6 @@ func createWebServer(options *apiserver.ServerOptions) cmux.CMux {
 	return tcpMux
 }
 
-
 func viperInit() {
 	viper.SetEnvPrefix("clustermanagerapi")
 	replacer := strings.NewReplacer("-", "_")
@@ -76,4 +74,3 @@ func viperInit() {
 
 	viper.AutomaticEnv()
 }
-

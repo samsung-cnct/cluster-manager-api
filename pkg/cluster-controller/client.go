@@ -7,8 +7,8 @@ import (
 
 	api "github.com/samsung-cnct/cluster-controller/pkg/apis/clustercontroller/v1alpha1"
 
-	kwatch "k8s.io/apimachinery/pkg/watch"
 	"github.com/sirupsen/logrus"
+	kwatch "k8s.io/apimachinery/pkg/watch"
 
 	"time"
 )
@@ -31,9 +31,7 @@ type Event struct {
 type Client struct {
 	logger *logrus.Entry
 	Config
-
 }
-
 
 // Config object
 type Config struct {

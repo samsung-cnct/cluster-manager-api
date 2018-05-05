@@ -1,8 +1,8 @@
 package helmutil
 
 import (
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	rbac "k8s.io/api/rbac/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func GenerateClusterAdminRole(name string) rbac.ClusterRole {
@@ -14,7 +14,7 @@ func GenerateClusterAdminRole(name string) rbac.ClusterRole {
 			{
 				APIGroups: []string{"*"},
 				Resources: []string{"*"},
-				Verbs: []string{"*"},
+				Verbs:     []string{"*"},
 			},
 		},
 	}
@@ -29,9 +29,8 @@ func GenerateAdminRole(name string) rbac.Role {
 			{
 				APIGroups: []string{"*"},
 				Resources: []string{"*"},
-				Verbs: []string{"*"},
+				Verbs:     []string{"*"},
 			},
 		},
 	}
 }
-

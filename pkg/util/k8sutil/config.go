@@ -3,13 +3,13 @@ package k8sutil
 import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	"path/filepath"
 	"os"
+	"path/filepath"
 )
 
 var (
 	KubeConfigLocation string
-	DefaultConfig *rest.Config
+	DefaultConfig      *rest.Config
 )
 
 const (

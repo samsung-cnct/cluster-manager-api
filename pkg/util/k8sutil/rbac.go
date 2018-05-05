@@ -1,10 +1,10 @@
 package k8sutil
 
 import (
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/rest"
-	"k8s.io/client-go/kubernetes"
 	rbac "k8s.io/api/rbac/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 )
 
 func GenerateSingleClusterRolebinding(name string, subject string, subjectNamespace string, roleName string) rbac.ClusterRoleBinding {
@@ -12,16 +12,16 @@ func GenerateSingleClusterRolebinding(name string, subject string, subjectNamesp
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
 		},
-		Subjects: []rbac.Subject {
+		Subjects: []rbac.Subject{
 			{
-				Kind: "ServiceAccount",
-				Name: subject,
+				Kind:      "ServiceAccount",
+				Name:      subject,
 				Namespace: subjectNamespace,
 			},
 		},
 		RoleRef: rbac.RoleRef{
-			Kind: "ClusterRole",
-			Name: roleName,
+			Kind:     "ClusterRole",
+			Name:     roleName,
 			APIGroup: "rbac.authorization.k8s.io",
 		},
 	}
@@ -32,21 +32,20 @@ func GenerateSingleRolebinding(name string, subject string, subjectNamespace str
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
 		},
-		Subjects: []rbac.Subject {
+		Subjects: []rbac.Subject{
 			{
-				Kind: "ServiceAccount",
-				Name: subject,
+				Kind:      "ServiceAccount",
+				Name:      subject,
 				Namespace: subjectNamespace,
 			},
 		},
 		RoleRef: rbac.RoleRef{
-			Kind: "Role",
-			Name: roleName,
+			Kind:     "Role",
+			Name:     roleName,
 			APIGroup: "rbac.authorization.k8s.io",
 		},
 	}
 }
-
 
 func CreateClusterRole(schema rbac.ClusterRole, config *rest.Config) (bool, error) {
 	if config == nil {

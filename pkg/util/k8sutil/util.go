@@ -2,8 +2,8 @@ package k8sutil
 
 import (
 	"github.com/juju/loggo"
-	"os"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
+	"os"
 )
 
 var (

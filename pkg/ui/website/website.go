@@ -1,14 +1,14 @@
 package website
 
 import (
-	"net/http"
 	"mime"
+	"net/http"
 
 	"github.com/philips/go-bindata-assetfs"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swaggerjson"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/protobuf"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/homepage"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/protobuf"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swagger"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swaggerjson"
 )
 
 func AddWebsiteHandles(mux *http.ServeMux) {
@@ -61,4 +61,3 @@ func serveHomepage(mux *http.ServeMux) {
 	prefix := "/"
 	mux.Handle(prefix, http.StripPrefix("/", fileServer))
 }
-

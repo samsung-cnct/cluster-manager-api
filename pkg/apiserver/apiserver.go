@@ -1,18 +1,18 @@
 package apiserver
 
 import (
+	"github.com/juju/loggo"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
-	"github.com/juju/loggo"
 
-	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
-	service "github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api"
-	"net/http"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/website"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"strconv"
 	"context"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	service "github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api"
+	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/website"
+	"net/http"
+	"strconv"
 )
 
 var (
@@ -70,4 +70,3 @@ func addgRPCRestGateway(router *http.ServeMux, grpcPortNumber int) {
 func newgRPCServiceServer() *service.Server {
 	return new(service.Server)
 }
-
