@@ -1,11 +1,11 @@
 type: chart
-rootfs:
+builds:
   - image: samsung_cnct/cluster-manager-api
     context: cluster-manager-api
     chart: cluster-manager-api
     value: image.repo
     dockerContext: .
-configs:
+deployments:
   - chart: cluster-manager-api
     timeout: 600
     retries: 2
