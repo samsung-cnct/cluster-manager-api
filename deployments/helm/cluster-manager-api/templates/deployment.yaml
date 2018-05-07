@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: {{ template "name" . }}
-        image: "{{.Values.image.repo}}:{{.Values.image.tag}}"
+        image: "{{.Values.image.repo}}"
         imagePullPolicy: "Always"
         ports:
         - containerPort: {{.Values.service.port}}
