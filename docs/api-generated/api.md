@@ -8,12 +8,20 @@
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
+    - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
+    - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
+    - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
+    - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
     - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
     - [GetPodCountReply](#cluster_manager_api.GetPodCountReply)
     - [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg)
     - [HelloWorldReply](#cluster_manager_api.HelloWorldReply)
+    - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
+    - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
+    - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
+    - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
   
   
   
@@ -25,12 +33,20 @@
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
+    - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
+    - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
+    - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
+    - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
     - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
     - [GetPodCountReply](#cluster_manager_api.GetPodCountReply)
     - [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg)
     - [HelloWorldReply](#cluster_manager_api.HelloWorldReply)
+    - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
+    - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
+    - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
+    - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
   
   
   
@@ -110,6 +126,74 @@
 
 
 
+<a name="cluster_manager_api.DeleteHelmChartMsg"/>
+
+### DeleteHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [string](#string) |  | Chart Name |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteHelmChartReply"/>
+
+### DeleteHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericHelmChart"/>
+
+### GenericHelmChart
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the name of the deployment |
+| namespace | [string](#string) |  | What is the namespace to deploy the application to |
+| repo | [string](#string) |  | What is the chart repository |
+| chart | [string](#string) |  | What is the chart name |
+| values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericTillerSetting"/>
+
+### GenericTillerSetting
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | What is the tiller namespace |
+| version | [string](#string) |  | What is the version of tiller/helm |
+
+
+
+
+
+
 <a name="cluster_manager_api.GetClusterMsg"/>
 
 ### GetClusterMsg
@@ -201,6 +285,74 @@ The response to Hello World
 
 
 
+
+<a name="cluster_manager_api.InstallHelmChartMsg"/>
+
+### InstallHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
+
+
+
+
+
+
+<a name="cluster_manager_api.InstallHelmChartReply"/>
+
+### InstallHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerMsg"/>
+
+### ProvisionTillerMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| namespace | [string](#string) |  | Namespace tiller should be installed in |
+| version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
+| cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
+| admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerReply"/>
+
+### ProvisionTillerReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
  
 
  
@@ -220,6 +372,9 @@ The response to Hello World
 | CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
+| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerMsg) | Will install (or reinstall) tiller |
+| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartMsg) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
+| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartMsg) | Will delete deployed helm chart |
 
  
 
@@ -294,6 +449,74 @@ The response to Hello World
 
 
 
+<a name="cluster_manager_api.DeleteHelmChartMsg"/>
+
+### DeleteHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [string](#string) |  | Chart Name |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteHelmChartReply"/>
+
+### DeleteHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericHelmChart"/>
+
+### GenericHelmChart
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the name of the deployment |
+| namespace | [string](#string) |  | What is the namespace to deploy the application to |
+| repo | [string](#string) |  | What is the chart repository |
+| chart | [string](#string) |  | What is the chart name |
+| values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericTillerSetting"/>
+
+### GenericTillerSetting
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | What is the tiller namespace |
+| version | [string](#string) |  | What is the version of tiller/helm |
+
+
+
+
+
+
 <a name="cluster_manager_api.GetClusterMsg"/>
 
 ### GetClusterMsg
@@ -385,6 +608,74 @@ The response to Hello World
 
 
 
+
+<a name="cluster_manager_api.InstallHelmChartMsg"/>
+
+### InstallHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
+
+
+
+
+
+
+<a name="cluster_manager_api.InstallHelmChartReply"/>
+
+### InstallHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerMsg"/>
+
+### ProvisionTillerMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| namespace | [string](#string) |  | Namespace tiller should be installed in |
+| version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
+| cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
+| admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerReply"/>
+
+### ProvisionTillerReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
  
 
  
@@ -404,6 +695,9 @@ The response to Hello World
 | CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
+| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerMsg) | Will install (or reinstall) tiller |
+| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartMsg) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
+| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartMsg) | Will delete deployed helm chart |
 
  
 
