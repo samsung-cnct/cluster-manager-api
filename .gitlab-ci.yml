@@ -1,0 +1,19 @@
+stages:
+ - build
+
+build:branch:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    IMAGE_URI: $CI_REGISTRY_IMAGE:branch-$CI_COMMIT_REF_NAME-$CI_JOB_ID
+    DOCKER_DRIVER: overlay2
+    #  DOCKER_HOST: tcp://localhost:2375
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker build -t $IMAGE_URI -f build/docker/cluster-manager-api/Dockerfile .
+    - docker push $IMAGE_URI
+
