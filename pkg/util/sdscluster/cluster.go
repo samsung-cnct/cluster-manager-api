@@ -28,7 +28,7 @@ func CreateSDSCluster(cluster sdsapi.SDSCluster, namespace string, config *rest.
 	SetLogger()
 	client := prepareRestClient(config)
 
-	_, err = client.SdsclusterV1alpha1().SDSClusters(namespace).Create(&cluster)
+	_, err = client.CmaV1alpha1().SDSClusters(namespace).Create(&cluster)
 	if err != nil && !k8sutil.IsResourceAlreadyExistsError(err) {
 		logger.Infof("SDSCluster -->%s<-- Cannot be created, error was %v", cluster.ObjectMeta.Name, err)
 		return false, err
@@ -45,7 +45,7 @@ func DeleteSDSCluster(name string, namespace string, config *rest.Config) (bool,
 	SetLogger()
 	client := prepareRestClient(config)
 
-	err = client.SdsclusterV1alpha1().SDSClusters(namespace).Delete(name, &metav1.DeleteOptions{})
+	err = client.CmaV1alpha1().SDSClusters(namespace).Delete(name, &metav1.DeleteOptions{})
 	if err != nil {
 		logger.Infof("SDSCluster -->%s<-- Cannot be Deleted, error was %v", name, err)
 		return false, err
@@ -58,7 +58,7 @@ func GetSDSCluster(name string, namespace string, config *rest.Config) (*sdsapi.
 	SetLogger()
 	client := prepareRestClient(config)
 
-	cluster, err := client.SdsclusterV1alpha1().SDSClusters(namespace).Get(name, metav1.GetOptions{})
+	cluster, err := client.CmaV1alpha1().SDSClusters(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		logger.Infof("SDSCluster -->%s<-- Cannot be Retrieved, error was %v", name, err)
 		return nil, err

@@ -15,6 +15,8 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/apiserver"
 	"k8s.io/client-go/rest"
 	ccworkqueue "github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil/workqueue"
+	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/sdscluster"
 )
 
 var (
@@ -41,7 +43,10 @@ func main() {
 		logger.Infof("Was unable to generate a valid kubernetes default config, some functionality may be broken.  Error was %v", err)
 	}
 
-	// Star the KrakenCluster CR Watcher
+	// Install the CRD
+	k8sutil.CreateCRD(apiextensionsclient.NewForConfigOrDie(k8sutil.DefaultConfig), sdscluster.GenerateCRD() )
+
+	// Start the KrakenCluster CR Watcher
 	go func() {
 		ccworkqueue.ListenToKrakenClusterChanges(nil)
 	}()

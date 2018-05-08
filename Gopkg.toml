@@ -31,6 +31,10 @@
 
 [[constraint]]
   branch = "master"
+  name = "github.com/go-openapi/spec"
+
+[[constraint]]
+  branch = "master"
   name = "github.com/golang/glog"
 
 [[constraint]]
@@ -96,6 +100,10 @@
 [[constraint]]
   name = "k8s.io/client-go"
   version = "7.0.0"
+
+[[constraint]]
+  branch = "master"
+  name = "k8s.io/kube-openapi"
 
 [prune]
   go-tests = true

@@ -8,7 +8,7 @@ import (
 
 const (
 	SDSClusterResourceKind   = "SDSCluster"
-	SDSClusterResourcePlural = "SDSClusters"
+	SDSClusterResourcePlural = "sdsclusters"
 	groupName           = "cma.sds.samsung.com"
 )
 
@@ -17,7 +17,7 @@ var (
 	AddToScheme   = SchemeBuilder.AddToScheme
 
 	SchemeGroupVersion = schema.GroupVersion{Group: groupName, Version: "v1alpha1"}
-	RedisCRDName       = SDSClusterResourcePlural + "." + groupName
+	SDSClusterCRDName       = SDSClusterResourcePlural + "." + groupName
 )
 
 // addKnownTypes adds the set of types defined in this package to the supplied scheme.
