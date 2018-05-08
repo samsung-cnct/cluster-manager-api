@@ -54,7 +54,7 @@ type sDSClusters struct {
 }
 
 // newSDSClusters returns a SDSClusters
-func newSDSClusters(c *SdsclusterV1alpha1Client, namespace string) *sDSClusters {
+func newSDSClusters(c *CmaV1alpha1Client, namespace string) *sDSClusters {
 	return &sDSClusters{
 		client: c.RESTClient(),
 		ns:     namespace,

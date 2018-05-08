@@ -20,8 +20,8 @@ package fake
 
 import (
 	clientset "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
-	sdsclusterv1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/sdscluster/v1alpha1"
-	fakesdsclusterv1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/sdscluster/v1alpha1/fake"
+	cmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/sdscluster/v1alpha1"
+	fakecmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/sdscluster/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -70,12 +70,12 @@ func (c *Clientset) Discovery() discovery.DiscoveryInterface {
 
 var _ clientset.Interface = &Clientset{}
 
-// SdsclusterV1alpha1 retrieves the SdsclusterV1alpha1Client
-func (c *Clientset) SdsclusterV1alpha1() sdsclusterv1alpha1.SdsclusterV1alpha1Interface {
-	return &fakesdsclusterv1alpha1.FakeSdsclusterV1alpha1{Fake: &c.Fake}
+// CmaV1alpha1 retrieves the CmaV1alpha1Client
+func (c *Clientset) CmaV1alpha1() cmav1alpha1.CmaV1alpha1Interface {
+	return &fakecmav1alpha1.FakeCmaV1alpha1{Fake: &c.Fake}
 }
 
-// Sdscluster retrieves the SdsclusterV1alpha1Client
-func (c *Clientset) Sdscluster() sdsclusterv1alpha1.SdsclusterV1alpha1Interface {
-	return &fakesdsclusterv1alpha1.FakeSdsclusterV1alpha1{Fake: &c.Fake}
+// Cma retrieves the CmaV1alpha1Client
+func (c *Clientset) Cma() cmav1alpha1.CmaV1alpha1Interface {
+	return &fakecmav1alpha1.FakeCmaV1alpha1{Fake: &c.Fake}
 }

@@ -30,13 +30,13 @@ import (
 
 // FakeSDSClusters implements SDSClusterInterface
 type FakeSDSClusters struct {
-	Fake *FakeSdsclusterV1alpha1
+	Fake *FakeCmaV1alpha1
 	ns   string
 }
 
-var sdsclustersResource = schema.GroupVersionResource{Group: "sdscluster", Version: "v1alpha1", Resource: "sdsclusters"}
+var sdsclustersResource = schema.GroupVersionResource{Group: "cma.sds.samsung.com", Version: "v1alpha1", Resource: "sdsclusters"}
 
-var sdsclustersKind = schema.GroupVersionKind{Group: "sdscluster", Version: "v1alpha1", Kind: "SDSCluster"}
+var sdsclustersKind = schema.GroupVersionKind{Group: "cma.sds.samsung.com", Version: "v1alpha1", Kind: "SDSCluster"}
 
 // Get takes name of the sDSCluster, and returns the corresponding sDSCluster object, and an error if there is any.
 func (c *FakeSDSClusters) Get(name string, options v1.GetOptions) (result *v1alpha1.SDSCluster, err error) {

@@ -20,7 +20,7 @@ package versioned
 
 import (
 	glog "github.com/golang/glog"
-	sdsclusterv1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/sdscluster/v1alpha1"
+	cmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/sdscluster/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
@@ -28,27 +28,27 @@ import (
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	SdsclusterV1alpha1() sdsclusterv1alpha1.SdsclusterV1alpha1Interface
+	CmaV1alpha1() cmav1alpha1.CmaV1alpha1Interface
 	// Deprecated: please explicitly pick a version if possible.
-	Sdscluster() sdsclusterv1alpha1.SdsclusterV1alpha1Interface
+	Cma() cmav1alpha1.CmaV1alpha1Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	sdsclusterV1alpha1 *sdsclusterv1alpha1.SdsclusterV1alpha1Client
+	cmaV1alpha1 *cmav1alpha1.CmaV1alpha1Client
 }
 
-// SdsclusterV1alpha1 retrieves the SdsclusterV1alpha1Client
-func (c *Clientset) SdsclusterV1alpha1() sdsclusterv1alpha1.SdsclusterV1alpha1Interface {
-	return c.sdsclusterV1alpha1
+// CmaV1alpha1 retrieves the CmaV1alpha1Client
+func (c *Clientset) CmaV1alpha1() cmav1alpha1.CmaV1alpha1Interface {
+	return c.cmaV1alpha1
 }
 
-// Deprecated: Sdscluster retrieves the default version of SdsclusterClient.
+// Deprecated: Cma retrieves the default version of CmaClient.
 // Please explicitly pick a version.
-func (c *Clientset) Sdscluster() sdsclusterv1alpha1.SdsclusterV1alpha1Interface {
-	return c.sdsclusterV1alpha1
+func (c *Clientset) Cma() cmav1alpha1.CmaV1alpha1Interface {
+	return c.cmaV1alpha1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -67,7 +67,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	}
 	var cs Clientset
 	var err error
-	cs.sdsclusterV1alpha1, err = sdsclusterv1alpha1.NewForConfig(&configShallowCopy)
+	cs.cmaV1alpha1, err = cmav1alpha1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 // panics if there is an error in the config.
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
-	cs.sdsclusterV1alpha1 = sdsclusterv1alpha1.NewForConfigOrDie(c)
+	cs.cmaV1alpha1 = cmav1alpha1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
 	return &cs
@@ -93,7 +93,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.sdsclusterV1alpha1 = sdsclusterv1alpha1.New(c)
+	cs.cmaV1alpha1 = cmav1alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

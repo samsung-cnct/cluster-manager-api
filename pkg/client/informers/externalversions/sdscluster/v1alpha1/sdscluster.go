@@ -61,13 +61,13 @@ func NewFilteredSDSClusterInformer(client clientset.Interface, namespace string,
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SdsclusterV1alpha1().SDSClusters(namespace).List(options)
+				return client.CmaV1alpha1().SDSClusters(namespace).List(options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SdsclusterV1alpha1().SDSClusters(namespace).Watch(options)
+				return client.CmaV1alpha1().SDSClusters(namespace).Watch(options)
 			},
 		},
 		&sdscluster_v1alpha1.SDSCluster{},

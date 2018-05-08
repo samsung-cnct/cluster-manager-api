@@ -123,9 +123,9 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Sdscluster() sdscluster.Interface
+	Cma() sdscluster.Interface
 }
 
-func (f *sharedInformerFactory) Sdscluster() sdscluster.Interface {
+func (f *sharedInformerFactory) Cma() sdscluster.Interface {
 	return sdscluster.New(f, f.namespace, f.tweakListOptions)
 }

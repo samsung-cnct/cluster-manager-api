@@ -25,22 +25,22 @@ import (
 	rest "k8s.io/client-go/rest"
 )
 
-type SdsclusterV1alpha1Interface interface {
+type CmaV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	SDSClustersGetter
 }
 
-// SdsclusterV1alpha1Client is used to interact with features provided by the sdscluster group.
-type SdsclusterV1alpha1Client struct {
+// CmaV1alpha1Client is used to interact with features provided by the cma.sds.samsung.com group.
+type CmaV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *SdsclusterV1alpha1Client) SDSClusters(namespace string) SDSClusterInterface {
+func (c *CmaV1alpha1Client) SDSClusters(namespace string) SDSClusterInterface {
 	return newSDSClusters(c, namespace)
 }
 
-// NewForConfig creates a new SdsclusterV1alpha1Client for the given config.
-func NewForConfig(c *rest.Config) (*SdsclusterV1alpha1Client, error) {
+// NewForConfig creates a new CmaV1alpha1Client for the given config.
+func NewForConfig(c *rest.Config) (*CmaV1alpha1Client, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -49,12 +49,12 @@ func NewForConfig(c *rest.Config) (*SdsclusterV1alpha1Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &SdsclusterV1alpha1Client{client}, nil
+	return &CmaV1alpha1Client{client}, nil
 }
 
-// NewForConfigOrDie creates a new SdsclusterV1alpha1Client for the given config and
+// NewForConfigOrDie creates a new CmaV1alpha1Client for the given config and
 // panics if there is an error in the config.
-func NewForConfigOrDie(c *rest.Config) *SdsclusterV1alpha1Client {
+func NewForConfigOrDie(c *rest.Config) *CmaV1alpha1Client {
 	client, err := NewForConfig(c)
 	if err != nil {
 		panic(err)
@@ -62,9 +62,9 @@ func NewForConfigOrDie(c *rest.Config) *SdsclusterV1alpha1Client {
 	return client
 }
 
-// New creates a new SdsclusterV1alpha1Client for the given RESTClient.
-func New(c rest.Interface) *SdsclusterV1alpha1Client {
-	return &SdsclusterV1alpha1Client{c}
+// New creates a new CmaV1alpha1Client for the given RESTClient.
+func New(c rest.Interface) *CmaV1alpha1Client {
+	return &CmaV1alpha1Client{c}
 }
 
 func setConfigDefaults(config *rest.Config) error {
@@ -82,7 +82,7 @@ func setConfigDefaults(config *rest.Config) error {
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *SdsclusterV1alpha1Client) RESTClient() rest.Interface {
+func (c *CmaV1alpha1Client) RESTClient() rest.Interface {
 	if c == nil {
 		return nil
 	}
