@@ -31,8 +31,8 @@ option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
     };
   };
   external_docs: {
-    url: "https://github.com/grpc-ecosystem/grpc-gateway";
-    description: "More about gRPC-Gateway";
+    url: "https://github.com/samsung-cnct/cluster-manager-api";
+    description: "More about Cluster Manager API";
   }
   schemes: HTTP;
   schemes: HTTPS;

@@ -46,12 +46,6 @@ func (s *Server) GetPodCount(ctx context.Context, in *pb.GetPodCountMsg) (*pb.Ge
 		return nil, err
 	}
 
-
-
-	//tempCluster, err := clusterControllerClient.KrakenCRCli.SamsungV1alpha1().KrakenClusters("default").Get("my-test-cluster", metav1.GetOptions{})
-	//tempCluster.ObjectMeta.Labels
-
-
 	logger.Infof("Was asked to get pods on -->%s<-- namespace, answer was -->%d<--", in.Namespace, int32(len(pods.Items)))
 	return &pb.GetPodCountReply{Pods: int32(len(pods.Items))}, nil
 

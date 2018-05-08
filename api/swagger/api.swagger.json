@@ -470,7 +470,7 @@
     }
   },
   "externalDocs": {
-    "description": "More about gRPC-Gateway",
-    "url": "https://github.com/grpc-ecosystem/grpc-gateway"
+    "description": "More about Cluster Manager API",
+    "url": "https://github.com/samsung-cnct/cluster-manager-api"
   }
 }
