@@ -14,6 +14,7 @@ import (
 	"github.com/juju/loggo"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/apiserver"
 	"k8s.io/client-go/rest"
+	ccworkqueue "github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil/workqueue"
 )
 
 var (
@@ -39,6 +40,11 @@ func main() {
 	if err != nil {
 		logger.Infof("Was unable to generate a valid kubernetes default config, some functionality may be broken.  Error was %v", err)
 	}
+
+	// Star the KrakenCluster CR Watcher
+	go func() {
+		ccworkqueue.ListenToKrakenClusterChanges(nil)
+	}()
 
 	logger.Infof("Creating Web Server")
 	tcpMux := createWebServer(&apiserver.ServerOptions{PortNumber: portNumber})
