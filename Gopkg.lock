@@ -163,7 +163,7 @@
     "pkg/client/clientset/versioned/scheme",
     "pkg/client/clientset/versioned/typed/clustercontroller/v1alpha1"
   ]
-  revision = "a58c1a81171bc9337e7f0433f7a291e2af61837a"
+  revision = "1ef93adbfb201e583c80b70e7b989825156c0960"
 
 [[projects]]
   name = "github.com/sirupsen/logrus"
@@ -214,7 +214,7 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
-  revision = "76a954637dfa3223c13edb4529f981f0d62cfa26"
+  revision = "4ec37c66abab2c7e02ae775328b2ff001c3f025a"
 
 [[projects]]
   branch = "master"
@@ -226,10 +226,9 @@
     "http2/hpack",
     "idna",
     "internal/timeseries",
-    "lex/httplex",
     "trace"
   ]
-  revision = "640f4622ab692b87c2f3a94265e6f579fe38263d"
+  revision = "d11bb6cd8e3c4e60239c9cb20ef68586d74500d0"
 
 [[projects]]
   branch = "master"
@@ -238,7 +237,7 @@
     "unix",
     "windows"
   ]
-  revision = "78d5f264b493f125018180c204871ecf58a2dce1"
+  revision = "7db1c3b1a98089d0071c84f646ff5c96aad43682"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -363,7 +362,7 @@
     "pkg/client/clientset/clientset/scheme",
     "pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
   ]
-  revision = "9da85b1a84c0d6a5a1397c7ef69b16386736a5bc"
+  revision = "c689afa9f022397593aa9400cd5ca6a4ed32b6a2"
 
 [[projects]]
   name = "k8s.io/apimachinery"
@@ -466,6 +465,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ffadc6b973f4dc426802f4332ed55862545d63b989616dede2bf8b56b2aa841b"
+  inputs-digest = "518f7832a4807daaf340c77d371028537fc8b807227a6f3ed35cf37bee46fae4"
   solver-name = "gps-cdcl"
   solver-version = 1
