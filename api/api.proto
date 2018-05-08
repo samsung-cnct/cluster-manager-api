@@ -19,18 +19,59 @@ package cluster_manager_api;
 import "google/api/annotations.proto";
 import "protoc-gen-swagger/options/annotations.proto";
 
-// The hello world service definition.
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "Cluster Manager API";
+    version: "v0.1.0";
+    contact: {
+        name: "Michael Venezia";
+        url: "https://github.com/venezia";
+        email: "mvenezia@gmail.com";
+    };
+  };
+  external_docs: {
+    url: "https://github.com/grpc-ecosystem/grpc-gateway";
+    description: "More about gRPC-Gateway";
+  }
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
+
 service Cluster {
+    // Simple Hello World Service - will repeat a greeting to the name provided
     rpc HelloWorld (HelloWorldMsg) returns (HelloWorldReply) {
         option (google.api.http) = {
       post : "/api/v1/helloworld"
       body: "*"
     };
     }
+    // Simple pod count response.  Will respond with the number of pods in the namespace provided
     rpc GetPodCount (GetPodCountMsg) returns (GetPodCountReply) {
         option (google.api.http) = {
             post : "/api/v1/getpodcount"
             body : "*"
+        };
+    }
+    // Will provision a cluster
+    rpc CreateCluster (CreateClusterMsg) returns (CreateClusterReply) {
+        option (google.api.http) = {
+            put : "/api/v1/cluster"
+            body : "*"
+        };
+    }
+    // Will retrieve the status of a cluster and its kubeconfig for connectivity
+    rpc GetCluster (GetClusterMsg) returns (GetClusterReply) {
+        option (google.api.http) = {
+            get : "/api/v1/cluster"
+        };
+    }
+    // Will delete a cluster
+    rpc DeleteCluster (DeleteClusterMsg) returns (DeleteClusterReply) {
+        option (google.api.http) = {
+            delete : "/api/v1/cluster"
         };
     }
 }
@@ -46,10 +87,50 @@ message HelloWorldReply {
 }
 
 message GetPodCountMsg {
+    // Namespace to fetch the pod count
+    // Leave empty to query all namespaces
     string namespace = 1;
 }
 
 message GetPodCountReply {
+    // Number of pods in the namespace (or all namespaces)
     int32 pods = 1;
 }
 
+message CreateClusterMsg {
+    // Name of the cluster to be provisioned
+    string name = 1;
+}
+
+message CreateClusterReply {
+    // Whether or not the cluster was provisioned by this request
+    bool ok = 1;
+    // The state of the cluster generation
+    string status = 2;
+}
+
+message GetClusterMsg {
+    // Name of the cluster to be looked up
+    string name = 1;
+}
+
+message GetClusterReply {
+    // Is the cluster in the system
+    bool ok = 1;
+    // What is the status of the cluster
+    string status = 2;
+    // What is the kubeconfig to connect to the cluster
+    string kubeconfig = 3;
+}
+
+message DeleteClusterMsg {
+    // What is the cluster's name to destroy
+    string name = 1;
+}
+
+message DeleteClusterReply {
+    // Could the cluster be destroyed
+    bool ok = 1;
+    // Status of the request
+    string status = 2;
+}

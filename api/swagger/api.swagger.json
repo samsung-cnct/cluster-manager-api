@@ -1,8 +1,13 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api.proto",
-    "version": "version not set"
+    "title": "Cluster Manager API",
+    "version": "v0.1.0",
+    "contact": {
+      "name": "Michael Venezia",
+      "url": "https://github.com/venezia",
+      "email": "mvenezia@gmail.com"
+    }
   },
   "schemes": [
     "http",
@@ -15,8 +20,84 @@
     "application/json"
   ],
   "paths": {
+    "/api/v1/cluster": {
+      "get": {
+        "summary": "Will retrieve the status of a cluster and its kubeconfig for connectivity",
+        "operationId": "GetCluster",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiGetClusterReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Name of the cluster to be looked up.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      },
+      "delete": {
+        "summary": "Will delete a cluster",
+        "operationId": "DeleteCluster",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiDeleteClusterReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "What is the cluster's name to destroy.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      },
+      "put": {
+        "summary": "Will provision a cluster",
+        "operationId": "CreateCluster",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiCreateClusterReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiCreateClusterMsg"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
     "/api/v1/getpodcount": {
       "post": {
+        "summary": "Simple pod count response.  Will respond with the number of pods in the namespace provided",
         "operationId": "GetPodCount",
         "responses": {
           "200": {
@@ -43,6 +124,7 @@
     },
     "/api/v1/helloworld": {
       "post": {
+        "summary": "Simple Hello World Service - will repeat a greeting to the name provided",
         "operationId": "HelloWorld",
         "responses": {
           "200": {
@@ -69,11 +151,67 @@
     }
   },
   "definitions": {
+    "cluster_manager_apiCreateClusterMsg": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the cluster to be provisioned"
+        }
+      }
+    },
+    "cluster_manager_apiCreateClusterReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Whether or not the cluster was provisioned by this request"
+        },
+        "status": {
+          "type": "string",
+          "title": "The state of the cluster generation"
+        }
+      }
+    },
+    "cluster_manager_apiDeleteClusterReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Could the cluster be destroyed"
+        },
+        "status": {
+          "type": "string",
+          "title": "Status of the request"
+        }
+      }
+    },
+    "cluster_manager_apiGetClusterReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Is the cluster in the system"
+        },
+        "status": {
+          "type": "string",
+          "title": "What is the status of the cluster"
+        },
+        "kubeconfig": {
+          "type": "string",
+          "title": "What is the kubeconfig to connect to the cluster"
+        }
+      }
+    },
     "cluster_manager_apiGetPodCountMsg": {
       "type": "object",
       "properties": {
         "namespace": {
-          "type": "string"
+          "type": "string",
+          "title": "Namespace to fetch the pod count\nLeave empty to query all namespaces"
         }
       }
     },
@@ -82,7 +220,8 @@
       "properties": {
         "pods": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "title": "Number of pods in the namespace (or all namespaces)"
         }
       }
     },
@@ -104,5 +243,9 @@
       },
       "title": "The response to Hello World"
     }
+  },
+  "externalDocs": {
+    "description": "More about gRPC-Gateway",
+    "url": "https://github.com/grpc-ecosystem/grpc-gateway"
   }
 }

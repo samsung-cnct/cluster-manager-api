@@ -4,6 +4,12 @@
 ## Table of Contents
 
 - [api.proto](#api.proto)
+    - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
+    - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
+    - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
+    - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
+    - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
+    - [GetClusterReply](#cluster_manager_api.GetClusterReply)
     - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
     - [GetPodCountReply](#cluster_manager_api.GetPodCountReply)
     - [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg)
@@ -15,6 +21,12 @@
   
 
 - [api.proto](#api.proto)
+    - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
+    - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
+    - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
+    - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
+    - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
+    - [GetClusterReply](#cluster_manager_api.GetClusterReply)
     - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
     - [GetPodCountReply](#cluster_manager_api.GetPodCountReply)
     - [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg)
@@ -36,6 +48,100 @@
 
 
 
+<a name="cluster_manager_api.CreateClusterMsg"/>
+
+### CreateClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Name of the cluster to be provisioned |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterReply"/>
+
+### CreateClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Whether or not the cluster was provisioned by this request |
+| status | [string](#string) |  | The state of the cluster generation |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteClusterMsg"/>
+
+### DeleteClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the cluster&#39;s name to destroy |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteClusterReply"/>
+
+### DeleteClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Could the cluster be destroyed |
+| status | [string](#string) |  | Status of the request |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetClusterMsg"/>
+
+### GetClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Name of the cluster to be looked up |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetClusterReply"/>
+
+### GetClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Is the cluster in the system |
+| status | [string](#string) |  | What is the status of the cluster |
+| kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
+
+
+
+
+
+
 <a name="cluster_manager_api.GetPodCountMsg"/>
 
 ### GetPodCountMsg
@@ -44,7 +150,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  |  |
+| namespace | [string](#string) |  | Namespace to fetch the pod count Leave empty to query all namespaces |
 
 
 
@@ -59,7 +165,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| pods | [int32](#int32) |  |  |
+| pods | [int32](#int32) |  | Number of pods in the namespace (or all namespaces) |
 
 
 
@@ -105,12 +211,15 @@ The response to Hello World
 <a name="cluster_manager_api.Cluster"/>
 
 ### Cluster
-The hello world service definition.
+
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| HelloWorld | [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg) | [HelloWorldReply](#cluster_manager_api.HelloWorldMsg) |  |
-| GetPodCount | [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg) | [GetPodCountReply](#cluster_manager_api.GetPodCountMsg) |  |
+| HelloWorld | [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg) | [HelloWorldReply](#cluster_manager_api.HelloWorldMsg) | Simple Hello World Service - will repeat a greeting to the name provided |
+| GetPodCount | [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg) | [GetPodCountReply](#cluster_manager_api.GetPodCountMsg) | Simple pod count response. Will respond with the number of pods in the namespace provided |
+| CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
+| GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
+| DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
 
  
 
@@ -123,6 +232,100 @@ The hello world service definition.
 
 
 
+<a name="cluster_manager_api.CreateClusterMsg"/>
+
+### CreateClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Name of the cluster to be provisioned |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterReply"/>
+
+### CreateClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Whether or not the cluster was provisioned by this request |
+| status | [string](#string) |  | The state of the cluster generation |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteClusterMsg"/>
+
+### DeleteClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the cluster&#39;s name to destroy |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteClusterReply"/>
+
+### DeleteClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Could the cluster be destroyed |
+| status | [string](#string) |  | Status of the request |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetClusterMsg"/>
+
+### GetClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Name of the cluster to be looked up |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetClusterReply"/>
+
+### GetClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Is the cluster in the system |
+| status | [string](#string) |  | What is the status of the cluster |
+| kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
+
+
+
+
+
+
 <a name="cluster_manager_api.GetPodCountMsg"/>
 
 ### GetPodCountMsg
@@ -131,7 +334,7 @@ The hello world service definition.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  |  |
+| namespace | [string](#string) |  | Namespace to fetch the pod count Leave empty to query all namespaces |
 
 
 
@@ -146,7 +349,7 @@ The hello world service definition.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| pods | [int32](#int32) |  |  |
+| pods | [int32](#int32) |  | Number of pods in the namespace (or all namespaces) |
 
 
 
@@ -192,12 +395,15 @@ The response to Hello World
 <a name="cluster_manager_api.Cluster"/>
 
 ### Cluster
-The hello world service definition.
+
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| HelloWorld | [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg) | [HelloWorldReply](#cluster_manager_api.HelloWorldMsg) |  |
-| GetPodCount | [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg) | [GetPodCountReply](#cluster_manager_api.GetPodCountMsg) |  |
+| HelloWorld | [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg) | [HelloWorldReply](#cluster_manager_api.HelloWorldMsg) | Simple Hello World Service - will repeat a greeting to the name provided |
+| GetPodCount | [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg) | [GetPodCountReply](#cluster_manager_api.GetPodCountMsg) | Simple pod count response. Will respond with the number of pods in the namespace provided |
+| CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
+| GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
+| DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
 
  
 

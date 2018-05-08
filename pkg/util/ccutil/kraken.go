@@ -77,3 +77,29 @@ func CreateKrakenCluster(cluster ccapi.KrakenCluster, namespace string, config *
 
 	return true, err
 }
+
+func DeleteKrakenCluster(name string, namespace string, config *rest.Config) (bool, error) {
+	var err error
+	SetLogger()
+	client := prepareRestClient(config)
+
+	err = client.SamsungV1alpha1().KrakenClusters(namespace).Delete(name, &metav1.DeleteOptions{})
+	if err != nil {
+		logger.Infof("KrakenCluster -->%s<-- Cannot be Deleted, error was %v", name, err)
+		return false, err
+	}
+	return true, err
+}
+
+func GetKrakenCluster(name string, namespace string, config *rest.Config) (*ccapi.KrakenCluster, error) {
+	var err error
+	SetLogger()
+	client := prepareRestClient(config)
+
+	cluster, err := client.SamsungV1alpha1().KrakenClusters(namespace).Get(name, metav1.GetOptions{})
+	if err != nil {
+		logger.Infof("KrakenCluster -->%s<-- Cannot be Retrieved, error was %v", name, err)
+		return nil, err
+	}
+	return cluster, err
+}
