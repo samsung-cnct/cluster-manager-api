@@ -17,6 +17,11 @@ const (
 	kubeconfigFile = "config"
 )
 
+type promptedCredentials struct {
+	username string
+	password string
+}
+
 func GenerateKubernetesConfig() (*rest.Config, error) {
 	var config *rest.Config
 	var err error
@@ -34,5 +39,7 @@ func GenerateKubernetesConfig() (*rest.Config, error) {
 			config, err = rest.InClusterConfig()
 		}
 	}
+
 	return config, err
 }
+

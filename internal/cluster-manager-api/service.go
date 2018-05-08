@@ -13,8 +13,8 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	ccapi "github.com/samsung-cnct/cluster-controller/pkg/apis/clustercontroller/v1alpha1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/helmutil"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 )
 
 var (
@@ -48,60 +48,12 @@ func (s *Server) GetPodCount(ctx context.Context, in *pb.GetPodCountMsg) (*pb.Ge
 		return nil, err
 	}
 
-	dummy := &ccapi.KrakenCluster{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: "my-test-cluster",
-		},
-		Spec: ccapi.KrakenClusterSpec{
-			CustomerID: "myCustomerID",
-			CloudProvider: ccapi.CloudProviderInfo{
-				Name: "aws",
-				Credentials: ccapi.CloudProviderCredentials{
-					Username: "myuser",
-					Password: "fakepassword1",
-				},
-			},
-			Provisioner: ccapi.ProvisionerInfo{
-				Name: "juju",
-			},
-			Cluster: ccapi.ClusterInfo{
-				ClusterName: "my-test-cluster",
-				NodePools: []ccapi.NodeProperties{
-					{
-						Name:        "worker",
-						PublicIPs:   false,
-						Size:        1,
-						MachineType: "m4.xlarge",
-						Os:          "ubuntu:16:04",
-					},
-					{
-						Name:        "master",
-						PublicIPs:   false,
-						Size:        1,
-						MachineType: "m4.xlarge",
-						Os:          "ubuntu:16:04",
-					},
-					{
-						Name:        "etcd",
-						PublicIPs:   false,
-						Size:        3,
-						MachineType: "m3.medium",
-						Os:          "ubuntu:16:04",
-					},
-				},
-				Fabric: ccapi.FabricInfo{
-					Name: "canal",
-				},
-			},
-		},
-	}
 
-	_, err = clusterControllerClient.KrakenCRCli.SamsungV1alpha1().KrakenClusters("default").Create(dummy)
-	if err != nil && !k8sutil.IsResourceAlreadyExistsError(err) {
-		logger.Infof("KrakenCluster -->%s<-- Cannot be created, error was %v", dummy.ObjectMeta.Name, err)
-	} else if k8sutil.IsResourceAlreadyExistsError(err) {
-		logger.Infof("KrakenCluster -->%s<-- Already exists, cannot recreate", dummy.ObjectMeta.Name)
-	}
+	ccutil.CreateKrakenCluster(
+		ccutil.GenerateKrakenCluster(
+			ccutil.KrakenClusterOptions{Name: "my-test-cluster"},
+			), "default", nil)
+
 
 	k8sutil.CreateNamespace(k8sutil.GenerateNamespace("test-tiller"), nil)
 	k8sutil.CreateServiceAccount(k8sutil.GenerateServiceAccount("tiller-sa"), "test-tiller", nil)
@@ -117,6 +69,10 @@ func (s *Server) GetPodCount(ctx context.Context, in *pb.GetPodCountMsg) (*pb.Ge
 			Namespace:      "test-tiller",
 			ServiceAccount: "tiller-sa",
 			Version:        "v2.8.2"}), "test-tiller", nil)
+
+	//tempCluster, err := clusterControllerClient.KrakenCRCli.SamsungV1alpha1().KrakenClusters("default").Get("my-test-cluster", metav1.GetOptions{})
+	//tempCluster.ObjectMeta.Labels
+
 
 	logger.Infof("Was asked to get pods on -->%s<-- namespace, answer was -->%d<--", in.Namespace, int32(len(pods.Items)))
 	return &pb.GetPodCountReply{Pods: int32(len(pods.Items))}, nil
