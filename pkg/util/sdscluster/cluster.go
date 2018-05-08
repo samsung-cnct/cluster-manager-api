@@ -23,44 +23,44 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 	}
 }
 
-func CreateKrakenCluster(cluster sdsapi.SDSCluster, namespace string, config *rest.Config) (bool, error) {
+func CreateSDSCluster(cluster sdsapi.SDSCluster, namespace string, config *rest.Config) (bool, error) {
 	var err error
 	SetLogger()
 	client := prepareRestClient(config)
 
 	_, err = client.SdsclusterV1alpha1().SDSClusters(namespace).Create(&cluster)
 	if err != nil && !k8sutil.IsResourceAlreadyExistsError(err) {
-		logger.Infof("KrakenCluster -->%s<-- Cannot be created, error was %v", cluster.ObjectMeta.Name, err)
+		logger.Infof("SDSCluster -->%s<-- Cannot be created, error was %v", cluster.ObjectMeta.Name, err)
 		return false, err
 	} else if k8sutil.IsResourceAlreadyExistsError(err) {
-		logger.Infof("KrakenCluster -->%s<-- Already exists, cannot recreate", cluster.ObjectMeta.Name)
+		logger.Infof("SDSCluster -->%s<-- Already exists, cannot recreate", cluster.ObjectMeta.Name)
 		return false, err
 	}
 
 	return true, err
 }
 
-func DeleteKrakenCluster(name string, namespace string, config *rest.Config) (bool, error) {
+func DeleteSDSCluster(name string, namespace string, config *rest.Config) (bool, error) {
 	var err error
 	SetLogger()
 	client := prepareRestClient(config)
 
 	err = client.SdsclusterV1alpha1().SDSClusters(namespace).Delete(name, &metav1.DeleteOptions{})
 	if err != nil {
-		logger.Infof("KrakenCluster -->%s<-- Cannot be Deleted, error was %v", name, err)
+		logger.Infof("SDSCluster -->%s<-- Cannot be Deleted, error was %v", name, err)
 		return false, err
 	}
 	return true, err
 }
 
-func GetKrakenCluster(name string, namespace string, config *rest.Config) (*sdsapi.SDSCluster, error) {
+func GetSDSCluster(name string, namespace string, config *rest.Config) (*sdsapi.SDSCluster, error) {
 	var err error
 	SetLogger()
 	client := prepareRestClient(config)
 
 	cluster, err := client.SdsclusterV1alpha1().SDSClusters(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
-		logger.Infof("KrakenCluster -->%s<-- Cannot be Retrieved, error was %v", name, err)
+		logger.Infof("SDSCluster -->%s<-- Cannot be Retrieved, error was %v", name, err)
 		return nil, err
 	}
 	return cluster, err
