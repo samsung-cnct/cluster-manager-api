@@ -30,16 +30,10 @@ type SDSCluster struct {
 type SDSClusterSpec struct {
 	// What provider
 	Provider	string		`json:"provider",omitempty`
+	// What package manager should be used
+	PackageManager SDSPackageManagerSpec	`json:"packageManager"`
 	// What Charts should be installed
 	Charts []Chart 			`json:"chart,omitempty"`
-}
-
-// SDSClusterSettings defines the specification of the redis system
-// +k8s:openapi-gen=true
-type Chart struct {
-	Name	  string         `json:"name"`
-	Chart     string           `json:"exporter,omitempty"`
-	Version   string         `json:"version,omitempty"`
 }
 
 // SDSClusterStatus has the status of the system
@@ -47,22 +41,15 @@ type Chart struct {
 type SDSClusterStatus struct {
 	Phase      Phase       `json:"phase"`
 	Conditions []Condition `json:"conditions"`
-	Master     string      `json:"master"`
 	ClusterBuilt bool		`json:clusterBuilt`
 	TillerInstalled bool	`json:tillerInstalled`
 	AppsInstalled bool		`json:appsInstalled`
 }
 
-// Phase of the RF status
-type Phase string
 
-// Condition saves the state information of the redis system
+// SDSClusterRef is a reference to a SDS Cluster
 // +k8s:openapi-gen=true
-type Condition struct {
-	Type           ConditionType `json:"type"`
-	Reason         string        `json:"reason"`
-	TransitionTime string        `json:"transitionTime"`
+type SDSClusterRef struct {
+	// Name of the SDS Cluster.  Note that the cluster must be in the same namespace right now
+	Name string `json:"name"`
 }
-
-// ConditionType defines the condition that the redis can have
-type ConditionType string

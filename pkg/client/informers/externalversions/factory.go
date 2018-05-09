@@ -24,8 +24,8 @@ import (
 	time "time"
 
 	clientset "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset"
+	cma "github.com/samsung-cnct/cluster-manager-api/pkg/client/informers/externalversions/cma"
 	internalinterfaces "github.com/samsung-cnct/cluster-manager-api/pkg/client/informers/externalversions/internalinterfaces"
-	sdscluster "github.com/samsung-cnct/cluster-manager-api/pkg/client/informers/externalversions/sdscluster"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -123,9 +123,9 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Cma() sdscluster.Interface
+	Cma() cma.Interface
 }
 
-func (f *sharedInformerFactory) Cma() sdscluster.Interface {
-	return sdscluster.New(f, f.namespace, f.tweakListOptions)
+func (f *sharedInformerFactory) Cma() cma.Interface {
+	return cma.New(f, f.namespace, f.tweakListOptions)
 }

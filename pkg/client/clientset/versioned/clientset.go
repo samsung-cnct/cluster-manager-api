@@ -20,7 +20,7 @@ package versioned
 
 import (
 	glog "github.com/golang/glog"
-	cmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/sdscluster/v1alpha1"
+	cmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/cma/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"

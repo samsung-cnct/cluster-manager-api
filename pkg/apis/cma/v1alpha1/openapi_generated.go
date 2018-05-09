@@ -30,39 +30,74 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.Chart": {
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Chart": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
-					Description: "SDSClusterSettings defines the specification of the redis system",
+					Description: "Chart represents a SDS Application's Chart information",
 					Properties: map[string]spec.Schema{
-						"name": {
+						"chartName": {
 							SchemaProps: spec.SchemaProps{
-								Type:   []string{"string"},
-								Format: "",
+								Description: "What is the chart name",
+								Type:        []string{"string"},
+								Format:      "",
 							},
 						},
-						"exporter": {
+						"repository": {
 							SchemaProps: spec.SchemaProps{
-								Type:   []string{"string"},
-								Format: "",
+								Description: "What is the respository information",
+								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.ChartRepository"),
+							},
+						},
+						"values": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What are the values for the Values.yaml file?",
+								Type:        []string{"string"},
+								Format:      "",
 							},
 						},
 						"version": {
 							SchemaProps: spec.SchemaProps{
-								Type:   []string{"string"},
-								Format: "",
+								Description: "What is the chart version",
+								Type:        []string{"string"},
+								Format:      "",
 							},
 						},
 					},
-					Required: []string{"name"},
+					Required: []string{"chartName", "repository", "values", "version"},
+				},
+			},
+			Dependencies: []string{
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.ChartRepository"},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.ChartRepository": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "ChartRepository represents a helm chart repository",
+					Properties: map[string]spec.Schema{
+						"name": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What is the repository name",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"url": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What is the URL for the repository?",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+					},
+					Required: []string{"name", "url"},
 				},
 			},
 			Dependencies: []string{},
 		},
-		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.Condition": {
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Condition": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
-					Description: "Condition saves the state information of the redis system",
+					Description: "Condition saves the state information of the system",
 					Properties: map[string]spec.Schema{
 						"type": {
 							SchemaProps: spec.SchemaProps{
@@ -88,7 +123,39 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			},
 			Dependencies: []string{},
 		},
-		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.SDSCluster": {
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.PackageManagerPermissions": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "PackageManagerPermissions represents the permissions for the package manager",
+					Properties: map[string]spec.Schema{
+						"clusterWide": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Should this be a cluster wide admin?",
+								Type:        []string{"boolean"},
+								Format:      "",
+							},
+						},
+						"namespaces": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What namespaces should this package manager administrate on?",
+								Type:        []string{"array"},
+								Items: &spec.SchemaOrArray{
+									Schema: &spec.Schema{
+										SchemaProps: spec.SchemaProps{
+											Type:   []string{"string"},
+											Format: "",
+										},
+									},
+								},
+							},
+						},
+					},
+					Required: []string{"clusterWide", "namespaces"},
+				},
+			},
+			Dependencies: []string{},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplication": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
 					Properties: map[string]spec.Schema{
@@ -113,12 +180,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 						},
 						"spec": {
 							SchemaProps: spec.SchemaProps{
-								Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.SDSClusterSpec"),
+								Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationSpec"),
 							},
 						},
 						"status": {
 							SchemaProps: spec.SchemaProps{
-								Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.SDSClusterStatus"),
+								Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationStatus"),
 							},
 						},
 					},
@@ -126,9 +193,167 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 				},
 			},
 			Dependencies: []string{
-				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.SDSClusterSpec", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.SDSClusterStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationSpec", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 		},
-		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.SDSClusterList": {
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationList": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "SDSApplicationList is a list of sds applications.",
+					Properties: map[string]spec.Schema{
+						"kind": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"apiVersion": {
+							SchemaProps: spec.SchemaProps{
+								Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"metadata": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Standard list metadata More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#metadata",
+								Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+							},
+						},
+						"items": {
+							SchemaProps: spec.SchemaProps{
+								Type: []string{"array"},
+								Items: &spec.SchemaOrArray{
+									Schema: &spec.Schema{
+										SchemaProps: spec.SchemaProps{
+											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplication"),
+										},
+									},
+								},
+							},
+						},
+					},
+					Required: []string{"items"},
+				},
+			},
+			Dependencies: []string{
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplication", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationSpec": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "SDSApplicationSpec represents a SDS Application - or a helm chart install",
+					Properties: map[string]spec.Schema{
+						"packageManager": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What tiller should be used",
+								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerRef"),
+							},
+						},
+						"namespace": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What namespace do we want this application installed in",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"name": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What is the application release's name",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"chart": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Chart Information",
+								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Chart"),
+							},
+						},
+					},
+					Required: []string{"packageManager", "namespace", "name", "chart"},
+				},
+			},
+			Dependencies: []string{
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Chart", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerRef"},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationStatus": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "The status of an application object",
+					Properties: map[string]spec.Schema{
+						"phase": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"ready": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"boolean"},
+								Format: "",
+							},
+						},
+						"conditions": {
+							SchemaProps: spec.SchemaProps{
+								Type: []string{"array"},
+								Items: &spec.SchemaOrArray{
+									Schema: &spec.Schema{
+										SchemaProps: spec.SchemaProps{
+											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Condition"),
+										},
+									},
+								},
+							},
+						},
+					},
+					Required: []string{"phase", "ready", "conditions"},
+				},
+			},
+			Dependencies: []string{
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Condition"},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSCluster": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Properties: map[string]spec.Schema{
+						"kind": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"apiVersion": {
+							SchemaProps: spec.SchemaProps{
+								Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"metadata": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+							},
+						},
+						"spec": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSClusterSpec"),
+							},
+						},
+						"status": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSClusterStatus"),
+							},
+						},
+					},
+					Required: []string{"spec", "status"},
+				},
+			},
+			Dependencies: []string{
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSClusterSpec", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSClusterStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSClusterList": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
 					Description: "SDSDClusterList is a list of sds clusters.",
@@ -159,7 +384,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Items: &spec.SchemaOrArray{
 									Schema: &spec.Schema{
 										SchemaProps: spec.SchemaProps{
-											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.SDSCluster"),
+											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSCluster"),
 										},
 									},
 								},
@@ -170,9 +395,27 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 				},
 			},
 			Dependencies: []string{
-				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.SDSCluster", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSCluster", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 		},
-		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.SDSClusterSpec": {
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSClusterRef": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "SDSClusterRef is a reference to a SDS Cluster",
+					Properties: map[string]spec.Schema{
+						"name": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Name of the SDS Cluster.  Note that the cluster must be in the same namespace right now",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+					},
+					Required: []string{"name"},
+				},
+			},
+			Dependencies: []string{},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSClusterSpec": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
 					Description: "SDSClusterSpec represents a SDSCluster spec",
@@ -184,6 +427,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Format:      "",
 							},
 						},
+						"packageManager": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What package manager should be used",
+								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerSpec"),
+							},
+						},
 						"chart": {
 							SchemaProps: spec.SchemaProps{
 								Description: "What Charts should be installed",
@@ -191,20 +440,20 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Items: &spec.SchemaOrArray{
 									Schema: &spec.Schema{
 										SchemaProps: spec.SchemaProps{
-											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.Chart"),
+											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Chart"),
 										},
 									},
 								},
 							},
 						},
 					},
-					Required: []string{"provider"},
+					Required: []string{"provider", "packageManager"},
 				},
 			},
 			Dependencies: []string{
-				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.Chart"},
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Chart", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerSpec"},
 		},
-		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.SDSClusterStatus": {
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSClusterStatus": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
 					Description: "SDSClusterStatus has the status of the system",
@@ -221,16 +470,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Items: &spec.SchemaOrArray{
 									Schema: &spec.Schema{
 										SchemaProps: spec.SchemaProps{
-											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.Condition"),
+											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Condition"),
 										},
 									},
 								},
-							},
-						},
-						"master": {
-							SchemaProps: spec.SchemaProps{
-								Type:   []string{"string"},
-								Format: "",
 							},
 						},
 						"ClusterBuilt": {
@@ -252,11 +495,219 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 							},
 						},
 					},
-					Required: []string{"phase", "conditions", "master", "ClusterBuilt", "TillerInstalled", "AppsInstalled"},
+					Required: []string{"phase", "conditions", "ClusterBuilt", "TillerInstalled", "AppsInstalled"},
 				},
 			},
 			Dependencies: []string{
-				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1.Condition"},
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Condition"},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManager": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Properties: map[string]spec.Schema{
+						"kind": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"apiVersion": {
+							SchemaProps: spec.SchemaProps{
+								Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"metadata": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+							},
+						},
+						"spec": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerSpec"),
+							},
+						},
+						"status": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerStatus"),
+							},
+						},
+					},
+					Required: []string{"spec", "status"},
+				},
+			},
+			Dependencies: []string{
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerSpec", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerList": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "SDSPackageManagerList is a list of sds package managers (tiller).",
+					Properties: map[string]spec.Schema{
+						"kind": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"apiVersion": {
+							SchemaProps: spec.SchemaProps{
+								Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"metadata": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Standard list metadata More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#metadata",
+								Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+							},
+						},
+						"items": {
+							SchemaProps: spec.SchemaProps{
+								Type: []string{"array"},
+								Items: &spec.SchemaOrArray{
+									Schema: &spec.Schema{
+										SchemaProps: spec.SchemaProps{
+											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManager"),
+										},
+									},
+								},
+							},
+						},
+					},
+					Required: []string{"items"},
+				},
+			},
+			Dependencies: []string{
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManager", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerRef": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "SDSPackageManagerRef is a reference to a SDS Package Manager",
+					Properties: map[string]spec.Schema{
+						"name": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Name of the SDS Package Manager.  Note that the package manager resource must be in the same namespace right now",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+					},
+					Required: []string{"name"},
+				},
+			},
+			Dependencies: []string{},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerSpec": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "SDSPackageManagerSpec represents a SDS Package Manager - or a tiller deployment",
+					Properties: map[string]spec.Schema{
+						"namespace": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What namespace do we want this package manager installed in",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"name": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What is the application release's name",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"version": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What version should this package manager be?",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"serviceAccount": {
+							SchemaProps: spec.SchemaProps{
+								Description: "ServiceAccount to use",
+								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.ServiceAccount"),
+							},
+						},
+						"permissions": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Permissions of the Package Manager",
+								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.PackageManagerPermissions"),
+							},
+						},
+					},
+					Required: []string{"namespace", "name", "version", "serviceAccount", "permissions"},
+				},
+			},
+			Dependencies: []string{
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.PackageManagerPermissions", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.ServiceAccount"},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerStatus": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "The status of an package manager object",
+					Properties: map[string]spec.Schema{
+						"phase": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"ready": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"boolean"},
+								Format: "",
+							},
+						},
+						"conditions": {
+							SchemaProps: spec.SchemaProps{
+								Type: []string{"array"},
+								Items: &spec.SchemaOrArray{
+									Schema: &spec.Schema{
+										SchemaProps: spec.SchemaProps{
+											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Condition"),
+										},
+									},
+								},
+							},
+						},
+					},
+					Required: []string{"phase", "ready", "conditions"},
+				},
+			},
+			Dependencies: []string{
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Condition"},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.ServiceAccount": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "ServiceAccount represents the service account settings",
+					Properties: map[string]spec.Schema{
+						"name": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Should this be a cluster wide admin?",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"namespace": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What namespace would we find this service account?",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+					},
+					Required: []string{"name", "namespace"},
+				},
+			},
+			Dependencies: []string{},
 		},
 		"k8s.io/api/core/v1.AWSElasticBlockStoreVolumeSource": {
 			Schema: spec.Schema{

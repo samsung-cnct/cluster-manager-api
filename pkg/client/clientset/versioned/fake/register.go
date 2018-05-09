@@ -19,7 +19,7 @@ limitations under the License.
 package fake
 
 import (
-	cmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1"
+	cmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

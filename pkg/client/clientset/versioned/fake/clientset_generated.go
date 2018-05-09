@@ -20,8 +20,8 @@ package fake
 
 import (
 	clientset "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
-	cmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/sdscluster/v1alpha1"
-	fakecmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/sdscluster/v1alpha1/fake"
+	cmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/cma/v1alpha1"
+	fakecmav1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned/typed/cma/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"

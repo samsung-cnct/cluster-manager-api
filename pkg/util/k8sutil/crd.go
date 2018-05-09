@@ -18,7 +18,7 @@ func CreateCRD(clientset apiextensionsclient.Interface, crd apiextensionsv1beta1
 		log.Printf("Error %v\n", err)
 		return err
 	} else if IsResourceAlreadyExistsError(err) {
-		log.Print("CRD already exists, skipping installation\n")
+		log.Printf("CRD %s already exists, need to work on a patch/update\n", crd.Name)
 	}
 	return nil
 }

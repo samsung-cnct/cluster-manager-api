@@ -21,7 +21,7 @@ package externalversions
 import (
 	"fmt"
 
-	v1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1"
+	v1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
 )
@@ -53,8 +53,12 @@ func (f *genericInformer) Lister() cache.GenericLister {
 func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource) (GenericInformer, error) {
 	switch resource {
 	// Group=cma.sds.samsung.com, Version=v1alpha1
+	case v1alpha1.SchemeGroupVersion.WithResource("sdsapplications"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Cma().V1alpha1().SDSApplications().Informer()}, nil
 	case v1alpha1.SchemeGroupVersion.WithResource("sdsclusters"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Cma().V1alpha1().SDSClusters().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("sdspackagemanagers"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Cma().V1alpha1().SDSPackageManagers().Informer()}, nil
 
 	}
 

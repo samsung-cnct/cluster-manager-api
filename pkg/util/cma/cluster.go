@@ -1,7 +1,7 @@
-package sdscluster
+package cma
 
 import (
-	sdsapi "github.com/samsung-cnct/cluster-manager-api/pkg/apis/sdscluster/v1alpha1"
+	sdsapi "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"k8s.io/client-go/rest"

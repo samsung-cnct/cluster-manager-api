@@ -1,4 +1,4 @@
-package sdscluster
+package cma
 
 import (
 	"github.com/juju/loggo"
