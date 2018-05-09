@@ -5,7 +5,7 @@ THIS_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PACKAGE_HOME=${THIS_DIRECTORY}/../../
 PACKAGE_NAME=github.com/samsung-cnct/cluster-manager-api
 PACKAGE_VIRTUAL=/go/src/${PACKAGE_NAME}
-API_PACKAGE=sdscluster/v1alpha1
+API_PACKAGE=cma/v1alpha1
 
 # Creating the deep copy object
 echo "Creating the deep copy object in ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} ... "
