@@ -8,6 +8,9 @@ import (
 	"k8s.io/client-go/rest"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 	"fmt"
+	"io/ioutil"
+	"os"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 func (s *Server) ProvisionTiller(ctx context.Context, in *pb.ProvisionTillerMsg) (*pb.ProvisionTillerReply, error) {
@@ -39,6 +42,10 @@ func (s *Server) ProvisionTiller(ctx context.Context, in *pb.ProvisionTillerMsg)
 			Namespace:      in.Namespace,
 			ServiceAccount: "tiller-sa",
 			Version:        in.Version}), in.Namespace, config)
+
+	if config == nil {
+		config = nil
+	}
 	return &pb.ProvisionTillerReply{Ok: true, Message: "Installed Tiller"}, nil
 }
 
@@ -47,8 +54,16 @@ func retrieveClusterRestConfig(name string, namespace string, config *rest.Confi
 	if err != nil {
 		return nil, err
 	}
+	// Let's create a tempfile and line it up for removal
+	file, err := ioutil.TempFile(os.TempDir(), "kraken-kubeconfig")
+	defer os.Remove(file.Name())
+	file.WriteString(cluster.Status.Kubeconfig)
 
-	logger.Infof("Would have retrieved kubeconfig for server %s", cluster.ObjectMeta.Name)
-	return config, nil
+	clusterConfig, err := clientcmd.BuildConfigFromFlags("", file.Name())
 
+	if err != nil {
+		logger.Errorf("Could not load kubeconfig for cluster -->%s<-- in namespace -->%s<--", name, namespace)
+		return nil, err
+	}
+	return clusterConfig, nil
 }
