@@ -48,12 +48,12 @@ func GenerateSingleRolebinding(name string, subject string, subjectNamespace str
 }
 
 func CreateClusterRole(schema rbac.ClusterRole, config *rest.Config) (bool, error) {
+	SetLogger()
 	if config == nil {
 		config = DefaultConfig
 	}
-	SetLogger()
 
-	clientSet, err := kubernetes.NewForConfig(DefaultConfig)
+	clientSet, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		logger.Errorf("Cannot establish a client connection to kubernetes: %v", err)
 		return false, err
@@ -71,12 +71,12 @@ func CreateClusterRole(schema rbac.ClusterRole, config *rest.Config) (bool, erro
 }
 
 func CreateRole(schema rbac.Role, namespace string, config *rest.Config) (bool, error) {
+	SetLogger()
 	if config == nil {
 		config = DefaultConfig
 	}
-	SetLogger()
 
-	clientSet, err := kubernetes.NewForConfig(DefaultConfig)
+	clientSet, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		logger.Errorf("Cannot establish a client connection to kubernetes: %v", err)
 		return false, err
@@ -94,12 +94,12 @@ func CreateRole(schema rbac.Role, namespace string, config *rest.Config) (bool, 
 }
 
 func CreateClusterRoleBinding(schema rbac.ClusterRoleBinding, config *rest.Config) (bool, error) {
+	SetLogger()
 	if config == nil {
 		config = DefaultConfig
 	}
-	SetLogger()
 
-	clientSet, err := kubernetes.NewForConfig(DefaultConfig)
+	clientSet, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		logger.Errorf("Cannot establish a client connection to kubernetes: %v", err)
 		return false, err
@@ -117,12 +117,12 @@ func CreateClusterRoleBinding(schema rbac.ClusterRoleBinding, config *rest.Confi
 }
 
 func CreateRoleBinding(schema rbac.RoleBinding, namespace string, config *rest.Config) (bool, error) {
+	SetLogger()
 	if config == nil {
 		config = DefaultConfig
 	}
-	SetLogger()
 
-	clientSet, err := kubernetes.NewForConfig(DefaultConfig)
+	clientSet, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		logger.Errorf("Cannot establish a client connection to kubernetes: %v", err)
 		return false, err

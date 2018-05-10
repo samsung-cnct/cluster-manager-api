@@ -16,12 +16,12 @@ func GenerateNamespace(name string) corev1.Namespace {
 }
 
 func CreateNamespace(schema corev1.Namespace, config *rest.Config) (bool, error) {
+	SetLogger()
 	if config == nil {
 		config = DefaultConfig
 	}
-	SetLogger()
 
-	clientSet, err := kubernetes.NewForConfig(DefaultConfig)
+	clientSet, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		logger.Errorf("Cannot establish a client connection to kubernetes: %v", err)
 		return false, err
