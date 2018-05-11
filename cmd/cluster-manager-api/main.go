@@ -20,6 +20,7 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/client-go/rest"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/controllers/sds-package-manager"
 )
 
 var (
@@ -58,6 +59,7 @@ func main() {
 
 	logger.Infof("Starting the SDSCluster Controller")
 	sdsClusterController := cluster.NewSDSClusterController(nil)
+	sdsPackageManagerController := sds_package_manager.NewSDSPackageManagerController(nil)
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -65,6 +67,11 @@ func main() {
 	}()
 
 	// TODO: Start the SDSPackageManager Controller
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		sdsPackageManagerController.Run(3, stop)
+	}()
 	// TODO: Start the SDSApplication Controller
 
 	logger.Infof("Starting KrakenCluster Watcher")

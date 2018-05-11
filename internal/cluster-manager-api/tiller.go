@@ -11,9 +11,22 @@ import (
 	"io/ioutil"
 	"os"
 	"k8s.io/client-go/tools/clientcmd"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 )
 
 func (s *Server) ProvisionTiller(ctx context.Context, in *pb.ProvisionTillerMsg) (*pb.ProvisionTillerReply, error) {
+	SetLogger()
+	cma.CreateSDSPackageManager(cma.GenerateSDSPackageManager(cma.SDSPackageManagerOptions{
+		Name: in.Cluster,
+		Namespace: in.Namespace,
+		Version: in.Version,
+		ClusterWide: in.ClusterWide,
+		AdminNamespaces: in.AdminNamespaces,
+	}), "default", nil)
+	return &pb.ProvisionTillerReply{Ok: true, Message: "Queued Tiller Install"}, nil
+}
+
+func (s *Server) aProvisionTiller(ctx context.Context, in *pb.ProvisionTillerMsg) (*pb.ProvisionTillerReply, error) {
 	SetLogger()
 	config, err := retrieveClusterRestConfig(in.Cluster, "default", nil)
 	if err != nil {
