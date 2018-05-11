@@ -3,20 +3,23 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net"
+	"strings"
+	"sync"
+
+	cluster "github.com/samsung-cnct/cluster-manager-api/pkg/controllers/cluster"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"github.com/soheilhy/cmux"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"net"
-	"strings"
 
 	"github.com/juju/loggo"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/apiserver"
-	"k8s.io/client-go/rest"
 	ccworkqueue "github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil/workqueue"
-	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
+	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
+	"k8s.io/client-go/rest"
 )
 
 var (
@@ -26,7 +29,7 @@ var (
 
 func main() {
 	var err error
-	logger := util.GetModuleLogger("cmd.redis-operator", loggo.INFO)
+	logger := util.GetModuleLogger("cmd.cma-operator", loggo.INFO)
 	viperInit()
 
 	// get flags
@@ -44,22 +47,45 @@ func main() {
 	}
 
 	// Install the CMA SDSCluster CRD
-	k8sutil.CreateCRD(apiextensionsclient.NewForConfigOrDie(k8sutil.DefaultConfig), cma.GenerateSDSClusterCRD() )
+	k8sutil.CreateCRD(apiextensionsclient.NewForConfigOrDie(k8sutil.DefaultConfig), cma.GenerateSDSClusterCRD())
 	// Install the CMA SDSPackageManager CRD
-	k8sutil.CreateCRD(apiextensionsclient.NewForConfigOrDie(k8sutil.DefaultConfig), cma.GenerateSDSPackageManagerCRD() )
+	k8sutil.CreateCRD(apiextensionsclient.NewForConfigOrDie(k8sutil.DefaultConfig), cma.GenerateSDSPackageManagerCRD())
 	// Install the CMA SDSApplication CRD
-	k8sutil.CreateCRD(apiextensionsclient.NewForConfigOrDie(k8sutil.DefaultConfig), cma.GenerateSDSApplicationCRD() )
+	k8sutil.CreateCRD(apiextensionsclient.NewForConfigOrDie(k8sutil.DefaultConfig), cma.GenerateSDSApplicationCRD())
 
-	// Start the KrakenCluster CR Watcher
+	var wg sync.WaitGroup
+	stop := make(chan struct{})
+
+	logger.Infof("Starting the SDSCluster Controller")
+	sdsClusterController := cluster.NewSDSClusterController(nil)
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
+		sdsClusterController.Run(3, stop)
+	}()
+
+	// TODO: Start the SDSPackageManager Controller
+	// TODO: Start the SDSApplication Controller
+
+	logger.Infof("Starting KrakenCluster Watcher")
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
 		ccworkqueue.ListenToKrakenClusterChanges(nil)
 	}()
 
 	logger.Infof("Creating Web Server")
 	tcpMux := createWebServer(&apiserver.ServerOptions{PortNumber: portNumber})
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		logger.Infof("Starting to serve requests on port %d", portNumber)
+		tcpMux.Serve()
+	}()
 
-	logger.Infof("Starting to serve requests on port %d", portNumber)
-	tcpMux.Serve()
+	<-stop
+	logger.Infof("Wating for controllers to shut down gracefully")
+	wg.Wait()
 }
 
 func createWebServer(options *apiserver.ServerOptions) cmux.CMux {

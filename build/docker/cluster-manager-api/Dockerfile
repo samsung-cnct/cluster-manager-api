@@ -17,4 +17,4 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -tags netgo -ldflags '-w -
 FROM alpine
 COPY --from=0 /go/src/github.com/samsung-cnct/cluster-manager-api/cluster-manager-api /cluster-manager-api
 
-ENTRYPOINT /cluster-manager-api
+ENTRYPOINT ["/cluster-manager-api"]

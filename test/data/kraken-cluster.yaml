@@ -1,0 +1,34 @@
+apiVersion: "samsung.cnct.com/v1alpha1"
+kind: KrakenCluster
+metadata:
+  name: my-test-kraken-cluster
+spec:
+  customerID: myCustomerID
+  cloudProvider:
+    name: aws
+    credentials:
+      username: myuser
+      password: fakepassword1
+  provisioner:
+    name: juju
+  cluster:
+    clusterName: my-test-cluster
+    nodePools:
+      - name: worker
+        publicIPs: false
+        size: 1
+        machineType: m4.xlarge
+        os: ubuntu:16:04
+      - name: master
+        size: 1
+        publicIPs: false
+        machineType: m4.xlarge
+        os: ubuntu:16:04
+      - name: etcd
+        size: 3
+        publicIPs: false
+        machineType: m2.medium
+        os: ubuntu:16:04
+    fabric:
+      name: canal
+

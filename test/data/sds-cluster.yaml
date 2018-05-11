@@ -1,0 +1,6 @@
+apiVersion: "cma.sds.samsung.com/v1alpha1"
+kind: SDSCluster
+metadata:
+  name: my-test-sds-cluster
+spec:
+  provider: KrakenCluster
