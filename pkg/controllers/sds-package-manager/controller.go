@@ -22,6 +22,8 @@ import (
 	"os"
 	"github.com/juju/loggo"
 	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 var (
@@ -37,7 +39,7 @@ type SDSPackageManagerController struct {
 	client *versioned.Clientset
 }
 
-func NewSDSPackageManagerController(config *rest.Config) *SDSPackageManagerController {
+func NewSDSPackageManagerController(config *rest.Config) (output *SDSPackageManagerController) {
 	if config == nil {
 		config = k8sutil.DefaultConfig
 	}
@@ -80,12 +82,14 @@ func NewSDSPackageManagerController(config *rest.Config) *SDSPackageManagerContr
 		},
 	}, cache.Indexers{})
 
-	return &SDSPackageManagerController{
+	output = &SDSPackageManagerController{
 		informer: informer,
 		indexer:  indexer,
 		queue:    queue,
 		client:   client,
 	}
+	output.SetLogger()
+	return
 }
 
 func (c *SDSPackageManagerController) processNextItem() bool {
@@ -125,6 +129,8 @@ func (c *SDSPackageManagerController) processItem(key string) error {
 		switch SDSPackageManager.Status.Phase {
 		case api.PackageManagerPhaseNone, api.PackageManagerPhasePending:
 			c.deployTiller(SDSPackageManager)
+		case api.PackageManagerPhaseInstalling:
+			c.waitForTiller(SDSPackageManager)
 		}
 	}
 	return nil
@@ -185,19 +191,8 @@ func (c *SDSPackageManagerController) runWorker() {
 }
 
 func (c *SDSPackageManagerController) deployTiller(packageManager *api.SDSPackageManager) (bool, error){
-	cluster, err := ccutil.GetKrakenCluster( packageManager.Spec.Name, packageManager.Namespace, nil)
+	config, err := c.getRestConfigForRemoteCluster(packageManager.Spec.Name, packageManager.Namespace, nil)
 	if err != nil {
-		glog.Errorf("Failed to retrieve KrakenCluster CR -->%s<-- in namespace -->%s<--, error was: ", packageManager.Spec.Name, packageManager.Namespace, err)
-		return false, err
-	}
-	if cluster.Status.Kubeconfig == "" {
-		glog.Errorf("Could not install tiller yet for cluster -->%s<-- cluster is not ready, status is -->%s<--", cluster.Name, cluster.Status.State)
-		return false, err
-	}
-
-	config, err := retrieveClusterRestConfig(packageManager.Name, packageManager.Namespace, nil)
-	if err != nil {
-		glog.Errorf("Could not install tiller yet for cluster -->%s<-- cluster is not ready, error is: %v", packageManager.Spec.Name, err)
 		return false, err
 	}
 
@@ -225,7 +220,12 @@ func (c *SDSPackageManagerController) deployTiller(packageManager *api.SDSPackag
 			Version:        packageManager.Spec.Version}), packageManager.Spec.Namespace, config)
 
 	packageManager.Status.Phase = api.PackageManagerPhaseInstalling
-	c.client.CmaV1alpha1().SDSPackageManagers(packageManager.Namespace).UpdateStatus(packageManager)
+	_, err = c.client.CmaV1alpha1().SDSPackageManagers(packageManager.Namespace).Update(packageManager)
+	if err == nil {
+		logger.Infof("Deployed tiller on -->%s<--", packageManager.Spec.Name)
+	} else {
+		logger.Infof("Could not update the status error was %s", err)
+	}
 
 	return true, nil
 }
@@ -249,7 +249,56 @@ func retrieveClusterRestConfig(name string, namespace string, config *rest.Confi
 	return clusterConfig, nil
 }
 
-func SetLogger() {
+func (c *SDSPackageManagerController) getRestConfigForRemoteCluster(clusterName string, namespace string, config *rest.Config) (*rest.Config, error) {
+	cluster, err := ccutil.GetKrakenCluster( clusterName, namespace, config)
+	if err != nil {
+		glog.Errorf("Failed to retrieve KrakenCluster CR -->%s<-- in namespace -->%s<--, error was: ", clusterName, namespace, err)
+		return nil, err
+	}
+	if cluster.Status.Kubeconfig == "" {
+		glog.Errorf("Could not install tiller yet for cluster -->%s<-- cluster is not ready, status is -->%s<--", cluster.Name, cluster.Status.State)
+		return nil, err
+	}
+
+	remoteConfig, err := retrieveClusterRestConfig(clusterName, namespace, config)
+	if err != nil {
+		glog.Errorf("Could not install tiller yet for cluster -->%s<-- cluster is not ready, error is: %v", clusterName, err)
+		return nil, err
+	}
+
+	return remoteConfig, nil
+}
+
+func (c *SDSPackageManagerController)  SetLogger() {
 	logger = util.GetModuleLogger("pkg.controllers.sds_package_manager", loggo.INFO)
+}
+
+func (c *SDSPackageManagerController) waitForTiller(packageManager *api.SDSPackageManager) (result bool, err error) {
+	config, err := c.getRestConfigForRemoteCluster(packageManager.Spec.Name, packageManager.Namespace, nil)
+	if err != nil {
+		return false, err
+	}
+
+	clientset, _ := kubernetes.NewForConfig(config)
+	timeout := 0
+	for timeout < 2000 {
+		job, err := clientset.BatchV1().Jobs(packageManager.Spec.Namespace).Get("tiller-install-job", v1.GetOptions{})
+		if err == nil {
+			if job.Status.Succeeded > 0 {
+				packageManager.Status.Phase = api.PackageManagerPhaseImplemented
+				packageManager.Status.Ready = true
+				_, err = c.client.CmaV1alpha1().SDSPackageManagers(packageManager.Namespace).Update(packageManager)
+				if err == nil {
+					logger.Infof("Tiller running on -->%s<--", packageManager.Spec.Name)
+				} else {
+					logger.Infof("Could not update the status error was %s", err)
+				}
+				return true, nil
+			}
+		}
+		time.Sleep(5 * time.Second)
+		timeout++
+	}
+	return false, nil
 }
 
