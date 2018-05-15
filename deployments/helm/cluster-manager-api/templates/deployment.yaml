@@ -17,6 +17,7 @@ spec:
         app: {{ template "name" . }}
         release: "{{ .Release.Name }}"
     spec:
+      serviceAccountName: {{ .Release.Name }}-serviceaccount
       containers:
       - name: {{ template "name" . }}
         image: "{{.Values.image.repo}}"

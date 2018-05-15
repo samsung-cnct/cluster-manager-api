@@ -5,8 +5,9 @@
 
 name: cluster-manager-api 
 image:
-  repo: quay.io/samsung_cnct/cluster-manager-api:v0.0.4
-#  tag: v0.0.4
+  repo: quay.io/samsung_cnct/cluster-manager-api:prod
 
+port: 80
 service:
-  port: 9050
+  port: 80
+  type: LoadBalancer
