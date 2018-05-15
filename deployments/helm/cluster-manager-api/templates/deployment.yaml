@@ -14,7 +14,7 @@ spec:
     metadata:
       name: {{ template "fullname" . }}
       labels:
-        app: {{ template "name" . }}
+        app: {{ template "fullname" . }}
         release: "{{ .Release.Name }}"
     spec:
       serviceAccountName: {{ .Release.Name }}-serviceaccount
