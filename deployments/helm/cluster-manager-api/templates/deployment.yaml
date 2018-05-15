@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    app: {{ template "name" . }}
+    app: {{ template "fullname" . }}
     chart: {{ template "chartname" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
