@@ -19,7 +19,7 @@ func GenerateKrakenCluster(options KrakenClusterOptions) ccapi.KrakenCluster {
 		Spec: ccapi.KrakenClusterSpec{
 			CustomerID: "myCustomerID",
 			CloudProvider: ccapi.CloudProviderInfo{
-				Name: "aws",
+				Name: "maas",
 				Credentials: ccapi.CloudProviderCredentials{
 					Username: "myuser",
 					Password: "fakepassword1",
@@ -27,6 +27,8 @@ func GenerateKrakenCluster(options KrakenClusterOptions) ccapi.KrakenCluster {
 			},
 			Provisioner: ccapi.ProvisionerInfo{
 				Name: "juju",
+				Bundle: "cs:bundle/kubernetes-core-306",
+				MaasEndpoint: "endpoint",
 			},
 			Cluster: ccapi.ClusterInfo{
 				ClusterName: "my-test-cluster",
@@ -49,7 +51,7 @@ func GenerateKrakenCluster(options KrakenClusterOptions) ccapi.KrakenCluster {
 						Name:        "etcd",
 						PublicIPs:   false,
 						Size:        3,
-						MachineType: "m3.medium",
+						MachineType: "m2.medium",
 						Os:          "ubuntu:16:04",
 					},
 				},
