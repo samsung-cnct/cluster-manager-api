@@ -4,7 +4,10 @@
 ## Table of Contents
 
 - [api.proto](#api.proto)
+    - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
+    - [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec)
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
+    - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
@@ -29,7 +32,10 @@
   
 
 - [api.proto](#api.proto)
+    - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
+    - [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec)
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
+    - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
@@ -64,6 +70,40 @@
 
 
 
+<a name="cluster_manager_api.CreateClusterAWSSpec"/>
+
+### CreateClusterAWSSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| region | [string](#string) |  | The region for AWS |
+| secret_key_id | [string](#string) |  | The SecretKeyId for API Access |
+| secret_access_key | [string](#string) |  | The SecretAccessKey for API access |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterMaaSSpec"/>
+
+### CreateClusterMaaSSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| endpoint | [string](#string) |  | The MaaS API endpoint |
+| username | [string](#string) |  | The username in the MaaS API |
+| oauth_key | [string](#string) |  | The OAuth key for the endpoint |
+
+
+
+
+
+
 <a name="cluster_manager_api.CreateClusterMsg"/>
 
 ### CreateClusterMsg
@@ -73,6 +113,24 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of the cluster to be provisioned |
+| provider | [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec) |  | The provider specification |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterProviderSpec"/>
+
+### CreateClusterProviderSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the provider - currently this is aws or maas |
+| maas | [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec) |  | The MaaS specification |
+| aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
 
 
 
@@ -387,6 +445,40 @@ The response to Hello World
 
 
 
+<a name="cluster_manager_api.CreateClusterAWSSpec"/>
+
+### CreateClusterAWSSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| region | [string](#string) |  | The region for AWS |
+| secret_key_id | [string](#string) |  | The SecretKeyId for API Access |
+| secret_access_key | [string](#string) |  | The SecretAccessKey for API access |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterMaaSSpec"/>
+
+### CreateClusterMaaSSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| endpoint | [string](#string) |  | The MaaS API endpoint |
+| username | [string](#string) |  | The username in the MaaS API |
+| oauth_key | [string](#string) |  | The OAuth key for the endpoint |
+
+
+
+
+
+
 <a name="cluster_manager_api.CreateClusterMsg"/>
 
 ### CreateClusterMsg
@@ -396,6 +488,24 @@ The response to Hello World
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of the cluster to be provisioned |
+| provider | [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec) |  | The provider specification |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterProviderSpec"/>
+
+### CreateClusterProviderSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the provider - currently this is aws or maas |
+| maas | [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec) |  | The MaaS specification |
+| aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
 
 
 

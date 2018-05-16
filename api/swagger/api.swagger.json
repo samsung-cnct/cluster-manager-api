@@ -250,12 +250,67 @@
     }
   },
   "definitions": {
+    "cluster_manager_apiCreateClusterAWSSpec": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "string",
+          "title": "The region for AWS"
+        },
+        "secret_key_id": {
+          "type": "string",
+          "title": "The SecretKeyId for API Access"
+        },
+        "secret_access_key": {
+          "type": "string",
+          "title": "The SecretAccessKey for API access"
+        }
+      }
+    },
+    "cluster_manager_apiCreateClusterMaaSSpec": {
+      "type": "object",
+      "properties": {
+        "endpoint": {
+          "type": "string",
+          "title": "The MaaS API endpoint"
+        },
+        "username": {
+          "type": "string",
+          "title": "The username in the MaaS API"
+        },
+        "oauth_key": {
+          "type": "string",
+          "title": "The OAuth key for the endpoint"
+        }
+      }
+    },
     "cluster_manager_apiCreateClusterMsg": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string",
           "title": "Name of the cluster to be provisioned"
+        },
+        "provider": {
+          "$ref": "#/definitions/cluster_manager_apiCreateClusterProviderSpec",
+          "title": "The provider specification"
+        }
+      }
+    },
+    "cluster_manager_apiCreateClusterProviderSpec": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "What is the provider - currently this is aws or maas"
+        },
+        "maas": {
+          "$ref": "#/definitions/cluster_manager_apiCreateClusterMaaSSpec",
+          "title": "The MaaS specification"
+        },
+        "aws": {
+          "$ref": "#/definitions/cluster_manager_apiCreateClusterAWSSpec",
+          "title": "The AWS specification"
         }
       }
     },

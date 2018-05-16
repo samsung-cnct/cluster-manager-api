@@ -11,7 +11,20 @@ import (
 )
 
 func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
-	options := cma.SDSClusterOptions{Name: in.Name, Provider: "aws"}
+	options := cma.SDSClusterOptions{
+		Name: in.Name,
+		Provider: in.Provider.Name,
+		AWS: cma.AWSOptions{
+			Region: in.Provider.Aws.Region,
+			SecretAccessKey: in.Provider.Aws.SecretAccessKey,
+			SecretKeyId: in.Provider.Aws.SecretKeyId,
+		},
+		MaaS: cma.MaaSOptions{
+			Endpoint: in.Provider.Maas.Endpoint,
+			Username: in.Provider.Maas.Username,
+			OAuthKey: in.Provider.Maas.OauthKey,
+		},
+	}
 	_, err := cma.CreateSDSCluster(cma.GenerateSDSCluster(options), "default", nil)
 	if err == nil {
 		return &pb.CreateClusterReply{Ok: true, Status: "Creating"}, nil

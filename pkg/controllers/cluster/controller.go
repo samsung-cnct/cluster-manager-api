@@ -203,7 +203,20 @@ func (c *SDSClusterController) deployKrakenCluster(sdsCluster *api.SDSCluster) {
 	clusterName := sdsCluster.GetName()
 	_, err := ccutil.CreateKrakenCluster(
 		ccutil.GenerateKrakenCluster(
-			ccutil.KrakenClusterOptions{Name: clusterName},
+			ccutil.KrakenClusterOptions{
+				Name: clusterName,
+				Provider: sdsCluster.Spec.Provider.Name,
+				MaaS: ccutil.MaaSOptions{
+					Endpoint: sdsCluster.Spec.Provider.MaaS.Endpoint,
+					Username: sdsCluster.Spec.Provider.MaaS.Username,
+					OAuthKey: sdsCluster.Spec.Provider.MaaS.OAuthKey,
+				},
+				AWS: ccutil.AWSOptions{
+					Region: sdsCluster.Spec.Provider.AWS.Region,
+					SecretKeyId: sdsCluster.Spec.Provider.AWS.SecretKeyId,
+					SecretAccessKey: sdsCluster.Spec.Provider.AWS.SecretAccessKey,
+				},
+			},
 		), "default", nil)
 	if (err != nil) && (!k8sutil.IsResourceAlreadyExistsError(err)) {
 		logger.Infof("Could not create kraken cluster")

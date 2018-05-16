@@ -30,6 +30,38 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.AWSSpec": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "AWSSpec represents an aws spec",
+					Properties: map[string]spec.Schema{
+						"secretKeyId": {
+							SchemaProps: spec.SchemaProps{
+								Description: "The API secret key id",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"secretAccessKey": {
+							SchemaProps: spec.SchemaProps{
+								Description: "The API secret access key",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"region": {
+							SchemaProps: spec.SchemaProps{
+								Description: "The region",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+					},
+					Required: []string{"secretKeyId", "secretAccessKey", "region"},
+				},
+			},
+			Dependencies: []string{},
+		},
 		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Chart": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -116,6 +148,38 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			},
 			Dependencies: []string{},
 		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.MaaSSpec": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "MaaSSpec represents a maas spec",
+					Properties: map[string]spec.Schema{
+						"endpoint": {
+							SchemaProps: spec.SchemaProps{
+								Description: "The MaaS endpoint",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"username": {
+							SchemaProps: spec.SchemaProps{
+								Description: "The username",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"oauthKey": {
+							SchemaProps: spec.SchemaProps{
+								Description: "The OAuth key",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+					},
+					Required: []string{"endpoint", "username", "oauthKey"},
+				},
+			},
+			Dependencies: []string{},
+		},
 		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.PackageManagerPermissions": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -147,6 +211,37 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 				},
 			},
 			Dependencies: []string{},
+		},
+		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.ProviderSpec": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "ProviderSpec represents a provider spec",
+					Properties: map[string]spec.Schema{
+						"name": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What type of provider",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"aws": {
+							SchemaProps: spec.SchemaProps{
+								Description: "The AWS Spec",
+								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.AWSSpec"),
+							},
+						},
+						"maas": {
+							SchemaProps: spec.SchemaProps{
+								Description: "The MaaS Spec",
+								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.MaaSSpec"),
+							},
+						},
+					},
+					Required: []string{"name", "aws", "maas"},
+				},
+			},
+			Dependencies: []string{
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.AWSSpec", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.MaaSSpec"},
 		},
 		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplication": {
 			Schema: spec.Schema{
@@ -423,8 +518,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 						"provider": {
 							SchemaProps: spec.SchemaProps{
 								Description: "What provider",
-								Type:        []string{"string"},
-								Format:      "",
+								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.ProviderSpec"),
 							},
 						},
 						"packageManager": {
@@ -451,7 +545,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 				},
 			},
 			Dependencies: []string{
-				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationSpec", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerSpec"},
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.ProviderSpec", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationSpec", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerSpec"},
 		},
 		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSClusterStatus": {
 			Schema: spec.Schema{
@@ -1560,6 +1654,52 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			},
 			Dependencies: []string{
 				"k8s.io/api/core/v1.ConfigMap", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+		},
+		"k8s.io/api/core/v1.ConfigMapNodeConfigSource": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "ConfigMapNodeConfigSource contains the information to reference a ConfigMap as a config source for the Node.",
+					Properties: map[string]spec.Schema{
+						"namespace": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Namespace is the metadata.namespace of the referenced ConfigMap. This field is required in all cases.",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"name": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Name is the metadata.name of the referenced ConfigMap. This field is required in all cases.",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"uid": {
+							SchemaProps: spec.SchemaProps{
+								Description: "UID is the metadata.UID of the referenced ConfigMap. This field is currently reqired in Node.Spec.",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"resourceVersion": {
+							SchemaProps: spec.SchemaProps{
+								Description: "ResourceVersion is the metadata.ResourceVersion of the referenced ConfigMap. This field is forbidden in Node.Spec.",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"kubeletConfigKey": {
+							SchemaProps: spec.SchemaProps{
+								Description: "KubeletConfigKey declares which key of the referenced ConfigMap corresponds to the KubeletConfiguration structure This field is required in all cases.",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+					},
+					Required: []string{"namespace", "name", "kubeletConfigKey"},
+				},
+			},
+			Dependencies: []string{},
 		},
 		"k8s.io/api/core/v1.ConfigMapProjection": {
 			Schema: spec.Schema{
@@ -4161,30 +4301,53 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 				SchemaProps: spec.SchemaProps{
 					Description: "NodeConfigSource specifies a source of node configuration. Exactly one subfield (excluding metadata) must be non-nil.",
 					Properties: map[string]spec.Schema{
-						"kind": {
+						"configMap": {
 							SchemaProps: spec.SchemaProps{
-								Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
-								Type:        []string{"string"},
-								Format:      "",
-							},
-						},
-						"apiVersion": {
-							SchemaProps: spec.SchemaProps{
-								Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
-								Type:        []string{"string"},
-								Format:      "",
-							},
-						},
-						"configMapRef": {
-							SchemaProps: spec.SchemaProps{
-								Ref: ref("k8s.io/api/core/v1.ObjectReference"),
+								Description: "ConfigMap is a reference to a Node's ConfigMap",
+								Ref:         ref("k8s.io/api/core/v1.ConfigMapNodeConfigSource"),
 							},
 						},
 					},
 				},
 			},
 			Dependencies: []string{
-				"k8s.io/api/core/v1.ObjectReference"},
+				"k8s.io/api/core/v1.ConfigMapNodeConfigSource"},
+		},
+		"k8s.io/api/core/v1.NodeConfigStatus": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "NodeConfigStatus describes the status of the config assigned by Node.Spec.ConfigSource.",
+					Properties: map[string]spec.Schema{
+						"assigned": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Assigned reports the checkpointed config the node will try to use. When Node.Spec.ConfigSource is updated, the node checkpoints the associated config payload to local disk, along with a record indicating intended config. The node refers to this record to choose its config checkpoint, and reports this record in Assigned. Assigned only updates in the status after the record has been checkpointed to disk. When the Kubelet is restarted, it tries to make the Assigned config the Active config by loading and validating the checkpointed payload identified by Assigned.",
+								Ref:         ref("k8s.io/api/core/v1.NodeConfigSource"),
+							},
+						},
+						"active": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Active reports the checkpointed config the node is actively using. Active will represent either the current version of the Assigned config, or the current LastKnownGood config, depending on whether attempting to use the Assigned config results in an error.",
+								Ref:         ref("k8s.io/api/core/v1.NodeConfigSource"),
+							},
+						},
+						"lastKnownGood": {
+							SchemaProps: spec.SchemaProps{
+								Description: "LastKnownGood reports the checkpointed config the node will fall back to when it encounters an error attempting to use the Assigned config. The Assigned config becomes the LastKnownGood config when the node determines that the Assigned config is stable and correct. This is currently implemented as a 10-minute soak period starting when the local record of Assigned config is updated. If the Assigned config is Active at the end of this period, it becomes the LastKnownGood. Note that if Spec.ConfigSource is reset to nil (use local defaults), the LastKnownGood is also immediately reset to nil, because the local default config is always assumed good. You should not make assumptions about the node's method of determining config stability and correctness, as this may change or become configurable in the future.",
+								Ref:         ref("k8s.io/api/core/v1.NodeConfigSource"),
+							},
+						},
+						"error": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Error describes any problems reconciling the Spec.ConfigSource to the Active config. Errors may occur, for example, attempting to checkpoint Spec.ConfigSource to the local Assigned record, attempting to checkpoint the payload associated with Spec.ConfigSource, attempting to load or validate the Assigned config, etc. Errors may occur at different points while syncing config. Earlier errors (e.g. download or checkpointing errors) will not result in a rollback to LastKnownGood, and may resolve across Kubelet retries. Later errors (e.g. loading or validating a checkpointed config) will result in a rollback to LastKnownGood. In the latter case, it is usually possible to resolve the error by fixing the config assigned in Spec.ConfigSource. You can find additional information for debugging by searching the error message in the Kubelet log. Error is a human-readable description of the error state; machines can check whether or not Error is empty, but should not rely on the stability of the Error text across Kubelet versions.",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+					},
+				},
+			},
+			Dependencies: []string{
+				"k8s.io/api/core/v1.NodeConfigSource"},
 		},
 		"k8s.io/api/core/v1.NodeDaemonEndpoints": {
 			Schema: spec.Schema{
@@ -4591,11 +4754,17 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								},
 							},
 						},
+						"config": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Status of the config assigned to the node via the dynamic Kubelet config feature.",
+								Ref:         ref("k8s.io/api/core/v1.NodeConfigStatus"),
+							},
+						},
 					},
 				},
 			},
 			Dependencies: []string{
-				"k8s.io/api/core/v1.AttachedVolume", "k8s.io/api/core/v1.ContainerImage", "k8s.io/api/core/v1.NodeAddress", "k8s.io/api/core/v1.NodeCondition", "k8s.io/api/core/v1.NodeDaemonEndpoints", "k8s.io/api/core/v1.NodeSystemInfo", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
+				"k8s.io/api/core/v1.AttachedVolume", "k8s.io/api/core/v1.ContainerImage", "k8s.io/api/core/v1.NodeAddress", "k8s.io/api/core/v1.NodeCondition", "k8s.io/api/core/v1.NodeConfigStatus", "k8s.io/api/core/v1.NodeDaemonEndpoints", "k8s.io/api/core/v1.NodeSystemInfo", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
 		},
 		"k8s.io/api/core/v1.NodeSystemInfo": {
 			Schema: spec.Schema{
@@ -8636,7 +8805,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 						},
 						"publishNotReadyAddresses": {
 							SchemaProps: spec.SchemaProps{
-								Description: "publishNotReadyAddresses, when set to true, indicates that DNS implementations must publish the notReadyAddresses of subsets for the Endpoints associated with the Service. The default value is false. The primary use case for setting this field is to use a StatefulSet's Headless Service to propagate SRV records for its Pods without respect to their readiness for purpose of peer discovery. This field will replace the service.alpha.kubernetes.io/tolerate-unready-endpoints when that annotation is deprecated and all clients have been converted to use this field.",
+								Description: "publishNotReadyAddresses, when set to true, indicates that DNS implementations must publish the notReadyAddresses of subsets for the Endpoints associated with the Service. The default value is false. The primary use case for setting this field is to use a StatefulSet's Headless Service to propagate SRV records for its Pods without respect to their readiness for purpose of peer discovery.",
 								Type:        []string{"boolean"},
 								Format:      "",
 							},
