@@ -32,10 +32,12 @@ func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetC
 }
 
 func (s *Server) DeleteCluster(ctx context.Context, in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
-	ok, err := ccutil.DeleteKrakenCluster(in.Name, "default", nil)
+	ok, err := cma.DeleteSDSCluster(in.Name, "default", nil)
+
+	// Shouldn't be needed, but just doing it for now
+	ok, err = ccutil.DeleteKrakenCluster(in.Name, "default", nil)
 	if err != nil {
 		return &pb.DeleteClusterReply{Ok: ok, Status: fmt.Sprintf("%v", err)}, nil
 	}
 	return &pb.DeleteClusterReply{Ok: ok, Status: "Deleting"}, nil
-
 }
