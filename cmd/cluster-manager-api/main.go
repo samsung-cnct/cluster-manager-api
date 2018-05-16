@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	cluster "github.com/samsung-cnct/cluster-manager-api/pkg/controllers/cluster"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/controllers/cluster"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"github.com/soheilhy/cmux"
@@ -59,14 +59,14 @@ func main() {
 
 	logger.Infof("Starting the SDSCluster Controller")
 	sdsClusterController := cluster.NewSDSClusterController(nil)
-	sdsPackageManagerController := sds_package_manager.NewSDSPackageManagerController(nil)
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		sdsClusterController.Run(3, stop)
 	}()
 
-	// TODO: Start the SDSPackageManager Controller
+	sdsPackageManagerController := sds_package_manager.NewSDSPackageManagerController(nil)
+	// Start the SDSPackageManager Controller
 	wg.Add(1)
 	go func() {
 		defer wg.Done()

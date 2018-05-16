@@ -47,6 +47,8 @@ type SDSApplicationSpec struct {
 	Name 			string 					`json:"name"`
 	// Chart Information
 	Chart			Chart				`json:"chart"`
+	// What are the values for the Values.yaml file?
+	Values			string					`json:"values"`
 }
 
 // Chart represents a SDS Application's Chart information
@@ -56,8 +58,6 @@ type Chart struct {
 	Name			string					`json:"chartName"`
 	// What is the respository information
 	Repository 		ChartRepository			`json:"repository"`
-	// What are the values for the Values.yaml file?
-	Values			string					`json:"values"`
 	// What is the chart version
 	Version 		string					`json:"version"`
 }

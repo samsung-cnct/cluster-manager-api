@@ -19,6 +19,43 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 		},
 		Spec: sdsapi.SDSClusterSpec{
 			Provider: options.Provider,
+			PackageManager: sdsapi.SDSPackageManagerSpec{
+				Version: "v2.9.0",
+				Name: options.Name,
+				Namespace: "cma-tiller",
+				Permissions: sdsapi.PackageManagerPermissions{
+					ClusterWide: true,
+				},
+			},
+			Applications: []sdsapi.SDSApplicationSpec{
+				{
+					Name: "prometheus-operator",
+					Namespace: "prometheus",
+					PackageManager: sdsapi.SDSPackageManagerRef{ Name: options.Name },
+					Chart: sdsapi.Chart{
+						Name: "coreos/prometheus-operator",
+						Repository: sdsapi.ChartRepository{Name: "coreos", URL: "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"},
+					},
+				},
+				{
+					Name: "kube-prometheus",
+					Namespace: "prometheus",
+					PackageManager: sdsapi.SDSPackageManagerRef{ Name: options.Name },
+					Chart: sdsapi.Chart{
+						Name: "coreos/kube-prometheus",
+						Repository: sdsapi.ChartRepository{Name: "coreos", URL: "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"},
+					},
+				},
+				{
+					Name: "logging",
+					Namespace: "logging",
+					PackageManager: sdsapi.SDSPackageManagerRef{ Name: options.Name },
+					Chart: sdsapi.Chart{
+						Name: "sds/logging-client",
+						Repository: sdsapi.ChartRepository{Name: "sds", URL: "https://charts.migrations.cnct.io"},
+					},
+				},
+			},
 		},
 	}
 }

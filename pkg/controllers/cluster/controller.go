@@ -9,13 +9,20 @@ import (
 	"github.com/golang/glog"
 	api "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
+	"github.com/juju/loggo"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
+)
+
+var (
+	logger loggo.Logger
 )
 
 type SDSClusterController struct {
@@ -69,12 +76,14 @@ func NewSDSClusterController(config *rest.Config) *SDSClusterController {
 		},
 	}, cache.Indexers{})
 
-	return &SDSClusterController{
+	output := &SDSClusterController{
 		informer: informer,
 		indexer:  indexer,
 		queue:    queue,
 		client:   client,
 	}
+	output.SetLogger()
+	return output
 }
 
 func (c *SDSClusterController) processNextItem() bool {
@@ -111,14 +120,20 @@ func (c *SDSClusterController) proxessItem(key string) error {
 		clusterName := sdsCluster.GetName()
 		fmt.Printf("SDSCluster %s does exist (name=%s)!\n", key, clusterName)
 
-		_, err := ccutil.CreateKrakenCluster(
-			ccutil.GenerateKrakenCluster(
-				ccutil.KrakenClusterOptions{Name: clusterName},
-			), "default", nil)
-
-		if err != nil {
-			glog.Errorf("Failed to request a KrakenCluster CR", key, err)
-			return err
+		switch sdsCluster.Status.Phase {
+		case api.ClusterPhaseNone, api.ClusterPhasePending:
+			c.deployKrakenCluster(sdsCluster)
+		case api.ClusterPhaseHaveCluster:
+			c.deployPackageManager(sdsCluster)
+		case api.ClusterPhaseHavePackageManager:
+			c.deployApplications(sdsCluster)
+		}
+		if sdsCluster.Status.ClusterBuilt != true {
+			c.deployKrakenCluster(sdsCluster)
+		} else if sdsCluster.Status.TillerInstalled != true {
+			c.deployPackageManager(sdsCluster)
+		} else if sdsCluster.Status.AppsInstalled != true {
+			c.deployApplications(sdsCluster)
 		}
 	}
 	return nil
@@ -177,3 +192,74 @@ func (c *SDSClusterController) runWorker() {
 	for c.processNextItem() {
 	}
 }
+
+func (c *SDSClusterController)  SetLogger() {
+	logger = util.GetModuleLogger("pkg.controllers.sds_cluster", loggo.INFO)
+}
+
+
+
+func (c *SDSClusterController) deployKrakenCluster(sdsCluster *api.SDSCluster) {
+	clusterName := sdsCluster.GetName()
+	_, err := ccutil.CreateKrakenCluster(
+		ccutil.GenerateKrakenCluster(
+			ccutil.KrakenClusterOptions{Name: clusterName},
+		), "default", nil)
+	if (err != nil) && (!k8sutil.IsResourceAlreadyExistsError(err)) {
+		logger.Infof("Could not create kraken cluster")
+		sdsCluster.Status.Phase = api.ClusterPhasePending
+		_, err = c.client.CmaV1alpha1().SDSClusters(sdsCluster.Namespace).Update(sdsCluster)
+		if err != nil {
+			logger.Infof("Could not update SDSCluster to Pending status, error was: %s", err)
+		}
+		return
+	}
+
+	sdsCluster.Status.Phase = api.ClusterPhaseWaitingForCluster
+	_, err = c.client.CmaV1alpha1().SDSClusters(sdsCluster.Namespace).Update(sdsCluster)
+	if err != nil {
+		logger.Infof("Failed to request a KrakenCluster CR, error was: %s", err)
+	}
+}
+
+func (c *SDSClusterController) deployPackageManager(sdsCluster *api.SDSCluster) {
+	clusterName := sdsCluster.GetName()
+	// Cluster name shouldn't have to be the name of the package manager - need to fix
+	options := cma.SDSPackageManagerOptions{
+		Name: clusterName,
+		Namespace: sdsCluster.Spec.PackageManager.Namespace,
+		Version: sdsCluster.Spec.PackageManager.Version,
+		ClusterWide: sdsCluster.Spec.PackageManager.Permissions.ClusterWide,
+		AdminNamespaces: sdsCluster.Spec.PackageManager.Permissions.Namespaces,
+	}
+	_, err := cma.CreateSDSPackageManager(cma.GenerateSDSPackageManager(options), sdsCluster.Namespace, nil)
+	if (err != nil) && (!k8sutil.IsResourceAlreadyExistsError(err)) {
+		logger.Infof("Could not create SDSPackageManager for cluster %s", clusterName)
+		sdsCluster.Status.Phase = api.ClusterPhaseHaveCluster
+		_, err = c.client.CmaV1alpha1().SDSClusters(sdsCluster.Namespace).Update(sdsCluster)
+		if err != nil {
+			logger.Infof("Could not update SDSCluster to HaveCluster status, error was: %s", err)
+		}
+		return
+	}
+
+	sdsCluster.Status.Phase = api.ClusterPhaseDeployingPackageManager
+	_, err = c.client.CmaV1alpha1().SDSClusters(sdsCluster.Namespace).Update(sdsCluster)
+	if err != nil {
+		logger.Infof("Failed to request a SDSPackageManager CR, error was: %s", err)
+	}
+}
+
+func (c *SDSClusterController) deployApplications(sdsCluster *api.SDSCluster) {
+	clusterName := sdsCluster.GetName()
+	for _, application := range sdsCluster.Spec.Applications {
+		logger.Infof("Going to deploy application %s", application.Name)
+	}
+
+	sdsCluster.Status.Phase = api.ClusterPhaseDeployingApplications
+	_, err := c.client.CmaV1alpha1().SDSClusters(sdsCluster.Namespace).Update(sdsCluster)
+	if err != nil {
+		logger.Infof("Failed to request a SDSPackageManager CR for cluster %s, error was: %s", clusterName, err)
+	}
+}
+

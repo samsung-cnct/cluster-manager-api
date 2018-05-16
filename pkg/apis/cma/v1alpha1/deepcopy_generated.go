@@ -275,9 +275,9 @@ func (in *SDSClusterRef) DeepCopy() *SDSClusterRef {
 func (in *SDSClusterSpec) DeepCopyInto(out *SDSClusterSpec) {
 	*out = *in
 	in.PackageManager.DeepCopyInto(&out.PackageManager)
-	if in.Charts != nil {
-		in, out := &in.Charts, &out.Charts
-		*out = make([]Chart, len(*in))
+	if in.Applications != nil {
+		in, out := &in.Applications, &out.Applications
+		*out = make([]SDSApplicationSpec, len(*in))
 		copy(*out, *in)
 	}
 	return

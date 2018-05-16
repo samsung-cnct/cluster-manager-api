@@ -48,13 +48,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.ChartRepository"),
 							},
 						},
-						"values": {
-							SchemaProps: spec.SchemaProps{
-								Description: "What are the values for the Values.yaml file?",
-								Type:        []string{"string"},
-								Format:      "",
-							},
-						},
 						"version": {
 							SchemaProps: spec.SchemaProps{
 								Description: "What is the chart version",
@@ -63,7 +56,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 							},
 						},
 					},
-					Required: []string{"chartName", "repository", "values", "version"},
+					Required: []string{"chartName", "repository", "version"},
 				},
 			},
 			Dependencies: []string{
@@ -270,8 +263,15 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Chart"),
 							},
 						},
+						"values": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What are the values for the Values.yaml file?",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
 					},
-					Required: []string{"packageManager", "namespace", "name", "chart"},
+					Required: []string{"packageManager", "namespace", "name", "chart", "values"},
 				},
 			},
 			Dependencies: []string{
@@ -433,14 +433,14 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Ref:         ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerSpec"),
 							},
 						},
-						"chart": {
+						"applications": {
 							SchemaProps: spec.SchemaProps{
 								Description: "What Charts should be installed",
 								Type:        []string{"array"},
 								Items: &spec.SchemaOrArray{
 									Schema: &spec.Schema{
 										SchemaProps: spec.SchemaProps{
-											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Chart"),
+											Ref: ref("github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationSpec"),
 										},
 									},
 								},
@@ -451,7 +451,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 				},
 			},
 			Dependencies: []string{
-				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.Chart", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerSpec"},
+				"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSApplicationSpec", "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSPackageManagerSpec"},
 		},
 		"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1.SDSClusterStatus": {
 			Schema: spec.Schema{

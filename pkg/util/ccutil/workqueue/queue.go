@@ -15,6 +15,11 @@ import (
 	"k8s.io/client-go/rest"
 	"github.com/samsung-cnct/cluster-controller/pkg/client/clientset/versioned"
 	ccapi "github.com/samsung-cnct/cluster-controller/pkg/apis/clustercontroller/v1alpha1"
+	sdsClient "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
+	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	cmaapi "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
+
+	"log"
 )
 
 type Controller struct {
@@ -70,7 +75,7 @@ func (c *Controller) syncToStdout(key string) error {
 		// is dependent on the actual instance, to detect that a KrakenCluster was recreated with the same name
 		fmt.Printf("Sync/Add/Update for KrakenCluster %s\n", obj.(*ccapi.KrakenCluster).GetName())
 		if (obj.(*ccapi.KrakenCluster).Status.State == ccapi.Created) && (obj.(*ccapi.KrakenCluster).Status.Kubeconfig != "" ) {
-			fmt.Printf("OMG I've been created %s\n", obj.(*ccapi.KrakenCluster).GetName())
+			c.updateSDSCluster(obj.(*ccapi.KrakenCluster))
 		}
 
 	}
@@ -181,3 +186,27 @@ func ListenToKrakenClusterChanges(config *rest.Config) {
 	select {}
 }
 
+func (c *Controller) updateSDSCluster(krakenCluster *ccapi.KrakenCluster) {
+	clusterName := krakenCluster.GetName()
+	log.Printf("I'm here for cluster %s", clusterName)
+	client := sdsClient.NewForConfigOrDie(k8sutil.DefaultConfig)
+	sdsCluster, err := client.CmaV1alpha1().SDSClusters(krakenCluster.Namespace).Get(clusterName, v1.GetOptions{})
+	if err != nil {
+		log.Printf("Failed to get SDSCluster for KrakenCluster %s, error was: ", clusterName, err)
+	}
+	changes := false
+	if sdsCluster.Status.ClusterBuilt == false {
+		changes = true
+		sdsCluster.Status.ClusterBuilt = true
+	}
+	if sdsCluster.Status.Phase == cmaapi.ClusterPhaseWaitingForCluster || sdsCluster.Status.Phase == cmaapi.ClusterPhaseNone || sdsCluster.Status.Phase == cmaapi.ClusterPhasePending {
+		changes = true
+		sdsCluster.Status.Phase = cmaapi.ClusterPhaseHaveCluster
+	}
+	if changes {
+		_, err = client.CmaV1alpha1().SDSClusters(sdsCluster.Namespace).Update(sdsCluster)
+		if err != nil {
+			log.Printf("Could not update SDSCluster for KrakenCluster %s, error was: ", clusterName, err)
+		}
+	}
+}

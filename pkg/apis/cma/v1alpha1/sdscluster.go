@@ -4,6 +4,17 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+const (
+	ClusterPhaseNone	= ""
+	ClusterPhasePending = "Pending"
+	ClusterPhaseWaitingForCluster = "Waiting for cluster"
+	ClusterPhaseHaveCluster = "Cluster created"
+	ClusterPhaseDeployingPackageManager = "Deploying Package Manager"
+	ClusterPhaseHavePackageManager = "Package Manager Installed"
+	ClusterPhaseDeployingApplications = "Deploying Applications"
+	ClusterPhaseReady = "Ready"
+)
+
 // SDSDClusterList is a list of sds clusters.
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +k8s:openapi-gen=true
@@ -33,7 +44,7 @@ type SDSClusterSpec struct {
 	// What package manager should be used
 	PackageManager SDSPackageManagerSpec	`json:"packageManager"`
 	// What Charts should be installed
-	Charts []Chart 			`json:"chart,omitempty"`
+	Applications []SDSApplicationSpec 			`json:"applications,omitempty"`
 }
 
 // SDSClusterStatus has the status of the system
