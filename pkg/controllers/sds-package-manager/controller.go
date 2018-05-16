@@ -241,6 +241,7 @@ func retrieveClusterRestConfig(name string, namespace string, config *rest.Confi
 	file.WriteString(cluster.Status.Kubeconfig)
 
 	clusterConfig, err := clientcmd.BuildConfigFromFlags("", file.Name())
+	clusterConfig.Insecure = true
 
 	if err != nil {
 		logger.Errorf("Could not load kubeconfig for cluster -->%s<-- in namespace -->%s<--", name, namespace)
