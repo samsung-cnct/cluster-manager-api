@@ -16,6 +16,10 @@ func GenerateClusterAdminRole(name string) rbac.ClusterRole {
 				Resources: []string{"*"},
 				Verbs:     []string{"*"},
 			},
+			{
+				NonResourceURLs: []string{"*"},
+				Verbs: []string{"*"},
+			},
 		},
 	}
 }
