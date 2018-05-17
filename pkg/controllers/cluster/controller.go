@@ -267,7 +267,7 @@ func (c *SDSClusterController) deployApplications(sdsCluster *api.SDSCluster) {
 	clusterName := sdsCluster.GetName()
 	for _, application := range sdsCluster.Spec.Applications {
 		_, err := cma.CreateSDSApplication(cma.GenerateSDSApplication(cma.SDSApplicationOptions{
-			Name: application.Name,
+			Name: sdsCluster.Name + "-" + application.Name,
 			Namespace: application.Namespace,
 			Values: application.Values,
 			PackageManager: application.PackageManager.Name,
