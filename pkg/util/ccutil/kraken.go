@@ -77,6 +77,8 @@ func generateProviderBlock(options KrakenClusterOptions) ccapi.CloudProviderInfo
 			Credentials: ccapi.CloudProviderCredentials{
 				Accesskey: options.AWS.SecretAccessKey,
 				Password: options.AWS.SecretKeyId,
+				// TODO this should go away with a change to cluster-controller
+				Username: "placeholder",
 			},
 			Region: "aws/"+options.AWS.Region,
 		}
