@@ -33,8 +33,6 @@ func GenerateSDSPackageManager(options SDSPackageManagerOptions) sdsapi.SDSPacka
 	}
 }
 
-
-
 func CreateSDSPackageManager(packageManager sdsapi.SDSPackageManager, namespace string, config *rest.Config) (bool, error) {
 	var err error
 	SetLogger()
@@ -49,5 +47,47 @@ func CreateSDSPackageManager(packageManager sdsapi.SDSPackageManager, namespace 
 		return false, err
 	}
 
-	return true, err
+	return true, nil
+}
+
+func UpdateSDSPackageManager(packageManager sdsapi.SDSPackageManager, namespace string, config *rest.Config) (*sdsapi.SDSPackageManager, error) {
+	var err error
+	SetLogger()
+	client := prepareRestClient(config)
+
+	updatedCluster, err := client.CmaV1alpha1().SDSPackageManagers(namespace).Update(&packageManager)
+	if err != nil {
+		logger.Infof("PackageManager -->%s<-- Cannot be updated, error was %v", packageManager.ObjectMeta.Name, err)
+		return nil, err
+	}
+
+	return updatedCluster, nil
+}
+
+func GetSDSPackageManager(name string, namespace string, config *rest.Config) (*sdsapi.SDSPackageManager, error) {
+	var err error
+	SetLogger()
+	client := prepareRestClient(config)
+
+	packageManager, err := client.CmaV1alpha1().SDSPackageManagers(namespace).Get(name, metav1.GetOptions{})
+	if err != nil {
+		logger.Infof("PackageManager -->%s<-- Cannot be fetched, error was %v", name, err)
+		return nil, err
+	}
+
+	return packageManager, nil
+}
+
+func DeleteSDSPackageManager(name string, namespace string, config *rest.Config) (bool, error) {
+	var err error
+	SetLogger()
+	client := prepareRestClient(config)
+
+	err = client.CmaV1alpha1().SDSPackageManagers(namespace).Delete(name, &metav1.DeleteOptions{})
+	if err != nil {
+		logger.Infof("PackageManager -->%s<-- Cannot be deleted, error was %v", name, err)
+		return false, err
+	}
+
+	return true, nil
 }

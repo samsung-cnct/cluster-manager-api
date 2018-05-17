@@ -24,6 +24,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 )
 
 var (
@@ -241,7 +242,9 @@ func retrieveClusterRestConfig(name string, namespace string, config *rest.Confi
 	file.WriteString(cluster.Status.Kubeconfig)
 
 	clusterConfig, err := clientcmd.BuildConfigFromFlags("", file.Name())
-	clusterConfig.TLSClientConfig = rest.TLSClientConfig{Insecure:true}
+	if os.Getenv("CLUSTERAPIMANAGER_INSECURE_TLS") == "true" {
+		clusterConfig.TLSClientConfig = rest.TLSClientConfig{Insecure:true}
+	}
 
 	if err != nil {
 		logger.Errorf("Could not load kubeconfig for cluster -->%s<-- in namespace -->%s<--", name, namespace)
@@ -291,6 +294,7 @@ func (c *SDSPackageManagerController) waitForTiller(packageManager *api.SDSPacka
 				_, err = c.client.CmaV1alpha1().SDSPackageManagers(packageManager.Namespace).Update(packageManager)
 				if err == nil {
 					logger.Infof("Tiller running on -->%s<--", packageManager.Spec.Name)
+					c.updateSDSCluster(packageManager)
 				} else {
 					logger.Infof("Could not update the status error was %s", err)
 				}
@@ -303,3 +307,30 @@ func (c *SDSPackageManagerController) waitForTiller(packageManager *api.SDSPacka
 	return false, nil
 }
 
+func (c *SDSPackageManagerController) updateSDSCluster(packageManager *api.SDSPackageManager) (result bool, err error) {
+	// TODO This is dubious, but for the PoC, good enough
+	sdsCluster, err := cma.GetSDSCluster(packageManager.Spec.Name, "default", nil)
+	if err != nil {
+		logger.Infof("Failed to get SDSCluster for SDSPackageManager %s, error was: ", packageManager.Spec.Name, err)
+	}
+
+	changes := false
+	if sdsCluster.Status.TillerInstalled == false {
+		changes = true
+		sdsCluster.Status.TillerInstalled = true
+	}
+	switch sdsCluster.Status.Phase {
+	case api.ClusterPhaseWaitingForCluster, api.ClusterPhaseNone, api.ClusterPhasePending, api.ClusterPhaseHaveCluster, api.ClusterPhaseDeployingPackageManager:
+		changes = true
+		sdsCluster.Status.Phase = api.ClusterPhaseHavePackageManager
+	}
+
+	if changes {
+		_, err = cma.UpdateSDSCluster(sdsCluster, sdsCluster.Namespace, nil)
+		if err != nil {
+			logger.Infof("Could not update SDSCluster for KrakenCluster %s, error was: ", sdsCluster.Name, err)
+		}
+	}
+
+	return true, nil
+}

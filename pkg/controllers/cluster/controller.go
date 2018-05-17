@@ -266,7 +266,25 @@ func (c *SDSClusterController) deployPackageManager(sdsCluster *api.SDSCluster) 
 func (c *SDSClusterController) deployApplications(sdsCluster *api.SDSCluster) {
 	clusterName := sdsCluster.GetName()
 	for _, application := range sdsCluster.Spec.Applications {
-		logger.Infof("Going to deploy application %s", application.Name)
+		_, err := cma.CreateSDSApplication(cma.GenerateSDSApplication(cma.SDSApplicationOptions{
+			Name: application.Name,
+			Namespace: application.Namespace,
+			Values: application.Values,
+			PackageManager: application.PackageManager.Name,
+			Chart: cma.Chart{
+				Name: application.Chart.Name,
+				Version: application.Chart.Version,
+				Repository: cma.ChartRepository{
+					Name: application.Chart.Repository.Name,
+					URL: application.Chart.Repository.URL,
+				},
+			},
+		}), "default", nil)
+		if err != nil {
+			logger.Infof("Error creating SDSApplication -->%s<-- for cluster -->%s<--, error was -->%s<--", application.Name, sdsCluster.Name, err)
+			continue
+		}
+		logger.Infof("Created SDSApplication -->%s<-- for SDSCluster -->%s<--", application.Name, sdsCluster.Name)
 	}
 
 	sdsCluster.Status.Phase = api.ClusterPhaseDeployingApplications

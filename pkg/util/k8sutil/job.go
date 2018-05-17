@@ -30,7 +30,7 @@ func CreateJob(schema batchv1.Job, namespace string, config *rest.Config) (bool,
 
 	_, err = clientSet.BatchV1().Jobs(namespace).Create(&schema)
 	if err != nil && !IsResourceAlreadyExistsError(err) {
-		logger.Infof("Job -->%s<-- in namespace -->%s<-- Cannot be created, error was %v", schema.ObjectMeta.Name, namespace, err)
+		logger.Infof("Job -->%s<-- in namespace -->%s<-- Cannot be created, error was %v", schema.ObjectMeta.Name, "default", err)
 		return false, err
 	} else if IsResourceAlreadyExistsError(err) {
 		logger.Infof("Job -->%s<-- in namespace -->%s<-- Already exists, cannot recreate", schema.ObjectMeta.Name, namespace)

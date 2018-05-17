@@ -108,6 +108,19 @@ func DeleteSDSCluster(name string, namespace string, config *rest.Config) (bool,
 	return true, err
 }
 
+func UpdateSDSCluster(cluster *sdsapi.SDSCluster, namespace string, config *rest.Config) (*sdsapi.SDSCluster, error) {
+	var err error
+	SetLogger()
+	client := prepareRestClient(config)
+
+	updatedCluster, err := client.CmaV1alpha1().SDSClusters(namespace).Update(cluster)
+	if err != nil {
+		logger.Infof("SDSCluster -->%s<-- Cannot be Updated, error was %v", cluster.Name, err)
+		return updatedCluster, err
+	}
+	return nil, err
+}
+
 func GetSDSCluster(name string, namespace string, config *rest.Config) (*sdsapi.SDSCluster, error) {
 	var err error
 	SetLogger()
