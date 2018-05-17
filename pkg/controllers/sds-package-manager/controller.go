@@ -242,7 +242,7 @@ func retrieveClusterRestConfig(name string, namespace string, config *rest.Confi
 	file.WriteString(cluster.Status.Kubeconfig)
 
 	clusterConfig, err := clientcmd.BuildConfigFromFlags("", file.Name())
-	if os.Getenv("CLUSTERAPIMANAGER_INSECURE_TLS") == "true" {
+	if os.Getenv("CLUSTERMANAGERAPI_INSECURE_TLS") == "true" {
 		clusterConfig.TLSClientConfig = rest.TLSClientConfig{Insecure:true}
 	}
 
