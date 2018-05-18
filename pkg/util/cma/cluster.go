@@ -81,7 +81,46 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 						Name:       "stable/nginx-ingress",
 						Repository: sdsapi.ChartRepository{Name: "stable", URL: "https://charts.migrations.cnct.io"},
 					},
-					Values: `{"controller":{"service":{"targetPorts":{"http":80,"https":443},"type":"NodePort"},"stats":{"enabled":true,"service":{"annotations":{},"clusterIP":"","servicePort":18080,"type":"ClusterIP"}},"metrics":{"enabled":true,"service":{"servicePort":9913,"type":"ClusterIP"}}},"rbac":{"create":false,"createRole":false,"createClusterRole":false,"serviceAccountName":"default"}}`,
+					Values: `## nginx configuration
+					## Ref: https://raw.githubusercontent.com/kubernetes/charts/master/stable/nginx-ingress/values.yaml
+					##
+					controller:
+					  service:
+						targetPorts:
+						  http: 80
+						  https: 443
+					
+						type: NodePort
+					
+					
+					  stats:
+						enabled: true
+					
+						service:
+						  annotations: {}
+						  clusterIP: ""
+					
+						  ## List of IP addresses at which the stats service is available
+						  ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+						  ##
+						  servicePort: 18080
+						  type: ClusterIP
+					
+					  ## If controller.stats.enabled = true and controller.metrics.enabled = true, Prometheus metrics will be exported
+					  ##
+					  metrics:
+						enabled: true
+					
+						service:
+						  servicePort: 9913
+						  type: ClusterIP
+					
+					## RBAC is now enabled by default.  disable it.
+					rbac:
+					  create: false
+					  createRole: false
+					  createClusterRole: false
+					  serviceAccountName: default`,
 				},
 			},
 		},
