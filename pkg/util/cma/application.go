@@ -2,28 +2,28 @@ package cma
 
 import (
 	sdsapi "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
 )
 
 type SDSApplicationOptions struct {
-	Name string
-	Namespace string
-	Values string
+	Name           string
+	Namespace      string
+	Values         string
 	PackageManager string
-	Chart Chart
+	Chart          Chart
 }
 
 type Chart struct {
-	Name string
+	Name       string
 	Repository ChartRepository
-	Version string
+	Version    string
 }
 
 type ChartRepository struct {
 	Name string
-	URL string
+	URL  string
 }
 
 func GenerateSDSApplication(options SDSApplicationOptions) sdsapi.SDSApplication {
@@ -32,16 +32,16 @@ func GenerateSDSApplication(options SDSApplicationOptions) sdsapi.SDSApplication
 			Name: options.Name,
 		},
 		Spec: sdsapi.SDSApplicationSpec{
-			Name: options.Name,
-			Namespace: options.Namespace,
-			Values: options.Values,
+			Name:           options.Name,
+			Namespace:      options.Namespace,
+			Values:         options.Values,
 			PackageManager: sdsapi.SDSPackageManagerRef{Name: options.PackageManager},
 			Chart: sdsapi.Chart{
-				Name: options.Chart.Name,
+				Name:    options.Chart.Name,
 				Version: options.Chart.Version,
 				Repository: sdsapi.ChartRepository{
 					Name: options.Chart.Repository.Name,
-					URL: options.Chart.Repository.URL,
+					URL:  options.Chart.Repository.URL,
 				},
 			},
 		},

@@ -2,30 +2,29 @@ package ccutil
 
 import (
 	ccapi "github.com/samsung-cnct/cluster-controller/pkg/apis/clustercontroller/v1alpha1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
 )
 
 type KrakenClusterOptions struct {
-	Name string
+	Name     string
 	Provider string
-	AWS AWSOptions
-	MaaS MaaSOptions
+	AWS      AWSOptions
+	MaaS     MaaSOptions
 }
 
 type AWSOptions struct {
-	SecretKeyId	string
+	SecretKeyId     string
 	SecretAccessKey string
-	Region string
+	Region          string
 }
 
 type MaaSOptions struct {
 	Endpoint string
 	Username string
-	OAuthKey	string
+	OAuthKey string
 }
-
 
 func GenerateKrakenCluster(options KrakenClusterOptions) ccapi.KrakenCluster {
 	return ccapi.KrakenCluster{
@@ -33,9 +32,9 @@ func GenerateKrakenCluster(options KrakenClusterOptions) ccapi.KrakenCluster {
 			Name: options.Name,
 		},
 		Spec: ccapi.KrakenClusterSpec{
-			CustomerID: "myCustomerID",
+			CustomerID:    "myCustomerID",
 			CloudProvider: generateProviderBlock(options),
-			Provisioner: generateProvisionerBlock(options),
+			Provisioner:   generateProvisionerBlock(options),
 			Cluster: ccapi.ClusterInfo{
 				ClusterName: "my-test-cluster",
 				NodePools: []ccapi.NodeProperties{
@@ -76,11 +75,11 @@ func generateProviderBlock(options KrakenClusterOptions) ccapi.CloudProviderInfo
 			Name: "aws",
 			Credentials: ccapi.CloudProviderCredentials{
 				Accesskey: options.AWS.SecretAccessKey,
-				Password: options.AWS.SecretKeyId,
+				Password:  options.AWS.SecretKeyId,
 				// TODO this should go away with a change to cluster-controller
 				Username: "placeholder",
 			},
-			Region: "aws/"+options.AWS.Region,
+			Region: "aws/" + options.AWS.Region,
 		}
 	default:
 		return ccapi.CloudProviderInfo{
@@ -97,18 +96,17 @@ func generateProvisionerBlock(options KrakenClusterOptions) ccapi.ProvisionerInf
 	switch options.Provider {
 	case "aws":
 		return ccapi.ProvisionerInfo{
-			Name: "juju",
+			Name:   "juju",
 			Bundle: "cs:bundle/kubernetes-core-306",
 		}
 	default:
 		return ccapi.ProvisionerInfo{
-			Name: "juju",
-			Bundle: "cs:bundle/kubernetes-core-306",
+			Name:         "juju",
+			Bundle:       "cs:bundle/kubernetes-core-306",
 			MaasEndpoint: options.MaaS.Endpoint,
 		}
 	}
 }
-
 
 func CreateKrakenCluster(cluster ccapi.KrakenCluster, namespace string, config *rest.Config) (bool, error) {
 	var err error

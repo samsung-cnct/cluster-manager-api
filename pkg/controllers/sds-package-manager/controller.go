@@ -7,30 +7,29 @@ import (
 	"k8s.io/apimachinery/pkg/fields"
 
 	"github.com/golang/glog"
+	"github.com/juju/loggo"
 	api "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/helmutil"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"io/ioutil"
+	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
-	"k8s.io/client-go/util/workqueue"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/helmutil"
-	"io/ioutil"
-	"os"
-	"github.com/juju/loggo"
 	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
+	"k8s.io/client-go/util/workqueue"
+	"os"
 )
 
 var (
 	logger loggo.Logger
 )
-
 
 type SDSPackageManagerController struct {
 	indexer  cache.Indexer
@@ -191,7 +190,7 @@ func (c *SDSPackageManagerController) runWorker() {
 	}
 }
 
-func (c *SDSPackageManagerController) deployTiller(packageManager *api.SDSPackageManager) (bool, error){
+func (c *SDSPackageManagerController) deployTiller(packageManager *api.SDSPackageManager) (bool, error) {
 	config, err := c.getRestConfigForRemoteCluster(packageManager.Spec.Name, packageManager.Namespace, nil)
 	if err != nil {
 		return false, err
@@ -201,7 +200,7 @@ func (c *SDSPackageManagerController) deployTiller(packageManager *api.SDSPackag
 	k8sutil.CreateServiceAccount(k8sutil.GenerateServiceAccount("tiller-sa"), packageManager.Spec.Namespace, config)
 	if packageManager.Spec.Permissions.ClusterWide {
 		k8sutil.CreateClusterRole(helmutil.GenerateClusterAdminRole("tiller-"+packageManager.Spec.Namespace), config)
-		k8sutil.CreateClusterRoleBinding(k8sutil.GenerateSingleClusterRolebinding("tiller-"+packageManager.Spec.Namespace, "tiller-sa", packageManager.Spec.Namespace,"tiller-"+packageManager.Spec.Namespace ), config)
+		k8sutil.CreateClusterRoleBinding(k8sutil.GenerateSingleClusterRolebinding("tiller-"+packageManager.Spec.Namespace, "tiller-sa", packageManager.Spec.Namespace, "tiller-"+packageManager.Spec.Namespace), config)
 	} else {
 		logger.Infof("Not cluster wide")
 		namespaces := append(packageManager.Spec.Permissions.Namespaces, packageManager.Spec.Namespace)
@@ -243,7 +242,7 @@ func retrieveClusterRestConfig(name string, namespace string, config *rest.Confi
 
 	clusterConfig, err := clientcmd.BuildConfigFromFlags("", file.Name())
 	if os.Getenv("CLUSTERMANAGERAPI_INSECURE_TLS") == "true" {
-		clusterConfig.TLSClientConfig = rest.TLSClientConfig{Insecure:true}
+		clusterConfig.TLSClientConfig = rest.TLSClientConfig{Insecure: true}
 	}
 
 	if err != nil {
@@ -254,9 +253,9 @@ func retrieveClusterRestConfig(name string, namespace string, config *rest.Confi
 }
 
 func (c *SDSPackageManagerController) getRestConfigForRemoteCluster(clusterName string, namespace string, config *rest.Config) (*rest.Config, error) {
-	cluster, err := ccutil.GetKrakenCluster( clusterName, namespace, config)
+	cluster, err := ccutil.GetKrakenCluster(clusterName, namespace, config)
 	if err != nil {
-		glog.Errorf("Failed to retrieve KrakenCluster CR -->%s<-- in namespace -->%s<--, error was: ", clusterName, namespace, err)
+		glog.Errorf("Failed to retrieve KrakenCluster CR -->%s<-- in namespace -->%s<--, error was: %s", clusterName, namespace, err)
 		return nil, err
 	}
 	if cluster.Status.Kubeconfig == "" {
@@ -273,7 +272,7 @@ func (c *SDSPackageManagerController) getRestConfigForRemoteCluster(clusterName 
 	return remoteConfig, nil
 }
 
-func (c *SDSPackageManagerController)  SetLogger() {
+func (c *SDSPackageManagerController) SetLogger() {
 	logger = util.GetModuleLogger("pkg.controllers.sds_package_manager", loggo.INFO)
 }
 

@@ -1,10 +1,9 @@
 package cluster_manager_api
 
 import (
+	"fmt"
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
 	"golang.org/x/net/context"
-	"fmt"
-
 )
 
 func (s *Server) InstallHelmChart(ctx context.Context, in *pb.InstallHelmChartMsg) (*pb.InstallHelmChartReply, error) {

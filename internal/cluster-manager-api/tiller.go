@@ -2,22 +2,22 @@ package cluster_manager_api
 
 import (
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
-	"golang.org/x/net/context"
-	"k8s.io/client-go/rest"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
-	"io/ioutil"
-	"os"
-	"k8s.io/client-go/tools/clientcmd"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
+	"golang.org/x/net/context"
+	"io/ioutil"
+	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
+	"os"
 )
 
 func (s *Server) ProvisionTiller(ctx context.Context, in *pb.ProvisionTillerMsg) (*pb.ProvisionTillerReply, error) {
 	SetLogger()
 	cma.CreateSDSPackageManager(cma.GenerateSDSPackageManager(cma.SDSPackageManagerOptions{
-		Name: in.Cluster,
-		Namespace: in.Namespace,
-		Version: in.Version,
-		ClusterWide: in.ClusterWide,
+		Name:            in.Cluster,
+		Namespace:       in.Namespace,
+		Version:         in.Version,
+		ClusterWide:     in.ClusterWide,
 		AdminNamespaces: in.AdminNamespaces,
 	}), "default", nil)
 	return &pb.ProvisionTillerReply{Ok: true, Message: "Queued Tiller Install"}, nil

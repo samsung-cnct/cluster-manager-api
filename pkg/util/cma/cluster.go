@@ -2,28 +2,28 @@ package cma
 
 import (
 	sdsapi "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
 )
 
 type SDSClusterOptions struct {
-	Name string
+	Name     string
 	Provider string
-	AWS	AWSOptions
-	MaaS MaaSOptions
+	AWS      AWSOptions
+	MaaS     MaaSOptions
 }
 
 type AWSOptions struct {
-	SecretKeyId	string
+	SecretKeyId     string
 	SecretAccessKey string
-	Region string
+	Region          string
 }
 
 type MaaSOptions struct {
 	Endpoint string
 	Username string
-	OAuthKey	string
+	OAuthKey string
 }
 
 func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
@@ -34,12 +34,12 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 		Spec: sdsapi.SDSClusterSpec{
 			Provider: sdsapi.ProviderSpec{
 				Name: options.Provider,
-				AWS: sdsapi.AWSSpec{ Region: options.AWS.Region, SecretAccessKey: options.AWS.SecretAccessKey, SecretKeyId: options.AWS.SecretKeyId},
-				MaaS: sdsapi.MaaSSpec{ Endpoint: options.MaaS.Endpoint, Username: options.MaaS.Username, OAuthKey: options.MaaS.OAuthKey },
+				AWS:  sdsapi.AWSSpec{Region: options.AWS.Region, SecretAccessKey: options.AWS.SecretAccessKey, SecretKeyId: options.AWS.SecretKeyId},
+				MaaS: sdsapi.MaaSSpec{Endpoint: options.MaaS.Endpoint, Username: options.MaaS.Username, OAuthKey: options.MaaS.OAuthKey},
 			},
 			PackageManager: sdsapi.SDSPackageManagerSpec{
-				Version: "v2.9.0",
-				Name: options.Name,
+				Version:   "v2.9.0",
+				Name:      options.Name,
 				Namespace: "cma-tiller",
 				Permissions: sdsapi.PackageManagerPermissions{
 					ClusterWide: true,
@@ -47,29 +47,29 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 			},
 			Applications: []sdsapi.SDSApplicationSpec{
 				{
-					Name: "prometheus-operator",
-					Namespace: "prometheus",
-					PackageManager: sdsapi.SDSPackageManagerRef{ Name: options.Name },
+					Name:           "prometheus-operator",
+					Namespace:      "prometheus",
+					PackageManager: sdsapi.SDSPackageManagerRef{Name: options.Name},
 					Chart: sdsapi.Chart{
-						Name: "coreos/prometheus-operator",
+						Name:       "coreos/prometheus-operator",
 						Repository: sdsapi.ChartRepository{Name: "coreos", URL: "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"},
 					},
 				},
 				{
-					Name: "kube-prometheus",
-					Namespace: "prometheus",
-					PackageManager: sdsapi.SDSPackageManagerRef{ Name: options.Name },
+					Name:           "kube-prometheus",
+					Namespace:      "prometheus",
+					PackageManager: sdsapi.SDSPackageManagerRef{Name: options.Name},
 					Chart: sdsapi.Chart{
-						Name: "coreos/kube-prometheus",
+						Name:       "coreos/kube-prometheus",
 						Repository: sdsapi.ChartRepository{Name: "coreos", URL: "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"},
 					},
 				},
 				{
-					Name: "logging",
-					Namespace: "logging",
-					PackageManager: sdsapi.SDSPackageManagerRef{ Name: options.Name },
+					Name:           "logging",
+					Namespace:      "logging",
+					PackageManager: sdsapi.SDSPackageManagerRef{Name: options.Name},
 					Chart: sdsapi.Chart{
-						Name: "sds/logging-client",
+						Name:       "sds/logging-client",
 						Repository: sdsapi.ChartRepository{Name: "sds", URL: "https://charts.migrations.cnct.io"},
 					},
 				},

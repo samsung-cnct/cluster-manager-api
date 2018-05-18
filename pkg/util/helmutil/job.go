@@ -1,12 +1,12 @@
 package helmutil
 
 import (
+	"encoding/base64"
 	sdsapi "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
-	"encoding/base64"
 )
 
 type TillerInitOptions struct {
@@ -23,8 +23,8 @@ func GenerateTillerInitJob(options TillerInitOptions) batchv1.Job {
 			Spec: corev1.PodSpec{
 				Containers: []corev1.Container{
 					{
-						Name:  "helm",
-						Image: "quay.io/venezia/helm:" + options.Version,
+						Name:            "helm",
+						Image:           "quay.io/venezia/helm:" + options.Version,
 						ImagePullPolicy: "Always",
 						Command: []string{
 							"/helm",
@@ -49,7 +49,7 @@ func GenerateTillerInitJob(options TillerInitOptions) batchv1.Job {
 
 func GenerateHelmInstallJob(application sdsapi.SDSApplicationSpec) batchv1.Job {
 	packageManager, _ := cma.GetSDSPackageManager(application.PackageManager.Name, "default", nil)
-	jobName := "app-install-"+application.Name
+	jobName := "app-install-" + application.Name
 	backoffLimit := int32(500)
 	commandString := ""
 	commandString += "/helm init -c && "
@@ -60,19 +60,18 @@ func GenerateHelmInstallJob(application sdsapi.SDSApplicationSpec) batchv1.Job {
 	commandString += application.Chart.Name
 	commandString += ""
 
-
 	jobSpec := batchv1.JobSpec{
 		Template: corev1.PodTemplateSpec{
 			Spec: corev1.PodSpec{
 				Containers: []corev1.Container{
 					{
-						Name:  jobName,
-						Image: "quay.io/venezia/helm:" + packageManager.Spec.Version,
+						Name:            jobName,
+						Image:           "quay.io/venezia/helm:" + packageManager.Spec.Version,
 						ImagePullPolicy: "Always",
-						Command: []string{ "/bin/bash", "-c", commandString },
+						Command:         []string{"/bin/bash", "-c", commandString},
 						Env: []corev1.EnvVar{
 							{
-								Name: "HELMVALUES",
+								Name:  "HELMVALUES",
 								Value: base64.StdEncoding.EncodeToString([]byte(application.Values)),
 							},
 						},

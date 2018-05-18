@@ -42,4 +42,3 @@ func GenerateKubernetesConfig() (*rest.Config, error) {
 
 	return config, err
 }
-

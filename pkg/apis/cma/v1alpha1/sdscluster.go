@@ -40,7 +40,7 @@ type SDSCluster struct {
 // +k8s:openapi-gen=true
 type SDSClusterSpec struct {
 	// What provider
-	Provider	ProviderSpec		`json:"provider",omitempty`
+	Provider	ProviderSpec		`json:"provider,omitempty"`
 	// What package manager should be used
 	PackageManager SDSPackageManagerSpec	`json:"packageManager"`
 	// What Charts should be installed
@@ -51,33 +51,33 @@ type SDSClusterSpec struct {
 // +k8s:openapi-gen=true
 type ProviderSpec struct {
 	// What type of provider
-	Name 	string `json:"name",omitempty`
+	Name 	string `json:"name,omitempty"`
 	// The AWS Spec
-	AWS	AWSSpec `json:"aws",omitempty`
+	AWS	AWSSpec `json:"aws,omitempty"`
 	// The MaaS Spec
-	MaaS MaaSSpec `json:"maas",omitempty`
+	MaaS MaaSSpec `json:"maas,omitempty"`
 }
 
 // AWSSpec represents an aws spec
 // +k8s:openapi-gen=true
 type AWSSpec struct {
 	// The API secret key id
-	SecretKeyId	string `json:"secretKeyId", omitempty`
+	SecretKeyId	string `json:"secretKeyId, omitempty"`
 	// The API secret access key
-	SecretAccessKey string `json:"secretAccessKey", omitempty`
+	SecretAccessKey string `json:"secretAccessKey, omitempty"`
 	// The region
-	Region string `json:"region", omitempty`
+	Region string `json:"region, omitempty"`
 }
 
 // MaaSSpec represents a maas spec
 // +k8s:openapi-gen=true
 type MaaSSpec struct {
 	// The MaaS endpoint
-	Endpoint string	`json:"endpoint", omitempty`
+	Endpoint string	`json:"endpoint, omitempty"`
 	// The username
-	Username string `json:"username", omitempty"`
+	Username string `json:"username, omitempty"`
 	// The OAuth key
-	OAuthKey	string	`json:"oauthKey", omitempty`
+	OAuthKey	string	`json:"oauthKey, omitempty"`
 }
 
 // SDSClusterStatus has the status of the system
@@ -85,9 +85,9 @@ type MaaSSpec struct {
 type SDSClusterStatus struct {
 	Phase      Phase       `json:"phase"`
 	Conditions []Condition `json:"conditions"`
-	ClusterBuilt bool		`json:clusterBuilt`
-	TillerInstalled bool	`json:tillerInstalled`
-	AppsInstalled bool		`json:appsInstalled`
+	ClusterBuilt bool		`json:"clusterBuilt"`
+	TillerInstalled bool	`json:"tillerInstalled"`
+	AppsInstalled bool		`json:"appsInstalled"`
 }
 
 

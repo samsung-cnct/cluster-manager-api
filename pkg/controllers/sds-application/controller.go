@@ -7,30 +7,29 @@ import (
 	"k8s.io/apimachinery/pkg/fields"
 
 	"github.com/golang/glog"
+	"github.com/juju/loggo"
 	api "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/helmutil"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"io/ioutil"
+	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
-	"k8s.io/client-go/util/workqueue"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/helmutil"
-	"io/ioutil"
-	"os"
-	"github.com/juju/loggo"
 	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
+	"k8s.io/client-go/util/workqueue"
+	"os"
 )
 
 var (
 	logger loggo.Logger
 )
-
 
 type SDSApplicationController struct {
 	indexer  cache.Indexer
@@ -191,7 +190,7 @@ func (c *SDSApplicationController) runWorker() {
 	}
 }
 
-func (c *SDSApplicationController) deployApplication(application *api.SDSApplication) (bool, error){
+func (c *SDSApplicationController) deployApplication(application *api.SDSApplication) (bool, error) {
 	config, err := c.getRestConfigForRemoteCluster(application.Spec.PackageManager.Name, application.Namespace, nil)
 	if err != nil {
 		return false, err
@@ -223,7 +222,7 @@ func retrieveClusterRestConfig(name string, namespace string, config *rest.Confi
 
 	clusterConfig, err := clientcmd.BuildConfigFromFlags("", file.Name())
 	if os.Getenv("CLUSTERMANAGERAPI_INSECURE_TLS") == "true" {
-		clusterConfig.TLSClientConfig = rest.TLSClientConfig{Insecure:true}
+		clusterConfig.TLSClientConfig = rest.TLSClientConfig{Insecure: true}
 	}
 
 	if err != nil {
@@ -234,9 +233,9 @@ func retrieveClusterRestConfig(name string, namespace string, config *rest.Confi
 }
 
 func (c *SDSApplicationController) getRestConfigForRemoteCluster(clusterName string, namespace string, config *rest.Config) (*rest.Config, error) {
-	cluster, err := ccutil.GetKrakenCluster( clusterName, namespace, config)
+	cluster, err := ccutil.GetKrakenCluster(clusterName, namespace, config)
 	if err != nil {
-		glog.Errorf("Failed to retrieve KrakenCluster CR -->%s<-- in namespace -->%s<--, error was: ", clusterName, namespace, err)
+		glog.Errorf("Failed to retrieve KrakenCluster CR -->%s<-- in namespace -->%s<--, error was: %s", clusterName, namespace, err)
 		return nil, err
 	}
 	if cluster.Status.Kubeconfig == "" {
@@ -253,7 +252,7 @@ func (c *SDSApplicationController) getRestConfigForRemoteCluster(clusterName str
 	return remoteConfig, nil
 }
 
-func (c *SDSApplicationController)  SetLogger() {
+func (c *SDSApplicationController) SetLogger() {
 	logger = util.GetModuleLogger("pkg.controllers.sds_application", loggo.INFO)
 }
 

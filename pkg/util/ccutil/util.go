@@ -2,10 +2,10 @@ package ccutil
 
 import (
 	"github.com/juju/loggo"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
-	"k8s.io/client-go/rest"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"github.com/samsung-cnct/cluster-controller/pkg/client/clientset/versioned"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"k8s.io/client-go/rest"
 )
 
 var (
@@ -23,4 +23,3 @@ func prepareRestClient(config *rest.Config) *versioned.Clientset {
 func SetLogger() {
 	logger = util.GetModuleLogger("pkg.util.ccutil", loggo.INFO)
 }
-

@@ -12,7 +12,6 @@ import (
 	clusterController "github.com/samsung-cnct/cluster-manager-api/pkg/cluster-controller"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 )
 
 var (
@@ -50,7 +49,6 @@ func (s *Server) GetPodCount(ctx context.Context, in *pb.GetPodCountMsg) (*pb.Ge
 	return &pb.GetPodCountReply{Pods: int32(len(pods.Items))}, nil
 
 }
-
 
 func SetLogger() {
 	logger = util.GetModuleLogger("internal.cluster-manager-api", loggo.INFO)

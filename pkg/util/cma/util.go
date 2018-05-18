@@ -2,10 +2,10 @@ package cma
 
 import (
 	"github.com/juju/loggo"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
-	"k8s.io/client-go/rest"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"k8s.io/client-go/rest"
 )
 
 var (

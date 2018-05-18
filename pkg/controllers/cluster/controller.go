@@ -7,18 +7,18 @@ import (
 	"k8s.io/apimachinery/pkg/fields"
 
 	"github.com/golang/glog"
+	"github.com/juju/loggo"
 	api "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
-	"github.com/juju/loggo"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 )
 
 var (
@@ -193,18 +193,16 @@ func (c *SDSClusterController) runWorker() {
 	}
 }
 
-func (c *SDSClusterController)  SetLogger() {
+func (c *SDSClusterController) SetLogger() {
 	logger = util.GetModuleLogger("pkg.controllers.sds_cluster", loggo.INFO)
 }
-
-
 
 func (c *SDSClusterController) deployKrakenCluster(sdsCluster *api.SDSCluster) {
 	clusterName := sdsCluster.GetName()
 	_, err := ccutil.CreateKrakenCluster(
 		ccutil.GenerateKrakenCluster(
 			ccutil.KrakenClusterOptions{
-				Name: clusterName,
+				Name:     clusterName,
 				Provider: sdsCluster.Spec.Provider.Name,
 				MaaS: ccutil.MaaSOptions{
 					Endpoint: sdsCluster.Spec.Provider.MaaS.Endpoint,
@@ -212,8 +210,8 @@ func (c *SDSClusterController) deployKrakenCluster(sdsCluster *api.SDSCluster) {
 					OAuthKey: sdsCluster.Spec.Provider.MaaS.OAuthKey,
 				},
 				AWS: ccutil.AWSOptions{
-					Region: sdsCluster.Spec.Provider.AWS.Region,
-					SecretKeyId: sdsCluster.Spec.Provider.AWS.SecretKeyId,
+					Region:          sdsCluster.Spec.Provider.AWS.Region,
+					SecretKeyId:     sdsCluster.Spec.Provider.AWS.SecretKeyId,
 					SecretAccessKey: sdsCluster.Spec.Provider.AWS.SecretAccessKey,
 				},
 			},
@@ -239,10 +237,10 @@ func (c *SDSClusterController) deployPackageManager(sdsCluster *api.SDSCluster) 
 	clusterName := sdsCluster.GetName()
 	// Cluster name shouldn't have to be the name of the package manager - need to fix
 	options := cma.SDSPackageManagerOptions{
-		Name: clusterName,
-		Namespace: sdsCluster.Spec.PackageManager.Namespace,
-		Version: sdsCluster.Spec.PackageManager.Version,
-		ClusterWide: sdsCluster.Spec.PackageManager.Permissions.ClusterWide,
+		Name:            clusterName,
+		Namespace:       sdsCluster.Spec.PackageManager.Namespace,
+		Version:         sdsCluster.Spec.PackageManager.Version,
+		ClusterWide:     sdsCluster.Spec.PackageManager.Permissions.ClusterWide,
 		AdminNamespaces: sdsCluster.Spec.PackageManager.Permissions.Namespaces,
 	}
 	_, err := cma.CreateSDSPackageManager(cma.GenerateSDSPackageManager(options), sdsCluster.Namespace, nil)
@@ -267,16 +265,16 @@ func (c *SDSClusterController) deployApplications(sdsCluster *api.SDSCluster) {
 	clusterName := sdsCluster.GetName()
 	for _, application := range sdsCluster.Spec.Applications {
 		_, err := cma.CreateSDSApplication(cma.GenerateSDSApplication(cma.SDSApplicationOptions{
-			Name: sdsCluster.Name + "-" + application.Name,
-			Namespace: application.Namespace,
-			Values: application.Values,
+			Name:           sdsCluster.Name + "-" + application.Name,
+			Namespace:      application.Namespace,
+			Values:         application.Values,
 			PackageManager: application.PackageManager.Name,
 			Chart: cma.Chart{
-				Name: application.Chart.Name,
+				Name:    application.Chart.Name,
 				Version: application.Chart.Version,
 				Repository: cma.ChartRepository{
 					Name: application.Chart.Repository.Name,
-					URL: application.Chart.Repository.URL,
+					URL:  application.Chart.Repository.URL,
 				},
 			},
 		}), "default", nil)
@@ -293,4 +291,3 @@ func (c *SDSClusterController) deployApplications(sdsCluster *api.SDSCluster) {
 		logger.Infof("Failed to request a SDSPackageManager CR for cluster %s, error was: %s", clusterName, err)
 	}
 }
-

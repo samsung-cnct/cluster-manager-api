@@ -56,7 +56,7 @@ type SDSApplicationSpec struct {
 type Chart struct {
 	// What is the chart name
 	Name			string					`json:"chartName"`
-	// What is the respository information
+	// What is the repository information
 	Repository 		ChartRepository			`json:"repository"`
 	// What is the chart version
 	Version 		string					`json:"version"`

@@ -1,18 +1,17 @@
 package cma
 
-import(
+import (
 	sdsapi "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
-
 )
 
 type SDSPackageManagerOptions struct {
-	Name string
-	Namespace string
-	Version string
-	ClusterWide bool
+	Name            string
+	Namespace       string
+	Version         string
+	ClusterWide     bool
 	AdminNamespaces []string
 }
 
@@ -22,12 +21,12 @@ func GenerateSDSPackageManager(options SDSPackageManagerOptions) sdsapi.SDSPacka
 			Name: options.Name,
 		},
 		Spec: sdsapi.SDSPackageManagerSpec{
-			Name: options.Name,
+			Name:      options.Name,
 			Namespace: options.Namespace,
-			Version: options.Version,
+			Version:   options.Version,
 			Permissions: sdsapi.PackageManagerPermissions{
 				ClusterWide: options.ClusterWide,
-				Namespaces: options.AdminNamespaces,
+				Namespaces:  options.AdminNamespaces,
 			},
 		},
 	}

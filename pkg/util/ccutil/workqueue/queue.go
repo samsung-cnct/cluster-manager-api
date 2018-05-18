@@ -6,18 +6,18 @@ import (
 
 	"github.com/golang/glog"
 
+	ccapi "github.com/samsung-cnct/cluster-controller/pkg/apis/clustercontroller/v1alpha1"
+	"github.com/samsung-cnct/cluster-controller/pkg/client/clientset/versioned"
+	cmaapi "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
+	sdsClient "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
-	"k8s.io/client-go/rest"
-	"github.com/samsung-cnct/cluster-controller/pkg/client/clientset/versioned"
-	ccapi "github.com/samsung-cnct/cluster-controller/pkg/apis/clustercontroller/v1alpha1"
-	sdsClient "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
-	cmaapi "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 
 	"log"
 )
@@ -74,7 +74,7 @@ func (c *Controller) syncToStdout(key string) error {
 		// Note that you also have to check the uid if you have a local controlled resource, which
 		// is dependent on the actual instance, to detect that a KrakenCluster was recreated with the same name
 		fmt.Printf("Sync/Add/Update for KrakenCluster %s\n", obj.(*ccapi.KrakenCluster).GetName())
-		if (obj.(*ccapi.KrakenCluster).Status.State == ccapi.Created) && (obj.(*ccapi.KrakenCluster).Status.Kubeconfig != "" ) {
+		if (obj.(*ccapi.KrakenCluster).Status.State == ccapi.Created) && (obj.(*ccapi.KrakenCluster).Status.Kubeconfig != "") {
 			c.updateSDSCluster(obj.(*ccapi.KrakenCluster))
 		}
 
@@ -192,7 +192,7 @@ func (c *Controller) updateSDSCluster(krakenCluster *ccapi.KrakenCluster) {
 	client := sdsClient.NewForConfigOrDie(k8sutil.DefaultConfig)
 	sdsCluster, err := client.CmaV1alpha1().SDSClusters(krakenCluster.Namespace).Get(clusterName, v1.GetOptions{})
 	if err != nil {
-		log.Printf("Failed to get SDSCluster for KrakenCluster %s, error was: ", clusterName, err)
+		log.Printf("Failed to get SDSCluster for KrakenCluster %s, error was: %s", clusterName, err)
 	}
 	changes := false
 	if sdsCluster.Status.ClusterBuilt == false {
@@ -206,7 +206,7 @@ func (c *Controller) updateSDSCluster(krakenCluster *ccapi.KrakenCluster) {
 	if changes {
 		_, err = client.CmaV1alpha1().SDSClusters(sdsCluster.Namespace).Update(sdsCluster)
 		if err != nil {
-			log.Printf("Could not update SDSCluster for KrakenCluster %s, error was: ", clusterName, err)
+			log.Printf("Could not update SDSCluster for KrakenCluster %s, error was: %s", clusterName, err)
 		}
 	}
 }

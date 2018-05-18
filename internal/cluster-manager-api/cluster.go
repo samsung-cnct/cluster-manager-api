@@ -1,23 +1,22 @@
 package cluster_manager_api
 
-
 import (
-	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
-	"golang.org/x/net/context"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 	"fmt"
+	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"golang.org/x/net/context"
 )
 
 func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
 	options := cma.SDSClusterOptions{
-		Name: in.Name,
+		Name:     in.Name,
 		Provider: in.Provider.Name,
 		AWS: cma.AWSOptions{
-			Region: in.Provider.Aws.Region,
+			Region:          in.Provider.Aws.Region,
 			SecretAccessKey: in.Provider.Aws.SecretAccessKey,
-			SecretKeyId: in.Provider.Aws.SecretKeyId,
+			SecretKeyId:     in.Provider.Aws.SecretKeyId,
 		},
 		MaaS: cma.MaaSOptions{
 			Endpoint: in.Provider.Maas.Endpoint,
