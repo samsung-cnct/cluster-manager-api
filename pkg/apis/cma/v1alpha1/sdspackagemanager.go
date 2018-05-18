@@ -7,12 +7,12 @@ import (
 type PackageManagerPhase Phase
 
 const (
-	PackageManagerPhaseNone	= ""
-	PackageManagerPhasePending = "Pending"
-	PackageManagerPhaseInstalling = "Installing"
-	PackageManagerPhaseUpgrading = "Upgrading"
+	PackageManagerPhaseNone        = ""
+	PackageManagerPhasePending     = "Pending"
+	PackageManagerPhaseInstalling  = "Installing"
+	PackageManagerPhaseUpgrading   = "Upgrading"
 	PackageManagerPhaseImplemented = "Implemented"
-	PackageManagerPhaseFailed = "Failed"
+	PackageManagerPhaseFailed      = "Failed"
 )
 
 // SDSPackageManagerList is a list of sds package managers (tiller).
@@ -47,39 +47,39 @@ type SDSPackageManagerRef struct {
 // +k8s:openapi-gen=true
 type SDSPackageManagerSpec struct {
 	// What namespace do we want this package manager installed in
-	Namespace		string		`json:"namespace"`
+	Namespace string `json:"namespace"`
 	// What is the application release's name
-	Name 			string 		`json:"name"`
+	Name string `json:"name"`
 	// What version should this package manager be?
-	Version 		string		`json:"version"`
+	Version string `json:"version"`
 	// ServiceAccount to use
-	ServiceAccount  ServiceAccount				`json:"serviceAccount"`
+	ServiceAccount ServiceAccount `json:"serviceAccount"`
 	// Permissions of the Package Manager
-	Permissions		PackageManagerPermissions	`json:"permissions"`
+	Permissions PackageManagerPermissions `json:"permissions"`
 }
 
 // PackageManagerPermissions represents the permissions for the package manager
 // +k8s:openapi-gen=true
 type PackageManagerPermissions struct {
 	// Should this be a cluster wide admin?
-	ClusterWide 	bool 		`json:"clusterWide"`
+	ClusterWide bool `json:"clusterWide"`
 	// What namespaces should this package manager administrate on?
-	Namespaces 		[]string 	`json:"namespaces"`
+	Namespaces []string `json:"namespaces"`
 }
 
 // ServiceAccount represents the service account settings
 // +k8s:openapi-gen=true
 type ServiceAccount struct {
 	// Should this be a cluster wide admin?
-	Name 	string 		`json:"name"`
+	Name string `json:"name"`
 	// What namespace would we find this service account?
-	Namespace 		string 	`json:"namespace"`
+	Namespace string `json:"namespace"`
 }
 
 // The status of an package manager object
 // +k8s:openapi-gen=true
 type SDSPackageManagerStatus struct {
-	Phase      PackageManagerPhase       `json:"phase"`
-	Ready	   bool					  `json:"ready"`
-	Conditions []Condition `json:"conditions"`
+	Phase      PackageManagerPhase `json:"phase"`
+	Ready      bool                `json:"ready"`
+	Conditions []Condition         `json:"conditions"`
 }

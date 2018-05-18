@@ -7,12 +7,12 @@ import (
 type ApplicationPhase Phase
 
 const (
-	ApplicationPhaseNone	= ""
-	ApplicationPhasePending = "Pending"
-	ApplicationPhaseInstalling = "Installing"
-	ApplicationPhaseUpgrading = "Upgrading"
+	ApplicationPhaseNone        = ""
+	ApplicationPhasePending     = "Pending"
+	ApplicationPhaseInstalling  = "Installing"
+	ApplicationPhaseUpgrading   = "Upgrading"
 	ApplicationPhaseImplemented = "Implemented"
-	ApplicationPhaseFailed = "Failed"
+	ApplicationPhaseFailed      = "Failed"
 )
 
 // SDSApplicationList is a list of sds applications.
@@ -40,43 +40,41 @@ type SDSApplication struct {
 // +k8s:openapi-gen=true
 type SDSApplicationSpec struct {
 	// What tiller should be used
-	PackageManager 	SDSPackageManagerRef 	`json:"packageManager"`
+	PackageManager SDSPackageManagerRef `json:"packageManager"`
 	// What namespace do we want this application installed in
-	Namespace		string					`json:"namespace"`
+	Namespace string `json:"namespace"`
 	// What is the application release's name
-	Name 			string 					`json:"name"`
+	Name string `json:"name"`
 	// Chart Information
-	Chart			Chart				`json:"chart"`
+	Chart Chart `json:"chart"`
 	// What are the values for the Values.yaml file?
-	Values			string					`json:"values"`
+	Values string `json:"values"`
 }
 
 // Chart represents a SDS Application's Chart information
 // +k8s:openapi-gen=true
 type Chart struct {
 	// What is the chart name
-	Name			string					`json:"chartName"`
+	Name string `json:"chartName"`
 	// What is the repository information
-	Repository 		ChartRepository			`json:"repository"`
+	Repository ChartRepository `json:"repository"`
 	// What is the chart version
-	Version 		string					`json:"version"`
+	Version string `json:"version"`
 }
 
 // ChartRepository represents a helm chart repository
 // +k8s:openapi-gen=true
 type ChartRepository struct {
 	// What is the repository name
-	Name 			string 					`json:"name"`
+	Name string `json:"name"`
 	// What is the URL for the repository?
-	URL 			string					`json:"url"`
+	URL string `json:"url"`
 }
 
 // The status of an application object
 // +k8s:openapi-gen=true
 type SDSApplicationStatus struct {
-	Phase      ApplicationPhase       `json:"phase"`
-	Ready 	   bool 				  `json:"ready"`
-	Conditions []Condition `json:"conditions"`
+	Phase      ApplicationPhase `json:"phase"`
+	Ready      bool             `json:"ready"`
+	Conditions []Condition      `json:"conditions"`
 }
-
-

@@ -5,14 +5,14 @@ import (
 )
 
 const (
-	ClusterPhaseNone	= ""
-	ClusterPhasePending = "Pending"
-	ClusterPhaseWaitingForCluster = "Waiting for cluster"
-	ClusterPhaseHaveCluster = "Cluster created"
+	ClusterPhaseNone                    = ""
+	ClusterPhasePending                 = "Pending"
+	ClusterPhaseWaitingForCluster       = "Waiting for cluster"
+	ClusterPhaseHaveCluster             = "Cluster created"
 	ClusterPhaseDeployingPackageManager = "Deploying Package Manager"
-	ClusterPhaseHavePackageManager = "Package Manager Installed"
-	ClusterPhaseDeployingApplications = "Deploying Applications"
-	ClusterPhaseReady = "Ready"
+	ClusterPhaseHavePackageManager      = "Package Manager Installed"
+	ClusterPhaseDeployingApplications   = "Deploying Applications"
+	ClusterPhaseReady                   = "Ready"
 )
 
 // SDSDClusterList is a list of sds clusters.
@@ -40,20 +40,20 @@ type SDSCluster struct {
 // +k8s:openapi-gen=true
 type SDSClusterSpec struct {
 	// What provider
-	Provider	ProviderSpec		`json:"provider,omitempty"`
+	Provider ProviderSpec `json:"provider,omitempty"`
 	// What package manager should be used
-	PackageManager SDSPackageManagerSpec	`json:"packageManager"`
+	PackageManager SDSPackageManagerSpec `json:"packageManager"`
 	// What Charts should be installed
-	Applications []SDSApplicationSpec 			`json:"applications,omitempty"`
+	Applications []SDSApplicationSpec `json:"applications,omitempty"`
 }
 
 // ProviderSpec represents a provider spec
 // +k8s:openapi-gen=true
 type ProviderSpec struct {
 	// What type of provider
-	Name 	string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
 	// The AWS Spec
-	AWS	AWSSpec `json:"aws,omitempty"`
+	AWS AWSSpec `json:"aws,omitempty"`
 	// The MaaS Spec
 	MaaS MaaSSpec `json:"maas,omitempty"`
 }
@@ -62,7 +62,7 @@ type ProviderSpec struct {
 // +k8s:openapi-gen=true
 type AWSSpec struct {
 	// The API secret key id
-	SecretKeyId	string `json:"secretKeyId, omitempty"`
+	SecretKeyId string `json:"secretKeyId, omitempty"`
 	// The API secret access key
 	SecretAccessKey string `json:"secretAccessKey, omitempty"`
 	// The region
@@ -73,23 +73,22 @@ type AWSSpec struct {
 // +k8s:openapi-gen=true
 type MaaSSpec struct {
 	// The MaaS endpoint
-	Endpoint string	`json:"endpoint, omitempty"`
+	Endpoint string `json:"endpoint, omitempty"`
 	// The username
 	Username string `json:"username, omitempty"`
 	// The OAuth key
-	OAuthKey	string	`json:"oauthKey, omitempty"`
+	OAuthKey string `json:"oauthKey, omitempty"`
 }
 
 // SDSClusterStatus has the status of the system
 // +k8s:openapi-gen=true
 type SDSClusterStatus struct {
-	Phase      Phase       `json:"phase"`
-	Conditions []Condition `json:"conditions"`
-	ClusterBuilt bool		`json:"clusterBuilt"`
-	TillerInstalled bool	`json:"tillerInstalled"`
-	AppsInstalled bool		`json:"appsInstalled"`
+	Phase           Phase       `json:"phase"`
+	Conditions      []Condition `json:"conditions"`
+	ClusterBuilt    bool        `json:"clusterBuilt"`
+	TillerInstalled bool        `json:"tillerInstalled"`
+	AppsInstalled   bool        `json:"appsInstalled"`
 }
-
 
 // SDSClusterRef is a reference to a SDS Cluster
 // +k8s:openapi-gen=true
