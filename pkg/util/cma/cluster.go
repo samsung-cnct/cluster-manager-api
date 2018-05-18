@@ -133,3 +133,17 @@ func GetSDSCluster(name string, namespace string, config *rest.Config) (*sdsapi.
 	}
 	return cluster, err
 }
+
+func ListSDSClusters(namespace string, config *rest.Config) ([]sdsapi.SDSCluster, error) {
+	var err error
+	SetLogger()
+	client := prepareRestClient(config)
+
+	list, err := client.CmaV1alpha1().SDSClusters(namespace).List(metav1.ListOptions{})
+	if err != nil {
+		logger.Infof("SDSCluster List Cannot be Retrieved, error was %v", err)
+		return nil, err
+	}
+	return list.Items, nil
+
+}

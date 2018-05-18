@@ -54,3 +54,17 @@ func (s *Server) DeleteCluster(ctx context.Context, in *pb.DeleteClusterMsg) (*p
 	}
 	return &pb.DeleteClusterReply{Ok: ok, Status: "Deleting"}, nil
 }
+
+func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (reply *pb.GetClusterListReply, err error) {
+	reply = &pb.GetClusterListReply{}
+	list, err := cma.ListSDSClusters("default", nil)
+	if err != nil {
+		reply.Ok = false
+		return
+	}
+	reply.Ok = true
+	for _, cluster := range list {
+		reply.Clusters = append(reply.Clusters, &pb.ClusterListItem{Name: cluster.Name, Status: string(cluster.Status.Phase)})
+	}
+	return
+}

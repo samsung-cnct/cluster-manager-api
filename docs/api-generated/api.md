@@ -4,6 +4,7 @@
 ## Table of Contents
 
 - [api.proto](#api.proto)
+    - [ClusterListItem](#cluster_manager_api.ClusterListItem)
     - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
     - [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec)
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
@@ -15,6 +16,8 @@
     - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
     - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
     - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
+    - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
+    - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
     - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
@@ -32,6 +35,7 @@
   
 
 - [api.proto](#api.proto)
+    - [ClusterListItem](#cluster_manager_api.ClusterListItem)
     - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
     - [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec)
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
@@ -43,6 +47,8 @@
     - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
     - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
     - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
+    - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
+    - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
     - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
@@ -70,6 +76,22 @@
 
 
 
+<a name="cluster_manager_api.ClusterListItem"/>
+
+### ClusterListItem
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Name of the cluster |
+| status | [string](#string) |  | What is the status of the cluster |
+
+
+
+
+
+
 <a name="cluster_manager_api.CreateClusterAWSSpec"/>
 
 ### CreateClusterAWSSpec
@@ -246,6 +268,32 @@
 | ----- | ---- | ----- | ----------- |
 | namespace | [string](#string) |  | What is the tiller namespace |
 | version | [string](#string) |  | What is the version of tiller/helm |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetClusterListMsg"/>
+
+### GetClusterListMsg
+
+
+
+
+
+
+
+<a name="cluster_manager_api.GetClusterListReply"/>
+
+### GetClusterListReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Is the cluster in the system |
+| clusters | [ClusterListItem](#cluster_manager_api.ClusterListItem) | repeated | List of clusters |
 
 
 
@@ -430,6 +478,7 @@ The response to Hello World
 | CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
+| GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListMsg) | Will retrieve a list of clusters |
 | ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerMsg) | Will install (or reinstall) tiller |
 | InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartMsg) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
 | DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartMsg) | Will delete deployed helm chart |
@@ -445,6 +494,22 @@ The response to Hello World
 
 
 
+<a name="cluster_manager_api.ClusterListItem"/>
+
+### ClusterListItem
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Name of the cluster |
+| status | [string](#string) |  | What is the status of the cluster |
+
+
+
+
+
+
 <a name="cluster_manager_api.CreateClusterAWSSpec"/>
 
 ### CreateClusterAWSSpec
@@ -621,6 +686,32 @@ The response to Hello World
 | ----- | ---- | ----- | ----------- |
 | namespace | [string](#string) |  | What is the tiller namespace |
 | version | [string](#string) |  | What is the version of tiller/helm |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetClusterListMsg"/>
+
+### GetClusterListMsg
+
+
+
+
+
+
+
+<a name="cluster_manager_api.GetClusterListReply"/>
+
+### GetClusterListReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Is the cluster in the system |
+| clusters | [ClusterListItem](#cluster_manager_api.ClusterListItem) | repeated | List of clusters |
 
 
 
@@ -805,6 +896,7 @@ The response to Hello World
 | CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
+| GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListMsg) | Will retrieve a list of clusters |
 | ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerMsg) | Will install (or reinstall) tiller |
 | InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartMsg) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
 | DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartMsg) | Will delete deployed helm chart |

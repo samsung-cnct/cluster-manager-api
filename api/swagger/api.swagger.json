@@ -95,6 +95,23 @@
         ]
       }
     },
+    "/api/v1/cluster/list": {
+      "get": {
+        "summary": "Will retrieve a list of clusters",
+        "operationId": "GetClusterList",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiGetClusterListReply"
+            }
+          }
+        },
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
     "/api/v1/getpodcount": {
       "post": {
         "summary": "Simple pod count response.  Will respond with the number of pods in the namespace provided",
@@ -250,6 +267,19 @@
     }
   },
   "definitions": {
+    "cluster_manager_apiClusterListItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the cluster"
+        },
+        "status": {
+          "type": "string",
+          "title": "What is the status of the cluster"
+        }
+      }
+    },
     "cluster_manager_apiCreateClusterAWSSpec": {
       "type": "object",
       "properties": {
@@ -391,6 +421,23 @@
         "version": {
           "type": "string",
           "title": "What is the version of tiller/helm"
+        }
+      }
+    },
+    "cluster_manager_apiGetClusterListReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Is the cluster in the system"
+        },
+        "clusters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cluster_manager_apiClusterListItem"
+          },
+          "title": "List of clusters"
         }
       }
     },

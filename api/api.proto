@@ -74,6 +74,12 @@ service Cluster {
             delete : "/api/v1/cluster"
         };
     }
+    // Will retrieve a list of clusters
+    rpc GetClusterList (GetClusterListMsg) returns (GetClusterListReply) {
+        option (google.api.http) = {
+            get : "/api/v1/cluster/list"
+        };
+    }
     // Will install (or reinstall) tiller
     rpc ProvisionTiller (ProvisionTillerMsg) returns (ProvisionTillerReply) {
         option (google.api.http) = {
@@ -157,6 +163,24 @@ message DeleteClusterReply {
     // Status of the request
     string status = 2;
 }
+
+message GetClusterListMsg {
+}
+
+message GetClusterListReply {
+    // Is the cluster in the system
+    bool ok = 1;
+    // List of clusters
+    repeated ClusterListItem clusters = 2;
+}
+
+message ClusterListItem {
+    // Name of the cluster
+    string name = 1;
+    // What is the status of the cluster
+    string status = 2;
+}
+
 
 message ProvisionTillerMsg {
     // Cluster tiller should be installed on
