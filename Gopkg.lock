@@ -233,7 +233,7 @@
     "pkg/client/clientset/versioned/scheme",
     "pkg/client/clientset/versioned/typed/clustercontroller/v1alpha1"
   ]
-  revision = "cfc16a3c7ed944f7f11d92777ab9bca5b6508c60"
+  revision = "d6b34d9d5ae445b649586fc3b6a2748301a0f8bc"
 
 [[projects]]
   name = "github.com/sirupsen/logrus"
@@ -344,7 +344,7 @@
     "googleapis/api/annotations",
     "googleapis/rpc/status"
   ]
-  revision = "7bb2a897381c9c5ab2aeb8614f758d7766af68ff"
+  revision = "11a468237815f3a3ddf9f7c6e8b6b3b382a24d15"
 
 [[projects]]
   name = "google.golang.org/grpc"
@@ -479,7 +479,6 @@
     "third_party/forked/golang/reflect"
   ]
   revision = "302974c03f7e50f16561ba237db776ab93594ef6"
-  version = "kubernetes-1.10.0"
 
 [[projects]]
   name = "k8s.io/client-go"
@@ -548,7 +547,7 @@
   branch = "master"
   name = "k8s.io/kube-openapi"
   packages = ["pkg/common"]
-  revision = "b3f03f55328800731ce03a164b80973014ecd455"
+  revision = "86e28c192d2743f0232b9bc5f0a531568ef9f2a5"
 
 [solve-meta]
   analyzer-name = "dep"

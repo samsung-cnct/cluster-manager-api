@@ -1,5 +1,5 @@
 /*
-Copyright 2018 The sds cluster Authors.
+Copyright 2018 Samsung SDS Cloud Native Computing Team.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ func (c *FakeSDSClusters) List(opts v1.ListOptions) (result *v1alpha1.SDSCluster
 	if label == nil {
 		label = labels.Everything()
 	}
-	list := &v1alpha1.SDSClusterList{}
+	list := &v1alpha1.SDSClusterList{ListMeta: obj.(*v1alpha1.SDSClusterList).ListMeta}
 	for _, item := range obj.(*v1alpha1.SDSClusterList).Items {
 		if label.Matches(labels.Set(item.Labels)) {
 			list.Items = append(list.Items, item)

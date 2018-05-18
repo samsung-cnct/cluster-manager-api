@@ -4,8 +4,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-THIS_DIRECTORY=$(dirname "${BASH_SOURCE}")
-PROJECT_DIRECTORY=${THIS_DIRECTORY}/../..
+THIS_DIRECTORY=$(dirname "$BASH_SOURCE")
+PROJECT_DIRECTORY=$THIS_DIRECTORY/../..
 
 echo
 echo "generating swagger-ui bindata file..."

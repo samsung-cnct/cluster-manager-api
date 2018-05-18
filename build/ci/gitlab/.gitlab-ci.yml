@@ -16,4 +16,3 @@ build:branch:
   script:
     - docker build -t $IMAGE_URI -f build/docker/cluster-manager-api/Dockerfile .
     - docker push $IMAGE_URI
-

@@ -6,6 +6,9 @@ import (
 
 	"k8s.io/apimachinery/pkg/fields"
 
+	"io/ioutil"
+	"os"
+
 	"github.com/golang/glog"
 	"github.com/juju/loggo"
 	api "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
@@ -15,7 +18,6 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/helmutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
-	"io/ioutil"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -24,7 +26,6 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/workqueue"
-	"os"
 )
 
 var (

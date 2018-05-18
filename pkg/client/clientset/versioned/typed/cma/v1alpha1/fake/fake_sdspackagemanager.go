@@ -1,5 +1,5 @@
 /*
-Copyright 2018 The sds cluster Authors.
+Copyright 2018 Samsung SDS Cloud Native Computing Team.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ func (c *FakeSDSPackageManagers) List(opts v1.ListOptions) (result *v1alpha1.SDS
 	if label == nil {
 		label = labels.Everything()
 	}
-	list := &v1alpha1.SDSPackageManagerList{}
+	list := &v1alpha1.SDSPackageManagerList{ListMeta: obj.(*v1alpha1.SDSPackageManagerList).ListMeta}
 	for _, item := range obj.(*v1alpha1.SDSPackageManagerList).Items {
 		if label.Matches(labels.Set(item.Labels)) {
 			list.Items = append(list.Items, item)

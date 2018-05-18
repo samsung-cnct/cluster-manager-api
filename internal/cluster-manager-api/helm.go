@@ -2,6 +2,7 @@ package cluster_manager_api
 
 import (
 	"fmt"
+
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
 	"golang.org/x/net/context"
 )

@@ -1,5 +1,5 @@
 /*
-Copyright 2018 The sds cluster Authors.
+Copyright 2018 Samsung SDS Cloud Native Computing Team.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import (
 	time "time"
 
 	cma_v1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
-	clientset "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset"
+	versioned "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
 	internalinterfaces "github.com/samsung-cnct/cluster-manager-api/pkg/client/informers/externalversions/internalinterfaces"
 	v1alpha1 "github.com/samsung-cnct/cluster-manager-api/pkg/client/listers/cma/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -47,14 +47,14 @@ type sDSClusterInformer struct {
 // NewSDSClusterInformer constructs a new informer for SDSCluster type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewSDSClusterInformer(client clientset.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+func NewSDSClusterInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
 	return NewFilteredSDSClusterInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
 // NewFilteredSDSClusterInformer constructs a new informer for SDSCluster type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredSDSClusterInformer(client clientset.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredSDSClusterInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
@@ -76,7 +76,7 @@ func NewFilteredSDSClusterInformer(client clientset.Interface, namespace string,
 	)
 }
 
-func (f *sDSClusterInformer) defaultInformer(client clientset.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+func (f *sDSClusterInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
 	return NewFilteredSDSClusterInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 

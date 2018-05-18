@@ -2,6 +2,7 @@ package cluster_manager_api
 
 import (
 	"fmt"
+
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"

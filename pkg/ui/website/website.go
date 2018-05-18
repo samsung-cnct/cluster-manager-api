@@ -7,7 +7,6 @@ import (
 	"github.com/philips/go-bindata-assetfs"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/homepage"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/protobuf"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swagger"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swaggerjson"
 )
 
@@ -23,9 +22,7 @@ func serveSwagger(mux *http.ServeMux) {
 
 	// Expose files in third_party/swagger-ui/ on <host>/swagger-ui
 	fileServer := http.FileServer(&assetfs.AssetFS{
-		Asset:    swagger.Asset,
-		AssetDir: swagger.AssetDir,
-		Prefix:   "swagger-ui",
+		Prefix: "swagger-ui",
 	})
 	prefix := "/swagger-ui/"
 	mux.Handle(prefix, http.StripPrefix(prefix, fileServer))

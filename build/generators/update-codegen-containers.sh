@@ -39,6 +39,6 @@ printf ".... done creating the lister\n\n"
 echo "Creating the informer in ${PACKAGE_NAME}/pkg/client/informers ... "
 docker run --rm=true -w $PACKAGE_VIRTUAL -v ${PACKAGE_HOME}:${PACKAGE_VIRTUAL} $K8S_CODE_GEN informer-gen \
        -p ${PACKAGE_NAME}/pkg/client/informers --input-dirs ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} \
-       --versioned-clientset-package ${PACKAGE_NAME}/pkg/client/clientset --listers-package ${PACKAGE_NAME}/pkg/client/listers \
+       --versioned-clientset-package ${PACKAGE_NAME}/pkg/client/clientset/versioned --listers-package ${PACKAGE_NAME}/pkg/client/listers \
        -h ${PACKAGE_VIRTUAL}/build/generators/custom-boilerplate.go.txt
 printf ".... done creating the informer\n\n"

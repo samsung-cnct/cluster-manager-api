@@ -1,14 +1,15 @@
 package cluster_manager_api
 
 import (
+	"io/ioutil"
+	"os"
+
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 	"golang.org/x/net/context"
-	"io/ioutil"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	"os"
 )
 
 func (s *Server) ProvisionTiller(ctx context.Context, in *pb.ProvisionTillerMsg) (*pb.ProvisionTillerReply, error) {

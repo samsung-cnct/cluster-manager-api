@@ -33,6 +33,6 @@ printf ".... done creating the lister\n\n"
 # Creating the informer
 echo "Creating the informer in ${PACKAGE_NAME}/pkg/client/informers ... "
 informer-gen -p ${PACKAGE_NAME}/pkg/client/informers --input-dirs ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} \
-       --versioned-clientset-package ${PACKAGE_NAME}/pkg/client/clientset --listers-package ${PACKAGE_NAME}/pkg/client/listers \
+       --versioned-clientset-package ${PACKAGE_NAME}/pkg/client/clientset/versioned --listers-package ${PACKAGE_NAME}/pkg/client/listers \
        -h ${THIS_DIRECTORY}/custom-boilerplate.go.txt
 printf ".... done creating the informer\n\n"
