@@ -7,25 +7,40 @@ import (
 	"k8s.io/client-go/rest"
 )
 
+// Options to for use with the GenerateSDSApplication method
 type SDSApplicationOptions struct {
-	Name           string
-	Namespace      string
-	Values         string
-	PackageManager string
-	Chart          Chart
-}
-
-type Chart struct {
-	Name       string
-	Repository ChartRepository
-	Version    string
-}
-
-type ChartRepository struct {
+	// Name of the application (what will show up in helm list)
 	Name string
-	URL  string
+	// Namespace of the application within the target kubernetes environment
+	Namespace string
+	// Values in the standard helm --values command line argument.  This will be written to disk and used
+	Values string
+	// What package manager (tiller) should be used when installing this application
+	PackageManager string
+	// The chart information (name, repository, version, etc.)
+	Chart Chart
 }
 
+// Chart represents the Chart part of the SDSApplicationOptions struct
+type Chart struct {
+	// Name of the Chart - should be repository/chart-name like fooinc/my-chart
+	Name string
+	// TODO Make ChartRepository an array
+	Repository ChartRepository
+	// Version of the chart to install
+	Version string
+}
+
+// Representation of a Chart Repository - used in Chart which is then used by SDSApplicationOptions which is used by
+// GenerateSDSApplication
+type ChartRepository struct {
+	// Name that will be used within the helm command.  So if it is called fooinc, chart name would be fooinc/my-chart
+	Name string
+	// The URL to the chart repository
+	URL string
+}
+
+// This generic helper method will create a SDSApplication object for us with the CMA API
 func GenerateSDSApplication(options SDSApplicationOptions) sdsapi.SDSApplication {
 	return sdsapi.SDSApplication{
 		ObjectMeta: metav1.ObjectMeta{
@@ -48,6 +63,9 @@ func GenerateSDSApplication(options SDSApplicationOptions) sdsapi.SDSApplication
 	}
 }
 
+// This method will create an SDS Application in the cluster provided by the config value.
+// The namespace value will be what namespace the custom resource (SDSApplication) will be installed in, not where the
+// eventual application will be installed in.
 func CreateSDSApplication(application sdsapi.SDSApplication, namespace string, config *rest.Config) (bool, error) {
 	var err error
 	SetLogger()
@@ -65,6 +83,7 @@ func CreateSDSApplication(application sdsapi.SDSApplication, namespace string, c
 	return true, nil
 }
 
+// This method will update an existing SDSApplication resource in the cluster provided by the config value.
 func UpdateSDSApplication(application sdsapi.SDSApplication, namespace string, config *rest.Config) (*sdsapi.SDSApplication, error) {
 	var err error
 	SetLogger()
@@ -79,6 +98,7 @@ func UpdateSDSApplication(application sdsapi.SDSApplication, namespace string, c
 	return updatedApplication, nil
 }
 
+// This method will return an existing SDSApplication resource in the cluster provided by the config value.
 func GetSDSApplication(name string, namespace string, config *rest.Config) (*sdsapi.SDSApplication, error) {
 	var err error
 	SetLogger()
@@ -93,6 +113,7 @@ func GetSDSApplication(name string, namespace string, config *rest.Config) (*sds
 	return application, nil
 }
 
+// This method will delete an existing SDSApplication resource in the cluster provided by the config value.
 func DeleteSDSApplication(name string, namespace string, config *rest.Config) (bool, error) {
 	var err error
 	SetLogger()
