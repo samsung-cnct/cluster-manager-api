@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
+	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 	"golang.org/x/net/context"

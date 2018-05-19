@@ -6,6 +6,11 @@ PACKAGE_HOME=${THIS_DIRECTORY}/../../
 PACKAGE_NAME=github.com/samsung-cnct/cluster-manager-api
 PACKAGE_VIRTUAL=/go/src/${PACKAGE_NAME}
 API_PACKAGE=cma/v1alpha1
+GENERATED_CODE_HOME=pkg/generated/cma/client
+
+echo "Removing old generated code"
+rm -rf ${PACKAGE_HOME}/${GENERATED_CODE_HOME}
+mkdir -p ${PACKAGE_HOME}/${GENERATED_CODE_HOME}
 
 # Creating the deep copy object
 echo "Creating the deep copy object in ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} ... "
@@ -19,20 +24,20 @@ openapi-gen -i ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE},k8s.io/apimachinery/pkg/a
 printf ".... done creating openapi validation object\n\n"
 
 # Creating the clientset
-echo "Creating the clientset in ${PACKAGE_NAME}/pkg/client/clientset ... "
-client-gen -p ${PACKAGE_NAME}/pkg/client/clientset --input-base ${PACKAGE_NAME}/pkg/apis --input $API_PACKAGE -n versioned \
+echo "Creating the clientset in ${PACKAGE_NAME}/${GENERATED_CODE_HOME}/clientset ... "
+client-gen -p ${PACKAGE_NAME}/${GENERATED_CODE_HOME}/clientset --input-base ${PACKAGE_NAME}/pkg/apis --input $API_PACKAGE -n versioned \
        -h ${THIS_DIRECTORY}/custom-boilerplate.go.txt
 printf ".... done creating the clientset\n\n"
 
 # Creating the lister
-echo "Creating the lister in ${PACKAGE_NAME}/pkg/client/listers ... "
-lister-gen -p ${PACKAGE_NAME}/pkg/client/listers --input-dirs ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} \
+echo "Creating the lister in ${PACKAGE_NAME}/${GENERATED_CODE_HOME}/listers ... "
+lister-gen -p ${PACKAGE_NAME}/${GENERATED_CODE_HOME}/listers --input-dirs ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} \
        -h ${THIS_DIRECTORY}/custom-boilerplate.go.txt
 printf ".... done creating the lister\n\n"
 
 # Creating the informer
-echo "Creating the informer in ${PACKAGE_NAME}/pkg/client/informers ... "
-informer-gen -p ${PACKAGE_NAME}/pkg/client/informers --input-dirs ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} \
-       --versioned-clientset-package ${PACKAGE_NAME}/pkg/client/clientset/versioned --listers-package ${PACKAGE_NAME}/pkg/client/listers \
+echo "Creating the informer in ${PACKAGE_NAME}/${GENERATED_CODE_HOME}/informers ... "
+informer-gen -p ${PACKAGE_NAME}/${GENERATED_CODE_HOME}/informers --input-dirs ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} \
+       --versioned-clientset-package ${PACKAGE_NAME}/${GENERATED_CODE_HOME}/clientset/versioned --listers-package ${PACKAGE_NAME}/${GENERATED_CODE_HOME}/listers \
        -h ${THIS_DIRECTORY}/custom-boilerplate.go.txt
 printf ".... done creating the informer\n\n"

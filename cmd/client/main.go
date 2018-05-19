@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
+	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )

@@ -12,7 +12,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	service "github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api"
-	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
+	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/website"
 )
 

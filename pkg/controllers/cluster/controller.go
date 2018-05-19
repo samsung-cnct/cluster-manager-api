@@ -9,7 +9,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/juju/loggo"
 	api "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/generated/cma/client/clientset/versioned"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"

@@ -2,7 +2,7 @@ package cma
 
 import (
 	"github.com/juju/loggo"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/generated/cma/client/clientset/versioned"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"k8s.io/client-go/rest"

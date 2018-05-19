@@ -2,7 +2,7 @@ package cluster_manager_api
 
 import (
 	"github.com/samsung-cnct/cluster-controller/pkg/client/clientset/versioned"
-	pb "github.com/samsung-cnct/cluster-manager-api/pkg/api"
+	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"golang.org/x/net/context"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"

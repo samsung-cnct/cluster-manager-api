@@ -9,7 +9,7 @@ import (
 	ccapi "github.com/samsung-cnct/cluster-controller/pkg/apis/clustercontroller/v1alpha1"
 	"github.com/samsung-cnct/cluster-controller/pkg/client/clientset/versioned"
 	cmaapi "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
-	sdsClient "github.com/samsung-cnct/cluster-manager-api/pkg/client/clientset/versioned"
+	sdsClient "github.com/samsung-cnct/cluster-manager-api/pkg/generated/cma/client/clientset/versioned"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"

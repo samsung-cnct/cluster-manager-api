@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/philips/go-bindata-assetfs"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/homepage"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/protobuf"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/ui/data/swaggerjson"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/generated/ui/data/homepage"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/generated/ui/data/protobuf"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/generated/ui/data/swaggerjson"
 )
 
 func AddWebsiteHandles(mux *http.ServeMux) {
