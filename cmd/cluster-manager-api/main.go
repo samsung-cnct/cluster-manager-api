@@ -7,7 +7,6 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/samsung-cnct/cluster-manager-api/pkg/controllers/cluster"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"github.com/soheilhy/cmux"
@@ -18,10 +17,11 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/apiserver"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/controllers/sds-application"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/controllers/sds-package-manager"
-	ccworkqueue "github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil/workqueue"
+	ccworkqueue "github.com/samsung-cnct/cluster-manager-api/pkg/controllers/kraken-cluster"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/client-go/rest"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/controllers/sds-cluster"
 )
 
 var (
@@ -59,7 +59,7 @@ func main() {
 	stop := make(chan struct{})
 
 	logger.Infof("Starting the SDSCluster Controller")
-	sdsClusterController := cluster.NewSDSClusterController(nil)
+	sdsClusterController := sds_cluster.NewSDSClusterController(nil)
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
