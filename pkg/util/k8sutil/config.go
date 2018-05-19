@@ -24,22 +24,15 @@ type promptedCredentials struct {
 }
 
 func GenerateKubernetesConfig() (*rest.Config, error) {
-	var config *rest.Config
-	var err error
-
 	if KubeConfigLocation != "" {
-		config, err = clientcmd.BuildConfigFromFlags("", KubeConfigLocation)
-		if err != nil {
-			logErrorAndExit(err)
-		}
+		return clientcmd.BuildConfigFromFlags("", KubeConfigLocation)
 	} else {
 		configPath := filepath.Join(homeDir(), kubeconfigDir, kubeconfigFile)
-		if _, err := os.Stat(configPath); err == nil {
-			config, err = clientcmd.BuildConfigFromFlags("", configPath)
+		_, err := os.Stat(configPath)
+		if err == nil {
+			return clientcmd.BuildConfigFromFlags("", configPath)
 		} else {
-			config, err = rest.InClusterConfig()
+			return rest.InClusterConfig()
 		}
 	}
-
-	return config, err
 }
