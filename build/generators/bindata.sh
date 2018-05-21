@@ -21,7 +21,7 @@ echo "generating protobuf files..."
 go-bindata-assetfs -pkg protobuf -o ${PROJECT_DIRECTORY}/pkg/generated/ui/data/protobuf/bindata.go -prefix ${PROJECT_DIRECTORY}/api ${PROJECT_DIRECTORY}/api
 
 echo "generating swagger.json files..."
-go-bindata-assetfs -pkg swaggerjson -o ${PROJECT_DIRECTORY}/pkg/generated/ui/data/swaggerjson/bindata.go -prefix ${PROJECT_DIRECTORY}/api/swagger ${PROJECT_DIRECTORY}/assets/generated/swagger
+go-bindata-assetfs -pkg swaggerjson -o ${PROJECT_DIRECTORY}/pkg/generated/ui/data/swaggerjson/bindata.go -prefix ${PROJECT_DIRECTORY}/assets/generated/swagger ${PROJECT_DIRECTORY}/assets/generated/swagger
 
 echo "generating homepage files..."
 go-bindata-assetfs -pkg homepage -o ${PROJECT_DIRECTORY}/pkg/generated/ui/data/homepage/bindata.go -prefix ${PROJECT_DIRECTORY}/assets/homepage ${PROJECT_DIRECTORY}/assets/homepage
