@@ -8,9 +8,14 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"golang.org/x/net/context"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts/poc"
 )
 
 func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
+	var layout layouts.Layout
+	layout = poc.NewLayout()
+
 	options := cma.SDSClusterOptions{
 		Name:     in.Name,
 		Provider: in.Provider.Name,
@@ -25,7 +30,8 @@ func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*p
 			OAuthKey: in.Provider.Maas.OauthKey,
 		},
 	}
-	_, err := cma.CreateSDSCluster(cma.GenerateSDSCluster(options), "default", nil)
+
+	_, err := cma.CreateSDSCluster(layout.GenerateSDSCluster(options), "default", nil)
 	if err == nil {
 		return &pb.CreateClusterReply{Ok: true, Status: "Creating"}, nil
 	} else if k8sutil.IsResourceAlreadyExistsError(err) {

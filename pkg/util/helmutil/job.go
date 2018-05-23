@@ -55,7 +55,9 @@ func GenerateHelmInstallJob(application sdsapi.SDSApplicationSpec) batchv1.Job {
 	commandString := ""
 	commandString += "/helm init -c && "
 	commandString += "/helm repo add " + application.Chart.Repository.Name + " " + application.Chart.Repository.URL + " && "
+	commandString += "( /helm delete --purge " + application.Name + " --tiller-namespace " + packageManager.Spec.Namespace + " || true ) && "
 	commandString += "echo $HELMVALUES | base64 -d > /helm.values && "
+	commandString += "/helm repo update && "
 	commandString += "/helm install --tiller-namespace " + packageManager.Spec.Namespace + " --name " + application.Name
 	commandString += " --namespace " + application.Namespace + " --values /helm.values "
 	commandString += application.Chart.Name

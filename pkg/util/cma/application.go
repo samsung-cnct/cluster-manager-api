@@ -44,7 +44,7 @@ type ChartRepository struct {
 func GenerateSDSApplication(options SDSApplicationOptions) sdsapi.SDSApplication {
 	return sdsapi.SDSApplication{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: options.Name,
+			Name: options.PackageManager + "-" + options.Name,
 		},
 		Spec: sdsapi.SDSApplicationSpec{
 			Name:           options.Name,

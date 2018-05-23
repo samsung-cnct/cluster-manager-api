@@ -19,6 +19,8 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts/poc"
 )
 
 var (
@@ -199,23 +201,26 @@ func (c *SDSClusterController) SetLogger() {
 
 func (c *SDSClusterController) deployKrakenCluster(sdsCluster *api.SDSCluster) {
 	clusterName := sdsCluster.GetName()
-	_, err := ccutil.CreateKrakenCluster(
-		ccutil.GenerateKrakenCluster(
-			ccutil.KrakenClusterOptions{
-				Name:     clusterName,
-				Provider: sdsCluster.Spec.Provider.Name,
-				MaaS: ccutil.MaaSOptions{
-					Endpoint: sdsCluster.Spec.Provider.MaaS.Endpoint,
-					Username: sdsCluster.Spec.Provider.MaaS.Username,
-					OAuthKey: sdsCluster.Spec.Provider.MaaS.OAuthKey,
-				},
-				AWS: ccutil.AWSOptions{
-					Region:          sdsCluster.Spec.Provider.AWS.Region,
-					SecretKeyId:     sdsCluster.Spec.Provider.AWS.SecretKeyId,
-					SecretAccessKey: sdsCluster.Spec.Provider.AWS.SecretAccessKey,
-				},
+	krakenCluster := ccutil.GenerateKrakenCluster(
+		ccutil.KrakenClusterOptions{
+			Name:     clusterName,
+			Provider: sdsCluster.Spec.Provider.Name,
+			MaaS: ccutil.MaaSOptions{
+				Endpoint: sdsCluster.Spec.Provider.MaaS.Endpoint,
+				Username: sdsCluster.Spec.Provider.MaaS.Username,
+				OAuthKey: sdsCluster.Spec.Provider.MaaS.OAuthKey,
 			},
-		), "default", nil)
+			AWS: ccutil.AWSOptions{
+				Region:          sdsCluster.Spec.Provider.AWS.Region,
+				SecretKeyId:     sdsCluster.Spec.Provider.AWS.SecretKeyId,
+				SecretAccessKey: sdsCluster.Spec.Provider.AWS.SecretAccessKey,
+			},
+		},
+	)
+	krakenCluster.Labels = make(map[string]string)
+	krakenCluster.Labels["SDSCluster"] = string(sdsCluster.ObjectMeta.UID)
+
+	_, err := ccutil.CreateKrakenCluster( krakenCluster, "default", nil)
 	if (err != nil) && (!k8sutil.IsResourceAlreadyExistsError(err)) {
 		logger.Infof("Could not create kraken cluster")
 		sdsCluster.Status.Phase = api.ClusterPhasePending
@@ -234,6 +239,10 @@ func (c *SDSClusterController) deployKrakenCluster(sdsCluster *api.SDSCluster) {
 }
 
 func (c *SDSClusterController) deployPackageManager(sdsCluster *api.SDSCluster) {
+	// TODO Make this dynamic, but for now OK
+	var layout layouts.Layout
+	layout = poc.NewLayout()
+
 	clusterName := sdsCluster.GetName()
 	// Cluster name shouldn't have to be the name of the package manager - need to fix
 	options := cma.SDSPackageManagerOptions{
@@ -243,7 +252,7 @@ func (c *SDSClusterController) deployPackageManager(sdsCluster *api.SDSCluster) 
 		ClusterWide:     sdsCluster.Spec.PackageManager.Permissions.ClusterWide,
 		AdminNamespaces: sdsCluster.Spec.PackageManager.Permissions.Namespaces,
 	}
-	_, err := cma.CreateSDSPackageManager(cma.GenerateSDSPackageManager(options), sdsCluster.Namespace, nil)
+	_, err := cma.CreateSDSPackageManager(layout.GenerateSDSPackageManager(options, sdsCluster), sdsCluster.Namespace, nil)
 	if (err != nil) && (!k8sutil.IsResourceAlreadyExistsError(err)) {
 		logger.Infof("Could not create SDSPackageManager for cluster %s", clusterName)
 		sdsCluster.Status.Phase = api.ClusterPhaseHaveCluster
@@ -262,22 +271,15 @@ func (c *SDSClusterController) deployPackageManager(sdsCluster *api.SDSCluster) 
 }
 
 func (c *SDSClusterController) deployApplications(sdsCluster *api.SDSCluster) {
+	// TODO Make this dynamic, but for now OK
+	var layout layouts.Layout
+	layout = poc.NewLayout()
+
+	packageManager, _ := cma.GetSDSPackageManager(sdsCluster.Name, "default", nil)
+
 	clusterName := sdsCluster.GetName()
-	for _, application := range sdsCluster.Spec.Applications {
-		_, err := cma.CreateSDSApplication(cma.GenerateSDSApplication(cma.SDSApplicationOptions{
-			Name:           sdsCluster.Name + "-" + application.Name,
-			Namespace:      application.Namespace,
-			Values:         application.Values,
-			PackageManager: application.PackageManager.Name,
-			Chart: cma.Chart{
-				Name:    application.Chart.Name,
-				Version: application.Chart.Version,
-				Repository: cma.ChartRepository{
-					Name: application.Chart.Repository.Name,
-					URL:  application.Chart.Repository.URL,
-				},
-			},
-		}), "default", nil)
+	for _, application := range layout.GenerateSDSApplications(sdsCluster, packageManager) {
+		_, err := cma.CreateSDSApplication(application, "default", nil)
 		if err != nil {
 			logger.Infof("Error creating SDSApplication -->%s<-- for cluster -->%s<--, error was -->%s<--", application.Name, sdsCluster.Name, err)
 			continue

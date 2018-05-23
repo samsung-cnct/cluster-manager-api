@@ -39,6 +39,8 @@ type SDSCluster struct {
 // SDSClusterSpec represents a SDSCluster spec
 // +k8s:openapi-gen=true
 type SDSClusterSpec struct {
+	// What is the layout for this SDSCluster
+	Layout string `json:"layout"`
 	// What provider
 	Provider ProviderSpec `json:"provider,omitempty"`
 	// What package manager should be used

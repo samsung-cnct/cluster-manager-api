@@ -512,6 +512,13 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 				SchemaProps: spec.SchemaProps{
 					Description: "SDSClusterSpec represents a SDSCluster spec",
 					Properties: map[string]spec.Schema{
+						"layout": {
+							SchemaProps: spec.SchemaProps{
+								Description: "What is the layout for this SDSCluster",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
 						"provider": {
 							SchemaProps: spec.SchemaProps{
 								Description: "What provider",
@@ -538,7 +545,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 							},
 						},
 					},
-					Required: []string{"packageManager"},
+					Required: []string{"layout", "packageManager"},
 				},
 			},
 			Dependencies: []string{
