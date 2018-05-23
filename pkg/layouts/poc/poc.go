@@ -2,12 +2,12 @@ package poc
 
 import (
 	"github.com/juju/loggo"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 )
 
-type Layout struct {}
+type Layout struct{}
 
 var (
 	logger loggo.Logger
@@ -46,35 +46,65 @@ func (l *Layout) GenerateSDSApplications(cluster *v1alpha1.SDSCluster, packageMa
 
 	// Generating Prometheus Operator Application
 	applications = append(applications, cma.GenerateSDSApplication(cma.SDSApplicationOptions{
-		Name: "prometheus-operator",
-		Namespace: "prometheus",
+		Name:           "prometheus-operator",
+		Namespace:      "prometheus",
 		PackageManager: packageManager.Name,
 		Chart: cma.Chart{
 			Name:       "coreos/prometheus-operator",
 			Repository: cma.ChartRepository{Name: "coreos", URL: "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"},
 		},
+		Values: `rbacEnable: false`,
 	}))
 
 	// Generating Kube-Prometheus Application
 	applications = append(applications, cma.GenerateSDSApplication(cma.SDSApplicationOptions{
-		Name: "kube-prometheus",
-		Namespace: "prometheus",
+		Name:           "kube-prometheus",
+		Namespace:      "prometheus",
 		PackageManager: packageManager.Name,
 		Chart: cma.Chart{
 			Name:       "coreos/kube-prometheus",
 			Repository: cma.ChartRepository{Name: "coreos", URL: "https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/"},
 		},
+		Values: `
+## kube-prometheus configuration, ref: https://github.com/samsung-cnct/cmc-poc.cluster.cnct.io/blob/master/managed-cluster/helm-values/kube-prometheus/values.yaml
+global:
+  rbacEnable: false
+  pspEnable: false
+grafana:
+  service:
+    type: NodePort
+    labels:
+      kubernetes.io/cluster-service: "true"
+      kubernetes.io/name: "MonitorGrafana"
+alertmanager:
+  service:
+    type: NodePort
+    labels:
+      kubernetes.io/cluster-service: "true"
+      kubernetes.io/name: "AlertManager"
+prometheus:
+  service:
+    type: NodePort
+    labels:
+      kubernetes.io/cluster-service: "true"
+      kubernetes.io/name: "Prometheus"
+`,
 	}))
 
 	// Generating Logging Client Application
 	applications = append(applications, cma.GenerateSDSApplication(cma.SDSApplicationOptions{
-		Name: "logging",
-		Namespace: "logging",
+		Name:           "logging",
+		Namespace:      "logging",
 		PackageManager: packageManager.Name,
 		Chart: cma.Chart{
 			Name:       "sds/logging-client",
 			Repository: cma.ChartRepository{Name: "sds", URL: "https://charts.migrations.cnct.io"},
 		},
+		Values: `
+## client-logging config.  ref: https://github.com/samsung-cnct/chart-logging-client/blob/master/charts/logging-client/values.yaml
+fluent-bit:
+  name: fluent-bit
+  cluster_uuid: ` + string(cluster.UID),
 	}))
 
 	// Generating nginx-ingress Application

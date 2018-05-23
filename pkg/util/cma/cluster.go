@@ -38,7 +38,7 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 				MaaS: sdsapi.MaaSSpec{Endpoint: options.MaaS.Endpoint, Username: options.MaaS.Username, OAuthKey: options.MaaS.OAuthKey},
 			},
 			PackageManager: sdsapi.SDSPackageManagerSpec{},
-			Applications: []sdsapi.SDSApplicationSpec{},
+			Applications:   []sdsapi.SDSApplicationSpec{},
 		},
 	}
 }

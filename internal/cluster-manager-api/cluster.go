@@ -4,12 +4,12 @@ import (
 	"fmt"
 
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts/poc"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"golang.org/x/net/context"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts/poc"
 )
 
 func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {

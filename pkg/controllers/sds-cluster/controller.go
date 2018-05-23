@@ -10,6 +10,8 @@ import (
 	"github.com/juju/loggo"
 	api "github.com/samsung-cnct/cluster-manager-api/pkg/apis/cma/v1alpha1"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/generated/cma/client/clientset/versioned"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts/poc"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
@@ -19,8 +21,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts/poc"
 )
 
 var (
@@ -220,7 +220,7 @@ func (c *SDSClusterController) deployKrakenCluster(sdsCluster *api.SDSCluster) {
 	krakenCluster.Labels = make(map[string]string)
 	krakenCluster.Labels["SDSCluster"] = string(sdsCluster.ObjectMeta.UID)
 
-	_, err := ccutil.CreateKrakenCluster( krakenCluster, "default", nil)
+	_, err := ccutil.CreateKrakenCluster(krakenCluster, "default", nil)
 	if (err != nil) && (!k8sutil.IsResourceAlreadyExistsError(err)) {
 		logger.Infof("Could not create kraken cluster")
 		sdsCluster.Status.Phase = api.ClusterPhasePending
