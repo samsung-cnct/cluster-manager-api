@@ -104,6 +104,8 @@ prometheus:
 ## client-logging config.  ref: https://github.com/samsung-cnct/chart-logging-client/blob/master/charts/logging-client/values.yaml
 fluent-bit:
   name: fluent-bit
+  elasticSearchHost: elasticsearch.cmc-poc.cluster.cnct.io
+  elasticSearchPort: 80
   cluster_uuid: ` + string(cluster.UID),
 	}))
 
