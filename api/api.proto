@@ -134,8 +134,11 @@ message CreateClusterMsg {
 message CreateClusterReply {
     // Whether or not the cluster was provisioned by this request
     bool ok = 1;
-    // The state of the cluster generation
-    string status = 2;
+
+    oneof cluster_or_error {
+        ClusterItem cluster = 2;
+        Error error = 7;
+    }
 }
 
 message GetClusterMsg {
@@ -146,10 +149,11 @@ message GetClusterMsg {
 message GetClusterReply {
     // Is the cluster in the system
     bool ok = 1;
-    // What is the status of the cluster
-    string status = 2;
-    // What is the kubeconfig to connect to the cluster
-    string kubeconfig = 3;
+
+    oneof cluster_or_error {
+        ClusterDetailItem cluster = 2;
+        Error error = 7;
+    }
 }
 
 message DeleteClusterMsg {
@@ -171,16 +175,35 @@ message GetClusterListReply {
     // Is the cluster in the system
     bool ok = 1;
     // List of clusters
-    repeated ClusterListItem clusters = 2;
+    repeated ClusterItem clusters = 2;
 }
 
-message ClusterListItem {
+message ClusterItem {
+    // ID of the cluster
+    string id = 1;
     // Name of the cluster
-    string name = 1;
+    string name = 2;
     // What is the status of the cluster
-    string status = 2;
+    string status = 3;
 }
 
+message ClusterDetailItem {
+    // ID of the cluster
+    string id = 1;
+    // Name of the cluster
+    string name = 2;
+    // What is the status of the cluster
+    string status = 3;
+    // What is the kubeconfig to connect to the cluster
+    string kubeconfig = 4;
+}
+
+message Error {
+    // The error code
+    string code = 1;
+    // The error message
+    string message = 2;
+}
 
 message ProvisionTillerMsg {
     // Cluster tiller should be installed on

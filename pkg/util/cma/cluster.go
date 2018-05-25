@@ -43,21 +43,22 @@ func GenerateSDSCluster(options SDSClusterOptions) sdsapi.SDSCluster {
 	}
 }
 
-func CreateSDSCluster(cluster sdsapi.SDSCluster, namespace string, config *rest.Config) (bool, error) {
+func CreateSDSCluster(cluster sdsapi.SDSCluster, namespace string, config *rest.Config) (*sdsapi.SDSCluster, error) {
 	var err error
+	var newCluster *sdsapi.SDSCluster
 	SetLogger()
 	client := prepareRestClient(config)
 
-	_, err = client.CmaV1alpha1().SDSClusters(namespace).Create(&cluster)
+	newCluster, err = client.CmaV1alpha1().SDSClusters(namespace).Create(&cluster)
 	if err != nil && !k8sutil.IsResourceAlreadyExistsError(err) {
 		logger.Infof("SDSCluster -->%s<-- Cannot be created, error was %v", cluster.ObjectMeta.Name, err)
-		return false, err
+		return nil, err
 	} else if k8sutil.IsResourceAlreadyExistsError(err) {
 		logger.Infof("SDSCluster -->%s<-- Already exists, cannot recreate", cluster.ObjectMeta.Name)
-		return false, err
+		return nil, err
 	}
 
-	return true, err
+	return newCluster, err
 }
 
 func DeleteSDSCluster(name string, namespace string, config *rest.Config) (bool, error) {

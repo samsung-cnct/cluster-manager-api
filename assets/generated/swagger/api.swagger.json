@@ -267,9 +267,34 @@
     }
   },
   "definitions": {
-    "cluster_manager_apiClusterListItem": {
+    "cluster_manager_apiClusterDetailItem": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "title": "ID of the cluster"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name of the cluster"
+        },
+        "status": {
+          "type": "string",
+          "title": "What is the status of the cluster"
+        },
+        "kubeconfig": {
+          "type": "string",
+          "title": "What is the kubeconfig to connect to the cluster"
+        }
+      }
+    },
+    "cluster_manager_apiClusterItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "ID of the cluster"
+        },
         "name": {
           "type": "string",
           "title": "Name of the cluster"
@@ -352,9 +377,11 @@
           "format": "boolean",
           "title": "Whether or not the cluster was provisioned by this request"
         },
-        "status": {
-          "type": "string",
-          "title": "The state of the cluster generation"
+        "cluster": {
+          "$ref": "#/definitions/cluster_manager_apiClusterItem"
+        },
+        "error": {
+          "$ref": "#/definitions/cluster_manager_apiError"
         }
       }
     },
@@ -383,6 +410,19 @@
         "message": {
           "type": "string",
           "title": "What messages were given"
+        }
+      }
+    },
+    "cluster_manager_apiError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "title": "The error code"
+        },
+        "message": {
+          "type": "string",
+          "title": "The error message"
         }
       }
     },
@@ -435,7 +475,7 @@
         "clusters": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/cluster_manager_apiClusterListItem"
+            "$ref": "#/definitions/cluster_manager_apiClusterItem"
           },
           "title": "List of clusters"
         }
@@ -449,13 +489,11 @@
           "format": "boolean",
           "title": "Is the cluster in the system"
         },
-        "status": {
-          "type": "string",
-          "title": "What is the status of the cluster"
+        "cluster": {
+          "$ref": "#/definitions/cluster_manager_apiClusterDetailItem"
         },
-        "kubeconfig": {
-          "type": "string",
-          "title": "What is the kubeconfig to connect to the cluster"
+        "error": {
+          "$ref": "#/definitions/cluster_manager_apiError"
         }
       }
     },

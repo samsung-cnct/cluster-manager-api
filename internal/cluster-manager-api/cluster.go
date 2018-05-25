@@ -3,6 +3,8 @@ package cluster_manager_api
 import (
 	"fmt"
 
+	"net/http"
+
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts/poc"
@@ -31,23 +33,79 @@ func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*p
 		},
 	}
 
-	_, err := cma.CreateSDSCluster(layout.GenerateSDSCluster(options), "default", nil)
+	sdsCluster, err := cma.CreateSDSCluster(layout.GenerateSDSCluster(options), "default", nil)
 	if err == nil {
-		return &pb.CreateClusterReply{Ok: true, Status: "Creating"}, nil
+		return &pb.CreateClusterReply{
+			Ok: true,
+			ClusterOrError: &pb.CreateClusterReply_Cluster{
+				Cluster: &pb.ClusterItem{
+					Id:     string(sdsCluster.ObjectMeta.UID),
+					Name:   sdsCluster.Name,
+					Status: string(sdsCluster.Status.Phase),
+				},
+			},
+		}, nil
 	} else if k8sutil.IsResourceAlreadyExistsError(err) {
-		return &pb.CreateClusterReply{Ok: true, Status: "Cluster already exists"}, nil
+		return &pb.CreateClusterReply{
+			Ok: false,
+			ClusterOrError: &pb.CreateClusterReply_Error{
+				Error: &pb.Error{
+					Code:    string(http.StatusBadRequest),
+					Message: "Cluster already exists",
+				},
+			},
+		}, nil
 	} else {
-		return &pb.CreateClusterReply{Ok: false, Status: "Could not create cluster, reason is " + fmt.Sprintf("%s", err)}, nil
+		return &pb.CreateClusterReply{
+			Ok: false,
+			ClusterOrError: &pb.CreateClusterReply_Error{
+				Error: &pb.Error{
+					Code:    string(http.StatusInternalServerError),
+					Message: "Could not create cluster, reason is " + fmt.Sprintf("%s", err),
+				},
+			},
+		}, nil
 	}
 }
 
 func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
-	cluster, err := ccutil.GetKrakenCluster(in.Name, "default", nil)
+	krakenCluster, err := ccutil.GetKrakenCluster(in.Name, "default", nil)
 	if err != nil {
-		return &pb.GetClusterReply{Ok: false, Status: fmt.Sprintf("%v", err)}, nil
+		return &pb.GetClusterReply{
+			Ok: false,
+			ClusterOrError: &pb.GetClusterReply_Error{
+				Error: &pb.Error{
+					Code:    string(http.StatusInternalServerError),
+					Message: fmt.Sprintf("%v", err),
+				},
+			},
+		}, nil
 	}
-	return &pb.GetClusterReply{Ok: true, Status: string(cluster.Status.State), Kubeconfig: cluster.Status.Kubeconfig}, nil
 
+	sdsCluster, err := cma.GetSDSCluster(in.Name, "default", nil)
+	if err != nil {
+		return &pb.GetClusterReply{
+			Ok: false,
+			ClusterOrError: &pb.GetClusterReply_Error{
+				Error: &pb.Error{
+					Code:    string(http.StatusInternalServerError),
+					Message: fmt.Sprintf("%v", err),
+				},
+			},
+		}, nil
+	}
+
+	return &pb.GetClusterReply{
+		Ok: true,
+		ClusterOrError: &pb.GetClusterReply_Cluster{
+			Cluster: &pb.ClusterDetailItem{
+				Id:         string(sdsCluster.ObjectMeta.UID),
+				Name:       sdsCluster.Name,
+				Status:     string(sdsCluster.Status.Phase),
+				Kubeconfig: krakenCluster.Status.Kubeconfig,
+			},
+		},
+	}, nil
 }
 
 func (s *Server) DeleteCluster(ctx context.Context, in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
@@ -70,7 +128,7 @@ func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (
 	}
 	reply.Ok = true
 	for _, cluster := range list {
-		reply.Clusters = append(reply.Clusters, &pb.ClusterListItem{Name: cluster.Name, Status: string(cluster.Status.Phase)})
+		reply.Clusters = append(reply.Clusters, &pb.ClusterItem{Id: string(cluster.ObjectMeta.UID), Name: cluster.Name, Status: string(cluster.Status.Phase)})
 	}
 	return
 }
