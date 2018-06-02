@@ -12,3 +12,4 @@ public/assets/
 main
 .testCoverage.txt
 cluster-manager-api
+!**/cluster-manager-api/

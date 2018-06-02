@@ -24,35 +24,23 @@ import (
 var (
 	logger loggo.Logger
 	config *rest.Config
+	OutputFormat string
 )
 
 
 func main() {
 	var rootCmd = &cobra.Command{
 		Use:   "cluster-manager-api",
-		Short: "Hugo is a very fast static site generator",
-		Long: `A Fast and Flexible Static Site Generator built with
-                love by spf13 and friends in Go.
-                Complete documentation is available at http://hugo.spf13.com`,
+		Short: "The cluster manager API",
+		Long: `The Cluster Manager API`,
 		Run: func(cmd *cobra.Command, args []string) {
 			doSomething()
-		},
-	}
-	var versionCmd = &cobra.Command{
-		Use:   "version",
-		Short: "Hugo is a very fast static site generator",
-		Long: `A Fast and Flexible Static Site Generator built with
-                love by spf13 and friends in Go.
-                Complete documentation is available at http://hugo.spf13.com`,
-		Run: func(cmd *cobra.Command, args []string) {
-			versionString, _ := json.Marshal(version.Get())
-			fmt.Printf("%s\n", versionString)
 		},
 	}
 
 	cobra.OnInitialize()
 	viperInit()
-	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(generateVersionCmd())
 	rootCmd.Execute()
 }
 
@@ -118,4 +106,35 @@ func viperInit() {
 	viper.BindPFlags(pflag.CommandLine)
 
 	viper.AutomaticEnv()
+}
+
+
+func generateVersionCmd() *cobra.Command{
+	var versionCmd = &cobra.Command{
+		Use:   "version",
+		Short: "Returns version information",
+		Long: `Find out the version, git commit, etc of the build`,
+		Run: func(cmd *cobra.Command, args []string) {
+			info := version.Get()
+			if OutputFormat == "json" {
+				versionString, _ := json.Marshal(info)
+				fmt.Printf("%s\n", versionString)
+			} else {
+				fmt.Printf("Version Information:\n")
+				fmt.Printf("\tGit Data:\n")
+				fmt.Printf("\t\tTagged Version:\t%s\n", info.GitVersion)
+				fmt.Printf("\t\tHash:\t\t%s\n", info.GitCommit)
+				fmt.Printf("\t\tTree State:\t%s\n", info.GitTreeState)
+				fmt.Printf("\t\tBuild Date:\t%s\n", info.BuildDate)
+				fmt.Printf("\tBuild Data:\n")
+				fmt.Printf("\t\tBuild Date:\t%s\n", info.BuildDate)
+				fmt.Printf("\t\tGo Version:\t%s\n", info.GoVersion)
+				fmt.Printf("\t\tCompiler:\t%s\n", info.Compiler)
+				fmt.Printf("\t\tPlatform:\t%s\n\n", info.Platform)
+			}
+		},
+	}
+
+	versionCmd.Flags().StringVarP(&OutputFormat, "output", "o", "text", "json or text")
+	return versionCmd
 }
