@@ -4,7 +4,8 @@
 ## Table of Contents
 
 - [api.proto](#api.proto)
-    - [ClusterListItem](#cluster_manager_api.ClusterListItem)
+    - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
+    - [ClusterItem](#cluster_manager_api.ClusterItem)
     - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
     - [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec)
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
@@ -14,6 +15,7 @@
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
     - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
     - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
+    - [Error](#cluster_manager_api.Error)
     - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
     - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
@@ -35,7 +37,8 @@
   
 
 - [api.proto](#api.proto)
-    - [ClusterListItem](#cluster_manager_api.ClusterListItem)
+    - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
+    - [ClusterItem](#cluster_manager_api.ClusterItem)
     - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
     - [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec)
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
@@ -45,6 +48,7 @@
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
     - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
     - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
+    - [Error](#cluster_manager_api.Error)
     - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
     - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
@@ -76,14 +80,33 @@
 
 
 
-<a name="cluster_manager_api.ClusterListItem"/>
+<a name="cluster_manager_api.ClusterDetailItem"/>
 
-### ClusterListItem
+### ClusterDetailItem
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  | ID of the cluster |
+| name | [string](#string) |  | Name of the cluster |
+| status | [string](#string) |  | What is the status of the cluster |
+| kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.ClusterItem"/>
+
+### ClusterItem
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  | ID of the cluster |
 | name | [string](#string) |  | Name of the cluster |
 | status | [string](#string) |  | What is the status of the cluster |
 
@@ -168,7 +191,8 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Whether or not the cluster was provisioned by this request |
-| status | [string](#string) |  | The state of the cluster generation |
+| cluster | [ClusterItem](#cluster_manager_api.ClusterItem) |  |  |
+| error | [Error](#cluster_manager_api.Error) |  |  |
 
 
 
@@ -239,6 +263,22 @@
 
 
 
+<a name="cluster_manager_api.Error"/>
+
+### Error
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| code | [string](#string) |  | The error code |
+| message | [string](#string) |  | The error message |
+
+
+
+
+
+
 <a name="cluster_manager_api.GenericHelmChart"/>
 
 ### GenericHelmChart
@@ -293,7 +333,7 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Is the cluster in the system |
-| clusters | [ClusterListItem](#cluster_manager_api.ClusterListItem) | repeated | List of clusters |
+| clusters | [ClusterItem](#cluster_manager_api.ClusterItem) | repeated | List of clusters |
 
 
 
@@ -324,8 +364,8 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Is the cluster in the system |
-| status | [string](#string) |  | What is the status of the cluster |
-| kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
+| cluster | [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem) |  |  |
+| error | [Error](#cluster_manager_api.Error) |  |  |
 
 
 
@@ -494,14 +534,33 @@ The response to Hello World
 
 
 
-<a name="cluster_manager_api.ClusterListItem"/>
+<a name="cluster_manager_api.ClusterDetailItem"/>
 
-### ClusterListItem
+### ClusterDetailItem
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  | ID of the cluster |
+| name | [string](#string) |  | Name of the cluster |
+| status | [string](#string) |  | What is the status of the cluster |
+| kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.ClusterItem"/>
+
+### ClusterItem
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  | ID of the cluster |
 | name | [string](#string) |  | Name of the cluster |
 | status | [string](#string) |  | What is the status of the cluster |
 
@@ -586,7 +645,8 @@ The response to Hello World
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Whether or not the cluster was provisioned by this request |
-| status | [string](#string) |  | The state of the cluster generation |
+| cluster | [ClusterItem](#cluster_manager_api.ClusterItem) |  |  |
+| error | [Error](#cluster_manager_api.Error) |  |  |
 
 
 
@@ -657,6 +717,22 @@ The response to Hello World
 
 
 
+<a name="cluster_manager_api.Error"/>
+
+### Error
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| code | [string](#string) |  | The error code |
+| message | [string](#string) |  | The error message |
+
+
+
+
+
+
 <a name="cluster_manager_api.GenericHelmChart"/>
 
 ### GenericHelmChart
@@ -711,7 +787,7 @@ The response to Hello World
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Is the cluster in the system |
-| clusters | [ClusterListItem](#cluster_manager_api.ClusterListItem) | repeated | List of clusters |
+| clusters | [ClusterItem](#cluster_manager_api.ClusterItem) | repeated | List of clusters |
 
 
 
@@ -742,8 +818,8 @@ The response to Hello World
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Is the cluster in the system |
-| status | [string](#string) |  | What is the status of the cluster |
-| kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
+| cluster | [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem) |  |  |
+| error | [Error](#cluster_manager_api.Error) |  |  |
 
 
 
