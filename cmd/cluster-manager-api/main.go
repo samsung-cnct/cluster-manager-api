@@ -17,7 +17,6 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/apiserver"
 	"k8s.io/client-go/rest"
 	"github.com/spf13/cobra"
-	"encoding/json"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/version"
 )
 
@@ -39,9 +38,9 @@ func main() {
 	}
 
 	cobra.OnInitialize()
-	viperInit()
 	rootCmd.AddCommand(generateVersionCmd())
 	rootCmd.Execute()
+	viperInit()
 }
 
 
@@ -116,25 +115,19 @@ func generateVersionCmd() *cobra.Command{
 		Long: `Find out the version, git commit, etc of the build`,
 		Run: func(cmd *cobra.Command, args []string) {
 			info := version.Get()
-			if OutputFormat == "json" {
-				versionString, _ := json.Marshal(info)
-				fmt.Printf("%s\n", versionString)
-			} else {
-				fmt.Printf("Version Information:\n")
-				fmt.Printf("\tGit Data:\n")
-				fmt.Printf("\t\tTagged Version:\t%s\n", info.GitVersion)
-				fmt.Printf("\t\tHash:\t\t%s\n", info.GitCommit)
-				fmt.Printf("\t\tTree State:\t%s\n", info.GitTreeState)
-				fmt.Printf("\t\tBuild Date:\t%s\n", info.BuildDate)
-				fmt.Printf("\tBuild Data:\n")
-				fmt.Printf("\t\tBuild Date:\t%s\n", info.BuildDate)
-				fmt.Printf("\t\tGo Version:\t%s\n", info.GoVersion)
-				fmt.Printf("\t\tCompiler:\t%s\n", info.Compiler)
-				fmt.Printf("\t\tPlatform:\t%s\n\n", info.Platform)
-			}
+			fmt.Printf("Version Information:\n")
+			fmt.Printf("\tGit Data:\n")
+			fmt.Printf("\t\tTagged Version:\t%s\n", info.GitVersion)
+			fmt.Printf("\t\tHash:\t\t%s\n", info.GitCommit)
+			fmt.Printf("\t\tTree State:\t%s\n", info.GitTreeState)
+			fmt.Printf("\t\tBuild Date:\t%s\n", info.BuildDate)
+			fmt.Printf("\tBuild Data:\n")
+			fmt.Printf("\t\tBuild Date:\t%s\n", info.BuildDate)
+			fmt.Printf("\t\tGo Version:\t%s\n", info.GoVersion)
+			fmt.Printf("\t\tCompiler:\t%s\n", info.Compiler)
+			fmt.Printf("\t\tPlatform:\t%s\n\n", info.Platform)
 		},
 	}
 
-	versionCmd.Flags().StringVarP(&OutputFormat, "output", "o", "text", "json or text")
 	return versionCmd
 }
