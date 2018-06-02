@@ -14,12 +14,6 @@
   revision = "de5bf2ad457846296e2031421a34e2568e304e35"
 
 [[projects]]
-  name = "github.com/davecgh/go-spew"
-  packages = ["spew"]
-  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
-  version = "v1.1.0"
-
-[[projects]]
   name = "github.com/elazarl/go-bindata-assetfs"
   packages = ["."]
   revision = "30f82fa23fd844bd5bb1e5f216db87fd77b5eb43"
@@ -31,8 +25,8 @@
     ".",
     "log"
   ]
-  revision = "2810ccc68e0ca445fa81ebfa03fbf70aca5c41ae"
-  version = "v2.7.0"
+  revision = "3658237ded108b4134956c1b3050349d93e7b895"
+  version = "v2.7.1"
 
 [[projects]]
   name = "github.com/fsnotify/fsnotify"
@@ -113,8 +107,8 @@
     "compiler",
     "extensions"
   ]
-  revision = "ee43cbb60db7bd22502942cccbc39059117352ab"
-  version = "v0.1.0"
+  revision = "7c663266750e7d82587642f65e60bc4083f1f84e"
+  version = "v0.2.0"
 
 [[projects]]
   name = "github.com/grpc-ecosystem/grpc-gateway"
@@ -124,17 +118,8 @@
     "runtime/internal",
     "utilities"
   ]
-  revision = "07f5e79768022f9a3265235f0db4ac8c3f675fec"
-  version = "v1.3.1"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/hashicorp/golang-lru"
-  packages = [
-    ".",
-    "simplelru"
-  ]
-  revision = "0fb14efe8c47ae851c0034ed7a448854d3d34cf3"
+  revision = "92583770e3f01b09a0d3e9bdf64321d8bebd48f2"
+  version = "v1.4.1"
 
 [[projects]]
   branch = "master"
@@ -175,7 +160,7 @@
   branch = "master"
   name = "github.com/juju/loggo"
   packages = ["."]
-  revision = "7f1609ff1f3fcf3519ed62ccaaa9e609ea287838"
+  revision = "584905176618da46b895b176c721b02c476b6993"
 
 [[projects]]
   name = "github.com/magiconair/properties"
@@ -191,7 +176,7 @@
     "jlexer",
     "jwriter"
   ]
-  revision = "8b799c424f57fa123fc63a99d6383bc6e4c02578"
+  revision = "9825584555aa620c53c265d4a09ace0df1346fd9"
 
 [[projects]]
   branch = "master"
@@ -236,10 +221,22 @@
   revision = "d6b34d9d5ae445b649586fc3b6a2748301a0f8bc"
 
 [[projects]]
-  name = "github.com/sirupsen/logrus"
-  packages = ["."]
-  revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
-  version = "v1.0.5"
+  branch = "master"
+  name = "github.com/samsung-cnct/cma-operator"
+  packages = [
+    "pkg/apis/cma/v1alpha1",
+    "pkg/generated/cma/client/clientset/versioned",
+    "pkg/generated/cma/client/clientset/versioned/scheme",
+    "pkg/generated/cma/client/clientset/versioned/typed/cma/v1alpha1",
+    "pkg/layouts",
+    "pkg/layouts/poc",
+    "pkg/util",
+    "pkg/util/ccutil",
+    "pkg/util/cma",
+    "pkg/util/k8sutil",
+    "pkg/util/retryutil"
+  ]
+  revision = "848b02b2b8f59062771eabe3f326f1b658ecbfa8"
 
 [[projects]]
   name = "github.com/soheilhy/cmux"
@@ -284,7 +281,7 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
-  revision = "1a580b3eff7814fc9b40602fd35256c63b50f491"
+  revision = "5ba7f63082460102a45837dbd1827e10f9479ac0"
 
 [[projects]]
   branch = "master"
@@ -298,7 +295,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "2491c5de3490fced2f6cff376127c667efeed857"
+  revision = "1e491301e022f8f977054da4c2d852decd59571f"
 
 [[projects]]
   branch = "master"
@@ -307,7 +304,7 @@
     "unix",
     "windows"
   ]
-  revision = "7c87d13f8e835d2fb3a70a2912c811ed0c1d241b"
+  revision = "c11f84a56e43e20a78cee75a7c034031ecf57d1f"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -344,7 +341,7 @@
     "googleapis/api/annotations",
     "googleapis/rpc/status"
   ]
-  revision = "11a468237815f3a3ddf9f7c6e8b6b3b382a24d15"
+  revision = "81158efcc9f219c511e4d3c0d61a0e6e49c01a24"
 
 [[projects]]
   name = "google.golang.org/grpc"
@@ -422,7 +419,7 @@
     "storage/v1alpha1",
     "storage/v1beta1"
   ]
-  revision = "184e700b32b7f1b532b9fce8dd8c1f412d297c4b"
+  revision = "667186a598c34df1953d343c18c571086f78f872"
 
 [[projects]]
   branch = "master"
@@ -434,7 +431,7 @@
     "pkg/client/clientset/clientset/scheme",
     "pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
   ]
-  revision = "ab3e6971b48ebf5dbda5d69c8295bb667add6f8d"
+  revision = "62f8be918ee7add015e95d57636cdff004af8fbf"
 
 [[projects]]
   name = "k8s.io/apimachinery"
@@ -442,7 +439,6 @@
     "pkg/api/errors",
     "pkg/api/meta",
     "pkg/api/resource",
-    "pkg/apis/meta/internalversion",
     "pkg/apis/meta/v1",
     "pkg/apis/meta/v1/unstructured",
     "pkg/apis/meta/v1beta1",
@@ -460,9 +456,7 @@
     "pkg/runtime/serializer/versioning",
     "pkg/selection",
     "pkg/types",
-    "pkg/util/cache",
     "pkg/util/clock",
-    "pkg/util/diff",
     "pkg/util/errors",
     "pkg/util/framer",
     "pkg/util/intstr",
@@ -484,7 +478,6 @@
   name = "k8s.io/client-go"
   packages = [
     "discovery",
-    "discovery/fake",
     "kubernetes",
     "kubernetes/scheme",
     "kubernetes/typed/admissionregistration/v1alpha1",
@@ -521,24 +514,18 @@
     "plugin/pkg/client/auth/exec",
     "rest",
     "rest/watch",
-    "testing",
     "tools/auth",
-    "tools/cache",
     "tools/clientcmd",
     "tools/clientcmd/api",
     "tools/clientcmd/api/latest",
     "tools/clientcmd/api/v1",
     "tools/metrics",
-    "tools/pager",
     "tools/reference",
     "transport",
-    "util/buffer",
     "util/cert",
     "util/flowcontrol",
     "util/homedir",
-    "util/integer",
-    "util/retry",
-    "util/workqueue"
+    "util/integer"
   ]
   revision = "23781f4d6632d88e869066eaebb743857aa1ef9b"
   version = "v7.0.0"
@@ -547,11 +534,11 @@
   branch = "master"
   name = "k8s.io/kube-openapi"
   packages = ["pkg/common"]
-  revision = "86e28c192d2743f0232b9bc5f0a531568ef9f2a5"
+  revision = "8a9b82f00b3a86eac24681da3f9fe6c34c01cea2"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ce3bf5b64a842c9167a5f19eccedc718b6351435b13d5dd502ed03e40a319d4e"
+  inputs-digest = "65e4d9b060d1573c2c1b0000a06e7dbda01f1d263f7f334e36a8483473c302a9"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -7,20 +7,14 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"github.com/samsung-cnct/cma-operator/pkg/util"
+	"github.com/samsung-cnct/cma-operator/pkg/util/k8sutil"
 	"github.com/soheilhy/cmux"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
 	"github.com/juju/loggo"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/apiserver"
-	ccworkqueue "github.com/samsung-cnct/cluster-manager-api/pkg/controllers/kraken-cluster"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/controllers/sds-application"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/controllers/sds-cluster"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/controllers/sds-package-manager"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
-	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/client-go/rest"
 )
 
@@ -48,47 +42,8 @@ func main() {
 		logger.Infof("Was unable to generate a valid kubernetes default config, some functionality may be broken.  Error was %v", err)
 	}
 
-	// Install the CMA SDSCluster CRD
-	k8sutil.CreateCRD(apiextensionsclient.NewForConfigOrDie(k8sutil.DefaultConfig), cma.GenerateSDSClusterCRD())
-	// Install the CMA SDSPackageManager CRD
-	k8sutil.CreateCRD(apiextensionsclient.NewForConfigOrDie(k8sutil.DefaultConfig), cma.GenerateSDSPackageManagerCRD())
-	// Install the CMA SDSApplication CRD
-	k8sutil.CreateCRD(apiextensionsclient.NewForConfigOrDie(k8sutil.DefaultConfig), cma.GenerateSDSApplicationCRD())
-
 	var wg sync.WaitGroup
 	stop := make(chan struct{})
-
-	logger.Infof("Starting the SDSCluster Controller")
-	sdsClusterController := sds_cluster.NewSDSClusterController(nil)
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		sdsClusterController.Run(3, stop)
-	}()
-
-	sdsPackageManagerController := sds_package_manager.NewSDSPackageManagerController(nil)
-	// Start the SDSPackageManager Controller
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		sdsPackageManagerController.Run(3, stop)
-	}()
-	// TODO: Start the SDSApplication Controller
-
-	sdsApplicationController := sds_application.NewSDSApplicationController(nil)
-	// Start the SDSPackageManager Controller
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		sdsApplicationController.Run(3, stop)
-	}()
-
-	logger.Infof("Starting KrakenCluster Watcher")
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		ccworkqueue.ListenToKrakenClusterChanges(nil)
-	}()
 
 	logger.Infof("Creating Web Server")
 	tcpMux := createWebServer(&apiserver.ServerOptions{PortNumber: portNumber})

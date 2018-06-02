@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/layouts/poc"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"github.com/samsung-cnct/cma-operator/pkg/layouts"
+	"github.com/samsung-cnct/cma-operator/pkg/layouts/poc"
+	"github.com/samsung-cnct/cma-operator/pkg/util/ccutil"
+	"github.com/samsung-cnct/cma-operator/pkg/util/cma"
+	"github.com/samsung-cnct/cma-operator/pkg/util/k8sutil"
 	"golang.org/x/net/context"
 )
 

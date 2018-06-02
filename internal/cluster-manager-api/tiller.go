@@ -5,8 +5,8 @@ import (
 	"os"
 
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/ccutil"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cma"
+	"github.com/samsung-cnct/cma-operator/pkg/util/ccutil"
+	"github.com/samsung-cnct/cma-operator/pkg/util/cma"
 	"golang.org/x/net/context"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"

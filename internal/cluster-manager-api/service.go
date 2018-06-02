@@ -2,12 +2,12 @@ package cluster_manager_api
 
 import (
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"github.com/samsung-cnct/cma-operator/pkg/util/k8sutil"
 	"golang.org/x/net/context"
 	"k8s.io/client-go/kubernetes"
 
 	"github.com/juju/loggo"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
+	"github.com/samsung-cnct/cma-operator/pkg/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
