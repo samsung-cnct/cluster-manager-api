@@ -24,6 +24,9 @@
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
     - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
     - [GetPodCountReply](#cluster_manager_api.GetPodCountReply)
+    - [GetVersionMsg](#cluster_manager_api.GetVersionMsg)
+    - [GetVersionReply](#cluster_manager_api.GetVersionReply)
+    - [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation)
     - [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg)
     - [HelloWorldReply](#cluster_manager_api.HelloWorldReply)
     - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
@@ -57,6 +60,9 @@
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
     - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
     - [GetPodCountReply](#cluster_manager_api.GetPodCountReply)
+    - [GetVersionMsg](#cluster_manager_api.GetVersionMsg)
+    - [GetVersionReply](#cluster_manager_api.GetVersionReply)
+    - [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation)
     - [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg)
     - [HelloWorldReply](#cluster_manager_api.HelloWorldReply)
     - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
@@ -402,6 +408,53 @@
 
 
 
+<a name="cluster_manager_api.GetVersionMsg"/>
+
+### GetVersionMsg
+
+
+
+
+
+
+
+<a name="cluster_manager_api.GetVersionReply"/>
+
+### GetVersionReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | If operation was OK |
+| version_information | [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation) |  | Version Information |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetVersionReply.VersionInformation"/>
+
+### GetVersionReply.VersionInformation
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| git_version | [string](#string) |  | The tag on the git repository |
+| git_commit | [string](#string) |  | The hash of the git commit |
+| git_tree_state | [string](#string) |  | Whether or not the tree was clean when built |
+| build_date | [string](#string) |  | Date of build |
+| go_version | [string](#string) |  | Version of go used to compile |
+| compiler | [string](#string) |  | Compiler used |
+| platform | [string](#string) |  | Platform it was compiled for / running on |
+
+
+
+
+
+
 <a name="cluster_manager_api.HelloWorldMsg"/>
 
 ### HelloWorldMsg
@@ -522,6 +575,7 @@ The response to Hello World
 | ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerMsg) | Will install (or reinstall) tiller |
 | InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartMsg) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
 | DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartMsg) | Will delete deployed helm chart |
+| GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionMsg) | Will return version information about api server |
 
  
 
@@ -856,6 +910,53 @@ The response to Hello World
 
 
 
+<a name="cluster_manager_api.GetVersionMsg"/>
+
+### GetVersionMsg
+
+
+
+
+
+
+
+<a name="cluster_manager_api.GetVersionReply"/>
+
+### GetVersionReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | If operation was OK |
+| version_information | [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation) |  | Version Information |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetVersionReply.VersionInformation"/>
+
+### GetVersionReply.VersionInformation
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| git_version | [string](#string) |  | The tag on the git repository |
+| git_commit | [string](#string) |  | The hash of the git commit |
+| git_tree_state | [string](#string) |  | Whether or not the tree was clean when built |
+| build_date | [string](#string) |  | Date of build |
+| go_version | [string](#string) |  | Version of go used to compile |
+| compiler | [string](#string) |  | Compiler used |
+| platform | [string](#string) |  | Platform it was compiled for / running on |
+
+
+
+
+
+
 <a name="cluster_manager_api.HelloWorldMsg"/>
 
 ### HelloWorldMsg
@@ -976,6 +1077,7 @@ The response to Hello World
 | ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerMsg) | Will install (or reinstall) tiller |
 | InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartMsg) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
 | DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartMsg) | Will delete deployed helm chart |
+| GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionMsg) | Will return version information about api server |
 
  
 

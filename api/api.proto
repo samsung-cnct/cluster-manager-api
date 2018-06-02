@@ -101,6 +101,12 @@ service Cluster {
             delete : "/api/v1/helm"
         };
     }
+    // Will return version information about api server
+    rpc GetVersionInformation (GetVersionMsg) returns (GetVersionReply) {
+        option (google.api.http) = {
+            get : "/api/v1/version"
+        };
+    }
 }
 
 // The Hello World request
@@ -304,3 +310,35 @@ message CreateClusterAWSSpec {
     // The SecretAccessKey for API access
     string secret_access_key = 3;
 }
+
+message GetVersionMsg {
+}
+
+
+
+message GetVersionReply {
+    // If operation was OK
+    bool ok = 1;
+
+    message VersionInformation {
+        // The tag on the git repository
+        string git_version = 1;
+        // The hash of the git commit
+        string git_commit = 2;
+        // Whether or not the tree was clean when built
+        string git_tree_state = 3;
+        // Date of build
+        string build_date = 4;
+        // Version of go used to compile
+        string go_version = 5;
+        // Compiler used
+        string compiler = 6;
+        // Platform it was compiled for / running on
+        string platform = 7;
+    }
+
+    // Version Information
+    VersionInformation version_information = 2;
+}
+
+

@@ -264,9 +264,59 @@
           "Cluster"
         ]
       }
+    },
+    "/api/v1/version": {
+      "get": {
+        "summary": "Will return version information about api server",
+        "operationId": "GetVersionInformation",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiGetVersionReply"
+            }
+          }
+        },
+        "tags": [
+          "Cluster"
+        ]
+      }
     }
   },
   "definitions": {
+    "GetVersionReplyVersionInformation": {
+      "type": "object",
+      "properties": {
+        "git_version": {
+          "type": "string",
+          "title": "The tag on the git repository"
+        },
+        "git_commit": {
+          "type": "string",
+          "title": "The hash of the git commit"
+        },
+        "git_tree_state": {
+          "type": "string",
+          "title": "Whether or not the tree was clean when built"
+        },
+        "build_date": {
+          "type": "string",
+          "title": "Date of build"
+        },
+        "go_version": {
+          "type": "string",
+          "title": "Version of go used to compile"
+        },
+        "compiler": {
+          "type": "string",
+          "title": "Compiler used"
+        },
+        "platform": {
+          "type": "string",
+          "title": "Platform it was compiled for / running on"
+        }
+      }
+    },
     "cluster_manager_apiClusterDetailItem": {
       "type": "object",
       "properties": {
@@ -513,6 +563,20 @@
           "type": "integer",
           "format": "int32",
           "title": "Number of pods in the namespace (or all namespaces)"
+        }
+      }
+    },
+    "cluster_manager_apiGetVersionReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "If operation was OK"
+        },
+        "version_information": {
+          "$ref": "#/definitions/GetVersionReplyVersionInformation",
+          "title": "Version Information"
         }
       }
     },

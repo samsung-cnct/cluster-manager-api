@@ -16,6 +16,9 @@ import (
 	"github.com/juju/loggo"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/apiserver"
 	"k8s.io/client-go/rest"
+	"github.com/spf13/cobra"
+	"encoding/json"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/version"
 )
 
 var (
@@ -23,10 +26,40 @@ var (
 	config *rest.Config
 )
 
+
 func main() {
+	var rootCmd = &cobra.Command{
+		Use:   "cluster-manager-api",
+		Short: "Hugo is a very fast static site generator",
+		Long: `A Fast and Flexible Static Site Generator built with
+                love by spf13 and friends in Go.
+                Complete documentation is available at http://hugo.spf13.com`,
+		Run: func(cmd *cobra.Command, args []string) {
+			doSomething()
+		},
+	}
+	var versionCmd = &cobra.Command{
+		Use:   "version",
+		Short: "Hugo is a very fast static site generator",
+		Long: `A Fast and Flexible Static Site Generator built with
+                love by spf13 and friends in Go.
+                Complete documentation is available at http://hugo.spf13.com`,
+		Run: func(cmd *cobra.Command, args []string) {
+			versionString, _ := json.Marshal(version.Get())
+			fmt.Printf("%s\n", versionString)
+		},
+	}
+
+	cobra.OnInitialize()
+	viperInit()
+	rootCmd.AddCommand(versionCmd)
+	rootCmd.Execute()
+}
+
+
+func doSomething() {
 	var err error
 	logger := util.GetModuleLogger("cmd.cma-operator", loggo.INFO)
-	viperInit()
 
 	// get flags
 	portNumber := viper.GetInt("port")

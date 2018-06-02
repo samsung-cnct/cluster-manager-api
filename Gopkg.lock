@@ -151,6 +151,12 @@
   version = "v0.3.4"
 
 [[projects]]
+  name = "github.com/inconshreveable/mousetrap"
+  packages = ["."]
+  revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
+  version = "v1.0"
+
+[[projects]]
   name = "github.com/json-iterator/go"
   packages = ["."]
   revision = "ca39e5af3ece67bbcda3d0f4f56a8e24d9f2dad4"
@@ -258,6 +264,12 @@
   packages = ["."]
   revision = "8965335b8c7107321228e3e3702cab9832751bac"
   version = "v1.2.0"
+
+[[projects]]
+  name = "github.com/spf13/cobra"
+  packages = ["."]
+  revision = "ef82de70bb3f60c65fb8eebacbb2d122ef517385"
+  version = "v0.0.3"
 
 [[projects]]
   branch = "master"
@@ -419,7 +431,7 @@
     "storage/v1alpha1",
     "storage/v1beta1"
   ]
-  revision = "667186a598c34df1953d343c18c571086f78f872"
+  revision = "a464731143616c0241f473cebb050833c1f0b4fb"
 
 [[projects]]
   branch = "master"
@@ -431,7 +443,7 @@
     "pkg/client/clientset/clientset/scheme",
     "pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
   ]
-  revision = "62f8be918ee7add015e95d57636cdff004af8fbf"
+  revision = "f76749f7e906fbcb1712b30f1b86f47c2f9d1b78"
 
 [[projects]]
   name = "k8s.io/apimachinery"
@@ -539,6 +551,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "65e4d9b060d1573c2c1b0000a06e7dbda01f1d263f7f334e36a8483473c302a9"
+  inputs-digest = "2c738a6996208818fd645b220afaf4b8bb7d7bbeb31edbde1f7c6fa80f5cfc23"
   solver-name = "gps-cdcl"
   solver-version = 1

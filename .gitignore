@@ -11,3 +11,4 @@ public/assets/
 .env
 main
 .testCoverage.txt
+cluster-manager-api

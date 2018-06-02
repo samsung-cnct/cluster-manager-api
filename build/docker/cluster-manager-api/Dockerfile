@@ -1,17 +1,15 @@
 # Initial preparations
-FROM golang:1.10.1-alpine
-RUN apk update && apk add git
+FROM golang:1.10.2-alpine
+RUN apk update && apk add git make
 
 # Let's add the code in
 ADD . /go/src/github.com/samsung-cnct/cluster-manager-api
 
 # Time to intall and rund ep
-RUN go get -u github.com/golang/dep/cmd/dep
 WORKDIR /go/src/github.com/samsung-cnct/cluster-manager-api
-RUN dep ensure
 
 # Build package in container
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -tags netgo -ldflags '-w -extldflags "-static"' -o ./cluster-manager-api cmd/cluster-manager-api/main.go
+RUN make -f build/Makefile container-build
 
 # Now that we have build a static binary, we can stuff it in a bare-bones alpine image
 FROM alpine
