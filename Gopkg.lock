@@ -236,7 +236,7 @@
     "pkg/util/k8sutil",
     "pkg/util/retryutil"
   ]
-  revision = "848b02b2b8f59062771eabe3f326f1b658ecbfa8"
+  revision = "38b6bdcaadd9f83e31cb5d593854d7def0895c40"
 
 [[projects]]
   name = "github.com/soheilhy/cmux"
