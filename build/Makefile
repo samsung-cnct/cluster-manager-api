@@ -11,10 +11,11 @@ GIT_DIRTY=$(shell test -n "`git status --porcelain`" && echo "dirty" || echo "cl
 BUILD_DATE=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
 
 # Associating version information variables with data
-LD_DATA_GIT_COMMIT=-X github.com/samsung-cnct/cluster-manager-api/pkg/version.gitCommit=${GIT_COMMIT}
-LD_DATA_GIT_TAG=-X github.com/samsung-cnct/cluster-manager-api/pkg/version.gitVersion=${GIT_TAG}
-LD_DATA_GIT_DIRTY=-X github.com/samsung-cnct/cluster-manager-api/pkg/version.gitTreeState=${GIT_DIRTY}
-LD_DATA_BUILD_DATE=-X github.com/samsung-cnct/cluster-manager-api/pkg/version.buildDate=${BUILD_DATE}
+VERSION_PACKAGE=github.com/samsung-cnct/cluster-manager-api/pkg/version
+LD_DATA_GIT_COMMIT=-X ${VERSION_PACKAGE}.gitCommit=${GIT_COMMIT}
+LD_DATA_GIT_TAG=-X ${VERSION_PACKAGE}.gitVersion=${GIT_TAG}
+LD_DATA_GIT_DIRTY=-X ${VERSION_PACKAGE}.gitTreeState=${GIT_DIRTY}
+LD_DATA_BUILD_DATE=-X ${VERSION_PACKAGE}.buildDate=${BUILD_DATE}
 LD_DATA=${LD_DATA_GIT_COMMIT} ${LD_DATA_GIT_TAG} ${LD_DATA_GIT_DIRTY} ${LD_DATA_BUILD_DATE}
 
 # Creating static binary
