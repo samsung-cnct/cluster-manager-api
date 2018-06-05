@@ -10,7 +10,6 @@ import (
 	"github.com/samsung-cnct/cma-operator/pkg/util"
 	"github.com/samsung-cnct/cma-operator/pkg/util/k8sutil"
 	"github.com/soheilhy/cmux"
-	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
 	"github.com/juju/loggo"
@@ -27,15 +26,17 @@ var (
 	rootCmd = &cobra.Command{
 		Use:   "cluster-manager-api",
 		Short: "The cluster manager API",
-		Long: `The Cluster Manager API`,
+		Long: `The Cluster Manager API
+
+Running this by itself will invoke the webserver to run.
+See subcommands for additional features`,
 		Run: func(cmd *cobra.Command, args []string) {
-			doSomething()
+			runWebServer()
 		},
 	}
 )
 
 func Execute() {
-	rootCmd.Flags().AddGoFlagSet(flag.CommandLine)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -44,9 +45,9 @@ func Execute() {
 }
 
 
-func doSomething() {
+func runWebServer() {
 	var err error
-	logger := util.GetModuleLogger("cmd.cma-operator", loggo.INFO)
+	logger := util.GetModuleLogger("cmd.cluster-manager-api", loggo.INFO)
 
 	// get flags
 	portNumber := viper.GetInt("port")
@@ -98,15 +99,17 @@ func init() {
 	viper.SetEnvKeyReplacer(replacer)
 
 	// using standard library "flag" package
-	flag.Int("port", 9050, "Port to listen on")
-	flag.String("kubeconfig", "", "Location of kubeconfig file")
-	flag.String("output", "text", "text or json")
+	rootCmd.Flags().Int("port", 9050, "Port to listen on")
+	rootCmd.Flags().String("kubeconfig", "", "Location of kubeconfig file")
 
-	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
-	pflag.Parse()
-	viper.BindPFlags(pflag.CommandLine)
+	//pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+	//pflag.Parse()
+	viper.BindPFlag("port", rootCmd.Flags().Lookup("port"))
+	viper.BindPFlag("kubeconfig", rootCmd.Flags().Lookup("kubeconfig"))
 
 	viper.AutomaticEnv()
+	rootCmd.Flags().AddGoFlagSet(flag.CommandLine)
+
 }
 
 

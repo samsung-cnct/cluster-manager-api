@@ -6,6 +6,7 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/version"
 	"github.com/spf13/viper"
 	"encoding/json"
+	"flag"
 )
 
 var VersionOutput string
@@ -26,6 +27,8 @@ func generateVersionCmd() *cobra.Command{
 
 	versionCmd.Flags().StringVarP(&VersionOutput, "output", "o", "text", "text or json")
 	viper.BindPFlag("versionoutput", versionCmd.Flags().Lookup("output"))
+	versionCmd.Flags().AddGoFlagSet(flag.CommandLine)
+
 	return versionCmd
 }
 
