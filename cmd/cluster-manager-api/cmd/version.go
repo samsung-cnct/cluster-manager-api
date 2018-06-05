@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
-	"fmt"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/version"
-	"github.com/spf13/viper"
 	"encoding/json"
 	"flag"
+	"fmt"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/version"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var VersionOutput string
@@ -15,11 +15,11 @@ func init() {
 	rootCmd.AddCommand(generateVersionCmd())
 }
 
-func generateVersionCmd() *cobra.Command{
+func generateVersionCmd() *cobra.Command {
 	var versionCmd = &cobra.Command{
 		Use:   "version",
 		Short: "Returns version information",
-		Long: `Find out the version, git commit, etc of the build`,
+		Long:  `Find out the version, git commit, etc of the build`,
 		Run: func(cmd *cobra.Command, args []string) {
 			printVersion()
 		},

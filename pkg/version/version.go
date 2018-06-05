@@ -1,19 +1,18 @@
 package version
 
 import (
-	"runtime"
 	"fmt"
 	"os/exec"
+	"runtime"
 	"strings"
 )
 
 var (
-	gitVersion string = ""
-	gitCommit string = ""
+	gitVersion   string = ""
+	gitCommit    string = ""
 	gitTreeState string = "dirty"
-	buildDate string = ""
+	buildDate    string = ""
 )
-
 
 type Info struct {
 	GitVersion   string `json:"gitVersion"`

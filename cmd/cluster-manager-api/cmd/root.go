@@ -14,8 +14,8 @@ import (
 
 	"github.com/juju/loggo"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/apiserver"
-	"k8s.io/client-go/rest"
 	"github.com/spf13/cobra"
+	"k8s.io/client-go/rest"
 	"os"
 )
 
@@ -43,7 +43,6 @@ func Execute() {
 		os.Exit(1)
 	}
 }
-
 
 func runWebServer() {
 	var err error
@@ -111,5 +110,3 @@ func init() {
 	rootCmd.Flags().AddGoFlagSet(flag.CommandLine)
 
 }
-
-
