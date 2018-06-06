@@ -31,6 +31,11 @@ CMA_SOURCE_FILE=cmd/cluster-manager-api/main.go
 # build binary command
 BUILD_CMA_BINARY_CMD=${GOBUILD} -a -tags netgo -ldflags ${LDFLAGS} -o ${CMA_BINARY_NAME} ${CMA_SOURCE_FILE}
 
+# protoc variables
+PROTOC_VERSION=3.5.1
+PROTOC_DARWIN_FILENAME=protoc-${PROTOC_VERSION}-osx-x86_64.zip
+PROTOC_DARWIN_DOWNLOAD_URL=https://github.com/google/protobuf/releases/download/v3.5.1/${PROTOC_DARWIN_FILENAME}
+
 # By default we will most likely want to build a linux build of the application
 all: new-dep cma-bin-linux-amd64
 
@@ -38,6 +43,22 @@ container-build: install-dep dep-ensure cma-bin-linux-amd64
 
 # Clean will clean up dep and remove any binaries
 clean: remove-binary
+
+# Installs the required tools
+install-tools: install-dep
+	go get -u github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
+	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
+	go get -u github.com/golang/protobuf/protoc-gen-go
+
+# Installs tools for a mac
+install-tools-darwin: install-protoc-darwin install-tools
+
+install-protoc-darwin:
+	curl -L ${PROTOC_DARWIN_DOWNLOAD_URL} > /tmp/${PROTOC_DARWIN_FILENAME}
+	sudo unzip -o /tmp/${PROTOC_DARWIN_FILENAME} -d /usr/local/
+	rm /tmp/${PROTOC_DARWIN_FILENAME}
+
 
 # Install dep will install dep in $GOROOT/bin
 install-dep:
