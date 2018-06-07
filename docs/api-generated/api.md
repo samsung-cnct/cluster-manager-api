@@ -17,7 +17,7 @@
     - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
     - [Error](#cluster_manager_api.Error)
     - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
-    - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
+    - [GenericHelmRepository](#cluster_manager_api.GenericHelmRepository)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
@@ -53,7 +53,7 @@
     - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
     - [Error](#cluster_manager_api.Error)
     - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
-    - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
+    - [GenericHelmRepository](#cluster_manager_api.GenericHelmRepository)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
@@ -244,9 +244,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| cluster | [string](#string) |  | Cluster tiller should be installed on |
-| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
-| chart | [string](#string) |  | Chart Name |
+| name | [string](#string) |  | What is the name of the deployment |
+| namespace | [string](#string) |  | What is the namespace of the deployment |
 
 
 
@@ -298,22 +297,23 @@
 | repo | [string](#string) |  | What is the chart repository |
 | chart | [string](#string) |  | What is the chart name |
 | values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
+| version | [string](#string) |  | What is the chart version |
 
 
 
 
 
 
-<a name="cluster_manager_api.GenericTillerSetting"/>
+<a name="cluster_manager_api.GenericHelmRepository"/>
 
-### GenericTillerSetting
+### GenericHelmRepository
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  | What is the tiller namespace |
-| version | [string](#string) |  | What is the version of tiller/helm |
+| name | [string](#string) |  | What is the name of the repository |
+| url | [string](#string) |  | What is the URL of the repository |
 
 
 
@@ -493,9 +493,9 @@ The response to Hello World
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| cluster | [string](#string) |  | Cluster tiller should be installed on |
-| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| packageManagerName | [string](#string) |  | What is the package manager name |
 | chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
+| repo | [GenericHelmRepository](#cluster_manager_api.GenericHelmRepository) |  | Repository Settings |
 
 
 
@@ -746,9 +746,8 @@ The response to Hello World
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| cluster | [string](#string) |  | Cluster tiller should be installed on |
-| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
-| chart | [string](#string) |  | Chart Name |
+| name | [string](#string) |  | What is the name of the deployment |
+| namespace | [string](#string) |  | What is the namespace of the deployment |
 
 
 
@@ -800,22 +799,23 @@ The response to Hello World
 | repo | [string](#string) |  | What is the chart repository |
 | chart | [string](#string) |  | What is the chart name |
 | values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
+| version | [string](#string) |  | What is the chart version |
 
 
 
 
 
 
-<a name="cluster_manager_api.GenericTillerSetting"/>
+<a name="cluster_manager_api.GenericHelmRepository"/>
 
-### GenericTillerSetting
+### GenericHelmRepository
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  | What is the tiller namespace |
-| version | [string](#string) |  | What is the version of tiller/helm |
+| name | [string](#string) |  | What is the name of the repository |
+| url | [string](#string) |  | What is the URL of the repository |
 
 
 
@@ -995,9 +995,9 @@ The response to Hello World
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| cluster | [string](#string) |  | Cluster tiller should be installed on |
-| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| packageManagerName | [string](#string) |  | What is the package manager name |
 | chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
+| repo | [GenericHelmRepository](#cluster_manager_api.GenericHelmRepository) |  | Repository Settings |
 
 
 

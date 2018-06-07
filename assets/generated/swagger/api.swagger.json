@@ -180,29 +180,15 @@
         },
         "parameters": [
           {
-            "name": "cluster",
-            "description": "Cluster tiller should be installed on.",
+            "name": "name",
+            "description": "What is the name of the deployment.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "tiller.namespace",
-            "description": "What is the tiller namespace.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "tiller.version",
-            "description": "What is the version of tiller/helm.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "chart",
-            "description": "Chart Name.",
+            "name": "namespace",
+            "description": "What is the namespace of the deployment.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -498,19 +484,23 @@
         "values": {
           "type": "string",
           "title": "What are the options (nested yaml - the Values.yaml contents)"
-        }
-      }
-    },
-    "cluster_manager_apiGenericTillerSetting": {
-      "type": "object",
-      "properties": {
-        "namespace": {
-          "type": "string",
-          "title": "What is the tiller namespace"
         },
         "version": {
           "type": "string",
-          "title": "What is the version of tiller/helm"
+          "title": "What is the chart version"
+        }
+      }
+    },
+    "cluster_manager_apiGenericHelmRepository": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "What is the name of the repository"
+        },
+        "url": {
+          "type": "string",
+          "title": "What is the URL of the repository"
         }
       }
     },
@@ -601,17 +591,17 @@
     "cluster_manager_apiInstallHelmChartMsg": {
       "type": "object",
       "properties": {
-        "cluster": {
+        "packageManagerName": {
           "type": "string",
-          "title": "Cluster tiller should be installed on"
-        },
-        "tiller": {
-          "$ref": "#/definitions/cluster_manager_apiGenericTillerSetting",
-          "title": "Tiller settings"
+          "title": "What is the package manager name"
         },
         "chart": {
           "$ref": "#/definitions/cluster_manager_apiGenericHelmChart",
           "title": "Chart Settings"
+        },
+        "repo": {
+          "$ref": "#/definitions/cluster_manager_apiGenericHelmRepository",
+          "title": "Repository Settings"
         }
       }
     },

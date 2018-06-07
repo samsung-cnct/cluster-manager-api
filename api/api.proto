@@ -233,12 +233,12 @@ message ProvisionTillerReply {
 }
 
 message InstallHelmChartMsg {
-    // Cluster tiller should be installed on
-    string cluster = 1;
-    // Tiller settings
-    GenericTillerSetting tiller = 2;
+    // What is the package manager name
+    string packageManagerName = 1;
     // Chart Settings
     GenericHelmChart chart = 3;
+    // Repository Settings
+    GenericHelmRepository repo = 4;
 }
 
 message InstallHelmChartReply {
@@ -249,12 +249,10 @@ message InstallHelmChartReply {
 }
 
 message DeleteHelmChartMsg {
-    // Cluster tiller should be installed on
-    string cluster = 1;
-    // Tiller settings
-    GenericTillerSetting tiller = 2;
-    // Chart Name
-    string chart = 3;
+    // What is the name of the deployment
+    string name = 1;
+    // What is the namespace of the deployment
+    string namespace = 3;
 }
 
 message DeleteHelmChartReply {
@@ -262,13 +260,6 @@ message DeleteHelmChartReply {
     bool ok = 1;
     // What messages were given
     string message = 2;
-}
-
-message GenericTillerSetting {
-    // What is the tiller namespace
-    string namespace = 1;
-    // What is the version of tiller/helm
-    string version = 2;
 }
 
 message GenericHelmChart {
@@ -282,6 +273,15 @@ message GenericHelmChart {
     string chart = 4;
     // What are the options (nested yaml - the Values.yaml contents)
     string values = 5;
+    // What is the chart version
+    string version = 6;
+}
+
+message GenericHelmRepository {
+    // What is the name of the repository
+    string name = 1;
+    // What is the URL of the repository
+    string url = 2;
 }
 
 message CreateClusterProviderSpec {

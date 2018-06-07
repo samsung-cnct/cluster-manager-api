@@ -13,3 +13,4 @@ main
 .testCoverage.txt
 cluster-manager-api
 !**/cluster-manager-api/
+docker-compose.yaml
