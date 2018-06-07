@@ -84,7 +84,7 @@ func apiProto() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "api.proto", size: 9009, mode: os.FileMode(420), modTime: time.Unix(1528403683, 0)}
+	info := bindataFileInfo{name: "api.proto", size: 9009, mode: os.FileMode(420), modTime: time.Unix(1528411484, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
