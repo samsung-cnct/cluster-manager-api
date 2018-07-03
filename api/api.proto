@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Michael Venezia <mvenezia@gmail.com>
+// Alika Larsen <alika.larsen@gmail.com>
+
 syntax = "proto3";
 
 package cluster_manager_api;
@@ -25,9 +28,9 @@ option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
     title: "Cluster Manager API";
     version: "v0.1.0";
     contact: {
-        name: "Michael Venezia";
-        url: "https://github.com/venezia";
-        email: "mvenezia@gmail.com";
+        name: "Samsung CNCT";
+        url: "https://github.com/samsung-cnct/cluster-manager-api";
+        email: "admin@samsung-cnct.io";
     };
   };
   external_docs: {
