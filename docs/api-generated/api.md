@@ -7,10 +7,10 @@
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
     - [ClusterItem](#cluster_manager_api.ClusterItem)
     - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
-    - [CreateClusterAWSSpec.AWSBYOItems](#cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems)
     - [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials)
     - [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter)
     - [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup)
+    - [CreateClusterAWSSpec.AWSPreconfiguredItems](#cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems)
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
@@ -33,10 +33,10 @@
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
     - [ClusterItem](#cluster_manager_api.ClusterItem)
     - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
-    - [CreateClusterAWSSpec.AWSBYOItems](#cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems)
     - [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials)
     - [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter)
     - [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup)
+    - [CreateClusterAWSSpec.AWSPreconfiguredItems](#cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems)
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
@@ -111,24 +111,8 @@
 | ----- | ---- | ----- | ----------- |
 | data_center | [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter) |  | The AWS Data Center |
 | credentials | [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials) |  | Credentials to build the cluster |
-| byo | [CreateClusterAWSSpec.AWSBYOItems](#cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems) |  | BYO items |
+| resources | [CreateClusterAWSSpec.AWSPreconfiguredItems](#cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems) |  | BYO items |
 | instance_groups | [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup) | repeated | Instance groups |
-
-
-
-
-
-
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems"/>
-
-### CreateClusterAWSSpec.AWSBYOItems
-For when some things are already created
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| vpc_id | [string](#string) |  | The VPC id, blank for for &#34;create one for you&#34;, filled if you are BYO VPC |
-| security_group_id | [string](#string) |  | Security group |
 
 
 
@@ -177,6 +161,22 @@ Instance groups define a type and number of instances
 | ----- | ---- | ----- | ----------- |
 | type | [string](#string) |  | Instance type (m5.large, etc.) |
 | quantity | [int32](#int32) |  | Number of instances (defaults to zero) |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems"/>
+
+### CreateClusterAWSSpec.AWSPreconfiguredItems
+For when some things are already created
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| vpc_id | [string](#string) |  | The VPC id, blank for for &#34;create one for you&#34;, filled if you are BYO VPC |
+| security_group_id | [string](#string) |  | Security group |
 
 
 
@@ -442,24 +442,8 @@ Reply for version request
 | ----- | ---- | ----- | ----------- |
 | data_center | [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter) |  | The AWS Data Center |
 | credentials | [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials) |  | Credentials to build the cluster |
-| byo | [CreateClusterAWSSpec.AWSBYOItems](#cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems) |  | BYO items |
+| resources | [CreateClusterAWSSpec.AWSPreconfiguredItems](#cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems) |  | BYO items |
 | instance_groups | [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup) | repeated | Instance groups |
-
-
-
-
-
-
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems"/>
-
-### CreateClusterAWSSpec.AWSBYOItems
-For when some things are already created
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| vpc_id | [string](#string) |  | The VPC id, blank for for &#34;create one for you&#34;, filled if you are BYO VPC |
-| security_group_id | [string](#string) |  | Security group |
 
 
 
@@ -508,6 +492,22 @@ Instance groups define a type and number of instances
 | ----- | ---- | ----- | ----------- |
 | type | [string](#string) |  | Instance type (m5.large, etc.) |
 | quantity | [int32](#int32) |  | Number of instances (defaults to zero) |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems"/>
+
+### CreateClusterAWSSpec.AWSPreconfiguredItems
+For when some things are already created
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| vpc_id | [string](#string) |  | The VPC id, blank for for &#34;create one for you&#34;, filled if you are BYO VPC |
+| security_group_id | [string](#string) |  | Security group |
 
 
 

@@ -4,9 +4,9 @@
     "title": "Cluster Manager API",
     "version": "v0.2.0",
     "contact": {
-      "name": "Michael Venezia",
-      "url": "https://github.com/venezia",
-      "email": "mvenezia@gmail.com"
+      "name": "Samsung CNCT",
+      "url": "https://github.com/samsung-cnct/cluster-manager-api",
+      "email": "admin@samsung-cnct.io"
     }
   },
   "schemes": [
@@ -131,20 +131,6 @@
     }
   },
   "definitions": {
-    "CreateClusterAWSSpecAWSBYOItems": {
-      "type": "object",
-      "properties": {
-        "vpc_id": {
-          "type": "string",
-          "title": "The VPC id, blank for for \"create one for you\", filled if you are BYO VPC"
-        },
-        "security_group_id": {
-          "type": "string",
-          "title": "Security group"
-        }
-      },
-      "title": "For when some things are already created"
-    },
     "CreateClusterAWSSpecAWSCredentials": {
       "type": "object",
       "properties": {
@@ -190,6 +176,20 @@
         }
       },
       "title": "Instance groups define a type and number of instances"
+    },
+    "CreateClusterAWSSpecAWSPreconfiguredItems": {
+      "type": "object",
+      "properties": {
+        "vpc_id": {
+          "type": "string",
+          "title": "The VPC id, blank for for \"create one for you\", filled if you are BYO VPC"
+        },
+        "security_group_id": {
+          "type": "string",
+          "title": "Security group"
+        }
+      },
+      "title": "For when some things are already created"
     },
     "GetVersionReplyVersionInformation": {
       "type": "object",
@@ -273,8 +273,8 @@
           "$ref": "#/definitions/CreateClusterAWSSpecAWSCredentials",
           "title": "Credentials to build the cluster"
         },
-        "byo": {
-          "$ref": "#/definitions/CreateClusterAWSSpecAWSBYOItems",
+        "resources": {
+          "$ref": "#/definitions/CreateClusterAWSSpecAWSPreconfiguredItems",
           "title": "BYO items"
         },
         "instance_groups": {

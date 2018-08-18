@@ -162,7 +162,7 @@ message CreateClusterAWSSpec {
     // Credentials to build the cluster
     AWSCredentials credentials = 2;
     // BYO items
-    AWSBYOItems byo = 3;
+    AWSPreconfiguredItems resources = 3;
     // Instance groups
     repeated AWSInstanceGroup instance_groups = 4;
 
@@ -183,7 +183,7 @@ message CreateClusterAWSSpec {
     }
 
     // For when some things are already created
-    message AWSBYOItems {
+    message AWSPreconfiguredItems {
         // The VPC id, blank for for "create one for you", filled if you are BYO VPC
         string vpc_id = 1;
         // Security group
