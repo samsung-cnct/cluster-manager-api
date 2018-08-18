@@ -7,8 +7,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/samsung-cnct/cma-operator/pkg/util"
-	"github.com/samsung-cnct/cma-operator/pkg/util/k8sutil"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	"github.com/soheilhy/cmux"
 	"github.com/spf13/viper"
 

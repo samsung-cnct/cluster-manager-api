@@ -7,32 +7,22 @@
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
     - [ClusterItem](#cluster_manager_api.ClusterItem)
     - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
-    - [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec)
+    - [CreateClusterAWSSpec.AWSBYOItems](#cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems)
+    - [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials)
+    - [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter)
+    - [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup)
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
-    - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
-    - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
-    - [Error](#cluster_manager_api.Error)
-    - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
-    - [GenericHelmRepository](#cluster_manager_api.GenericHelmRepository)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
-    - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
-    - [GetPodCountReply](#cluster_manager_api.GetPodCountReply)
     - [GetVersionMsg](#cluster_manager_api.GetVersionMsg)
     - [GetVersionReply](#cluster_manager_api.GetVersionReply)
     - [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation)
-    - [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg)
-    - [HelloWorldReply](#cluster_manager_api.HelloWorldReply)
-    - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
-    - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
-    - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
-    - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
   
   
   
@@ -43,32 +33,22 @@
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
     - [ClusterItem](#cluster_manager_api.ClusterItem)
     - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
-    - [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec)
+    - [CreateClusterAWSSpec.AWSBYOItems](#cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems)
+    - [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials)
+    - [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter)
+    - [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup)
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
-    - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
-    - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
-    - [Error](#cluster_manager_api.Error)
-    - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
-    - [GenericHelmRepository](#cluster_manager_api.GenericHelmRepository)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
-    - [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg)
-    - [GetPodCountReply](#cluster_manager_api.GetPodCountReply)
     - [GetVersionMsg](#cluster_manager_api.GetVersionMsg)
     - [GetVersionReply](#cluster_manager_api.GetVersionReply)
     - [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation)
-    - [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg)
-    - [HelloWorldReply](#cluster_manager_api.HelloWorldReply)
-    - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
-    - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
-    - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
-    - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
   
   
   
@@ -129,7 +109,40 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| region | [string](#string) |  | The region for AWS |
+| data_center | [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter) |  | The AWS Data Center |
+| credentials | [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials) |  | Credentials to build the cluster |
+| byo | [CreateClusterAWSSpec.AWSBYOItems](#cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems) |  | BYO items |
+| instance_groups | [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup) | repeated | Instance groups |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems"/>
+
+### CreateClusterAWSSpec.AWSBYOItems
+For when some things are already created
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| vpc_id | [string](#string) |  | The VPC id, blank for for &#34;create one for you&#34;, filled if you are BYO VPC |
+| security_group_id | [string](#string) |  | Security group |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSCredentials"/>
+
+### CreateClusterAWSSpec.AWSCredentials
+The credentials to use for creating the cluster
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
 | secret_key_id | [string](#string) |  | The SecretKeyId for API Access |
 | secret_access_key | [string](#string) |  | The SecretAccessKey for API access |
 
@@ -138,17 +151,32 @@
 
 
 
-<a name="cluster_manager_api.CreateClusterMaaSSpec"/>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter"/>
 
-### CreateClusterMaaSSpec
-
+### CreateClusterAWSSpec.AWSDataCenter
+Which Data Center
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| endpoint | [string](#string) |  | The MaaS API endpoint |
-| username | [string](#string) |  | The username in the MaaS API |
-| oauth_key | [string](#string) |  | The OAuth key for the endpoint |
+| region | [string](#string) |  | Which region (us-east-1, etc.) |
+| availability_zones | [string](#string) | repeated | Which availability zones (us-east-1b, us-east-2c, us-west-2d, etc.) |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup"/>
+
+### CreateClusterAWSSpec.AWSInstanceGroup
+Instance groups define a type and number of instances
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| type | [string](#string) |  | Instance type (m5.large, etc.) |
+| quantity | [int32](#int32) |  | Number of instances (defaults to zero) |
 
 
 
@@ -180,7 +208,7 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the provider - currently this is aws or maas |
-| maas | [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec) |  | The MaaS specification |
+| k8s_version | [string](#string) |  |  |
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
 
 
@@ -197,8 +225,7 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Whether or not the cluster was provisioned by this request |
-| cluster | [ClusterItem](#cluster_manager_api.ClusterItem) |  |  |
-| error | [Error](#cluster_manager_api.Error) |  |  |
+| cluster | [ClusterItem](#cluster_manager_api.ClusterItem) |  | The details of the cluster request response |
 
 
 
@@ -230,90 +257,6 @@
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Could the cluster be destroyed |
 | status | [string](#string) |  | Status of the request |
-
-
-
-
-
-
-<a name="cluster_manager_api.DeleteHelmChartMsg"/>
-
-### DeleteHelmChartMsg
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  | What is the name of the deployment |
-| namespace | [string](#string) |  | What is the namespace of the deployment |
-
-
-
-
-
-
-<a name="cluster_manager_api.DeleteHelmChartReply"/>
-
-### DeleteHelmChartReply
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| ok | [bool](#bool) |  | Was the operation successful |
-| message | [string](#string) |  | What messages were given |
-
-
-
-
-
-
-<a name="cluster_manager_api.Error"/>
-
-### Error
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| code | [string](#string) |  | The error code |
-| message | [string](#string) |  | The error message |
-
-
-
-
-
-
-<a name="cluster_manager_api.GenericHelmChart"/>
-
-### GenericHelmChart
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  | What is the name of the deployment |
-| namespace | [string](#string) |  | What is the namespace to deploy the application to |
-| repo | [string](#string) |  | What is the chart repository |
-| chart | [string](#string) |  | What is the chart name |
-| values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
-| version | [string](#string) |  | What is the chart version |
-
-
-
-
-
-
-<a name="cluster_manager_api.GenericHelmRepository"/>
-
-### GenericHelmRepository
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  | What is the name of the repository |
-| url | [string](#string) |  | What is the URL of the repository |
 
 
 
@@ -371,37 +314,6 @@
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Is the cluster in the system |
 | cluster | [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem) |  |  |
-| error | [Error](#cluster_manager_api.Error) |  |  |
-
-
-
-
-
-
-<a name="cluster_manager_api.GetPodCountMsg"/>
-
-### GetPodCountMsg
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  | Namespace to fetch the pod count Leave empty to query all namespaces |
-
-
-
-
-
-
-<a name="cluster_manager_api.GetPodCountReply"/>
-
-### GetPodCountReply
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| pods | [int32](#int32) |  | Number of pods in the namespace (or all namespaces) |
 
 
 
@@ -411,7 +323,7 @@
 <a name="cluster_manager_api.GetVersionMsg"/>
 
 ### GetVersionMsg
-
+Get version of API Server
 
 
 
@@ -421,7 +333,7 @@
 <a name="cluster_manager_api.GetVersionReply"/>
 
 ### GetVersionReply
-
+Reply for version request
 
 
 | Field | Type | Label | Description |
@@ -454,104 +366,6 @@
 
 
 
-
-<a name="cluster_manager_api.HelloWorldMsg"/>
-
-### HelloWorldMsg
-The Hello World request
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="cluster_manager_api.HelloWorldReply"/>
-
-### HelloWorldReply
-The response to Hello World
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| message | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="cluster_manager_api.InstallHelmChartMsg"/>
-
-### InstallHelmChartMsg
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| packageManagerName | [string](#string) |  | What is the package manager name |
-| chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
-| repo | [GenericHelmRepository](#cluster_manager_api.GenericHelmRepository) |  | Repository Settings |
-
-
-
-
-
-
-<a name="cluster_manager_api.InstallHelmChartReply"/>
-
-### InstallHelmChartReply
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| ok | [bool](#bool) |  | Was the operation successful |
-| message | [string](#string) |  | What messages were given |
-
-
-
-
-
-
-<a name="cluster_manager_api.ProvisionTillerMsg"/>
-
-### ProvisionTillerMsg
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| cluster | [string](#string) |  | Cluster tiller should be installed on |
-| namespace | [string](#string) |  | Namespace tiller should be installed in |
-| version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
-| cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
-| admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
-
-
-
-
-
-
-<a name="cluster_manager_api.ProvisionTillerReply"/>
-
-### ProvisionTillerReply
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| ok | [bool](#bool) |  | Was the operation successful |
-| message | [string](#string) |  | What messages were given |
-
-
-
-
-
  
 
  
@@ -566,15 +380,10 @@ The response to Hello World
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| HelloWorld | [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg) | [HelloWorldReply](#cluster_manager_api.HelloWorldMsg) | Simple Hello World Service - will repeat a greeting to the name provided |
-| GetPodCount | [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg) | [GetPodCountReply](#cluster_manager_api.GetPodCountMsg) | Simple pod count response. Will respond with the number of pods in the namespace provided |
 | CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
 | GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListMsg) | Will retrieve a list of clusters |
-| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerMsg) | Will install (or reinstall) tiller |
-| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartMsg) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
-| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartMsg) | Will delete deployed helm chart |
 | GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionMsg) | Will return version information about api server |
 
  
@@ -631,7 +440,40 @@ The response to Hello World
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| region | [string](#string) |  | The region for AWS |
+| data_center | [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter) |  | The AWS Data Center |
+| credentials | [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials) |  | Credentials to build the cluster |
+| byo | [CreateClusterAWSSpec.AWSBYOItems](#cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems) |  | BYO items |
+| instance_groups | [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup) | repeated | Instance groups |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSBYOItems"/>
+
+### CreateClusterAWSSpec.AWSBYOItems
+For when some things are already created
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| vpc_id | [string](#string) |  | The VPC id, blank for for &#34;create one for you&#34;, filled if you are BYO VPC |
+| security_group_id | [string](#string) |  | Security group |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSCredentials"/>
+
+### CreateClusterAWSSpec.AWSCredentials
+The credentials to use for creating the cluster
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
 | secret_key_id | [string](#string) |  | The SecretKeyId for API Access |
 | secret_access_key | [string](#string) |  | The SecretAccessKey for API access |
 
@@ -640,17 +482,32 @@ The response to Hello World
 
 
 
-<a name="cluster_manager_api.CreateClusterMaaSSpec"/>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter"/>
 
-### CreateClusterMaaSSpec
-
+### CreateClusterAWSSpec.AWSDataCenter
+Which Data Center
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| endpoint | [string](#string) |  | The MaaS API endpoint |
-| username | [string](#string) |  | The username in the MaaS API |
-| oauth_key | [string](#string) |  | The OAuth key for the endpoint |
+| region | [string](#string) |  | Which region (us-east-1, etc.) |
+| availability_zones | [string](#string) | repeated | Which availability zones (us-east-1b, us-east-2c, us-west-2d, etc.) |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup"/>
+
+### CreateClusterAWSSpec.AWSInstanceGroup
+Instance groups define a type and number of instances
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| type | [string](#string) |  | Instance type (m5.large, etc.) |
+| quantity | [int32](#int32) |  | Number of instances (defaults to zero) |
 
 
 
@@ -682,7 +539,7 @@ The response to Hello World
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the provider - currently this is aws or maas |
-| maas | [CreateClusterMaaSSpec](#cluster_manager_api.CreateClusterMaaSSpec) |  | The MaaS specification |
+| k8s_version | [string](#string) |  |  |
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
 
 
@@ -699,8 +556,7 @@ The response to Hello World
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Whether or not the cluster was provisioned by this request |
-| cluster | [ClusterItem](#cluster_manager_api.ClusterItem) |  |  |
-| error | [Error](#cluster_manager_api.Error) |  |  |
+| cluster | [ClusterItem](#cluster_manager_api.ClusterItem) |  | The details of the cluster request response |
 
 
 
@@ -732,90 +588,6 @@ The response to Hello World
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Could the cluster be destroyed |
 | status | [string](#string) |  | Status of the request |
-
-
-
-
-
-
-<a name="cluster_manager_api.DeleteHelmChartMsg"/>
-
-### DeleteHelmChartMsg
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  | What is the name of the deployment |
-| namespace | [string](#string) |  | What is the namespace of the deployment |
-
-
-
-
-
-
-<a name="cluster_manager_api.DeleteHelmChartReply"/>
-
-### DeleteHelmChartReply
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| ok | [bool](#bool) |  | Was the operation successful |
-| message | [string](#string) |  | What messages were given |
-
-
-
-
-
-
-<a name="cluster_manager_api.Error"/>
-
-### Error
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| code | [string](#string) |  | The error code |
-| message | [string](#string) |  | The error message |
-
-
-
-
-
-
-<a name="cluster_manager_api.GenericHelmChart"/>
-
-### GenericHelmChart
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  | What is the name of the deployment |
-| namespace | [string](#string) |  | What is the namespace to deploy the application to |
-| repo | [string](#string) |  | What is the chart repository |
-| chart | [string](#string) |  | What is the chart name |
-| values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
-| version | [string](#string) |  | What is the chart version |
-
-
-
-
-
-
-<a name="cluster_manager_api.GenericHelmRepository"/>
-
-### GenericHelmRepository
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  | What is the name of the repository |
-| url | [string](#string) |  | What is the URL of the repository |
 
 
 
@@ -873,37 +645,6 @@ The response to Hello World
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Is the cluster in the system |
 | cluster | [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem) |  |  |
-| error | [Error](#cluster_manager_api.Error) |  |  |
-
-
-
-
-
-
-<a name="cluster_manager_api.GetPodCountMsg"/>
-
-### GetPodCountMsg
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  | Namespace to fetch the pod count Leave empty to query all namespaces |
-
-
-
-
-
-
-<a name="cluster_manager_api.GetPodCountReply"/>
-
-### GetPodCountReply
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| pods | [int32](#int32) |  | Number of pods in the namespace (or all namespaces) |
 
 
 
@@ -913,7 +654,7 @@ The response to Hello World
 <a name="cluster_manager_api.GetVersionMsg"/>
 
 ### GetVersionMsg
-
+Get version of API Server
 
 
 
@@ -923,7 +664,7 @@ The response to Hello World
 <a name="cluster_manager_api.GetVersionReply"/>
 
 ### GetVersionReply
-
+Reply for version request
 
 
 | Field | Type | Label | Description |
@@ -956,104 +697,6 @@ The response to Hello World
 
 
 
-
-<a name="cluster_manager_api.HelloWorldMsg"/>
-
-### HelloWorldMsg
-The Hello World request
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="cluster_manager_api.HelloWorldReply"/>
-
-### HelloWorldReply
-The response to Hello World
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| message | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="cluster_manager_api.InstallHelmChartMsg"/>
-
-### InstallHelmChartMsg
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| packageManagerName | [string](#string) |  | What is the package manager name |
-| chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
-| repo | [GenericHelmRepository](#cluster_manager_api.GenericHelmRepository) |  | Repository Settings |
-
-
-
-
-
-
-<a name="cluster_manager_api.InstallHelmChartReply"/>
-
-### InstallHelmChartReply
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| ok | [bool](#bool) |  | Was the operation successful |
-| message | [string](#string) |  | What messages were given |
-
-
-
-
-
-
-<a name="cluster_manager_api.ProvisionTillerMsg"/>
-
-### ProvisionTillerMsg
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| cluster | [string](#string) |  | Cluster tiller should be installed on |
-| namespace | [string](#string) |  | Namespace tiller should be installed in |
-| version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
-| cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
-| admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
-
-
-
-
-
-
-<a name="cluster_manager_api.ProvisionTillerReply"/>
-
-### ProvisionTillerReply
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| ok | [bool](#bool) |  | Was the operation successful |
-| message | [string](#string) |  | What messages were given |
-
-
-
-
-
  
 
  
@@ -1068,15 +711,10 @@ The response to Hello World
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| HelloWorld | [HelloWorldMsg](#cluster_manager_api.HelloWorldMsg) | [HelloWorldReply](#cluster_manager_api.HelloWorldMsg) | Simple Hello World Service - will repeat a greeting to the name provided |
-| GetPodCount | [GetPodCountMsg](#cluster_manager_api.GetPodCountMsg) | [GetPodCountReply](#cluster_manager_api.GetPodCountMsg) | Simple pod count response. Will respond with the number of pods in the namespace provided |
 | CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
 | GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListMsg) | Will retrieve a list of clusters |
-| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerMsg) | Will install (or reinstall) tiller |
-| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartMsg) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
-| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartMsg) | Will delete deployed helm chart |
 | GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionMsg) | Will return version information about api server |
 
  

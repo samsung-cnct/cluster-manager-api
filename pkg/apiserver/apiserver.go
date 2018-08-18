@@ -2,7 +2,7 @@ package apiserver
 
 import (
 	"github.com/juju/loggo"
-	"github.com/samsung-cnct/cma-operator/pkg/util"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
 

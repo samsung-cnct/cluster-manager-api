@@ -23,7 +23,7 @@ import "protoc-gen-swagger/options/annotations.proto";
 option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
   info: {
     title: "Cluster Manager API";
-    version: "v0.1.0";
+    version: "v0.2.0";
     contact: {
         name: "Michael Venezia";
         url: "https://github.com/venezia";
@@ -34,27 +34,13 @@ option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
     url: "https://github.com/samsung-cnct/cluster-manager-api";
     description: "More about Cluster Manager API";
   }
-  schemes: HTTP;
   schemes: HTTPS;
+  schemes: HTTP;
   consumes: "application/json";
   produces: "application/json";
 };
 
 service Cluster {
-    // Simple Hello World Service - will repeat a greeting to the name provided
-    rpc HelloWorld (HelloWorldMsg) returns (HelloWorldReply) {
-        option (google.api.http) = {
-      post : "/api/v1/helloworld"
-      body: "*"
-    };
-    }
-    // Simple pod count response.  Will respond with the number of pods in the namespace provided
-    rpc GetPodCount (GetPodCountMsg) returns (GetPodCountReply) {
-        option (google.api.http) = {
-            post : "/api/v1/getpodcount"
-            body : "*"
-        };
-    }
     // Will provision a cluster
     rpc CreateCluster (CreateClusterMsg) returns (CreateClusterReply) {
         option (google.api.http) = {
@@ -80,54 +66,12 @@ service Cluster {
             get : "/api/v1/cluster/list"
         };
     }
-    // Will install (or reinstall) tiller
-    rpc ProvisionTiller (ProvisionTillerMsg) returns (ProvisionTillerReply) {
-        option (google.api.http) = {
-            post : "/api/v1/tiller"
-            body : "*"
-        };
-    }
-    // Will install (or reinstall) helm chart
-    // This will be destructive if a chart has already been deployed with the same name
-    rpc InstallHelmChart (InstallHelmChartMsg) returns (InstallHelmChartReply) {
-        option (google.api.http) = {
-            put : "/api/v1/helm"
-            body : "*"
-        };
-    }
-    // Will delete deployed helm chart
-    rpc DeleteHelmChart (DeleteHelmChartMsg) returns (DeleteHelmChartReply) {
-        option (google.api.http) = {
-            delete : "/api/v1/helm"
-        };
-    }
     // Will return version information about api server
     rpc GetVersionInformation (GetVersionMsg) returns (GetVersionReply) {
         option (google.api.http) = {
             get : "/api/v1/version"
         };
     }
-}
-
-// The Hello World request
-message HelloWorldMsg {
-    string name = 1;
-}
-
-// The response to Hello World
-message HelloWorldReply {
-    string message = 1;
-}
-
-message GetPodCountMsg {
-    // Namespace to fetch the pod count
-    // Leave empty to query all namespaces
-    string namespace = 1;
-}
-
-message GetPodCountReply {
-    // Number of pods in the namespace (or all namespaces)
-    int32 pods = 1;
 }
 
 message CreateClusterMsg {
@@ -140,11 +84,8 @@ message CreateClusterMsg {
 message CreateClusterReply {
     // Whether or not the cluster was provisioned by this request
     bool ok = 1;
-
-    oneof cluster_or_error {
-        ClusterItem cluster = 2;
-        Error error = 7;
-    }
+    // The details of the cluster request response
+    ClusterItem cluster = 2;
 }
 
 message GetClusterMsg {
@@ -156,10 +97,7 @@ message GetClusterReply {
     // Is the cluster in the system
     bool ok = 1;
 
-    oneof cluster_or_error {
-        ClusterDetailItem cluster = 2;
-        Error error = 7;
-    }
+    ClusterDetailItem cluster = 2;
 }
 
 message DeleteClusterMsg {
@@ -204,118 +142,65 @@ message ClusterDetailItem {
     string kubeconfig = 4;
 }
 
-message Error {
-    // The error code
-    string code = 1;
-    // The error message
-    string message = 2;
-}
-
-message ProvisionTillerMsg {
-    // Cluster tiller should be installed on
-    string cluster = 1;
-    // Namespace tiller should be installed in
-    string namespace = 2;
-    // Versino of tiller/helm to install / upgrade to
-    string version = 3;
-    // Is the tiller a cluster-wide tiller?
-    // Should it have cluster-wide admin privileges?
-    bool cluster_wide = 4;
-    // Namespaces that it should be able to admin on
-    repeated string admin_namespaces = 5;
-}
-
-message ProvisionTillerReply {
-    // Was the operation successful
-    bool ok = 1;
-    // What messages were given
-    string message = 2;
-}
-
-message InstallHelmChartMsg {
-    // What is the package manager name
-    string packageManagerName = 1;
-    // Chart Settings
-    GenericHelmChart chart = 3;
-    // Repository Settings
-    GenericHelmRepository repo = 4;
-}
-
-message InstallHelmChartReply {
-    // Was the operation successful
-    bool ok = 1;
-    // What messages were given
-    string message = 2;
-}
-
-message DeleteHelmChartMsg {
-    // What is the name of the deployment
-    string name = 1;
-    // What is the namespace of the deployment
-    string namespace = 3;
-}
-
-message DeleteHelmChartReply {
-    // Was the operation successful
-    bool ok = 1;
-    // What messages were given
-    string message = 2;
-}
-
-message GenericHelmChart {
-    // What is the name of the deployment
-    string name = 1;
-    // What is the namespace to deploy the application to
-    string namespace = 2;
-    // What is the chart repository
-    string repo = 3;
-    // What is the chart name
-    string chart = 4;
-    // What are the options (nested yaml - the Values.yaml contents)
-    string values = 5;
-    // What is the chart version
-    string version = 6;
-}
-
-message GenericHelmRepository {
-    // What is the name of the repository
-    string name = 1;
-    // What is the URL of the repository
-    string url = 2;
-}
-
 message CreateClusterProviderSpec {
     // What is the provider - currently this is aws or maas
     string name = 1;
-    // The MaaS specification
-    CreateClusterMaaSSpec maas = 2;
+    string k8s_version = 2;
+
+    oneof provider_information {
     // The AWS specification
     CreateClusterAWSSpec aws = 3;
-}
-
-message CreateClusterMaaSSpec {
-    // The MaaS API endpoint
-    string endpoint = 1;
-    // The username in the MaaS API
-    string username = 2;
-    // The OAuth key for the endpoint
-    string oauth_key = 3;
+    }
 }
 
 message CreateClusterAWSSpec {
-    // The region for AWS
-    string region = 1;
-    // The SecretKeyId for API Access
-    string secret_key_id = 2;
-    // The SecretAccessKey for API access
-    string secret_access_key = 3;
+    // The AWS Data Center
+    AWSDataCenter data_center = 1;
+    // Credentials to build the cluster
+    AWSCredentials credentials = 2;
+    // BYO items
+    AWSBYOItems byo = 3;
+    // Instance groups
+    repeated AWSInstanceGroup instance_groups = 4;
+
+    // Which Data Center
+    message AWSDataCenter {
+        // Which region (us-east-1, etc.)
+        string region = 1;
+        // Which availability zones (us-east-1b, us-east-2c, us-west-2d, etc.)
+        repeated string availability_zones = 2;
+    }
+
+    // The credentials to use for creating the cluster
+    message AWSCredentials {
+        // The SecretKeyId for API Access
+        string secret_key_id = 1;
+        // The SecretAccessKey for API access
+        string secret_access_key = 2;
+    }
+
+    // For when some things are already created
+    message AWSBYOItems {
+        // The VPC id, blank for for "create one for you", filled if you are BYO VPC
+        string vpc_id = 1;
+        // Security group
+        string security_group_id = 2;
+    }
+
+    // Instance groups define a type and number of instances
+    message AWSInstanceGroup {
+        // Instance type (m5.large, etc.)
+        string type = 1;
+        // Number of instances (defaults to zero)
+        int32 quantity = 2;
+    }
 }
 
+// Get version of API Server
 message GetVersionMsg {
 }
 
-
-
+// Reply for version request
 message GetVersionReply {
     // If operation was OK
     bool ok = 1;
