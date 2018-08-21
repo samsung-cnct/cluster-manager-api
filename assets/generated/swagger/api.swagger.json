@@ -319,7 +319,7 @@
           "$ref": "#/definitions/cluster_manager_apiCreateClusterAWSSpec",
           "title": "The AWS specification"
         },
-        "highly_available": {
+        "high_availability": {
           "type": "boolean",
           "format": "boolean",
           "title": "Whether or not the cluster is HA"

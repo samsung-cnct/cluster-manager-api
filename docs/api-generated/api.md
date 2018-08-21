@@ -211,7 +211,7 @@ For when some things are already created
 | name | [string](#string) |  | What is the provider - currently this is aws or maas |
 | k8s_version | [string](#string) |  | The version of Kubernetes |
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
-| highly_available | [bool](#bool) |  | Whether or not the cluster is HA |
+| high_availability | [bool](#bool) |  | Whether or not the cluster is HA |
 | network_fabric | [string](#string) |  | The fabric to be used |
 
 
@@ -545,7 +545,7 @@ For when some things are already created
 | name | [string](#string) |  | What is the provider - currently this is aws or maas |
 | k8s_version | [string](#string) |  | The version of Kubernetes |
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
-| highly_available | [bool](#bool) |  | Whether or not the cluster is HA |
+| high_availability | [bool](#bool) |  | Whether or not the cluster is HA |
 | network_fabric | [string](#string) |  | The fabric to be used |
 
 

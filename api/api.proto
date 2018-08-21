@@ -157,7 +157,7 @@ message CreateClusterProviderSpec {
     }
 
     // Whether or not the cluster is HA
-    bool highly_available = 4;
+    bool high_availability = 4;
     // The fabric to be used
     string network_fabric = 5;
 
