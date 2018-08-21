@@ -169,10 +169,15 @@
           "type": "string",
           "title": "Instance type (m5.large, etc.)"
         },
-        "quantity": {
+        "min_quantity": {
           "type": "integer",
           "format": "int32",
-          "title": "Number of instances (defaults to zero)"
+          "title": "Minimum number of instances (defaults to zero)"
+        },
+        "max_quantity": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Maximum number of instances (defaults to zero)"
         }
       },
       "title": "Instance groups define a type and number of instances"
@@ -307,11 +312,21 @@
           "title": "What is the provider - currently this is aws or maas"
         },
         "k8s_version": {
-          "type": "string"
+          "type": "string",
+          "title": "The version of Kubernetes"
         },
         "aws": {
           "$ref": "#/definitions/cluster_manager_apiCreateClusterAWSSpec",
           "title": "The AWS specification"
+        },
+        "highly_available": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Whether or not the cluster is HA"
+        },
+        "network_fabric": {
+          "type": "string",
+          "title": "The fabric to be used"
         }
       }
     },

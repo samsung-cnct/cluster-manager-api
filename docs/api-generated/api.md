@@ -160,7 +160,8 @@ Instance groups define a type and number of instances
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | type | [string](#string) |  | Instance type (m5.large, etc.) |
-| quantity | [int32](#int32) |  | Number of instances (defaults to zero) |
+| min_quantity | [int32](#int32) |  | Minimum number of instances (defaults to zero) |
+| max_quantity | [int32](#int32) |  | Maximum number of instances (defaults to zero) |
 
 
 
@@ -208,8 +209,10 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the provider - currently this is aws or maas |
-| k8s_version | [string](#string) |  |  |
+| k8s_version | [string](#string) |  | The version of Kubernetes |
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
+| highly_available | [bool](#bool) |  | Whether or not the cluster is HA |
+| network_fabric | [string](#string) |  | The fabric to be used |
 
 
 
@@ -491,7 +494,8 @@ Instance groups define a type and number of instances
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | type | [string](#string) |  | Instance type (m5.large, etc.) |
-| quantity | [int32](#int32) |  | Number of instances (defaults to zero) |
+| min_quantity | [int32](#int32) |  | Minimum number of instances (defaults to zero) |
+| max_quantity | [int32](#int32) |  | Maximum number of instances (defaults to zero) |
 
 
 
@@ -539,8 +543,10 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the provider - currently this is aws or maas |
-| k8s_version | [string](#string) |  |  |
+| k8s_version | [string](#string) |  | The version of Kubernetes |
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
+| highly_available | [bool](#bool) |  | Whether or not the cluster is HA |
+| network_fabric | [string](#string) |  | The fabric to be used |
 
 
 

@@ -148,12 +148,19 @@ message ClusterDetailItem {
 message CreateClusterProviderSpec {
     // What is the provider - currently this is aws or maas
     string name = 1;
+    // The version of Kubernetes
     string k8s_version = 2;
 
     oneof provider_information {
-    // The AWS specification
-    CreateClusterAWSSpec aws = 3;
+        // The AWS specification
+        CreateClusterAWSSpec aws = 3;
     }
+
+    // Whether or not the cluster is HA
+    bool highly_available = 4;
+    // The fabric to be used
+    string network_fabric = 5;
+
 }
 
 message CreateClusterAWSSpec {
@@ -194,8 +201,10 @@ message CreateClusterAWSSpec {
     message AWSInstanceGroup {
         // Instance type (m5.large, etc.)
         string type = 1;
-        // Number of instances (defaults to zero)
-        int32 quantity = 2;
+        // Minimum number of instances (defaults to zero)
+        int32 min_quantity = 2;
+        // Maximum number of instances (defaults to zero)
+        int32 max_quantity = 3;
     }
 }
 
