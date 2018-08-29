@@ -192,6 +192,10 @@
         "security_group_id": {
           "type": "string",
           "title": "Security group"
+        },
+        "iam_role_arn": {
+          "type": "string",
+          "title": "The IAM role for the cluster (arn)"
         }
       },
       "title": "For when some things are already created"

@@ -178,6 +178,7 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | vpc_id | [string](#string) |  | The VPC id, blank for for &#34;create one for you&#34;, filled if you are BYO VPC |
 | security_group_id | [string](#string) |  | Security group |
+| iam_role_arn | [string](#string) |  | The IAM role for the cluster (arn) |
 
 
 
@@ -512,6 +513,7 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | vpc_id | [string](#string) |  | The VPC id, blank for for &#34;create one for you&#34;, filled if you are BYO VPC |
 | security_group_id | [string](#string) |  | Security group |
+| iam_role_arn | [string](#string) |  | The IAM role for the cluster (arn) |
 
 
 
