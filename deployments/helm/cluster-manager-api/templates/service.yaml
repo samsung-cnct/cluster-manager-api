@@ -14,5 +14,10 @@ spec:
   - name: registry
     port: {{ .Values.service.port | int }}
     targetPort: {{ .Values.port | int }}
+    {{- if eq .Values.service.type "NodePort" }}
+    {{- if .Values.service.nodePort }}
+    nodePort: {{ .Values.service.nodePort }}
+    {{- end }}
+    {{- end }}
   selector:
     app: {{ template "fullname" . }}
