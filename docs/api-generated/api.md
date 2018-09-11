@@ -1,13 +1,17 @@
 # Protocol Documentation
-<a name="top"/>
+<a name="top"></a>
 
 ## Table of Contents
 
 - [api.proto](#api.proto)
+    - [AWSCredentials](#cluster_manager_api.AWSCredentials)
+    - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
+    - [AzureCredentials](#cluster_manager_api.AzureCredentials)
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
     - [ClusterItem](#cluster_manager_api.ClusterItem)
+    - [CreateClusterAKSSpec](#cluster_manager_api.CreateClusterAKSSpec)
+    - [CreateClusterAKSSpec.AKSInstanceGroup](#cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup)
     - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
-    - [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials)
     - [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter)
     - [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup)
     - [CreateClusterAWSSpec.AWSPreconfiguredItems](#cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems)
@@ -30,10 +34,14 @@
   
 
 - [api.proto](#api.proto)
+    - [AWSCredentials](#cluster_manager_api.AWSCredentials)
+    - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
+    - [AzureCredentials](#cluster_manager_api.AzureCredentials)
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
     - [ClusterItem](#cluster_manager_api.ClusterItem)
+    - [CreateClusterAKSSpec](#cluster_manager_api.CreateClusterAKSSpec)
+    - [CreateClusterAKSSpec.AKSInstanceGroup](#cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup)
     - [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec)
-    - [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials)
     - [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter)
     - [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup)
     - [CreateClusterAWSSpec.AWSPreconfiguredItems](#cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems)
@@ -59,14 +67,65 @@
 
 
 
-<a name="api.proto"/>
+<a name="api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
 ## api.proto
 
 
 
-<a name="cluster_manager_api.ClusterDetailItem"/>
+<a name="cluster_manager_api.AWSCredentials"></a>
+
+### AWSCredentials
+The credentials to use for creating the cluster
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| secret_key_id | [string](#string) |  | The SecretKeyId for API Access |
+| secret_access_key | [string](#string) |  | The SecretAccessKey for API access |
+| region | [string](#string) |  | The Region for API access |
+
+
+
+
+
+
+<a name="cluster_manager_api.AzureClusterServiceAccount"></a>
+
+### AzureClusterServiceAccount
+the account used by the cluster to create azure resources (ex: load balancer)
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| client_id | [string](#string) |  | The ClientId (aka: AppID) |
+| client_secret | [string](#string) |  | The ClientSecret (aka: password) |
+
+
+
+
+
+
+<a name="cluster_manager_api.AzureCredentials"></a>
+
+### AzureCredentials
+The credentials to use for creating the cluster
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| app_id | [string](#string) |  | The AppId for API Access |
+| tenant | [string](#string) |  | The Tenant for API access |
+| password | [string](#string) |  | The Password for API access |
+| subscription_id | [string](#string) |  | The Subscription for API access |
+
+
+
+
+
+
+<a name="cluster_manager_api.ClusterDetailItem"></a>
 
 ### ClusterDetailItem
 
@@ -84,7 +143,7 @@
 
 
 
-<a name="cluster_manager_api.ClusterItem"/>
+<a name="cluster_manager_api.ClusterItem"></a>
 
 ### ClusterItem
 
@@ -101,7 +160,43 @@
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec"/>
+<a name="cluster_manager_api.CreateClusterAKSSpec"></a>
+
+### CreateClusterAKSSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| location | [string](#string) |  | The Azure Data Center |
+| credentials | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Credentials to build the cluster |
+| clusterAccount | [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount) |  | Cluster service account used to talk to azure (ex: creating load balancer) |
+| instance_groups | [CreateClusterAKSSpec.AKSInstanceGroup](#cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup) | repeated | Instance groups |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup"></a>
+
+### CreateClusterAKSSpec.AKSInstanceGroup
+Instance groups define a type and number of instances
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | The name of the group |
+| type | [string](#string) |  | Instance type (Standard_D2_v2, etc.) |
+| min_quantity | [int32](#int32) |  | Minimum number of instances (defaults to zero) |
+| max_quantity | [int32](#int32) |  | Maximum number of instances (defaults to zero) |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAWSSpec"></a>
 
 ### CreateClusterAWSSpec
 
@@ -110,7 +205,7 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | data_center | [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter) |  | The AWS Data Center |
-| credentials | [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials) |  | Credentials to build the cluster |
+| credentials | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | Credentials to build the cluster |
 | resources | [CreateClusterAWSSpec.AWSPreconfiguredItems](#cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems) |  | BYO items |
 | instance_groups | [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup) | repeated | Instance groups |
 
@@ -119,23 +214,7 @@
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSCredentials"/>
-
-### CreateClusterAWSSpec.AWSCredentials
-The credentials to use for creating the cluster
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secret_key_id | [string](#string) |  | The SecretKeyId for API Access |
-| secret_access_key | [string](#string) |  | The SecretAccessKey for API access |
-
-
-
-
-
-
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter"/>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter"></a>
 
 ### CreateClusterAWSSpec.AWSDataCenter
 Which Data Center
@@ -151,7 +230,7 @@ Which Data Center
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup"/>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup"></a>
 
 ### CreateClusterAWSSpec.AWSInstanceGroup
 Instance groups define a type and number of instances
@@ -168,7 +247,7 @@ Instance groups define a type and number of instances
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems"/>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems"></a>
 
 ### CreateClusterAWSSpec.AWSPreconfiguredItems
 For when some things are already created
@@ -178,14 +257,14 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | vpc_id | [string](#string) |  | The VPC id, blank for for &#34;create one for you&#34;, filled if you are BYO VPC |
 | security_group_id | [string](#string) |  | Security group |
-| iam_role_arn | [string](#string) |  | The IAM role for the cluster (arn) |
+| iam_role_arn | [string](#string) |  | The IAM role for the cluster (arn)ClusterAssociationdd |
 
 
 
 
 
 
-<a name="cluster_manager_api.CreateClusterMsg"/>
+<a name="cluster_manager_api.CreateClusterMsg"></a>
 
 ### CreateClusterMsg
 
@@ -201,7 +280,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterProviderSpec"/>
+<a name="cluster_manager_api.CreateClusterProviderSpec"></a>
 
 ### CreateClusterProviderSpec
 
@@ -212,6 +291,7 @@ For when some things are already created
 | name | [string](#string) |  | What is the provider - currently this is aws or maas |
 | k8s_version | [string](#string) |  | The version of Kubernetes |
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
+| azure | [CreateClusterAKSSpec](#cluster_manager_api.CreateClusterAKSSpec) |  |  |
 | high_availability | [bool](#bool) |  | Whether or not the cluster is HA |
 | network_fabric | [string](#string) |  | The fabric to be used |
 
@@ -220,7 +300,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterReply"/>
+<a name="cluster_manager_api.CreateClusterReply"></a>
 
 ### CreateClusterReply
 
@@ -236,7 +316,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.DeleteClusterMsg"/>
+<a name="cluster_manager_api.DeleteClusterMsg"></a>
 
 ### DeleteClusterMsg
 
@@ -245,13 +325,15 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
 
 
 
-<a name="cluster_manager_api.DeleteClusterReply"/>
+<a name="cluster_manager_api.DeleteClusterReply"></a>
 
 ### DeleteClusterReply
 
@@ -267,17 +349,23 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterListMsg"/>
+<a name="cluster_manager_api.GetClusterListMsg"></a>
 
 ### GetClusterListMsg
 
 
 
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
 
-<a name="cluster_manager_api.GetClusterListReply"/>
+
+
+<a name="cluster_manager_api.GetClusterListReply"></a>
 
 ### GetClusterListReply
 
@@ -293,7 +381,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterMsg"/>
+<a name="cluster_manager_api.GetClusterMsg"></a>
 
 ### GetClusterMsg
 
@@ -302,13 +390,15 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of the cluster to be looked up |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
 
 
 
-<a name="cluster_manager_api.GetClusterReply"/>
+<a name="cluster_manager_api.GetClusterReply"></a>
 
 ### GetClusterReply
 
@@ -324,7 +414,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetVersionMsg"/>
+<a name="cluster_manager_api.GetVersionMsg"></a>
 
 ### GetVersionMsg
 Get version of API Server
@@ -334,7 +424,7 @@ Get version of API Server
 
 
 
-<a name="cluster_manager_api.GetVersionReply"/>
+<a name="cluster_manager_api.GetVersionReply"></a>
 
 ### GetVersionReply
 Reply for version request
@@ -350,7 +440,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.GetVersionReply.VersionInformation"/>
+<a name="cluster_manager_api.GetVersionReply.VersionInformation"></a>
 
 ### GetVersionReply.VersionInformation
 
@@ -377,31 +467,82 @@ Reply for version request
  
 
 
-<a name="cluster_manager_api.Cluster"/>
+<a name="cluster_manager_api.Cluster"></a>
 
 ### Cluster
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
-| GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
-| DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
-| GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListMsg) | Will retrieve a list of clusters |
-| GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionMsg) | Will return version information about api server |
+| CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterReply) | Will provision a cluster |
+| GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterReply) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
+| DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply) | Will delete a cluster |
+| GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListReply) | Will retrieve a list of clusters |
+| GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionReply) | Will return version information about api server |
 
  
 
 
 
-<a name="api.proto"/>
+<a name="api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
 ## api.proto
 
 
 
-<a name="cluster_manager_api.ClusterDetailItem"/>
+<a name="cluster_manager_api.AWSCredentials"></a>
+
+### AWSCredentials
+The credentials to use for creating the cluster
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| secret_key_id | [string](#string) |  | The SecretKeyId for API Access |
+| secret_access_key | [string](#string) |  | The SecretAccessKey for API access |
+| region | [string](#string) |  | The Region for API access |
+
+
+
+
+
+
+<a name="cluster_manager_api.AzureClusterServiceAccount"></a>
+
+### AzureClusterServiceAccount
+the account used by the cluster to create azure resources (ex: load balancer)
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| client_id | [string](#string) |  | The ClientId (aka: AppID) |
+| client_secret | [string](#string) |  | The ClientSecret (aka: password) |
+
+
+
+
+
+
+<a name="cluster_manager_api.AzureCredentials"></a>
+
+### AzureCredentials
+The credentials to use for creating the cluster
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| app_id | [string](#string) |  | The AppId for API Access |
+| tenant | [string](#string) |  | The Tenant for API access |
+| password | [string](#string) |  | The Password for API access |
+| subscription_id | [string](#string) |  | The Subscription for API access |
+
+
+
+
+
+
+<a name="cluster_manager_api.ClusterDetailItem"></a>
 
 ### ClusterDetailItem
 
@@ -419,7 +560,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.ClusterItem"/>
+<a name="cluster_manager_api.ClusterItem"></a>
 
 ### ClusterItem
 
@@ -436,7 +577,43 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec"/>
+<a name="cluster_manager_api.CreateClusterAKSSpec"></a>
+
+### CreateClusterAKSSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| location | [string](#string) |  | The Azure Data Center |
+| credentials | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Credentials to build the cluster |
+| clusterAccount | [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount) |  | Cluster service account used to talk to azure (ex: creating load balancer) |
+| instance_groups | [CreateClusterAKSSpec.AKSInstanceGroup](#cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup) | repeated | Instance groups |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup"></a>
+
+### CreateClusterAKSSpec.AKSInstanceGroup
+Instance groups define a type and number of instances
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | The name of the group |
+| type | [string](#string) |  | Instance type (Standard_D2_v2, etc.) |
+| min_quantity | [int32](#int32) |  | Minimum number of instances (defaults to zero) |
+| max_quantity | [int32](#int32) |  | Maximum number of instances (defaults to zero) |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterAWSSpec"></a>
 
 ### CreateClusterAWSSpec
 
@@ -445,7 +622,7 @@ Reply for version request
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | data_center | [CreateClusterAWSSpec.AWSDataCenter](#cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter) |  | The AWS Data Center |
-| credentials | [CreateClusterAWSSpec.AWSCredentials](#cluster_manager_api.CreateClusterAWSSpec.AWSCredentials) |  | Credentials to build the cluster |
+| credentials | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | Credentials to build the cluster |
 | resources | [CreateClusterAWSSpec.AWSPreconfiguredItems](#cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems) |  | BYO items |
 | instance_groups | [CreateClusterAWSSpec.AWSInstanceGroup](#cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup) | repeated | Instance groups |
 
@@ -454,23 +631,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSCredentials"/>
-
-### CreateClusterAWSSpec.AWSCredentials
-The credentials to use for creating the cluster
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secret_key_id | [string](#string) |  | The SecretKeyId for API Access |
-| secret_access_key | [string](#string) |  | The SecretAccessKey for API access |
-
-
-
-
-
-
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter"/>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter"></a>
 
 ### CreateClusterAWSSpec.AWSDataCenter
 Which Data Center
@@ -486,7 +647,7 @@ Which Data Center
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup"/>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup"></a>
 
 ### CreateClusterAWSSpec.AWSInstanceGroup
 Instance groups define a type and number of instances
@@ -503,7 +664,7 @@ Instance groups define a type and number of instances
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems"/>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems"></a>
 
 ### CreateClusterAWSSpec.AWSPreconfiguredItems
 For when some things are already created
@@ -513,14 +674,14 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | vpc_id | [string](#string) |  | The VPC id, blank for for &#34;create one for you&#34;, filled if you are BYO VPC |
 | security_group_id | [string](#string) |  | Security group |
-| iam_role_arn | [string](#string) |  | The IAM role for the cluster (arn) |
+| iam_role_arn | [string](#string) |  | The IAM role for the cluster (arn)ClusterAssociationdd |
 
 
 
 
 
 
-<a name="cluster_manager_api.CreateClusterMsg"/>
+<a name="cluster_manager_api.CreateClusterMsg"></a>
 
 ### CreateClusterMsg
 
@@ -536,7 +697,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterProviderSpec"/>
+<a name="cluster_manager_api.CreateClusterProviderSpec"></a>
 
 ### CreateClusterProviderSpec
 
@@ -547,6 +708,7 @@ For when some things are already created
 | name | [string](#string) |  | What is the provider - currently this is aws or maas |
 | k8s_version | [string](#string) |  | The version of Kubernetes |
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
+| azure | [CreateClusterAKSSpec](#cluster_manager_api.CreateClusterAKSSpec) |  |  |
 | high_availability | [bool](#bool) |  | Whether or not the cluster is HA |
 | network_fabric | [string](#string) |  | The fabric to be used |
 
@@ -555,7 +717,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterReply"/>
+<a name="cluster_manager_api.CreateClusterReply"></a>
 
 ### CreateClusterReply
 
@@ -571,7 +733,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.DeleteClusterMsg"/>
+<a name="cluster_manager_api.DeleteClusterMsg"></a>
 
 ### DeleteClusterMsg
 
@@ -580,13 +742,15 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
 
 
 
-<a name="cluster_manager_api.DeleteClusterReply"/>
+<a name="cluster_manager_api.DeleteClusterReply"></a>
 
 ### DeleteClusterReply
 
@@ -602,17 +766,23 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterListMsg"/>
+<a name="cluster_manager_api.GetClusterListMsg"></a>
 
 ### GetClusterListMsg
 
 
 
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
 
-<a name="cluster_manager_api.GetClusterListReply"/>
+
+
+<a name="cluster_manager_api.GetClusterListReply"></a>
 
 ### GetClusterListReply
 
@@ -628,7 +798,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterMsg"/>
+<a name="cluster_manager_api.GetClusterMsg"></a>
 
 ### GetClusterMsg
 
@@ -637,13 +807,15 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of the cluster to be looked up |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
 
 
 
-<a name="cluster_manager_api.GetClusterReply"/>
+<a name="cluster_manager_api.GetClusterReply"></a>
 
 ### GetClusterReply
 
@@ -659,7 +831,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetVersionMsg"/>
+<a name="cluster_manager_api.GetVersionMsg"></a>
 
 ### GetVersionMsg
 Get version of API Server
@@ -669,7 +841,7 @@ Get version of API Server
 
 
 
-<a name="cluster_manager_api.GetVersionReply"/>
+<a name="cluster_manager_api.GetVersionReply"></a>
 
 ### GetVersionReply
 Reply for version request
@@ -685,7 +857,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.GetVersionReply.VersionInformation"/>
+<a name="cluster_manager_api.GetVersionReply.VersionInformation"></a>
 
 ### GetVersionReply.VersionInformation
 
@@ -712,18 +884,18 @@ Reply for version request
  
 
 
-<a name="cluster_manager_api.Cluster"/>
+<a name="cluster_manager_api.Cluster"></a>
 
 ### Cluster
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
-| GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
-| DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
-| GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListMsg) | Will retrieve a list of clusters |
-| GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionMsg) | Will return version information about api server |
+| CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterReply) | Will provision a cluster |
+| GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterReply) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
+| DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply) | Will delete a cluster |
+| GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListReply) | Will retrieve a list of clusters |
+| GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionReply) | Will return version information about api server |
 
  
 

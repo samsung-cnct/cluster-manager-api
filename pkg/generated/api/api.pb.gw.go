@@ -75,9 +75,17 @@ func request_Cluster_DeleteCluster_0(ctx context.Context, marshaler runtime.Mars
 
 }
 
+var (
+	filter_Cluster_GetClusterList_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
 func request_Cluster_GetClusterList_0(ctx context.Context, marshaler runtime.Marshaler, client ClusterClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetClusterListMsg
 	var metadata runtime.ServerMetadata
+
+	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_Cluster_GetClusterList_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
 
 	msg, err := client.GetClusterList(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -124,8 +132,8 @@ func RegisterClusterHandler(ctx context.Context, mux *runtime.ServeMux, conn *gr
 	return RegisterClusterHandlerClient(ctx, mux, NewClusterClient(conn))
 }
 
-// RegisterClusterHandler registers the http handlers for service Cluster to "mux".
-// The handlers forward requests to the grpc endpoint over the given implementation of "ClusterClient".
+// RegisterClusterHandlerClient registers the http handlers for service Cluster
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ClusterClient".
 // Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ClusterClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
 // "ClusterClient" to call the correct interceptors.

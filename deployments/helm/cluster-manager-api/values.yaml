@@ -14,9 +14,11 @@ service:
   nodePort:
 
 helpers:
-#  azure:
-#    endpoint: cma-aks-grpc.cnct.io:443
-#    insecure: false
-#  aws:
-#    endpoint: cma-aws-grpc.cnct.io:443
-#    insecure: false
+  aks:
+    enabled: false
+    endpoint: cma-aks-grpc.cnct.io:443
+    insecure: false
+  aws:
+    enabled: false
+    endpoint: cma-aws-grpc.cnct.io:443
+    insecure: false

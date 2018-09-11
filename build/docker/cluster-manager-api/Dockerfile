@@ -1,5 +1,5 @@
 # Initial preparations
-FROM golang:1.10.2-alpine
+FROM golang:1.11.0-alpine
 RUN apk update && apk add git make
 
 # Let's add the code in

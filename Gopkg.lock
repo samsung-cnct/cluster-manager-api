@@ -45,7 +45,7 @@
   revision = "23def4e6c14b4da8ac2ed8007337bc5eb5007998"
 
 [[projects]]
-  digest = "1:0a7ddae0f9b0357691225e6048e0d4ea0253d94f3f951808df3e0ad556051433"
+  digest = "1:fa5e9e1af8a8645086811ec5ab003806026babc57c8bb3a6f7e1ab34b80e2ff1"
   name = "github.com/golang/protobuf"
   packages = [
     "jsonpb",
@@ -58,8 +58,8 @@
     "ptypes/timestamp",
   ]
   pruneopts = "UT"
-  revision = "b4deda0973fb4c70b50d226b1af49f3da59f5265"
-  version = "v1.1.0"
+  revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
+  version = "v1.2.0"
 
 [[projects]]
   branch = "master"
@@ -101,7 +101,7 @@
   revision = "9cad4c3443a7200dd6400aef47183728de563a38"
 
 [[projects]]
-  digest = "1:36d8bdf4367306ad70e7fb62c6cd6735a3c448a5ef3ac912b384fd143a36ff3a"
+  digest = "1:24f449b4ea0ecdcd5c15b5c06d54571b9a54d62b4ccb704313ac4ce6013c3e0e"
   name = "github.com/grpc-ecosystem/grpc-gateway"
   packages = [
     "protoc-gen-swagger/options",
@@ -110,8 +110,8 @@
     "utilities",
   ]
   pruneopts = "UT"
-  revision = "92583770e3f01b09a0d3e9bdf64321d8bebd48f2"
-  version = "v1.4.1"
+  revision = "8558711daa6c2853489043207b563dceacbc19cf"
+  version = "v1.5.0"
 
 [[projects]]
   branch = "master"
@@ -227,6 +227,14 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "3dcc96556217539f50599357fb481ac0dc7439b9"
+
+[[projects]]
+  branch = "master"
+  digest = "1:fb7ba2754e64caf05cfa85dac59392230b180b5b1a70cd7f8a08e9b039792fef"
+  name = "github.com/samsung-cnct/cma-aks"
+  packages = ["pkg/generated/api"]
+  pruneopts = "UT"
+  revision = "2ac754eb405dd3a6e6fb2a24f9da1afb83b06d01"
 
 [[projects]]
   digest = "1:30e06e6d62a1d694e3cdbff29d8a9a96022e05a487d0c6eaf0ef898965ef28fb"
@@ -365,7 +373,7 @@
   revision = "c66870c02cf823ceb633bcd05be3c7cda29976f4"
 
 [[projects]]
-  digest = "1:3dd7996ce6bf52dec6a2f69fa43e7c4cefea1d4dfa3c8ab7a5f8a9f7434e239d"
+  digest = "1:76332e947f184a2dc091db40f22c7089ada36bbc577793074639695af85a10fd"
   name = "google.golang.org/grpc"
   packages = [
     ".",
@@ -388,6 +396,8 @@
     "metadata",
     "naming",
     "peer",
+    "reflection",
+    "reflection/grpc_reflection_v1alpha",
     "resolver",
     "resolver/dns",
     "resolver/passthrough",
@@ -585,6 +595,7 @@
     "github.com/grpc-ecosystem/grpc-gateway/utilities",
     "github.com/juju/loggo",
     "github.com/philips/go-bindata-assetfs",
+    "github.com/samsung-cnct/cma-aks/pkg/generated/api",
     "github.com/soheilhy/cmux",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
@@ -593,6 +604,7 @@
     "google.golang.org/grpc",
     "google.golang.org/grpc/codes",
     "google.golang.org/grpc/grpclog",
+    "google.golang.org/grpc/reflection",
     "google.golang.org/grpc/status",
     "k8s.io/api/batch/v1",
     "k8s.io/api/core/v1",
