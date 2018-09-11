@@ -11,6 +11,7 @@ port: 80
 service:
   port: 80
   type: LoadBalancer
+  nodePort:
 
 helpers:
 #  azure:
