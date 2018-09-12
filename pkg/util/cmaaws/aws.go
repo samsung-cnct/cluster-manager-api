@@ -160,4 +160,3 @@ func (a *Client) ListClusters(input ListClusterInput) (ListClusterOutput, error)
 	}
 	return output, nil
 }
-
