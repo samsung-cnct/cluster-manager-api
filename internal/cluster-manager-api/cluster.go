@@ -12,7 +12,7 @@ func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*p
 	}
 	aws := in.Provider.GetAws()
 	if aws != nil {
-
+		return awsCreateCluster(in)
 	}
 	return &pb.CreateClusterReply{
 		Ok: true,
@@ -25,12 +25,11 @@ func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*p
 }
 
 func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
-	if in.GetAzure().AppId != "" {
+	if in.GetAzure() != nil && in.GetAzure().AppId != "" {
 		return azureGetCluster(in)
 	}
-	aws := in.GetAws()
-	if aws != nil {
-
+	if in.GetAws() != nil && in.GetAws().Region != "" {
+		return awsGetCluster(in)
 	}
 	return &pb.GetClusterReply{
 		Ok: true,
@@ -44,23 +43,21 @@ func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetC
 }
 
 func (s *Server) DeleteCluster(ctx context.Context, in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
-	if in.GetAzure().AppId != "" {
+	if in.GetAzure() != nil && in.GetAzure().AppId != "" {
 		return azureDeleteCluster(in)
 	}
-	aws := in.GetAws()
-	if aws != nil {
-
+	if in.GetAws() != nil && in.GetAws().Region != "" {
+		return awsDeleteCluster(in)
 	}
 	return &pb.DeleteClusterReply{Ok: true, Status: "Deleting, but not really"}, nil
 }
 
 func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (reply *pb.GetClusterListReply, err error) {
-	if in.GetAzure().AppId != "" {
+	if in.GetAzure() != nil && in.GetAzure().AppId != "" {
 		return azureGetClusterList(in)
 	}
-	aws := in.GetAws()
-	if aws != nil {
-
+	if in.GetAws() != nil && in.GetAws().Region != "" {
+		return awsGetClusterList(in)
 	}
 	reply = &pb.GetClusterListReply{}
 	return
