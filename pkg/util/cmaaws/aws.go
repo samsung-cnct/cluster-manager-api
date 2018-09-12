@@ -2,8 +2,10 @@ package cmaaws
 
 import (
 	"context"
+	"crypto/tls"
 	pb "gitlab.com/mvenezia/cma-aws/pkg/generated/api"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 type Client struct {
@@ -28,7 +30,11 @@ func (a *Client) CreateNewClient(hostname string, insecure bool) error {
 			return err
 		}
 	} else {
-		a.conn, err = grpc.Dial(hostname)
+		// If TLS is enabled, we're going to create credentials, also using built in certificates
+		var tlsConf tls.Config
+		creds := credentials.NewTLS(&tlsConf)
+
+		a.conn, err = grpc.Dial(hostname, grpc.WithTransportCredentials(creds))
 		if err != nil {
 			return err
 		}
