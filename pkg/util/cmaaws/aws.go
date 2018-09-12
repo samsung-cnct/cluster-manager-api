@@ -6,10 +6,8 @@ import (
 	"google.golang.org/grpc"
 )
 
-
-
 type Client struct {
-	conn *grpc.ClientConn
+	conn   *grpc.ClientConn
 	client pb.ClusterClient
 }
 
@@ -51,7 +49,7 @@ func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, e
 	var instanceGroups []*pb.CreateClusterAWSSpec_AWSInstanceGroup
 	for _, j := range input.AWS.InstanceGroups {
 		instanceGroups = append(instanceGroups, &pb.CreateClusterAWSSpec_AWSInstanceGroup{
-			Type: j.Type,
+			Type:        j.Type,
 			MinQuantity: int32(j.MinQuantity),
 			MaxQuantity: int32(j.MaxQuantity),
 		})
@@ -59,27 +57,27 @@ func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, e
 	result, err := a.client.CreateCluster(context.Background(), &pb.CreateClusterMsg{
 		Name: input.Name,
 		Provider: &pb.CreateClusterProviderSpec{
-			Name: AWSProvider,
+			Name:       AWSProvider,
 			K8SVersion: input.K8SVersion,
 			Aws: &pb.CreateClusterAWSSpec{
 				DataCenter: &pb.CreateClusterAWSSpec_AWSDataCenter{
-					Region: input.AWS.DataCenter.Region,
+					Region:            input.AWS.DataCenter.Region,
 					AvailabilityZones: input.AWS.DataCenter.AvailabilityZones,
 				},
 				Credentials: &pb.AWSCredentials{
-					Region: input.AWS.Credentials.Region,
-					SecretKeyId: input.AWS.Credentials.SecretKeyID,
+					Region:          input.AWS.Credentials.Region,
+					SecretKeyId:     input.AWS.Credentials.SecretKeyID,
 					SecretAccessKey: input.AWS.Credentials.SecretAccessKey,
 				},
 				Resources: &pb.CreateClusterAWSSpec_AWSPreconfiguredItems{
-					VpcId: input.AWS.PreconfiguredItems.VPCID,
+					VpcId:           input.AWS.PreconfiguredItems.VPCID,
 					SecurityGroupId: input.AWS.PreconfiguredItems.SecurityGroupID,
-					IamRoleArn: input.AWS.PreconfiguredItems.IAMRoleARN,
+					IamRoleArn:      input.AWS.PreconfiguredItems.IAMRoleARN,
 				},
 				InstanceGroups: instanceGroups,
 			},
 			HighAvailability: input.HighAvailability,
-			NetworkFabric: input.NetworkFabric,
+			NetworkFabric:    input.NetworkFabric,
 		},
 	})
 	if err != nil {
@@ -87,8 +85,8 @@ func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, e
 	}
 	output := CreateClusterOutput{
 		Cluster: ClusterItem{
-			ID: result.Cluster.Id,
-			Name: result.Cluster.Name,
+			ID:     result.Cluster.Id,
+			Name:   result.Cluster.Name,
 			Status: result.Cluster.Status,
 		},
 	}
@@ -99,8 +97,8 @@ func (a *Client) GetCluster(input GetClusterInput) (GetClusterOutput, error) {
 	result, err := a.client.GetCluster(context.Background(), &pb.GetClusterMsg{
 		Name: input.Name,
 		Credentials: &pb.AWSCredentials{
-			Region: input.Credentials.Region,
-			SecretKeyId: input.Credentials.SecretKeyID,
+			Region:          input.Credentials.Region,
+			SecretKeyId:     input.Credentials.SecretKeyID,
 			SecretAccessKey: input.Credentials.SecretAccessKey,
 		},
 	})
@@ -109,9 +107,9 @@ func (a *Client) GetCluster(input GetClusterInput) (GetClusterOutput, error) {
 	}
 	output := GetClusterOutput{
 		Cluster: ClusterDetailItem{
-			ID: result.Cluster.Id,
-			Name: result.Cluster.Name,
-			Status: result.Cluster.Status,
+			ID:         result.Cluster.Id,
+			Name:       result.Cluster.Name,
+			Status:     result.Cluster.Status,
 			Kubeconfig: result.Cluster.Kubeconfig,
 		},
 	}
@@ -122,8 +120,8 @@ func (a *Client) DeleteCluster(input DeleteClusterInput) (DeleteClusterOutput, e
 	result, err := a.client.DeleteCluster(context.Background(), &pb.DeleteClusterMsg{
 		Name: input.Name,
 		Credentials: &pb.AWSCredentials{
-			Region: input.Credentials.Region,
-			SecretKeyId: input.Credentials.SecretKeyID,
+			Region:          input.Credentials.Region,
+			SecretKeyId:     input.Credentials.SecretKeyID,
 			SecretAccessKey: input.Credentials.SecretAccessKey,
 		},
 	})
@@ -140,8 +138,8 @@ func (a *Client) ListClusters(input ListClusterInput) (ListClusterOutput, error)
 	var clusters []ClusterItem
 	result, err := a.client.GetClusterList(context.Background(), &pb.GetClusterListMsg{
 		Credentials: &pb.AWSCredentials{
-			Region: input.Credentials.Region,
-			SecretKeyId: input.Credentials.SecretKeyID,
+			Region:          input.Credentials.Region,
+			SecretKeyId:     input.Credentials.SecretKeyID,
 			SecretAccessKey: input.Credentials.SecretAccessKey,
 		},
 	})
@@ -150,8 +148,8 @@ func (a *Client) ListClusters(input ListClusterInput) (ListClusterOutput, error)
 	}
 	for _, j := range result.Clusters {
 		clusters = append(clusters, ClusterItem{
-			ID: j.Id,
-			Name: j.Name,
+			ID:     j.Id,
+			Name:   j.Name,
 			Status: j.Status,
 		})
 	}

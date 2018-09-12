@@ -24,33 +24,33 @@ func awsCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
 	}
 	for _, j := range in.Provider.GetAws().InstanceGroups {
 		instanceGroups = append(instanceGroups, cmaaws.InstanceGroup{
-			Type: j.Type,
+			Type:        j.Type,
 			MinQuantity: int(j.MinQuantity),
 			MaxQuantity: int(j.MaxQuantity),
 		})
 	}
 	result, err := client.CreateCluster(cmaaws.CreateClusterInput{
-		Name: in.Name,
+		Name:       in.Name,
 		K8SVersion: in.Provider.K8SVersion,
 		AWS: cmaaws.AWSSpec{
 			DataCenter: cmaaws.DataCenter{
-				Region: in.Provider.GetAws().DataCenter.Region,
+				Region:            in.Provider.GetAws().DataCenter.Region,
 				AvailabilityZones: in.Provider.GetAws().DataCenter.AvailabilityZones,
 			},
 			Credentials: cmaaws.Credentials{
-				Region: in.Provider.GetAws().Credentials.Region,
-				SecretKeyID: in.Provider.GetAws().Credentials.SecretKeyId,
+				Region:          in.Provider.GetAws().Credentials.Region,
+				SecretKeyID:     in.Provider.GetAws().Credentials.SecretKeyId,
 				SecretAccessKey: in.Provider.GetAws().Credentials.SecretAccessKey,
 			},
 			PreconfiguredItems: cmaaws.PreconfiguredItems{
-				VPCID: in.Provider.GetAws().Resources.VpcId,
+				VPCID:           in.Provider.GetAws().Resources.VpcId,
 				SecurityGroupID: in.Provider.GetAws().Resources.SecurityGroupId,
-				IAMRoleARN: in.Provider.GetAws().Resources.IamRoleArn,
+				IAMRoleARN:      in.Provider.GetAws().Resources.IamRoleArn,
 			},
 			InstanceGroups: instanceGroups,
 		},
 		HighAvailability: in.Provider.HighAvailability,
-		NetworkFabric: in.Provider.NetworkFabric,
+		NetworkFabric:    in.Provider.NetworkFabric,
 	})
 	if err != nil {
 		return &pb.CreateClusterReply{}, err
@@ -58,8 +58,8 @@ func awsCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
 	return &pb.CreateClusterReply{
 		Ok: true,
 		Cluster: &pb.ClusterItem{
-			Id: result.Cluster.ID,
-			Name: result.Cluster.Name,
+			Id:     result.Cluster.ID,
+			Name:   result.Cluster.Name,
 			Status: result.Cluster.Status,
 		},
 	}, nil
@@ -73,8 +73,8 @@ func awsGetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 	result, err := client.GetCluster(cmaaws.GetClusterInput{
 		Name: in.Name,
 		Credentials: cmaaws.Credentials{
-			Region: in.GetAws().Region,
-			SecretKeyID: in.GetAws().SecretKeyId,
+			Region:          in.GetAws().Region,
+			SecretKeyID:     in.GetAws().SecretKeyId,
 			SecretAccessKey: in.GetAws().SecretAccessKey,
 		},
 	})
@@ -84,9 +84,9 @@ func awsGetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 	return &pb.GetClusterReply{
 		Ok: true,
 		Cluster: &pb.ClusterDetailItem{
-			Id: result.Cluster.ID,
-			Name: result.Cluster.Name,
-			Status: result.Cluster.Status,
+			Id:         result.Cluster.ID,
+			Name:       result.Cluster.Name,
+			Status:     result.Cluster.Status,
 			Kubeconfig: result.Cluster.Kubeconfig,
 		},
 	}, nil
@@ -100,8 +100,8 @@ func awsGetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListReply, error
 	}
 	result, err := client.ListClusters(cmaaws.ListClusterInput{
 		Credentials: cmaaws.Credentials{
-			Region: in.GetAws().Region,
-			SecretKeyID: in.GetAws().SecretKeyId,
+			Region:          in.GetAws().Region,
+			SecretKeyID:     in.GetAws().SecretKeyId,
 			SecretAccessKey: in.GetAws().SecretAccessKey,
 		},
 	})
@@ -110,13 +110,13 @@ func awsGetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListReply, error
 	}
 	for _, j := range result.Clusters {
 		clusters = append(clusters, &pb.ClusterItem{
-			Id: j.ID,
-			Name: j.Name,
+			Id:     j.ID,
+			Name:   j.Name,
 			Status: j.Status,
 		})
 	}
 	return &pb.GetClusterListReply{
-		Ok: true,
+		Ok:       true,
 		Clusters: clusters,
 	}, nil
 }
@@ -129,8 +129,8 @@ func awsDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
 	result, err := client.DeleteCluster(cmaaws.DeleteClusterInput{
 		Name: in.Name,
 		Credentials: cmaaws.Credentials{
-			Region: in.GetAws().Region,
-			SecretKeyID: in.GetAws().SecretKeyId,
+			Region:          in.GetAws().Region,
+			SecretKeyID:     in.GetAws().SecretKeyId,
 			SecretAccessKey: in.GetAws().SecretAccessKey,
 		},
 	})
@@ -138,7 +138,7 @@ func awsDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
 		return &pb.DeleteClusterReply{}, err
 	}
 	return &pb.DeleteClusterReply{
-		Ok: true,
+		Ok:     true,
 		Status: result.Status,
 	}, nil
 }

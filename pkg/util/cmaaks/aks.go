@@ -6,10 +6,8 @@ import (
 	"google.golang.org/grpc"
 )
 
-
-
 type AKSClient struct {
-	conn *grpc.ClientConn
+	conn   *grpc.ClientConn
 	client pb.ClusterClient
 }
 
@@ -51,8 +49,8 @@ func (a *AKSClient) CreateCluster(input CreateClusterInput) (CreateClusterOutput
 	var instanceGroups []*pb.CreateClusterAKSSpec_AKSInstanceGroup
 	for _, j := range input.Azure.InstanceGroups {
 		instanceGroups = append(instanceGroups, &pb.CreateClusterAKSSpec_AKSInstanceGroup{
-			Name: j.Name,
-			Type: j.Type,
+			Name:        j.Name,
+			Type:        j.Type,
 			MinQuantity: int32(j.MinQuantity),
 			MaxQuantity: int32(j.MaxQuantity),
 		})
@@ -60,24 +58,24 @@ func (a *AKSClient) CreateCluster(input CreateClusterInput) (CreateClusterOutput
 	result, err := a.client.CreateCluster(context.Background(), &pb.CreateClusterMsg{
 		Name: input.Name,
 		Provider: &pb.CreateClusterProviderSpec{
-			Name: AKSProvider,
+			Name:       AKSProvider,
 			K8SVersion: input.K8SVersion,
 			Azure: &pb.CreateClusterAKSSpec{
 				Location: input.Azure.Location,
 				Credentials: &pb.AzureCredentials{
-					AppId: input.Azure.Credentials.AppID,
-					Tenant: input.Azure.Credentials.Tenant,
-					Password: input.Azure.Credentials.Password,
+					AppId:          input.Azure.Credentials.AppID,
+					Tenant:         input.Azure.Credentials.Tenant,
+					Password:       input.Azure.Credentials.Password,
 					SubscriptionId: input.Azure.Credentials.SubscriptionID,
 				},
 				ClusterAccount: &pb.AzureClusterServiceAccount{
-					ClientId: input.Azure.ClusterServiceAccount.ClientID,
+					ClientId:     input.Azure.ClusterServiceAccount.ClientID,
 					ClientSecret: input.Azure.ClusterServiceAccount.ClientSecret,
 				},
 				InstanceGroups: instanceGroups,
 			},
 			HighAvailability: input.HighAvailability,
-			NetworkFabric: input.NetworkFabric,
+			NetworkFabric:    input.NetworkFabric,
 		},
 	})
 	if err != nil {
@@ -85,8 +83,8 @@ func (a *AKSClient) CreateCluster(input CreateClusterInput) (CreateClusterOutput
 	}
 	output := CreateClusterOutput{
 		Cluster: ClusterItem{
-			ID: result.Cluster.Id,
-			Name: result.Cluster.Name,
+			ID:     result.Cluster.Id,
+			Name:   result.Cluster.Name,
 			Status: result.Cluster.Status,
 		},
 	}
@@ -97,9 +95,9 @@ func (a *AKSClient) GetCluster(input GetClusterInput) (GetClusterOutput, error) 
 	result, err := a.client.GetCluster(context.Background(), &pb.GetClusterMsg{
 		Name: input.Name,
 		Credentials: &pb.AzureCredentials{
-			AppId: input.Credentials.AppID,
-			Tenant: input.Credentials.Tenant,
-			Password: input.Credentials.Password,
+			AppId:          input.Credentials.AppID,
+			Tenant:         input.Credentials.Tenant,
+			Password:       input.Credentials.Password,
 			SubscriptionId: input.Credentials.SubscriptionID,
 		},
 	})
@@ -108,9 +106,9 @@ func (a *AKSClient) GetCluster(input GetClusterInput) (GetClusterOutput, error) 
 	}
 	output := GetClusterOutput{
 		Cluster: ClusterDetailItem{
-			ID: result.Cluster.Id,
-			Name: result.Cluster.Name,
-			Status: result.Cluster.Status,
+			ID:         result.Cluster.Id,
+			Name:       result.Cluster.Name,
+			Status:     result.Cluster.Status,
 			Kubeconfig: result.Cluster.Kubeconfig,
 		},
 	}
@@ -121,9 +119,9 @@ func (a *AKSClient) DeleteCluster(input DeleteClusterInput) (DeleteClusterOutput
 	result, err := a.client.DeleteCluster(context.Background(), &pb.DeleteClusterMsg{
 		Name: input.Name,
 		Credentials: &pb.AzureCredentials{
-			AppId: input.Credentials.AppID,
-			Tenant: input.Credentials.Tenant,
-			Password: input.Credentials.Password,
+			AppId:          input.Credentials.AppID,
+			Tenant:         input.Credentials.Tenant,
+			Password:       input.Credentials.Password,
 			SubscriptionId: input.Credentials.SubscriptionID,
 		},
 	})
@@ -140,9 +138,9 @@ func (a *AKSClient) ListClusters(input ListClusterInput) (ListClusterOutput, err
 	var clusters []ClusterItem
 	result, err := a.client.GetClusterList(context.Background(), &pb.GetClusterListMsg{
 		Credentials: &pb.AzureCredentials{
-			AppId: input.Credentials.AppID,
-			Tenant: input.Credentials.Tenant,
-			Password: input.Credentials.Password,
+			AppId:          input.Credentials.AppID,
+			Tenant:         input.Credentials.Tenant,
+			Password:       input.Credentials.Password,
 			SubscriptionId: input.Credentials.SubscriptionID,
 		},
 	})
@@ -151,8 +149,8 @@ func (a *AKSClient) ListClusters(input ListClusterInput) (ListClusterOutput, err
 	}
 	for _, j := range result.Clusters {
 		clusters = append(clusters, ClusterItem{
-			ID: j.Id,
-			Name: j.Name,
+			ID:     j.Id,
+			Name:   j.Name,
 			Status: j.Status,
 		})
 	}

@@ -5,11 +5,11 @@ const (
 )
 
 type CreateClusterInput struct {
-	Name string
-	K8SVersion string
-	Azure AzureSpec
+	Name             string
+	K8SVersion       string
+	Azure            AzureSpec
 	HighAvailability bool
-	NetworkFabric string
+	NetworkFabric    string
 }
 
 type CreateClusterOutput struct {
@@ -17,7 +17,7 @@ type CreateClusterOutput struct {
 }
 
 type GetClusterInput struct {
-	Name string
+	Name        string
 	Credentials Credentials
 }
 
@@ -26,7 +26,7 @@ type GetClusterOutput struct {
 }
 
 type DeleteClusterInput struct {
-	Name string
+	Name        string
 	Credentials Credentials
 }
 
@@ -43,40 +43,40 @@ type ListClusterOutput struct {
 }
 
 type Credentials struct {
-	AppID string
-	Tenant string
-	Password string
+	AppID          string
+	Tenant         string
+	Password       string
 	SubscriptionID string
 }
 
 type AzureSpec struct {
-	Location string
-	Credentials Credentials
+	Location              string
+	Credentials           Credentials
 	ClusterServiceAccount ClusterServiceAccount
-	InstanceGroups []InstanceGroup
+	InstanceGroups        []InstanceGroup
 }
 
 type ClusterItem struct {
-	ID string
-	Name string
+	ID     string
+	Name   string
 	Status string
 }
 
 type ClusterDetailItem struct {
-	ID string
-	Name string
-	Status string
+	ID         string
+	Name       string
+	Status     string
 	Kubeconfig string
 }
 
 type ClusterServiceAccount struct {
-	ClientID string
+	ClientID     string
 	ClientSecret string
 }
 
 type InstanceGroup struct {
-	Name string
-	Type string
+	Name        string
+	Type        string
 	MinQuantity int
 	MaxQuantity int
 }

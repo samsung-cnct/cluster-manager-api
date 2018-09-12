@@ -12,4 +12,3 @@ type AKSRealClientInterface interface {
 	Close() error
 	AKSClientInterface
 }
-

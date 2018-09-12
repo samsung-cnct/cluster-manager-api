@@ -1,16 +1,15 @@
 package cmaaws
 
-
 const (
 	AWSProvider = "AWS"
 )
 
 type CreateClusterInput struct {
-	Name string
-	K8SVersion string
-	AWS AWSSpec
+	Name             string
+	K8SVersion       string
+	AWS              AWSSpec
 	HighAvailability bool
-	NetworkFabric string
+	NetworkFabric    string
 }
 
 type CreateClusterOutput struct {
@@ -18,7 +17,7 @@ type CreateClusterOutput struct {
 }
 
 type GetClusterInput struct {
-	Name string
+	Name        string
 	Credentials Credentials
 }
 
@@ -27,7 +26,7 @@ type GetClusterOutput struct {
 }
 
 type DeleteClusterInput struct {
-	Name string
+	Name        string
 	Credentials Credentials
 }
 
@@ -44,44 +43,44 @@ type ListClusterOutput struct {
 }
 
 type Credentials struct {
-	SecretKeyID string
+	SecretKeyID     string
 	SecretAccessKey string
-	Region string
+	Region          string
 }
 
 type AWSSpec struct {
-	DataCenter DataCenter
-	Credentials Credentials
+	DataCenter         DataCenter
+	Credentials        Credentials
 	PreconfiguredItems PreconfiguredItems
-	InstanceGroups []InstanceGroup
+	InstanceGroups     []InstanceGroup
 }
 
 type DataCenter struct {
-	Region string
+	Region            string
 	AvailabilityZones []string
 }
 
 type PreconfiguredItems struct {
-	VPCID string
+	VPCID           string
 	SecurityGroupID string
-	IAMRoleARN string
+	IAMRoleARN      string
 }
 
 type ClusterItem struct {
-	ID string
-	Name string
+	ID     string
+	Name   string
 	Status string
 }
 
 type ClusterDetailItem struct {
-	ID string
-	Name string
-	Status string
+	ID         string
+	Name       string
+	Status     string
 	Kubeconfig string
 }
 
 type InstanceGroup struct {
-	Type string
+	Type        string
 	MinQuantity int
 	MaxQuantity int
 }

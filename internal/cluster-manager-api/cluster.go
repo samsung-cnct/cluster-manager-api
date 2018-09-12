@@ -34,9 +34,9 @@ func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetC
 	return &pb.GetClusterReply{
 		Ok: true,
 		Cluster: &pb.ClusterDetailItem{
-			Id:     "abc123",
-			Name:   "dummyName",
-			Status: "Placeholder",
+			Id:         "abc123",
+			Name:       "dummyName",
+			Status:     "Placeholder",
 			Kubeconfig: "undefined still",
 		},
 	}, nil
@@ -62,4 +62,3 @@ func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (
 	reply = &pb.GetClusterListReply{}
 	return
 }
-
