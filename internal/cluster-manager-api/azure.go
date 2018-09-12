@@ -24,31 +24,31 @@ func azureCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error)
 	}
 	for _, j := range in.Provider.GetAzure().InstanceGroups {
 		instanceGroups = append(instanceGroups, cmaaks.InstanceGroup{
-			Name: j.Name,
-			Type: j.Type,
+			Name:        j.Name,
+			Type:        j.Type,
 			MinQuantity: int(j.MinQuantity),
 			MaxQuantity: int(j.MaxQuantity),
 		})
 	}
 	result, err := client.CreateCluster(cmaaks.CreateClusterInput{
-		Name: in.Name,
+		Name:       in.Name,
 		K8SVersion: in.Provider.K8SVersion,
 		Azure: cmaaks.AzureSpec{
 			Location: in.Provider.GetAzure().Location,
 			Credentials: cmaaks.Credentials{
-				AppID: in.Provider.GetAzure().Credentials.AppId,
-				Tenant: in.Provider.GetAzure().Credentials.Tenant,
-				Password: in.Provider.GetAzure().Credentials.Password,
+				AppID:          in.Provider.GetAzure().Credentials.AppId,
+				Tenant:         in.Provider.GetAzure().Credentials.Tenant,
+				Password:       in.Provider.GetAzure().Credentials.Password,
 				SubscriptionID: in.Provider.GetAzure().Credentials.SubscriptionId,
 			},
 			ClusterServiceAccount: cmaaks.ClusterServiceAccount{
-				ClientID: in.Provider.GetAzure().ClusterAccount.ClientId,
+				ClientID:     in.Provider.GetAzure().ClusterAccount.ClientId,
 				ClientSecret: in.Provider.GetAzure().ClusterAccount.ClientSecret,
 			},
 			InstanceGroups: instanceGroups,
 		},
 		HighAvailability: in.Provider.HighAvailability,
-		NetworkFabric: in.Provider.NetworkFabric,
+		NetworkFabric:    in.Provider.NetworkFabric,
 	})
 	if err != nil {
 		return &pb.CreateClusterReply{}, err
@@ -56,8 +56,8 @@ func azureCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error)
 	return &pb.CreateClusterReply{
 		Ok: true,
 		Cluster: &pb.ClusterItem{
-			Id: result.Cluster.ID,
-			Name: result.Cluster.Name,
+			Id:     result.Cluster.ID,
+			Name:   result.Cluster.Name,
 			Status: result.Cluster.Status,
 		},
 	}, nil
@@ -71,9 +71,9 @@ func azureGetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 	result, err := client.GetCluster(cmaaks.GetClusterInput{
 		Name: in.Name,
 		Credentials: cmaaks.Credentials{
-			AppID: in.GetAzure().AppId,
-			Tenant: in.GetAzure().Tenant,
-			Password: in.GetAzure().Password,
+			AppID:          in.GetAzure().AppId,
+			Tenant:         in.GetAzure().Tenant,
+			Password:       in.GetAzure().Password,
 			SubscriptionID: in.GetAzure().SubscriptionId,
 		},
 	})
@@ -83,9 +83,9 @@ func azureGetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 	return &pb.GetClusterReply{
 		Ok: true,
 		Cluster: &pb.ClusterDetailItem{
-			Id: result.Cluster.ID,
-			Name: result.Cluster.Name,
-			Status: result.Cluster.Status,
+			Id:         result.Cluster.ID,
+			Name:       result.Cluster.Name,
+			Status:     result.Cluster.Status,
 			Kubeconfig: result.Cluster.Kubeconfig,
 		},
 	}, nil
@@ -99,9 +99,9 @@ func azureGetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListReply, err
 	}
 	result, err := client.ListClusters(cmaaks.ListClusterInput{
 		Credentials: cmaaks.Credentials{
-			AppID: in.GetAzure().AppId,
-			Tenant: in.GetAzure().Tenant,
-			Password: in.GetAzure().Password,
+			AppID:          in.GetAzure().AppId,
+			Tenant:         in.GetAzure().Tenant,
+			Password:       in.GetAzure().Password,
 			SubscriptionID: in.GetAzure().SubscriptionId,
 		},
 	})
@@ -110,13 +110,13 @@ func azureGetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListReply, err
 	}
 	for _, j := range result.Clusters {
 		clusters = append(clusters, &pb.ClusterItem{
-			Id: j.ID,
-			Name: j.Name,
+			Id:     j.ID,
+			Name:   j.Name,
 			Status: j.Status,
 		})
 	}
 	return &pb.GetClusterListReply{
-		Ok: true,
+		Ok:       true,
 		Clusters: clusters,
 	}, nil
 }
@@ -129,9 +129,9 @@ func azureDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error)
 	result, err := client.DeleteCluster(cmaaks.DeleteClusterInput{
 		Name: in.Name,
 		Credentials: cmaaks.Credentials{
-			AppID: in.GetAzure().AppId,
-			Tenant: in.GetAzure().Tenant,
-			Password: in.GetAzure().Password,
+			AppID:          in.GetAzure().AppId,
+			Tenant:         in.GetAzure().Tenant,
+			Password:       in.GetAzure().Password,
 			SubscriptionID: in.GetAzure().SubscriptionId,
 		},
 	})
@@ -139,7 +139,7 @@ func azureDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error)
 		return &pb.DeleteClusterReply{}, err
 	}
 	return &pb.DeleteClusterReply{
-		Ok: true,
+		Ok:     true,
 		Status: result.Status,
 	}, nil
 }

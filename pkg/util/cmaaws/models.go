@@ -1,13 +1,13 @@
-package cmaaks
+package cmaaws
 
 const (
-	AKSProvider = "AKS"
+	AWSProvider = "AWS"
 )
 
 type CreateClusterInput struct {
 	Name             string
 	K8SVersion       string
-	Azure            AzureSpec
+	AWS              AWSSpec
 	HighAvailability bool
 	NetworkFabric    string
 }
@@ -43,17 +43,27 @@ type ListClusterOutput struct {
 }
 
 type Credentials struct {
-	AppID          string
-	Tenant         string
-	Password       string
-	SubscriptionID string
+	SecretKeyID     string
+	SecretAccessKey string
+	Region          string
 }
 
-type AzureSpec struct {
-	Location              string
-	Credentials           Credentials
-	ClusterServiceAccount ClusterServiceAccount
-	InstanceGroups        []InstanceGroup
+type AWSSpec struct {
+	DataCenter         DataCenter
+	Credentials        Credentials
+	PreconfiguredItems PreconfiguredItems
+	InstanceGroups     []InstanceGroup
+}
+
+type DataCenter struct {
+	Region            string
+	AvailabilityZones []string
+}
+
+type PreconfiguredItems struct {
+	VPCID           string
+	SecurityGroupID string
+	IAMRoleARN      string
 }
 
 type ClusterItem struct {
@@ -69,13 +79,7 @@ type ClusterDetailItem struct {
 	Kubeconfig string
 }
 
-type ClusterServiceAccount struct {
-	ClientID     string
-	ClientSecret string
-}
-
 type InstanceGroup struct {
-	Name        string
 	Type        string
 	MinQuantity int
 	MaxQuantity int

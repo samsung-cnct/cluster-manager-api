@@ -82,6 +82,16 @@
   #version = "7.0.0"
   branch = "master"
 
+[[constraint]]
+  branch = "master"
+  name = "gitlab.com/mvenezia/cma-aws"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/samsung-cnct/cma-aks"
+
+
+
 [prune]
   go-tests = true
   unused-packages = true

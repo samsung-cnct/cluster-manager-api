@@ -1,14 +1,14 @@
-package cmaaks
+package cmaaws
 
-type AKSClientInterface interface {
+type ClientInterface interface {
 	CreateCluster(CreateClusterInput) (CreateClusterOutput, error)
 	GetCluster(GetClusterInput) (GetClusterOutput, error)
 	DeleteCluster(DeleteClusterInput) (DeleteClusterOutput, error)
 	ListClusters(ListClusterInput) (ListClusterOutput, error)
 }
 
-type AKSRealClientInterface interface {
+type RealClientInterface interface {
 	CreateNewClient(string, bool) error
 	Close() error
-	AKSClientInterface
+	ClientInterface
 }
