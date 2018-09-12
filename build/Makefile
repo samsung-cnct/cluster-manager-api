@@ -32,9 +32,9 @@ CMA_SOURCE_FILE=cmd/cluster-manager-api/main.go
 BUILD_CMA_BINARY_CMD=${GOBUILD} -a -tags netgo -ldflags ${LDFLAGS} -o ${CMA_BINARY_NAME} ${CMA_SOURCE_FILE}
 
 # protoc variables
-PROTOC_VERSION=3.5.1
+PROTOC_VERSION=3.6.1
 PROTOC_DARWIN_FILENAME=protoc-${PROTOC_VERSION}-osx-x86_64.zip
-PROTOC_DARWIN_DOWNLOAD_URL=https://github.com/google/protobuf/releases/download/v3.5.1/${PROTOC_DARWIN_FILENAME}
+PROTOC_DARWIN_DOWNLOAD_URL=https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/${PROTOC_DARWIN_FILENAME}
 
 # By default we will most likely want to build a linux build of the application
 all: new-dep cma-bin-linux-amd64
@@ -79,8 +79,8 @@ dep-ensure:
 # Run the code generators for the user
 generators:
 	./build/generators/api.sh
-	./build/generators/bindata.sh
 	./build/generators/swagger-dist-adjustment.sh
+	./build/generators/bindata.sh
 
 # Build a darwin (mac) binary
 cma-bin-darwin:

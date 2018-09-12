@@ -5,6 +5,7 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
 	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 
 	"context"
 	"net/http"
@@ -34,6 +35,8 @@ func addGRPCServer(tcpMux cmux.CMux) {
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
 	pb.RegisterClusterServer(grpcServer, newgRPCServiceServer())
+	// Register reflection service on gRPC server.
+	reflection.Register(grpcServer)
 
 	grpcListener := tcpMux.MatchWithWriters(cmux.HTTP2MatchHeaderFieldPrefixSendSettings("content-type", "application/grpc"))
 	// Start servers

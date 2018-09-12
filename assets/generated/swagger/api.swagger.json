@@ -39,6 +39,55 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "aws.secret_key_id",
+            "description": "The SecretKeyId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.secret_access_key",
+            "description": "The SecretAccessKey for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.region",
+            "description": "The Region for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.app_id",
+            "description": "The AppId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.tenant",
+            "description": "The Tenant for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.password",
+            "description": "The Password for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.subscription_id",
+            "description": "The Subscription for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -60,6 +109,55 @@
           {
             "name": "name",
             "description": "What is the cluster's name to destroy.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.secret_key_id",
+            "description": "The SecretKeyId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.secret_access_key",
+            "description": "The SecretAccessKey for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.region",
+            "description": "The Region for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.app_id",
+            "description": "The AppId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.tenant",
+            "description": "The Tenant for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.password",
+            "description": "The Password for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.subscription_id",
+            "description": "The Subscription for API access.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -107,6 +205,57 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "aws.secret_key_id",
+            "description": "The SecretKeyId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.secret_access_key",
+            "description": "The SecretAccessKey for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.region",
+            "description": "The Region for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.app_id",
+            "description": "The AppId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.tenant",
+            "description": "The Tenant for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.password",
+            "description": "The Password for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.subscription_id",
+            "description": "The Subscription for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "tags": [
           "Cluster"
         ]
@@ -131,19 +280,29 @@
     }
   },
   "definitions": {
-    "CreateClusterAWSSpecAWSCredentials": {
+    "CreateClusterAKSSpecAKSInstanceGroup": {
       "type": "object",
       "properties": {
-        "secret_key_id": {
+        "name": {
           "type": "string",
-          "title": "The SecretKeyId for API Access"
+          "title": "The name of the group"
         },
-        "secret_access_key": {
+        "type": {
           "type": "string",
-          "title": "The SecretAccessKey for API access"
+          "title": "Instance type (Standard_D2_v2, etc.)"
+        },
+        "min_quantity": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Minimum number of instances (defaults to zero)"
+        },
+        "max_quantity": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Maximum number of instances (defaults to zero)"
         }
       },
-      "title": "The credentials to use for creating the cluster"
+      "title": "Instance groups define a type and number of instances"
     },
     "CreateClusterAWSSpecAWSDataCenter": {
       "type": "object",
@@ -192,6 +351,10 @@
         "security_group_id": {
           "type": "string",
           "title": "Security group"
+        },
+        "iam_role_arn": {
+          "type": "string",
+          "title": "The IAM role for the cluster (arn)ClusterAssociationdd"
         }
       },
       "title": "For when some things are already created"
@@ -228,6 +391,60 @@
           "title": "Platform it was compiled for / running on"
         }
       }
+    },
+    "cluster_manager_apiAWSCredentials": {
+      "type": "object",
+      "properties": {
+        "secret_key_id": {
+          "type": "string",
+          "title": "The SecretKeyId for API Access"
+        },
+        "secret_access_key": {
+          "type": "string",
+          "title": "The SecretAccessKey for API access"
+        },
+        "region": {
+          "type": "string",
+          "title": "The Region for API access"
+        }
+      },
+      "title": "The credentials to use for creating the cluster"
+    },
+    "cluster_manager_apiAzureClusterServiceAccount": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "type": "string",
+          "title": "The ClientId (aka: AppID)"
+        },
+        "client_secret": {
+          "type": "string",
+          "title": "The ClientSecret (aka: password)"
+        }
+      },
+      "title": "the account used by the cluster to create azure resources (ex: load balancer)"
+    },
+    "cluster_manager_apiAzureCredentials": {
+      "type": "object",
+      "properties": {
+        "app_id": {
+          "type": "string",
+          "title": "The AppId for API Access"
+        },
+        "tenant": {
+          "type": "string",
+          "title": "The Tenant for API access"
+        },
+        "password": {
+          "type": "string",
+          "title": "The Password for API access"
+        },
+        "subscription_id": {
+          "type": "string",
+          "title": "The Subscription for API access"
+        }
+      },
+      "title": "The credentials to use for creating the cluster"
     },
     "cluster_manager_apiClusterDetailItem": {
       "type": "object",
@@ -267,6 +484,30 @@
         }
       }
     },
+    "cluster_manager_apiCreateClusterAKSSpec": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "title": "The Azure Data Center"
+        },
+        "credentials": {
+          "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
+          "title": "Credentials to build the cluster"
+        },
+        "clusterAccount": {
+          "$ref": "#/definitions/cluster_manager_apiAzureClusterServiceAccount",
+          "title": "Cluster service account used to talk to azure (ex: creating load balancer)"
+        },
+        "instance_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CreateClusterAKSSpecAKSInstanceGroup"
+          },
+          "title": "Instance groups"
+        }
+      }
+    },
     "cluster_manager_apiCreateClusterAWSSpec": {
       "type": "object",
       "properties": {
@@ -275,7 +516,7 @@
           "title": "The AWS Data Center"
         },
         "credentials": {
-          "$ref": "#/definitions/CreateClusterAWSSpecAWSCredentials",
+          "$ref": "#/definitions/cluster_manager_apiAWSCredentials",
           "title": "Credentials to build the cluster"
         },
         "resources": {
@@ -318,6 +559,9 @@
         "aws": {
           "$ref": "#/definitions/cluster_manager_apiCreateClusterAWSSpec",
           "title": "The AWS specification"
+        },
+        "azure": {
+          "$ref": "#/definitions/cluster_manager_apiCreateClusterAKSSpec"
         },
         "high_availability": {
           "type": "boolean",

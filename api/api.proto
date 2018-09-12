@@ -94,6 +94,10 @@ message CreateClusterReply {
 message GetClusterMsg {
     // Name of the cluster to be looked up
     string name = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
 }
 
 message GetClusterReply {
@@ -106,6 +110,10 @@ message GetClusterReply {
 message DeleteClusterMsg {
     // What is the cluster's name to destroy
     string name = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
 }
 
 message DeleteClusterReply {
@@ -116,6 +124,10 @@ message DeleteClusterReply {
 }
 
 message GetClusterListMsg {
+    // AWS Credentials
+    AWSCredentials aws = 1;
+    // Azure Credentials
+    AzureCredentials azure = 2;
 }
 
 message GetClusterListReply {
@@ -154,12 +166,13 @@ message CreateClusterProviderSpec {
     oneof provider_information {
         // The AWS specification
         CreateClusterAWSSpec aws = 3;
+        CreateClusterAKSSpec azure = 4;
     }
 
     // Whether or not the cluster is HA
-    bool high_availability = 4;
+    bool high_availability = 5;
     // The fabric to be used
-    string network_fabric = 5;
+    string network_fabric = 6;
 
 }
 
@@ -181,20 +194,14 @@ message CreateClusterAWSSpec {
         repeated string availability_zones = 2;
     }
 
-    // The credentials to use for creating the cluster
-    message AWSCredentials {
-        // The SecretKeyId for API Access
-        string secret_key_id = 1;
-        // The SecretAccessKey for API access
-        string secret_access_key = 2;
-    }
-
     // For when some things are already created
     message AWSPreconfiguredItems {
         // The VPC id, blank for for "create one for you", filled if you are BYO VPC
         string vpc_id = 1;
         // Security group
         string security_group_id = 2;
+        // The IAM role for the cluster (arn)ClusterAssociationdd
+        string iam_role_arn = 3;
     }
 
     // Instance groups define a type and number of instances
@@ -236,6 +243,59 @@ message GetVersionReply {
 
     // Version Information
     VersionInformation version_information = 2;
+}
+
+// The credentials to use for creating the cluster
+message AWSCredentials {
+    // The SecretKeyId for API Access
+    string secret_key_id = 1;
+    // The SecretAccessKey for API access
+    string secret_access_key = 2;
+    // The Region for API access
+    string region = 3;
+}
+
+
+// The credentials to use for creating the cluster
+message AzureCredentials {
+    // The AppId for API Access
+    string app_id = 1;
+    // The Tenant for API access
+    string tenant = 2;
+    // The Password for API access
+    string password = 3;
+    // The Subscription for API access
+    string subscription_id = 4;
+}
+
+// the account used by the cluster to create azure resources (ex: load balancer)
+message AzureClusterServiceAccount {
+    // The ClientId (aka: AppID)
+    string client_id = 1;
+    // The ClientSecret (aka: password)
+    string client_secret = 2;
+}
+message CreateClusterAKSSpec {
+    // The Azure Data Center
+    string location = 1;
+    // Credentials to build the cluster
+    AzureCredentials credentials = 2;
+    // Cluster service account used to talk to azure (ex: creating load balancer)
+    AzureClusterServiceAccount clusterAccount = 3;
+    // Instance groups
+    repeated AKSInstanceGroup instance_groups = 4;
+
+    // Instance groups define a type and number of instances
+    message AKSInstanceGroup {
+        // The name of the group
+        string name = 1;
+        // Instance type (Standard_D2_v2, etc.)
+        string type = 2;
+        // Minimum number of instances (defaults to zero)
+        int32 min_quantity = 3;
+        // Maximum number of instances (defaults to zero)
+        int32 max_quantity = 4;
+    }
 }
 
 

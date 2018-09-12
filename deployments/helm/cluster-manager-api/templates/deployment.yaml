@@ -27,3 +27,15 @@ spec:
         env:
         - name: CLUSTERMANAGERAPI_PORT
           value: "{{.Values.service.port}}"
+        {{- if .Values.helpers.aws.enabled }}
+          - name: CLUSTERMANAGERAPI_CMAAWS_ENDPOINT
+            value: "{{.Values.helpers.aws.endpoint }}"
+          - name: CLUSTERMANAGERAPI_CMAAWS_INSECURE
+            value: "{{.Values.helpers.aws.insecure }}"
+        {{- end }}
+        {{- if .Values.helpers.aks.enabled }}
+          - name: CLUSTERMANAGERAPI_CMAAKS_ENDPOINT
+            value: "{{.Values.helpers.aks.endpoint }}"
+          - name: CLUSTERMANAGERAPI_CMAAKS_INSECURE
+            value: "{{.Values.helpers.aks.insecure }}"
+        {{- end }}
