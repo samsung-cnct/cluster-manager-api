@@ -2,8 +2,10 @@ package cmaaks
 
 import (
 	"context"
+	"crypto/tls"
 	pb "github.com/samsung-cnct/cma-aks/pkg/generated/api"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 type AKSClient struct {
@@ -23,12 +25,17 @@ func CreateNewClient(hostname string, insecure bool) (AKSClientInterface, error)
 func (a *AKSClient) CreateNewClient(hostname string, insecure bool) error {
 	var err error
 	if insecure {
+		// This is for non TLS traffic
 		a.conn, err = grpc.Dial(hostname, grpc.WithInsecure())
 		if err != nil {
 			return err
 		}
 	} else {
-		a.conn, err = grpc.Dial(hostname)
+		// If TLS is enabled, we're going to create credentials, also using built in certificates
+		var tlsConf tls.Config
+		creds := credentials.NewTLS(&tlsConf)
+
+		a.conn, err = grpc.Dial(hostname, grpc.WithTransportCredentials(creds))
 		if err != nil {
 			return err
 		}
