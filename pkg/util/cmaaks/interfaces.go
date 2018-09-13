@@ -5,10 +5,6 @@ type AKSClientInterface interface {
 	GetCluster(GetClusterInput) (GetClusterOutput, error)
 	DeleteCluster(DeleteClusterInput) (DeleteClusterOutput, error)
 	ListClusters(ListClusterInput) (ListClusterOutput, error)
-}
-
-type AKSRealClientInterface interface {
 	CreateNewClient(string, bool) error
 	Close() error
-	AKSClientInterface
 }

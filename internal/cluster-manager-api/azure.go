@@ -22,6 +22,7 @@ func azureCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error)
 	if err != nil {
 		return &pb.CreateClusterReply{}, err
 	}
+	defer client.Close()
 	for _, j := range in.Provider.GetAzure().InstanceGroups {
 		instanceGroups = append(instanceGroups, cmaaks.InstanceGroup{
 			Name:        j.Name,
@@ -68,6 +69,7 @@ func azureGetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 	if err != nil {
 		return &pb.GetClusterReply{}, err
 	}
+	defer client.Close()
 	result, err := client.GetCluster(cmaaks.GetClusterInput{
 		Name: in.Name,
 		Credentials: cmaaks.Credentials{
@@ -97,6 +99,7 @@ func azureGetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListReply, err
 	if err != nil {
 		return &pb.GetClusterListReply{}, err
 	}
+	defer client.Close()
 	result, err := client.ListClusters(cmaaks.ListClusterInput{
 		Credentials: cmaaks.Credentials{
 			AppID:          in.GetAzure().AppId,
@@ -126,6 +129,7 @@ func azureDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error)
 	if err != nil {
 		return &pb.DeleteClusterReply{}, err
 	}
+	defer client.Close()
 	result, err := client.DeleteCluster(cmaaks.DeleteClusterInput{
 		Name: in.Name,
 		Credentials: cmaaks.Credentials{

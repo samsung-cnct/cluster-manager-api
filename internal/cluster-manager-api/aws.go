@@ -22,6 +22,7 @@ func awsCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
 	if err != nil {
 		return &pb.CreateClusterReply{}, err
 	}
+	defer client.Close()
 	for _, j := range in.Provider.GetAws().InstanceGroups {
 		instanceGroups = append(instanceGroups, cmaaws.InstanceGroup{
 			Type:        j.Type,
@@ -70,6 +71,7 @@ func awsGetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 	if err != nil {
 		return &pb.GetClusterReply{}, err
 	}
+	defer client.Close()
 	result, err := client.GetCluster(cmaaws.GetClusterInput{
 		Name: in.Name,
 		Credentials: cmaaws.Credentials{
@@ -98,6 +100,7 @@ func awsGetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListReply, error
 	if err != nil {
 		return &pb.GetClusterListReply{}, err
 	}
+	defer client.Close()
 	result, err := client.ListClusters(cmaaws.ListClusterInput{
 		Credentials: cmaaws.Credentials{
 			Region:          in.GetAws().Region,
@@ -126,6 +129,7 @@ func awsDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
 	if err != nil {
 		return &pb.DeleteClusterReply{}, err
 	}
+	defer client.Close()
 	result, err := client.DeleteCluster(cmaaws.DeleteClusterInput{
 		Name: in.Name,
 		Credentials: cmaaws.Credentials{
