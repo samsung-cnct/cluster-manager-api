@@ -3,7 +3,7 @@ stages:
  - test
 
 test:branch:
-  stage: test
+  stage: build
   image: golang:1.11.0-alpine
   before_script:
     - apk update && apk add git make
