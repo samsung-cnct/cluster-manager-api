@@ -2,19 +2,24 @@ stages:
  - build
  - test
 
-test:branch:
+build:branch:
   stage: build
   image: golang:1.11.0-alpine
-  before_script:
+  services:
+    - docker:dind
+  variables:
+    IMAGE_URI: $CI_REGISTRY_IMAGE:branch-$CI_COMMIT_REF_NAME-$CI_JOB_ID
+    DOCKER_DRIVER: overlay2
+    #  DOCKER_HOST: tcp://localhost:2375
+  script:
     - apk update && apk add git make
     - mkdir -p /go/src/github.com/samsung-cnct/
     - ln -s /builds/user /go/src/github.com/samsung-cnct/cluster-manager-api
-  script:
     - cd /go/src/github.com/samsung-cnct/cluster-manager-api
     - make -f build/Makefile install-dep dep-ensure
     - go test $(go list ./... | grep -v /vendor/ | grep -v generated ) -v -coverprofile .testCoverage.txt
 
-build:branch:
+build:dummy:
   stage: build
   image: docker:latest
   services:
