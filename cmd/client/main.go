@@ -15,7 +15,6 @@ func main() {
 	address := "localhost"
 	port := 9050
 	serverAddr := fmt.Sprintf("%s:%d", address, port)
-	name := "Bob"
 
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(serverAddr, grpc.WithInsecure())
@@ -25,10 +24,10 @@ func main() {
 	defer conn.Close()
 	c := pb.NewClusterClient(conn)
 
-	r, err := c.HelloWorld(context.Background(), &pb.HelloWorldMsg{Name: name})
+	r, err := c.GetVersionInformation(context.Background(), &pb.GetVersionMsg{})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	log.Printf("Greeting: %s", r.Message)
+	log.Printf("Greeting: %s", r.VersionInformation)
 
 }
