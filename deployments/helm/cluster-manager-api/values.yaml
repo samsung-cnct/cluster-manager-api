@@ -10,8 +10,21 @@ image:
 port: 80
 service:
   port: 80
-  type: LoadBalancer
-  nodePort:
+  type: ClusterIP
+ingress:
+  rest:
+    name: cma
+    host: cma.ontario.cluster.cnct.io
+  grpc:
+    name: cma-grpc
+    host: cma-grpc.ontario.cluster.cnct.io
+issuer:
+  email: mvenezia@gmail.com
+  region: us-east-1
+  accesskey:
+    id: ""
+    secret: ""
+  hostedzoneid: ""
 
 helpers:
   aks:

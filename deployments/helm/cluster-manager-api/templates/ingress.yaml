@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/grpc-backend: "true"
+  name: {{ .Values.ingress.grpc.name }}
+spec:
+  rules:
+  - host: {{ .Values.ingress.grpc.host }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ template "fullname" . }}
+          servicePort: {{ .Values.service.port | int }}
+        path: /
+  tls:
+  - hosts:
+    - {{ .Values.ingress.grpc.host }}
+    secretName: {{ .Values.name }}-tls
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+  name: {{ .Values.ingress.rest.name }}
+spec:
+  rules:
+  - host: {{ .Values.ingress.rest.host }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ template "fullname" . }}
+          servicePort: {{ .Values.service.port | int }}
+        path: /
+  tls:
+  - hosts:
+    - {{ .Values.ingress.rest.host }}
+    secretName: {{ .Values.name }}-tls
+---

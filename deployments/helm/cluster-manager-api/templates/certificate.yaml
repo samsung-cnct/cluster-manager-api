@@ -1,0 +1,19 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: {{ .Values.name }}-tls
+spec:
+  acme:
+    config:
+    - dns01:
+        provider: route53
+      domains:
+      - {{ .Values.ingress.rest.host }}
+      - {{ .Values.ingress.grpc.host }}
+  commonName: {{ .Values.ingress.rest.host }}
+  dnsNames:
+  - {{ .Values.ingress.rest.host }}
+  - {{ .Values.ingress.grpc.host }}
+  issuerRef:
+    name: {{ .Values.name }}-issuer
+  secretName: {{ .Values.name }}-tls

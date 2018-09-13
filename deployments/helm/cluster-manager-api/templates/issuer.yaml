@@ -1,0 +1,22 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  annotations:
+  name: {{ .Values.name }}-issuer
+spec:
+  acme:
+    dns01:
+      providers:
+      - name: route53
+        route53:
+          accessKeyID: {{ .Values.issuer.accesskey.id }}
+          hostedZoneID: {{ .Values.issuer.hostedzoneid }}
+          region: {{ .Values.issuer.region }}
+          secretAccessKeySecretRef:
+            name: {{ .Values.name }}-route53-access-key-secret
+            key: secret-access-key
+    email: {{ .Values.issuer.email }}
+    privateKeySecretRef:
+      key: ""
+      name: {{ .Values.name }}-issuer-account-key
+    server: https://acme-v02.api.letsencrypt.org/directory
