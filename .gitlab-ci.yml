@@ -2,7 +2,7 @@ stages:
  - build
  - test
 
-build:branch:
+test:branch:
   stage: build
   image: golang:1.11.0-alpine
   services:
@@ -14,12 +14,12 @@ build:branch:
   script:
     - apk update && apk add git make
     - mkdir -p /go/src/github.com/samsung-cnct/
-    - ln -s /builds/user /go/src/github.com/samsung-cnct/cluster-manager-api
+    - ln -s ${PWD} /go/src/github.com/samsung-cnct/cluster-manager-api
     - cd /go/src/github.com/samsung-cnct/cluster-manager-api
     - make -f build/Makefile install-dep dep-ensure
     - go test $(go list ./... | grep -v /vendor/ | grep -v generated ) -v -coverprofile .testCoverage.txt
 
-build:dummy:
+build:branch:
   stage: build
   image: docker:latest
   services:
