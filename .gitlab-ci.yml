@@ -5,14 +5,8 @@ stages:
 test:branch:
   stage: build
   image: golang:1.11.0-alpine
-  services:
-    - docker:dind
-  variables:
-    IMAGE_URI: $CI_REGISTRY_IMAGE:branch-$CI_COMMIT_REF_NAME-$CI_JOB_ID
-    DOCKER_DRIVER: overlay2
-    #  DOCKER_HOST: tcp://localhost:2375
   script:
-    - apk update && apk add git make
+    - apk update && apk add git make gcc musl-dev
     - mkdir -p /go/src/github.com/samsung-cnct/
     - ln -s ${PWD} /go/src/github.com/samsung-cnct/cluster-manager-api
     - cd /go/src/github.com/samsung-cnct/cluster-manager-api
