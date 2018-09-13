@@ -1,6 +1,18 @@
 stages:
- - test
  - build
+ - test
+
+test:branch:
+  stage: test
+  image: golang:1.11.0-alpine
+  before_script:
+    - apk update && apk add git make
+    - mkdir -p /go/src/github.com/samsung-cnct/
+    - ln -s /builds/user /go/src/github.com/samsung-cnct/cluster-manager-api
+  script:
+    - cd /go/src/github.com/samsung-cnct/cluster-manager-api
+    - make -f build/Makefile install-dep dep-ensure
+    - go test $(go list ./... | grep -v /vendor/ | grep -v generated ) -v -coverprofile .testCoverage.txt
 
 build:branch:
   stage: build
@@ -18,15 +30,3 @@ build:branch:
     - docker build -t $IMAGE_URI -f build/docker/cluster-manager-api/Dockerfile .
     - docker push $IMAGE_URI
 
-
-test:branch:
-  stage: test
-  image: golang:1.11.0-alpine
-  before_script:
-    - apk update && apk add git make
-    - mkdir -p /go/src/github.com/samsung-cnct/
-    - ln -s /builds/user /go/src/github.com/samsung-cnct/cluster-manager-api
-  script:
-    - cd /go/src/github.com/samsung-cnct/cluster-manager-api
-    - make -f build/Makefile install-dep dep-ensure
-    - go test $(go list ./... | grep -v /vendor/ | grep -v generated ) -v -coverprofile .testCoverage.txt
