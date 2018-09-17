@@ -39,9 +39,9 @@ type ListClusterOutput struct {
 }
 
 type VMWareSpec struct {
-	Namespace  string
-	PrivateKey string
-	Machines   []MachineSpec
+	ControlPlaneNodes []MachineSpec
+	WorkerNodes       []MachineSpec
+	APIEndpoint       string
 }
 
 type ClusterItem struct {
@@ -58,8 +58,27 @@ type ClusterDetailItem struct {
 }
 
 type MachineSpec struct {
-	Username            string
-	Host                string
-	Port                int
-	ControlPlaneVersion string
+	Username string
+	Host     string
+	Port     int
+	Password string
+	Labels   []KubernetesLabel
+}
+
+type KubernetesLabel struct {
+	Name  string
+	Value string
+}
+
+type AdjustClusterInput struct {
+	Name        string
+	AddNodes    []MachineSpec
+	RemoveNodes []RemoveMachineSpec
+}
+
+type AdjustClusterOutput struct {
+}
+
+type RemoveMachineSpec struct {
+	Host string
 }

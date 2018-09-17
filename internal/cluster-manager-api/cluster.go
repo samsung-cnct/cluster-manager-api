@@ -1,6 +1,7 @@
 package cluster_manager_api
 
 import (
+	"fmt"
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"golang.org/x/net/context"
 )
@@ -71,4 +72,35 @@ func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (
 	}
 	reply = &pb.GetClusterListReply{}
 	return
+}
+
+// Will return upgrade options for a given cluster
+func (s *Server) GetUpgradeClusterInformation(ctx context.Context, in *pb.GetUpgradeClusterInformationMsg) (*pb.GetUpgradeClusterInformationReply, error) {
+	//TODO this is just temporary stuff until cma-vmware catches up
+	if in.Provider == "vmware" {
+		return &pb.GetUpgradeClusterInformationReply{Ok: true, Versions: []string{"1.10.8", "1.11.3"}}, nil
+	}
+
+	return &pb.GetUpgradeClusterInformationReply{}, fmt.Errorf("upgrades not supported yet")
+}
+
+// Will attempt to upgrade a cluster
+func (s *Server) UpgradeCluster(ctx context.Context, in *pb.UpgradeClusterMsg) (*pb.UpgradeClusterReply, error) {
+	//TODO this is just temporary stuff until cma-vmware catches up
+	if in.Provider == "vmware" {
+		return &pb.UpgradeClusterReply{Ok: false}, nil
+	}
+	return &pb.UpgradeClusterReply{}, fmt.Errorf("upgrades not supported yet")
+}
+
+// Will adjust a provision a cluster
+func (s *Server) AdjustClusterNodes(ctx context.Context, in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply, error) {
+	vmware := in.GetVmware()
+	if vmware != nil {
+		return vmwareAdjustCluster(in)
+	}
+	return &pb.AdjustClusterReply{
+		Ok: false,
+	}, nil
+
 }

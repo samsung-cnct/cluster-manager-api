@@ -4,8 +4,30 @@ import (
 	"fmt"
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmaaks"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/azure"
 	"github.com/spf13/viper"
+	"golang.org/x/net/context"
 )
+
+func (s *Server) UpdateAzureCredentials(ctx context.Context, in *pb.UpdateAzureCredentialsMsg) (*pb.UpdateAzureCredentialsReply, error) {
+	azureSecretClient, err := azurek8sutil.CreateFromDefaults()
+	if err != nil {
+		return &pb.UpdateAzureCredentialsReply{}, err
+	}
+	// TODO Add an UPDATE command
+	azureSecretClient.DeleteCredentials(in.Name)
+	err = azureSecretClient.CreateCredentials(in.Name, azurek8sutil.Credentials{
+		AppID:          in.Credentials.AppId,
+		Tenant:         in.Credentials.Tenant,
+		Password:       in.Credentials.Password,
+		SubscriptionID: in.Credentials.SubscriptionId,
+	})
+	if err != nil {
+		return &pb.UpdateAzureCredentialsReply{}, err
+	}
+	return &pb.UpdateAzureCredentialsReply{Ok: true}, nil
+
+}
 
 func azureGetClient() (cmaaks.AKSClientInterface, error) {
 	hostname := viper.GetString("cmaaks-endpoint")
@@ -23,6 +45,10 @@ func azureCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error)
 		return &pb.CreateClusterReply{}, err
 	}
 	defer client.Close()
+	azureSecretClient, err := azurek8sutil.CreateFromDefaults()
+	if err != nil {
+		return &pb.CreateClusterReply{}, err
+	}
 	for _, j := range in.Provider.GetAzure().InstanceGroups {
 		instanceGroups = append(instanceGroups, cmaaks.InstanceGroup{
 			Name:        j.Name,
@@ -54,6 +80,21 @@ func azureCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error)
 	if err != nil {
 		return &pb.CreateClusterReply{}, err
 	}
+
+	// Cluster Creation was successful, going to save the credentials
+	err = azureSecretClient.CreateCredentials(in.Name, azurek8sutil.Credentials{
+		AppID:          in.Provider.GetAzure().Credentials.AppId,
+		Tenant:         in.Provider.GetAzure().Credentials.Tenant,
+		Password:       in.Provider.GetAzure().Credentials.Password,
+		SubscriptionID: in.Provider.GetAzure().Credentials.SubscriptionId,
+	})
+
+	if err != nil {
+		// TODO Unsure what to do if we suddenly can't persist the credentails to kubernetes
+		// TODO Going to log for now
+		logger.Errorf("Could not set AWS credentials into kubernetes, this is bad")
+	}
+
 	return &pb.CreateClusterReply{
 		Ok: true,
 		Cluster: &pb.ClusterItem{

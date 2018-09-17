@@ -5,6 +5,7 @@ type VMWareClientInterface interface {
 	GetCluster(GetClusterInput) (GetClusterOutput, error)
 	DeleteCluster(DeleteClusterInput) (DeleteClusterOutput, error)
 	ListClusters(ListClusterInput) (ListClusterOutput, error)
+	AdjustCluster(AdjustClusterInput) (AdjustClusterOutput, error)
 	CreateNewClient(string, bool) error
 	Close() error
 }

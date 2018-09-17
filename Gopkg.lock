@@ -663,7 +663,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:e2bcbbd1b2b9410b1e8d629c48154bd13ef4b072421943b111e870bc7c5c32f0"
+  digest = "1:90aa602796c4fc2324efb7b0ece69121c969b36ee1d084143a53af2fa8871524"
   name = "k8s.io/client-go"
   packages = [
     "discovery",
@@ -705,6 +705,7 @@
     "pkg/apis/clientauthentication/v1beta1",
     "pkg/version",
     "plugin/pkg/client/auth/exec",
+    "plugin/pkg/client/auth/oidc",
     "rest",
     "rest/watch",
     "tools/auth",
@@ -759,6 +760,8 @@
     "k8s.io/apimachinery/pkg/api/errors",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
     "k8s.io/client-go/kubernetes",
+    "k8s.io/client-go/kubernetes/typed/core/v1",
+    "k8s.io/client-go/plugin/pkg/client/auth/oidc",
     "k8s.io/client-go/rest",
     "k8s.io/client-go/tools/clientcmd",
   ]

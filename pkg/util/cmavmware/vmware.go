@@ -53,13 +53,33 @@ func (a *VMWareClient) SetClient(client pb.ClusterClient) {
 }
 
 func (a *VMWareClient) CreateCluster(input CreateClusterInput) (CreateClusterOutput, error) {
-	var machines []*pb.MachineSpec
-	for _, j := range input.VMWare.Machines {
-		machines = append(machines, &pb.MachineSpec{
-			Host:                j.Host,
-			Port:                int32(j.Port),
-			Username:            j.Username,
-			ControlPlaneVersion: j.ControlPlaneVersion,
+	var workerNodes []*pb.MachineSpec
+	var controlPlaneNodes []*pb.MachineSpec
+
+	for _, j := range input.VMWare.ControlPlaneNodes {
+		//var labels []KubernetesLabel
+		//for _, k := range j.Labels {
+		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
+		//}
+		controlPlaneNodes = append(controlPlaneNodes, &pb.MachineSpec{
+			Host:     j.Host,
+			Port:     int32(j.Port),
+			Username: j.Username,
+			// Password: j.Password,
+			// Labels = labels
+		})
+	}
+	for _, j := range input.VMWare.WorkerNodes {
+		//var labels []KubernetesLabel
+		//for _, k := range j.Labels {
+		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
+		//}
+		workerNodes = append(workerNodes, &pb.MachineSpec{
+			Host:     j.Host,
+			Port:     int32(j.Port),
+			Username: j.Username,
+			// Password: j.Password,
+			// Labels = labels
 		})
 	}
 	result, err := a.client.CreateCluster(context.Background(), &pb.CreateClusterMsg{
@@ -67,10 +87,10 @@ func (a *VMWareClient) CreateCluster(input CreateClusterInput) (CreateClusterOut
 		Provider: &pb.CreateClusterProviderSpec{
 			Name:       VMWareProvider,
 			K8SVersion: input.K8SVersion,
-			Vmware: &pb.CreateClusterVMWareSpec{
-				Namespace:  input.VMWare.Namespace,
-				PrivateKey: input.VMWare.PrivateKey,
-				Machines:   machines,
+			Vmware:     &pb.CreateClusterVMWareSpec{
+				//Controlplanenodes: controlPlaneNodes,
+				//Workernodes: workerNodes,
+				//Apiendpoint: input.VMWare.APIEndpoint,
 			},
 			HighAvailability: input.HighAvailability,
 			NetworkFabric:    input.NetworkFabric,
@@ -136,5 +156,45 @@ func (a *VMWareClient) ListClusters(input ListClusterInput) (ListClusterOutput, 
 	output := ListClusterOutput{
 		Clusters: clusters,
 	}
+	return output, nil
+}
+
+func (a *VMWareClient) AdjustCluster(input AdjustClusterInput) (AdjustClusterOutput, error) {
+	var addNodes []*pb.MachineSpec
+	var removeNodes []*pb.MachineSpec
+
+	for _, j := range input.AddNodes {
+		//var labels []KubernetesLabel
+		//for _, k := range j.Labels {
+		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
+		//}
+		addNodes = append(addNodes, &pb.MachineSpec{
+			Host:     j.Host,
+			Port:     int32(j.Port),
+			Username: j.Username,
+			// Password: j.Password,
+			// Labels = labels
+		})
+	}
+	for _, j := range input.RemoveNodes {
+		//var labels []KubernetesLabel
+		//for _, k := range j.Labels {
+		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
+		//}
+		removeNodes = append(removeNodes, &pb.MachineSpec{
+			Host: j.Host,
+		})
+	}
+	//result, err := a.client.AdjustCluster(context.Background(), &pb.AdjustClusterMsg{
+	//	Name: input.Name,
+	//	Vmware:     &pb.CreateClusterVMWareSpec{
+	//		AddNodes: addNodes,
+	//		RemoveNodes: removeNodes,
+	//	},
+	//})
+	//if err != nil {
+	//	return AdjustClusterOutput{}, err
+	//}
+	output := AdjustClusterOutput{}
 	return output, nil
 }

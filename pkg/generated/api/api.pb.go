@@ -1506,15 +1506,16 @@ func (m *CreateClusterAKSSpec_AKSInstanceGroup) GetMaxQuantity() int32 {
 }
 
 type CreateClusterVMWareSpec struct {
-	// This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster
-	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently.
-	PrivateKey string `protobuf:"bytes,2,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
 	// Machines which comprise the cluster
-	Machines             []*CreateClusterVMWareSpec_VMWareMachineSpec `protobuf:"bytes,3,rep,name=machines,proto3" json:"machines,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                     `json:"-"`
-	XXX_unrecognized     []byte                                       `json:"-"`
-	XXX_sizecache        int32                                        `json:"-"`
+	ControlPlaneNodes []*VMWareMachineSpec `protobuf:"bytes,3,rep,name=control_plane_nodes,json=controlPlaneNodes,proto3" json:"control_plane_nodes,omitempty"`
+	// Machines which comprise the cluster
+	WorkerNodes []*VMWareMachineSpec `protobuf:"bytes,4,rep,name=worker_nodes,json=workerNodes,proto3" json:"worker_nodes,omitempty"`
+	// This should be a value like ip:port that will be a virtual IP/port
+	// Passed back to external customers to be able to communicate to the cluster
+	ApiEndpoint          string   `protobuf:"bytes,5,opt,name=api_endpoint,json=apiEndpoint,proto3" json:"api_endpoint,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *CreateClusterVMWareSpec) Reset()         { *m = CreateClusterVMWareSpec{} }
@@ -1541,29 +1542,77 @@ func (m *CreateClusterVMWareSpec) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateClusterVMWareSpec proto.InternalMessageInfo
 
-func (m *CreateClusterVMWareSpec) GetNamespace() string {
+func (m *CreateClusterVMWareSpec) GetControlPlaneNodes() []*VMWareMachineSpec {
 	if m != nil {
-		return m.Namespace
-	}
-	return ""
-}
-
-func (m *CreateClusterVMWareSpec) GetPrivateKey() string {
-	if m != nil {
-		return m.PrivateKey
-	}
-	return ""
-}
-
-func (m *CreateClusterVMWareSpec) GetMachines() []*CreateClusterVMWareSpec_VMWareMachineSpec {
-	if m != nil {
-		return m.Machines
+		return m.ControlPlaneNodes
 	}
 	return nil
 }
 
-// The credentials to use for creating the cluster
-type CreateClusterVMWareSpec_VMWareMachineSpec struct {
+func (m *CreateClusterVMWareSpec) GetWorkerNodes() []*VMWareMachineSpec {
+	if m != nil {
+		return m.WorkerNodes
+	}
+	return nil
+}
+
+func (m *CreateClusterVMWareSpec) GetApiEndpoint() string {
+	if m != nil {
+		return m.ApiEndpoint
+	}
+	return ""
+}
+
+type KubernetesLabel struct {
+	// The name of a label
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The value of a label
+	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *KubernetesLabel) Reset()         { *m = KubernetesLabel{} }
+func (m *KubernetesLabel) String() string { return proto.CompactTextString(m) }
+func (*KubernetesLabel) ProtoMessage()    {}
+func (*KubernetesLabel) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{19}
+}
+func (m *KubernetesLabel) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_KubernetesLabel.Unmarshal(m, b)
+}
+func (m *KubernetesLabel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_KubernetesLabel.Marshal(b, m, deterministic)
+}
+func (dst *KubernetesLabel) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_KubernetesLabel.Merge(dst, src)
+}
+func (m *KubernetesLabel) XXX_Size() int {
+	return xxx_messageInfo_KubernetesLabel.Size(m)
+}
+func (m *KubernetesLabel) XXX_DiscardUnknown() {
+	xxx_messageInfo_KubernetesLabel.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_KubernetesLabel proto.InternalMessageInfo
+
+func (m *KubernetesLabel) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *KubernetesLabel) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+// The specification for a specific node
+type VMWareMachineSpec struct {
 	// The username for SSH access
 	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	// The host for SSH access
@@ -1571,64 +1620,1264 @@ type CreateClusterVMWareSpec_VMWareMachineSpec struct {
 	// The port for SSH access
 	Port int32 `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
 	// The k8s version for the control plane. This node is only a master if this field is defined.
-	ControlPlaneVersion  string   `protobuf:"bytes,4,opt,name=control_plane_version,json=controlPlaneVersion,proto3" json:"control_plane_version,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Password string `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"`
+	// The labels for the machines
+	Labels               []*KubernetesLabel `protobuf:"bytes,5,rep,name=labels,proto3" json:"labels,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
-func (m *CreateClusterVMWareSpec_VMWareMachineSpec) Reset() {
-	*m = CreateClusterVMWareSpec_VMWareMachineSpec{}
+func (m *VMWareMachineSpec) Reset()         { *m = VMWareMachineSpec{} }
+func (m *VMWareMachineSpec) String() string { return proto.CompactTextString(m) }
+func (*VMWareMachineSpec) ProtoMessage()    {}
+func (*VMWareMachineSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{20}
 }
-func (m *CreateClusterVMWareSpec_VMWareMachineSpec) String() string { return proto.CompactTextString(m) }
-func (*CreateClusterVMWareSpec_VMWareMachineSpec) ProtoMessage()    {}
-func (*CreateClusterVMWareSpec_VMWareMachineSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{18, 0}
+func (m *VMWareMachineSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_VMWareMachineSpec.Unmarshal(m, b)
 }
-func (m *CreateClusterVMWareSpec_VMWareMachineSpec) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CreateClusterVMWareSpec_VMWareMachineSpec.Unmarshal(m, b)
+func (m *VMWareMachineSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_VMWareMachineSpec.Marshal(b, m, deterministic)
 }
-func (m *CreateClusterVMWareSpec_VMWareMachineSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CreateClusterVMWareSpec_VMWareMachineSpec.Marshal(b, m, deterministic)
+func (dst *VMWareMachineSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VMWareMachineSpec.Merge(dst, src)
 }
-func (dst *CreateClusterVMWareSpec_VMWareMachineSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateClusterVMWareSpec_VMWareMachineSpec.Merge(dst, src)
+func (m *VMWareMachineSpec) XXX_Size() int {
+	return xxx_messageInfo_VMWareMachineSpec.Size(m)
 }
-func (m *CreateClusterVMWareSpec_VMWareMachineSpec) XXX_Size() int {
-	return xxx_messageInfo_CreateClusterVMWareSpec_VMWareMachineSpec.Size(m)
-}
-func (m *CreateClusterVMWareSpec_VMWareMachineSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_CreateClusterVMWareSpec_VMWareMachineSpec.DiscardUnknown(m)
+func (m *VMWareMachineSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_VMWareMachineSpec.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_CreateClusterVMWareSpec_VMWareMachineSpec proto.InternalMessageInfo
+var xxx_messageInfo_VMWareMachineSpec proto.InternalMessageInfo
 
-func (m *CreateClusterVMWareSpec_VMWareMachineSpec) GetUsername() string {
+func (m *VMWareMachineSpec) GetUsername() string {
 	if m != nil {
 		return m.Username
 	}
 	return ""
 }
 
-func (m *CreateClusterVMWareSpec_VMWareMachineSpec) GetHost() string {
+func (m *VMWareMachineSpec) GetHost() string {
 	if m != nil {
 		return m.Host
 	}
 	return ""
 }
 
-func (m *CreateClusterVMWareSpec_VMWareMachineSpec) GetPort() int32 {
+func (m *VMWareMachineSpec) GetPort() int32 {
 	if m != nil {
 		return m.Port
 	}
 	return 0
 }
 
-func (m *CreateClusterVMWareSpec_VMWareMachineSpec) GetControlPlaneVersion() string {
+func (m *VMWareMachineSpec) GetPassword() string {
 	if m != nil {
-		return m.ControlPlaneVersion
+		return m.Password
 	}
 	return ""
+}
+
+func (m *VMWareMachineSpec) GetLabels() []*KubernetesLabel {
+	if m != nil {
+		return m.Labels
+	}
+	return nil
+}
+
+type ProvisionTillerMsg struct {
+	// Cluster tiller should be installed on
+	Cluster string `protobuf:"bytes,1,opt,name=cluster,proto3" json:"cluster,omitempty"`
+	// Namespace tiller should be installed in
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Versino of tiller/helm to install / upgrade to
+	Version string `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
+	// Is the tiller a cluster-wide tiller?
+	// Should it have cluster-wide admin privileges?
+	ClusterWide bool `protobuf:"varint,4,opt,name=cluster_wide,json=clusterWide,proto3" json:"cluster_wide,omitempty"`
+	// Namespaces that it should be able to admin on
+	AdminNamespaces []string `protobuf:"bytes,5,rep,name=admin_namespaces,json=adminNamespaces,proto3" json:"admin_namespaces,omitempty"`
+	// Name of the providers (aws/aks/vmware/etc)
+	Provider string `protobuf:"bytes,6,opt,name=provider,proto3" json:"provider,omitempty"`
+	// AWS Credentials
+	Aws *AWSCredentials `protobuf:"bytes,7,opt,name=aws,proto3" json:"aws,omitempty"`
+	// Azure Credentials
+	Azure                *AzureCredentials `protobuf:"bytes,8,opt,name=azure,proto3" json:"azure,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *ProvisionTillerMsg) Reset()         { *m = ProvisionTillerMsg{} }
+func (m *ProvisionTillerMsg) String() string { return proto.CompactTextString(m) }
+func (*ProvisionTillerMsg) ProtoMessage()    {}
+func (*ProvisionTillerMsg) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{21}
+}
+func (m *ProvisionTillerMsg) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProvisionTillerMsg.Unmarshal(m, b)
+}
+func (m *ProvisionTillerMsg) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProvisionTillerMsg.Marshal(b, m, deterministic)
+}
+func (dst *ProvisionTillerMsg) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProvisionTillerMsg.Merge(dst, src)
+}
+func (m *ProvisionTillerMsg) XXX_Size() int {
+	return xxx_messageInfo_ProvisionTillerMsg.Size(m)
+}
+func (m *ProvisionTillerMsg) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProvisionTillerMsg.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProvisionTillerMsg proto.InternalMessageInfo
+
+func (m *ProvisionTillerMsg) GetCluster() string {
+	if m != nil {
+		return m.Cluster
+	}
+	return ""
+}
+
+func (m *ProvisionTillerMsg) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ProvisionTillerMsg) GetVersion() string {
+	if m != nil {
+		return m.Version
+	}
+	return ""
+}
+
+func (m *ProvisionTillerMsg) GetClusterWide() bool {
+	if m != nil {
+		return m.ClusterWide
+	}
+	return false
+}
+
+func (m *ProvisionTillerMsg) GetAdminNamespaces() []string {
+	if m != nil {
+		return m.AdminNamespaces
+	}
+	return nil
+}
+
+func (m *ProvisionTillerMsg) GetProvider() string {
+	if m != nil {
+		return m.Provider
+	}
+	return ""
+}
+
+func (m *ProvisionTillerMsg) GetAws() *AWSCredentials {
+	if m != nil {
+		return m.Aws
+	}
+	return nil
+}
+
+func (m *ProvisionTillerMsg) GetAzure() *AzureCredentials {
+	if m != nil {
+		return m.Azure
+	}
+	return nil
+}
+
+type ProvisionTillerReply struct {
+	// Was the operation successful
+	Ok bool `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	// What messages were given
+	Message              string   `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ProvisionTillerReply) Reset()         { *m = ProvisionTillerReply{} }
+func (m *ProvisionTillerReply) String() string { return proto.CompactTextString(m) }
+func (*ProvisionTillerReply) ProtoMessage()    {}
+func (*ProvisionTillerReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{22}
+}
+func (m *ProvisionTillerReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProvisionTillerReply.Unmarshal(m, b)
+}
+func (m *ProvisionTillerReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProvisionTillerReply.Marshal(b, m, deterministic)
+}
+func (dst *ProvisionTillerReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProvisionTillerReply.Merge(dst, src)
+}
+func (m *ProvisionTillerReply) XXX_Size() int {
+	return xxx_messageInfo_ProvisionTillerReply.Size(m)
+}
+func (m *ProvisionTillerReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProvisionTillerReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProvisionTillerReply proto.InternalMessageInfo
+
+func (m *ProvisionTillerReply) GetOk() bool {
+	if m != nil {
+		return m.Ok
+	}
+	return false
+}
+
+func (m *ProvisionTillerReply) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
+type InstallHelmChartMsg struct {
+	// Cluster tiller should be installed on
+	Cluster string `protobuf:"bytes,1,opt,name=cluster,proto3" json:"cluster,omitempty"`
+	// Tiller settings
+	Tiller *GenericTillerSetting `protobuf:"bytes,2,opt,name=tiller,proto3" json:"tiller,omitempty"`
+	// Chart Settings
+	Chart *GenericHelmChart `protobuf:"bytes,3,opt,name=chart,proto3" json:"chart,omitempty"`
+	// Name of the providers (aws/aks/vmware/etc)
+	Provider string `protobuf:"bytes,6,opt,name=provider,proto3" json:"provider,omitempty"`
+	// AWS Credentials
+	Aws *AWSCredentials `protobuf:"bytes,7,opt,name=aws,proto3" json:"aws,omitempty"`
+	// Azure Credentials
+	Azure                *AzureCredentials `protobuf:"bytes,8,opt,name=azure,proto3" json:"azure,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *InstallHelmChartMsg) Reset()         { *m = InstallHelmChartMsg{} }
+func (m *InstallHelmChartMsg) String() string { return proto.CompactTextString(m) }
+func (*InstallHelmChartMsg) ProtoMessage()    {}
+func (*InstallHelmChartMsg) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{23}
+}
+func (m *InstallHelmChartMsg) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_InstallHelmChartMsg.Unmarshal(m, b)
+}
+func (m *InstallHelmChartMsg) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_InstallHelmChartMsg.Marshal(b, m, deterministic)
+}
+func (dst *InstallHelmChartMsg) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InstallHelmChartMsg.Merge(dst, src)
+}
+func (m *InstallHelmChartMsg) XXX_Size() int {
+	return xxx_messageInfo_InstallHelmChartMsg.Size(m)
+}
+func (m *InstallHelmChartMsg) XXX_DiscardUnknown() {
+	xxx_messageInfo_InstallHelmChartMsg.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InstallHelmChartMsg proto.InternalMessageInfo
+
+func (m *InstallHelmChartMsg) GetCluster() string {
+	if m != nil {
+		return m.Cluster
+	}
+	return ""
+}
+
+func (m *InstallHelmChartMsg) GetTiller() *GenericTillerSetting {
+	if m != nil {
+		return m.Tiller
+	}
+	return nil
+}
+
+func (m *InstallHelmChartMsg) GetChart() *GenericHelmChart {
+	if m != nil {
+		return m.Chart
+	}
+	return nil
+}
+
+func (m *InstallHelmChartMsg) GetProvider() string {
+	if m != nil {
+		return m.Provider
+	}
+	return ""
+}
+
+func (m *InstallHelmChartMsg) GetAws() *AWSCredentials {
+	if m != nil {
+		return m.Aws
+	}
+	return nil
+}
+
+func (m *InstallHelmChartMsg) GetAzure() *AzureCredentials {
+	if m != nil {
+		return m.Azure
+	}
+	return nil
+}
+
+type InstallHelmChartReply struct {
+	// Was the operation successful
+	Ok bool `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	// What messages were given
+	Message              string   `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *InstallHelmChartReply) Reset()         { *m = InstallHelmChartReply{} }
+func (m *InstallHelmChartReply) String() string { return proto.CompactTextString(m) }
+func (*InstallHelmChartReply) ProtoMessage()    {}
+func (*InstallHelmChartReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{24}
+}
+func (m *InstallHelmChartReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_InstallHelmChartReply.Unmarshal(m, b)
+}
+func (m *InstallHelmChartReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_InstallHelmChartReply.Marshal(b, m, deterministic)
+}
+func (dst *InstallHelmChartReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InstallHelmChartReply.Merge(dst, src)
+}
+func (m *InstallHelmChartReply) XXX_Size() int {
+	return xxx_messageInfo_InstallHelmChartReply.Size(m)
+}
+func (m *InstallHelmChartReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_InstallHelmChartReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InstallHelmChartReply proto.InternalMessageInfo
+
+func (m *InstallHelmChartReply) GetOk() bool {
+	if m != nil {
+		return m.Ok
+	}
+	return false
+}
+
+func (m *InstallHelmChartReply) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
+type DeleteHelmChartMsg struct {
+	// Cluster tiller should be installed on
+	Cluster string `protobuf:"bytes,1,opt,name=cluster,proto3" json:"cluster,omitempty"`
+	// Tiller settings
+	Tiller *GenericTillerSetting `protobuf:"bytes,2,opt,name=tiller,proto3" json:"tiller,omitempty"`
+	// Chart Name
+	Chart string `protobuf:"bytes,3,opt,name=chart,proto3" json:"chart,omitempty"`
+	// Name of the providers (aws/aks/vmware/etc)
+	Provider string `protobuf:"bytes,6,opt,name=provider,proto3" json:"provider,omitempty"`
+	// AWS Credentials
+	Aws *AWSCredentials `protobuf:"bytes,7,opt,name=aws,proto3" json:"aws,omitempty"`
+	// Azure Credentials
+	Azure                *AzureCredentials `protobuf:"bytes,8,opt,name=azure,proto3" json:"azure,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *DeleteHelmChartMsg) Reset()         { *m = DeleteHelmChartMsg{} }
+func (m *DeleteHelmChartMsg) String() string { return proto.CompactTextString(m) }
+func (*DeleteHelmChartMsg) ProtoMessage()    {}
+func (*DeleteHelmChartMsg) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{25}
+}
+func (m *DeleteHelmChartMsg) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteHelmChartMsg.Unmarshal(m, b)
+}
+func (m *DeleteHelmChartMsg) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteHelmChartMsg.Marshal(b, m, deterministic)
+}
+func (dst *DeleteHelmChartMsg) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteHelmChartMsg.Merge(dst, src)
+}
+func (m *DeleteHelmChartMsg) XXX_Size() int {
+	return xxx_messageInfo_DeleteHelmChartMsg.Size(m)
+}
+func (m *DeleteHelmChartMsg) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteHelmChartMsg.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteHelmChartMsg proto.InternalMessageInfo
+
+func (m *DeleteHelmChartMsg) GetCluster() string {
+	if m != nil {
+		return m.Cluster
+	}
+	return ""
+}
+
+func (m *DeleteHelmChartMsg) GetTiller() *GenericTillerSetting {
+	if m != nil {
+		return m.Tiller
+	}
+	return nil
+}
+
+func (m *DeleteHelmChartMsg) GetChart() string {
+	if m != nil {
+		return m.Chart
+	}
+	return ""
+}
+
+func (m *DeleteHelmChartMsg) GetProvider() string {
+	if m != nil {
+		return m.Provider
+	}
+	return ""
+}
+
+func (m *DeleteHelmChartMsg) GetAws() *AWSCredentials {
+	if m != nil {
+		return m.Aws
+	}
+	return nil
+}
+
+func (m *DeleteHelmChartMsg) GetAzure() *AzureCredentials {
+	if m != nil {
+		return m.Azure
+	}
+	return nil
+}
+
+type DeleteHelmChartReply struct {
+	// Was the operation successful
+	Ok bool `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	// What messages were given
+	Message              string   `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteHelmChartReply) Reset()         { *m = DeleteHelmChartReply{} }
+func (m *DeleteHelmChartReply) String() string { return proto.CompactTextString(m) }
+func (*DeleteHelmChartReply) ProtoMessage()    {}
+func (*DeleteHelmChartReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{26}
+}
+func (m *DeleteHelmChartReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteHelmChartReply.Unmarshal(m, b)
+}
+func (m *DeleteHelmChartReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteHelmChartReply.Marshal(b, m, deterministic)
+}
+func (dst *DeleteHelmChartReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteHelmChartReply.Merge(dst, src)
+}
+func (m *DeleteHelmChartReply) XXX_Size() int {
+	return xxx_messageInfo_DeleteHelmChartReply.Size(m)
+}
+func (m *DeleteHelmChartReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteHelmChartReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteHelmChartReply proto.InternalMessageInfo
+
+func (m *DeleteHelmChartReply) GetOk() bool {
+	if m != nil {
+		return m.Ok
+	}
+	return false
+}
+
+func (m *DeleteHelmChartReply) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
+type GenericTillerSetting struct {
+	// What is the tiller namespace
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// What is the version of tiller/helm
+	Version              string   `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GenericTillerSetting) Reset()         { *m = GenericTillerSetting{} }
+func (m *GenericTillerSetting) String() string { return proto.CompactTextString(m) }
+func (*GenericTillerSetting) ProtoMessage()    {}
+func (*GenericTillerSetting) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{27}
+}
+func (m *GenericTillerSetting) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GenericTillerSetting.Unmarshal(m, b)
+}
+func (m *GenericTillerSetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GenericTillerSetting.Marshal(b, m, deterministic)
+}
+func (dst *GenericTillerSetting) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GenericTillerSetting.Merge(dst, src)
+}
+func (m *GenericTillerSetting) XXX_Size() int {
+	return xxx_messageInfo_GenericTillerSetting.Size(m)
+}
+func (m *GenericTillerSetting) XXX_DiscardUnknown() {
+	xxx_messageInfo_GenericTillerSetting.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GenericTillerSetting proto.InternalMessageInfo
+
+func (m *GenericTillerSetting) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *GenericTillerSetting) GetVersion() string {
+	if m != nil {
+		return m.Version
+	}
+	return ""
+}
+
+type GenericHelmChart struct {
+	// What is the name of the deployment
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// What is the namespace to deploy the application to
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// What is the chart repository
+	Repo string `protobuf:"bytes,3,opt,name=repo,proto3" json:"repo,omitempty"`
+	// What is the chart name
+	Chart string `protobuf:"bytes,4,opt,name=chart,proto3" json:"chart,omitempty"`
+	// What are the options (nested yaml - the Values.yaml contents)
+	Values               string   `protobuf:"bytes,5,opt,name=values,proto3" json:"values,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GenericHelmChart) Reset()         { *m = GenericHelmChart{} }
+func (m *GenericHelmChart) String() string { return proto.CompactTextString(m) }
+func (*GenericHelmChart) ProtoMessage()    {}
+func (*GenericHelmChart) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{28}
+}
+func (m *GenericHelmChart) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GenericHelmChart.Unmarshal(m, b)
+}
+func (m *GenericHelmChart) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GenericHelmChart.Marshal(b, m, deterministic)
+}
+func (dst *GenericHelmChart) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GenericHelmChart.Merge(dst, src)
+}
+func (m *GenericHelmChart) XXX_Size() int {
+	return xxx_messageInfo_GenericHelmChart.Size(m)
+}
+func (m *GenericHelmChart) XXX_DiscardUnknown() {
+	xxx_messageInfo_GenericHelmChart.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GenericHelmChart proto.InternalMessageInfo
+
+func (m *GenericHelmChart) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *GenericHelmChart) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *GenericHelmChart) GetRepo() string {
+	if m != nil {
+		return m.Repo
+	}
+	return ""
+}
+
+func (m *GenericHelmChart) GetChart() string {
+	if m != nil {
+		return m.Chart
+	}
+	return ""
+}
+
+func (m *GenericHelmChart) GetValues() string {
+	if m != nil {
+		return m.Values
+	}
+	return ""
+}
+
+type GetUpgradeClusterInformationMsg struct {
+	// Name of the providers (aws/aks/vmware/etc)
+	Provider string `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
+	// AWS Credentials
+	Aws *AWSCredentials `protobuf:"bytes,2,opt,name=aws,proto3" json:"aws,omitempty"`
+	// Azure Credentials
+	Azure *AzureCredentials `protobuf:"bytes,3,opt,name=azure,proto3" json:"azure,omitempty"`
+	// What is the cluster that we are considering for upgrade
+	Name                 string   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetUpgradeClusterInformationMsg) Reset()         { *m = GetUpgradeClusterInformationMsg{} }
+func (m *GetUpgradeClusterInformationMsg) String() string { return proto.CompactTextString(m) }
+func (*GetUpgradeClusterInformationMsg) ProtoMessage()    {}
+func (*GetUpgradeClusterInformationMsg) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{29}
+}
+func (m *GetUpgradeClusterInformationMsg) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetUpgradeClusterInformationMsg.Unmarshal(m, b)
+}
+func (m *GetUpgradeClusterInformationMsg) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetUpgradeClusterInformationMsg.Marshal(b, m, deterministic)
+}
+func (dst *GetUpgradeClusterInformationMsg) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetUpgradeClusterInformationMsg.Merge(dst, src)
+}
+func (m *GetUpgradeClusterInformationMsg) XXX_Size() int {
+	return xxx_messageInfo_GetUpgradeClusterInformationMsg.Size(m)
+}
+func (m *GetUpgradeClusterInformationMsg) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetUpgradeClusterInformationMsg.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetUpgradeClusterInformationMsg proto.InternalMessageInfo
+
+func (m *GetUpgradeClusterInformationMsg) GetProvider() string {
+	if m != nil {
+		return m.Provider
+	}
+	return ""
+}
+
+func (m *GetUpgradeClusterInformationMsg) GetAws() *AWSCredentials {
+	if m != nil {
+		return m.Aws
+	}
+	return nil
+}
+
+func (m *GetUpgradeClusterInformationMsg) GetAzure() *AzureCredentials {
+	if m != nil {
+		return m.Azure
+	}
+	return nil
+}
+
+func (m *GetUpgradeClusterInformationMsg) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type GetUpgradeClusterInformationReply struct {
+	// Can the cluster be upgraded
+	Ok bool `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	// What versions are possible right now
+	Versions             []string `protobuf:"bytes,2,rep,name=versions,proto3" json:"versions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetUpgradeClusterInformationReply) Reset()         { *m = GetUpgradeClusterInformationReply{} }
+func (m *GetUpgradeClusterInformationReply) String() string { return proto.CompactTextString(m) }
+func (*GetUpgradeClusterInformationReply) ProtoMessage()    {}
+func (*GetUpgradeClusterInformationReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{30}
+}
+func (m *GetUpgradeClusterInformationReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetUpgradeClusterInformationReply.Unmarshal(m, b)
+}
+func (m *GetUpgradeClusterInformationReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetUpgradeClusterInformationReply.Marshal(b, m, deterministic)
+}
+func (dst *GetUpgradeClusterInformationReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetUpgradeClusterInformationReply.Merge(dst, src)
+}
+func (m *GetUpgradeClusterInformationReply) XXX_Size() int {
+	return xxx_messageInfo_GetUpgradeClusterInformationReply.Size(m)
+}
+func (m *GetUpgradeClusterInformationReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetUpgradeClusterInformationReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetUpgradeClusterInformationReply proto.InternalMessageInfo
+
+func (m *GetUpgradeClusterInformationReply) GetOk() bool {
+	if m != nil {
+		return m.Ok
+	}
+	return false
+}
+
+func (m *GetUpgradeClusterInformationReply) GetVersions() []string {
+	if m != nil {
+		return m.Versions
+	}
+	return nil
+}
+
+type UpgradeClusterMsg struct {
+	// Name of the providers (aws/aks/vmware/etc)
+	Provider string `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
+	// AWS Credentials
+	Aws *AWSCredentials `protobuf:"bytes,2,opt,name=aws,proto3" json:"aws,omitempty"`
+	// Azure Credentials
+	Azure *AzureCredentials `protobuf:"bytes,3,opt,name=azure,proto3" json:"azure,omitempty"`
+	// What is the cluster that we are considering for upgrade
+	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	// What version are we upgrading to?
+	Version              string   `protobuf:"bytes,5,opt,name=version,proto3" json:"version,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpgradeClusterMsg) Reset()         { *m = UpgradeClusterMsg{} }
+func (m *UpgradeClusterMsg) String() string { return proto.CompactTextString(m) }
+func (*UpgradeClusterMsg) ProtoMessage()    {}
+func (*UpgradeClusterMsg) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{31}
+}
+func (m *UpgradeClusterMsg) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpgradeClusterMsg.Unmarshal(m, b)
+}
+func (m *UpgradeClusterMsg) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpgradeClusterMsg.Marshal(b, m, deterministic)
+}
+func (dst *UpgradeClusterMsg) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpgradeClusterMsg.Merge(dst, src)
+}
+func (m *UpgradeClusterMsg) XXX_Size() int {
+	return xxx_messageInfo_UpgradeClusterMsg.Size(m)
+}
+func (m *UpgradeClusterMsg) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpgradeClusterMsg.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpgradeClusterMsg proto.InternalMessageInfo
+
+func (m *UpgradeClusterMsg) GetProvider() string {
+	if m != nil {
+		return m.Provider
+	}
+	return ""
+}
+
+func (m *UpgradeClusterMsg) GetAws() *AWSCredentials {
+	if m != nil {
+		return m.Aws
+	}
+	return nil
+}
+
+func (m *UpgradeClusterMsg) GetAzure() *AzureCredentials {
+	if m != nil {
+		return m.Azure
+	}
+	return nil
+}
+
+func (m *UpgradeClusterMsg) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpgradeClusterMsg) GetVersion() string {
+	if m != nil {
+		return m.Version
+	}
+	return ""
+}
+
+type UpgradeClusterReply struct {
+	// Was this a successful request
+	Ok                   bool     `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpgradeClusterReply) Reset()         { *m = UpgradeClusterReply{} }
+func (m *UpgradeClusterReply) String() string { return proto.CompactTextString(m) }
+func (*UpgradeClusterReply) ProtoMessage()    {}
+func (*UpgradeClusterReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{32}
+}
+func (m *UpgradeClusterReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpgradeClusterReply.Unmarshal(m, b)
+}
+func (m *UpgradeClusterReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpgradeClusterReply.Marshal(b, m, deterministic)
+}
+func (dst *UpgradeClusterReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpgradeClusterReply.Merge(dst, src)
+}
+func (m *UpgradeClusterReply) XXX_Size() int {
+	return xxx_messageInfo_UpgradeClusterReply.Size(m)
+}
+func (m *UpgradeClusterReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpgradeClusterReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpgradeClusterReply proto.InternalMessageInfo
+
+func (m *UpgradeClusterReply) GetOk() bool {
+	if m != nil {
+		return m.Ok
+	}
+	return false
+}
+
+type AdjustClusterMsg struct {
+	// What is the cluster that we are considering for upgrade
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Provider changes
+	//
+	// Types that are valid to be assigned to ProviderChanges:
+	//	*AdjustClusterMsg_Vmware
+	ProviderChanges      isAdjustClusterMsg_ProviderChanges `protobuf_oneof:"provider_changes"`
+	XXX_NoUnkeyedLiteral struct{}                           `json:"-"`
+	XXX_unrecognized     []byte                             `json:"-"`
+	XXX_sizecache        int32                              `json:"-"`
+}
+
+func (m *AdjustClusterMsg) Reset()         { *m = AdjustClusterMsg{} }
+func (m *AdjustClusterMsg) String() string { return proto.CompactTextString(m) }
+func (*AdjustClusterMsg) ProtoMessage()    {}
+func (*AdjustClusterMsg) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{33}
+}
+func (m *AdjustClusterMsg) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AdjustClusterMsg.Unmarshal(m, b)
+}
+func (m *AdjustClusterMsg) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AdjustClusterMsg.Marshal(b, m, deterministic)
+}
+func (dst *AdjustClusterMsg) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AdjustClusterMsg.Merge(dst, src)
+}
+func (m *AdjustClusterMsg) XXX_Size() int {
+	return xxx_messageInfo_AdjustClusterMsg.Size(m)
+}
+func (m *AdjustClusterMsg) XXX_DiscardUnknown() {
+	xxx_messageInfo_AdjustClusterMsg.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AdjustClusterMsg proto.InternalMessageInfo
+
+func (m *AdjustClusterMsg) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type isAdjustClusterMsg_ProviderChanges interface {
+	isAdjustClusterMsg_ProviderChanges()
+}
+
+type AdjustClusterMsg_Vmware struct {
+	Vmware *AdjustClusterMsg_AdjustClusterVMWareSpec `protobuf:"bytes,5,opt,name=vmware,proto3,oneof"`
+}
+
+func (*AdjustClusterMsg_Vmware) isAdjustClusterMsg_ProviderChanges() {}
+
+func (m *AdjustClusterMsg) GetProviderChanges() isAdjustClusterMsg_ProviderChanges {
+	if m != nil {
+		return m.ProviderChanges
+	}
+	return nil
+}
+
+func (m *AdjustClusterMsg) GetVmware() *AdjustClusterMsg_AdjustClusterVMWareSpec {
+	if x, ok := m.GetProviderChanges().(*AdjustClusterMsg_Vmware); ok {
+		return x.Vmware
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*AdjustClusterMsg) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _AdjustClusterMsg_OneofMarshaler, _AdjustClusterMsg_OneofUnmarshaler, _AdjustClusterMsg_OneofSizer, []interface{}{
+		(*AdjustClusterMsg_Vmware)(nil),
+	}
+}
+
+func _AdjustClusterMsg_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*AdjustClusterMsg)
+	// provider_changes
+	switch x := m.ProviderChanges.(type) {
+	case *AdjustClusterMsg_Vmware:
+		b.EncodeVarint(5<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Vmware); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("AdjustClusterMsg.ProviderChanges has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _AdjustClusterMsg_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*AdjustClusterMsg)
+	switch tag {
+	case 5: // provider_changes.vmware
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(AdjustClusterMsg_AdjustClusterVMWareSpec)
+		err := b.DecodeMessage(msg)
+		m.ProviderChanges = &AdjustClusterMsg_Vmware{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _AdjustClusterMsg_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*AdjustClusterMsg)
+	// provider_changes
+	switch x := m.ProviderChanges.(type) {
+	case *AdjustClusterMsg_Vmware:
+		s := proto.Size(x.Vmware)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+type AdjustClusterMsg_AdjustClusterVMWareSpec struct {
+	// Machines which we want to add to the cluster
+	AddNodes []*VMWareMachineSpec `protobuf:"bytes,1,rep,name=add_nodes,json=addNodes,proto3" json:"add_nodes,omitempty"`
+	// Machines which we want to remove from the cluster
+	RemoveNodes          []*AdjustClusterMsg_VMWareRemoveMachineSpec `protobuf:"bytes,2,rep,name=remove_nodes,json=removeNodes,proto3" json:"remove_nodes,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                    `json:"-"`
+	XXX_unrecognized     []byte                                      `json:"-"`
+	XXX_sizecache        int32                                       `json:"-"`
+}
+
+func (m *AdjustClusterMsg_AdjustClusterVMWareSpec) Reset() {
+	*m = AdjustClusterMsg_AdjustClusterVMWareSpec{}
+}
+func (m *AdjustClusterMsg_AdjustClusterVMWareSpec) String() string { return proto.CompactTextString(m) }
+func (*AdjustClusterMsg_AdjustClusterVMWareSpec) ProtoMessage()    {}
+func (*AdjustClusterMsg_AdjustClusterVMWareSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{33, 0}
+}
+func (m *AdjustClusterMsg_AdjustClusterVMWareSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AdjustClusterMsg_AdjustClusterVMWareSpec.Unmarshal(m, b)
+}
+func (m *AdjustClusterMsg_AdjustClusterVMWareSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AdjustClusterMsg_AdjustClusterVMWareSpec.Marshal(b, m, deterministic)
+}
+func (dst *AdjustClusterMsg_AdjustClusterVMWareSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AdjustClusterMsg_AdjustClusterVMWareSpec.Merge(dst, src)
+}
+func (m *AdjustClusterMsg_AdjustClusterVMWareSpec) XXX_Size() int {
+	return xxx_messageInfo_AdjustClusterMsg_AdjustClusterVMWareSpec.Size(m)
+}
+func (m *AdjustClusterMsg_AdjustClusterVMWareSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_AdjustClusterMsg_AdjustClusterVMWareSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AdjustClusterMsg_AdjustClusterVMWareSpec proto.InternalMessageInfo
+
+func (m *AdjustClusterMsg_AdjustClusterVMWareSpec) GetAddNodes() []*VMWareMachineSpec {
+	if m != nil {
+		return m.AddNodes
+	}
+	return nil
+}
+
+func (m *AdjustClusterMsg_AdjustClusterVMWareSpec) GetRemoveNodes() []*AdjustClusterMsg_VMWareRemoveMachineSpec {
+	if m != nil {
+		return m.RemoveNodes
+	}
+	return nil
+}
+
+type AdjustClusterMsg_VMWareRemoveMachineSpec struct {
+	// The host for SSH access
+	Host                 string   `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AdjustClusterMsg_VMWareRemoveMachineSpec) Reset() {
+	*m = AdjustClusterMsg_VMWareRemoveMachineSpec{}
+}
+func (m *AdjustClusterMsg_VMWareRemoveMachineSpec) String() string { return proto.CompactTextString(m) }
+func (*AdjustClusterMsg_VMWareRemoveMachineSpec) ProtoMessage()    {}
+func (*AdjustClusterMsg_VMWareRemoveMachineSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{33, 1}
+}
+func (m *AdjustClusterMsg_VMWareRemoveMachineSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AdjustClusterMsg_VMWareRemoveMachineSpec.Unmarshal(m, b)
+}
+func (m *AdjustClusterMsg_VMWareRemoveMachineSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AdjustClusterMsg_VMWareRemoveMachineSpec.Marshal(b, m, deterministic)
+}
+func (dst *AdjustClusterMsg_VMWareRemoveMachineSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AdjustClusterMsg_VMWareRemoveMachineSpec.Merge(dst, src)
+}
+func (m *AdjustClusterMsg_VMWareRemoveMachineSpec) XXX_Size() int {
+	return xxx_messageInfo_AdjustClusterMsg_VMWareRemoveMachineSpec.Size(m)
+}
+func (m *AdjustClusterMsg_VMWareRemoveMachineSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_AdjustClusterMsg_VMWareRemoveMachineSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AdjustClusterMsg_VMWareRemoveMachineSpec proto.InternalMessageInfo
+
+func (m *AdjustClusterMsg_VMWareRemoveMachineSpec) GetHost() string {
+	if m != nil {
+		return m.Host
+	}
+	return ""
+}
+
+type AdjustClusterReply struct {
+	// Was this a successful request
+	Ok                   bool     `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AdjustClusterReply) Reset()         { *m = AdjustClusterReply{} }
+func (m *AdjustClusterReply) String() string { return proto.CompactTextString(m) }
+func (*AdjustClusterReply) ProtoMessage()    {}
+func (*AdjustClusterReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{34}
+}
+func (m *AdjustClusterReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AdjustClusterReply.Unmarshal(m, b)
+}
+func (m *AdjustClusterReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AdjustClusterReply.Marshal(b, m, deterministic)
+}
+func (dst *AdjustClusterReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AdjustClusterReply.Merge(dst, src)
+}
+func (m *AdjustClusterReply) XXX_Size() int {
+	return xxx_messageInfo_AdjustClusterReply.Size(m)
+}
+func (m *AdjustClusterReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_AdjustClusterReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AdjustClusterReply proto.InternalMessageInfo
+
+func (m *AdjustClusterReply) GetOk() bool {
+	if m != nil {
+		return m.Ok
+	}
+	return false
+}
+
+type UpdateAWSCredentialsMsg struct {
+	// Cluster name
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Credentials to build the cluster
+	Credentials          *AWSCredentials `protobuf:"bytes,2,opt,name=credentials,proto3" json:"credentials,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *UpdateAWSCredentialsMsg) Reset()         { *m = UpdateAWSCredentialsMsg{} }
+func (m *UpdateAWSCredentialsMsg) String() string { return proto.CompactTextString(m) }
+func (*UpdateAWSCredentialsMsg) ProtoMessage()    {}
+func (*UpdateAWSCredentialsMsg) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{35}
+}
+func (m *UpdateAWSCredentialsMsg) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateAWSCredentialsMsg.Unmarshal(m, b)
+}
+func (m *UpdateAWSCredentialsMsg) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateAWSCredentialsMsg.Marshal(b, m, deterministic)
+}
+func (dst *UpdateAWSCredentialsMsg) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateAWSCredentialsMsg.Merge(dst, src)
+}
+func (m *UpdateAWSCredentialsMsg) XXX_Size() int {
+	return xxx_messageInfo_UpdateAWSCredentialsMsg.Size(m)
+}
+func (m *UpdateAWSCredentialsMsg) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateAWSCredentialsMsg.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateAWSCredentialsMsg proto.InternalMessageInfo
+
+func (m *UpdateAWSCredentialsMsg) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpdateAWSCredentialsMsg) GetCredentials() *AWSCredentials {
+	if m != nil {
+		return m.Credentials
+	}
+	return nil
+}
+
+type UpdateAWSCredentialsReply struct {
+	// Was this a successful request
+	Ok                   bool     `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateAWSCredentialsReply) Reset()         { *m = UpdateAWSCredentialsReply{} }
+func (m *UpdateAWSCredentialsReply) String() string { return proto.CompactTextString(m) }
+func (*UpdateAWSCredentialsReply) ProtoMessage()    {}
+func (*UpdateAWSCredentialsReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{36}
+}
+func (m *UpdateAWSCredentialsReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateAWSCredentialsReply.Unmarshal(m, b)
+}
+func (m *UpdateAWSCredentialsReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateAWSCredentialsReply.Marshal(b, m, deterministic)
+}
+func (dst *UpdateAWSCredentialsReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateAWSCredentialsReply.Merge(dst, src)
+}
+func (m *UpdateAWSCredentialsReply) XXX_Size() int {
+	return xxx_messageInfo_UpdateAWSCredentialsReply.Size(m)
+}
+func (m *UpdateAWSCredentialsReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateAWSCredentialsReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateAWSCredentialsReply proto.InternalMessageInfo
+
+func (m *UpdateAWSCredentialsReply) GetOk() bool {
+	if m != nil {
+		return m.Ok
+	}
+	return false
+}
+
+type UpdateAzureCredentialsMsg struct {
+	// Cluster name
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Credentials to build the cluster
+	Credentials          *AzureCredentials `protobuf:"bytes,2,opt,name=credentials,proto3" json:"credentials,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *UpdateAzureCredentialsMsg) Reset()         { *m = UpdateAzureCredentialsMsg{} }
+func (m *UpdateAzureCredentialsMsg) String() string { return proto.CompactTextString(m) }
+func (*UpdateAzureCredentialsMsg) ProtoMessage()    {}
+func (*UpdateAzureCredentialsMsg) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{37}
+}
+func (m *UpdateAzureCredentialsMsg) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateAzureCredentialsMsg.Unmarshal(m, b)
+}
+func (m *UpdateAzureCredentialsMsg) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateAzureCredentialsMsg.Marshal(b, m, deterministic)
+}
+func (dst *UpdateAzureCredentialsMsg) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateAzureCredentialsMsg.Merge(dst, src)
+}
+func (m *UpdateAzureCredentialsMsg) XXX_Size() int {
+	return xxx_messageInfo_UpdateAzureCredentialsMsg.Size(m)
+}
+func (m *UpdateAzureCredentialsMsg) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateAzureCredentialsMsg.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateAzureCredentialsMsg proto.InternalMessageInfo
+
+func (m *UpdateAzureCredentialsMsg) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpdateAzureCredentialsMsg) GetCredentials() *AzureCredentials {
+	if m != nil {
+		return m.Credentials
+	}
+	return nil
+}
+
+type UpdateAzureCredentialsReply struct {
+	// Was this a successful request
+	Ok                   bool     `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateAzureCredentialsReply) Reset()         { *m = UpdateAzureCredentialsReply{} }
+func (m *UpdateAzureCredentialsReply) String() string { return proto.CompactTextString(m) }
+func (*UpdateAzureCredentialsReply) ProtoMessage()    {}
+func (*UpdateAzureCredentialsReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{38}
+}
+func (m *UpdateAzureCredentialsReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateAzureCredentialsReply.Unmarshal(m, b)
+}
+func (m *UpdateAzureCredentialsReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateAzureCredentialsReply.Marshal(b, m, deterministic)
+}
+func (dst *UpdateAzureCredentialsReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateAzureCredentialsReply.Merge(dst, src)
+}
+func (m *UpdateAzureCredentialsReply) XXX_Size() int {
+	return xxx_messageInfo_UpdateAzureCredentialsReply.Size(m)
+}
+func (m *UpdateAzureCredentialsReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateAzureCredentialsReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateAzureCredentialsReply proto.InternalMessageInfo
+
+func (m *UpdateAzureCredentialsReply) GetOk() bool {
+	if m != nil {
+		return m.Ok
+	}
+	return false
 }
 
 func init() {
@@ -1656,7 +2905,28 @@ func init() {
 	proto.RegisterType((*CreateClusterAKSSpec)(nil), "cluster_manager_api.CreateClusterAKSSpec")
 	proto.RegisterType((*CreateClusterAKSSpec_AKSInstanceGroup)(nil), "cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup")
 	proto.RegisterType((*CreateClusterVMWareSpec)(nil), "cluster_manager_api.CreateClusterVMWareSpec")
-	proto.RegisterType((*CreateClusterVMWareSpec_VMWareMachineSpec)(nil), "cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec")
+	proto.RegisterType((*KubernetesLabel)(nil), "cluster_manager_api.KubernetesLabel")
+	proto.RegisterType((*VMWareMachineSpec)(nil), "cluster_manager_api.VMWareMachineSpec")
+	proto.RegisterType((*ProvisionTillerMsg)(nil), "cluster_manager_api.ProvisionTillerMsg")
+	proto.RegisterType((*ProvisionTillerReply)(nil), "cluster_manager_api.ProvisionTillerReply")
+	proto.RegisterType((*InstallHelmChartMsg)(nil), "cluster_manager_api.InstallHelmChartMsg")
+	proto.RegisterType((*InstallHelmChartReply)(nil), "cluster_manager_api.InstallHelmChartReply")
+	proto.RegisterType((*DeleteHelmChartMsg)(nil), "cluster_manager_api.DeleteHelmChartMsg")
+	proto.RegisterType((*DeleteHelmChartReply)(nil), "cluster_manager_api.DeleteHelmChartReply")
+	proto.RegisterType((*GenericTillerSetting)(nil), "cluster_manager_api.GenericTillerSetting")
+	proto.RegisterType((*GenericHelmChart)(nil), "cluster_manager_api.GenericHelmChart")
+	proto.RegisterType((*GetUpgradeClusterInformationMsg)(nil), "cluster_manager_api.GetUpgradeClusterInformationMsg")
+	proto.RegisterType((*GetUpgradeClusterInformationReply)(nil), "cluster_manager_api.GetUpgradeClusterInformationReply")
+	proto.RegisterType((*UpgradeClusterMsg)(nil), "cluster_manager_api.UpgradeClusterMsg")
+	proto.RegisterType((*UpgradeClusterReply)(nil), "cluster_manager_api.UpgradeClusterReply")
+	proto.RegisterType((*AdjustClusterMsg)(nil), "cluster_manager_api.AdjustClusterMsg")
+	proto.RegisterType((*AdjustClusterMsg_AdjustClusterVMWareSpec)(nil), "cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec")
+	proto.RegisterType((*AdjustClusterMsg_VMWareRemoveMachineSpec)(nil), "cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec")
+	proto.RegisterType((*AdjustClusterReply)(nil), "cluster_manager_api.AdjustClusterReply")
+	proto.RegisterType((*UpdateAWSCredentialsMsg)(nil), "cluster_manager_api.UpdateAWSCredentialsMsg")
+	proto.RegisterType((*UpdateAWSCredentialsReply)(nil), "cluster_manager_api.UpdateAWSCredentialsReply")
+	proto.RegisterType((*UpdateAzureCredentialsMsg)(nil), "cluster_manager_api.UpdateAzureCredentialsMsg")
+	proto.RegisterType((*UpdateAzureCredentialsReply)(nil), "cluster_manager_api.UpdateAzureCredentialsReply")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1677,10 +2947,27 @@ type ClusterClient interface {
 	GetCluster(ctx context.Context, in *GetClusterMsg, opts ...grpc.CallOption) (*GetClusterReply, error)
 	// Will delete a cluster
 	DeleteCluster(ctx context.Context, in *DeleteClusterMsg, opts ...grpc.CallOption) (*DeleteClusterReply, error)
+	// Will adjust a provision a cluster
+	AdjustClusterNodes(ctx context.Context, in *AdjustClusterMsg, opts ...grpc.CallOption) (*AdjustClusterReply, error)
 	// Will retrieve a list of clusters
 	GetClusterList(ctx context.Context, in *GetClusterListMsg, opts ...grpc.CallOption) (*GetClusterListReply, error)
+	// Will install (or reinstall) tiller
+	ProvisionTiller(ctx context.Context, in *ProvisionTillerMsg, opts ...grpc.CallOption) (*ProvisionTillerReply, error)
+	// Will install (or reinstall) helm chart
+	// This will be destructive if a chart has already been deployed with the same name
+	InstallHelmChart(ctx context.Context, in *InstallHelmChartMsg, opts ...grpc.CallOption) (*InstallHelmChartReply, error)
+	// Will delete deployed helm chart
+	DeleteHelmChart(ctx context.Context, in *DeleteHelmChartMsg, opts ...grpc.CallOption) (*DeleteHelmChartReply, error)
 	// Will return version information about api server
 	GetVersionInformation(ctx context.Context, in *GetVersionMsg, opts ...grpc.CallOption) (*GetVersionReply, error)
+	// Will return upgrade options for a given cluster
+	GetUpgradeClusterInformation(ctx context.Context, in *GetUpgradeClusterInformationMsg, opts ...grpc.CallOption) (*GetUpgradeClusterInformationReply, error)
+	// Will attempt to upgrade a cluster
+	UpgradeCluster(ctx context.Context, in *UpgradeClusterMsg, opts ...grpc.CallOption) (*UpgradeClusterReply, error)
+	// Will update aws credentials used for a cluster
+	UpdateAWSCredentials(ctx context.Context, in *UpdateAWSCredentialsMsg, opts ...grpc.CallOption) (*UpdateAWSCredentialsReply, error)
+	// Will update azure credentials used for a cluster
+	UpdateAzureCredentials(ctx context.Context, in *UpdateAzureCredentialsMsg, opts ...grpc.CallOption) (*UpdateAzureCredentialsReply, error)
 }
 
 type clusterClient struct {
@@ -1718,9 +3005,45 @@ func (c *clusterClient) DeleteCluster(ctx context.Context, in *DeleteClusterMsg,
 	return out, nil
 }
 
+func (c *clusterClient) AdjustClusterNodes(ctx context.Context, in *AdjustClusterMsg, opts ...grpc.CallOption) (*AdjustClusterReply, error) {
+	out := new(AdjustClusterReply)
+	err := c.cc.Invoke(ctx, "/cluster_manager_api.Cluster/AdjustClusterNodes", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *clusterClient) GetClusterList(ctx context.Context, in *GetClusterListMsg, opts ...grpc.CallOption) (*GetClusterListReply, error) {
 	out := new(GetClusterListReply)
 	err := c.cc.Invoke(ctx, "/cluster_manager_api.Cluster/GetClusterList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterClient) ProvisionTiller(ctx context.Context, in *ProvisionTillerMsg, opts ...grpc.CallOption) (*ProvisionTillerReply, error) {
+	out := new(ProvisionTillerReply)
+	err := c.cc.Invoke(ctx, "/cluster_manager_api.Cluster/ProvisionTiller", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterClient) InstallHelmChart(ctx context.Context, in *InstallHelmChartMsg, opts ...grpc.CallOption) (*InstallHelmChartReply, error) {
+	out := new(InstallHelmChartReply)
+	err := c.cc.Invoke(ctx, "/cluster_manager_api.Cluster/InstallHelmChart", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterClient) DeleteHelmChart(ctx context.Context, in *DeleteHelmChartMsg, opts ...grpc.CallOption) (*DeleteHelmChartReply, error) {
+	out := new(DeleteHelmChartReply)
+	err := c.cc.Invoke(ctx, "/cluster_manager_api.Cluster/DeleteHelmChart", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1736,6 +3059,42 @@ func (c *clusterClient) GetVersionInformation(ctx context.Context, in *GetVersio
 	return out, nil
 }
 
+func (c *clusterClient) GetUpgradeClusterInformation(ctx context.Context, in *GetUpgradeClusterInformationMsg, opts ...grpc.CallOption) (*GetUpgradeClusterInformationReply, error) {
+	out := new(GetUpgradeClusterInformationReply)
+	err := c.cc.Invoke(ctx, "/cluster_manager_api.Cluster/GetUpgradeClusterInformation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterClient) UpgradeCluster(ctx context.Context, in *UpgradeClusterMsg, opts ...grpc.CallOption) (*UpgradeClusterReply, error) {
+	out := new(UpgradeClusterReply)
+	err := c.cc.Invoke(ctx, "/cluster_manager_api.Cluster/UpgradeCluster", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterClient) UpdateAWSCredentials(ctx context.Context, in *UpdateAWSCredentialsMsg, opts ...grpc.CallOption) (*UpdateAWSCredentialsReply, error) {
+	out := new(UpdateAWSCredentialsReply)
+	err := c.cc.Invoke(ctx, "/cluster_manager_api.Cluster/UpdateAWSCredentials", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterClient) UpdateAzureCredentials(ctx context.Context, in *UpdateAzureCredentialsMsg, opts ...grpc.CallOption) (*UpdateAzureCredentialsReply, error) {
+	out := new(UpdateAzureCredentialsReply)
+	err := c.cc.Invoke(ctx, "/cluster_manager_api.Cluster/UpdateAzureCredentials", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ClusterServer is the server API for Cluster service.
 type ClusterServer interface {
 	// Will provision a cluster
@@ -1744,10 +3103,27 @@ type ClusterServer interface {
 	GetCluster(context.Context, *GetClusterMsg) (*GetClusterReply, error)
 	// Will delete a cluster
 	DeleteCluster(context.Context, *DeleteClusterMsg) (*DeleteClusterReply, error)
+	// Will adjust a provision a cluster
+	AdjustClusterNodes(context.Context, *AdjustClusterMsg) (*AdjustClusterReply, error)
 	// Will retrieve a list of clusters
 	GetClusterList(context.Context, *GetClusterListMsg) (*GetClusterListReply, error)
+	// Will install (or reinstall) tiller
+	ProvisionTiller(context.Context, *ProvisionTillerMsg) (*ProvisionTillerReply, error)
+	// Will install (or reinstall) helm chart
+	// This will be destructive if a chart has already been deployed with the same name
+	InstallHelmChart(context.Context, *InstallHelmChartMsg) (*InstallHelmChartReply, error)
+	// Will delete deployed helm chart
+	DeleteHelmChart(context.Context, *DeleteHelmChartMsg) (*DeleteHelmChartReply, error)
 	// Will return version information about api server
 	GetVersionInformation(context.Context, *GetVersionMsg) (*GetVersionReply, error)
+	// Will return upgrade options for a given cluster
+	GetUpgradeClusterInformation(context.Context, *GetUpgradeClusterInformationMsg) (*GetUpgradeClusterInformationReply, error)
+	// Will attempt to upgrade a cluster
+	UpgradeCluster(context.Context, *UpgradeClusterMsg) (*UpgradeClusterReply, error)
+	// Will update aws credentials used for a cluster
+	UpdateAWSCredentials(context.Context, *UpdateAWSCredentialsMsg) (*UpdateAWSCredentialsReply, error)
+	// Will update azure credentials used for a cluster
+	UpdateAzureCredentials(context.Context, *UpdateAzureCredentialsMsg) (*UpdateAzureCredentialsReply, error)
 }
 
 func RegisterClusterServer(s *grpc.Server, srv ClusterServer) {
@@ -1808,6 +3184,24 @@ func _Cluster_DeleteCluster_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Cluster_AdjustClusterNodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdjustClusterMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterServer).AdjustClusterNodes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cluster_manager_api.Cluster/AdjustClusterNodes",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterServer).AdjustClusterNodes(ctx, req.(*AdjustClusterMsg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Cluster_GetClusterList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetClusterListMsg)
 	if err := dec(in); err != nil {
@@ -1822,6 +3216,60 @@ func _Cluster_GetClusterList_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClusterServer).GetClusterList(ctx, req.(*GetClusterListMsg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cluster_ProvisionTiller_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProvisionTillerMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterServer).ProvisionTiller(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cluster_manager_api.Cluster/ProvisionTiller",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterServer).ProvisionTiller(ctx, req.(*ProvisionTillerMsg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cluster_InstallHelmChart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstallHelmChartMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterServer).InstallHelmChart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cluster_manager_api.Cluster/InstallHelmChart",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterServer).InstallHelmChart(ctx, req.(*InstallHelmChartMsg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cluster_DeleteHelmChart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteHelmChartMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterServer).DeleteHelmChart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cluster_manager_api.Cluster/DeleteHelmChart",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterServer).DeleteHelmChart(ctx, req.(*DeleteHelmChartMsg))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1844,6 +3292,78 @@ func _Cluster_GetVersionInformation_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Cluster_GetUpgradeClusterInformation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUpgradeClusterInformationMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterServer).GetUpgradeClusterInformation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cluster_manager_api.Cluster/GetUpgradeClusterInformation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterServer).GetUpgradeClusterInformation(ctx, req.(*GetUpgradeClusterInformationMsg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cluster_UpgradeCluster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpgradeClusterMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterServer).UpgradeCluster(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cluster_manager_api.Cluster/UpgradeCluster",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterServer).UpgradeCluster(ctx, req.(*UpgradeClusterMsg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cluster_UpdateAWSCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAWSCredentialsMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterServer).UpdateAWSCredentials(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cluster_manager_api.Cluster/UpdateAWSCredentials",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterServer).UpdateAWSCredentials(ctx, req.(*UpdateAWSCredentialsMsg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cluster_UpdateAzureCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAzureCredentialsMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterServer).UpdateAzureCredentials(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cluster_manager_api.Cluster/UpdateAzureCredentials",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterServer).UpdateAzureCredentials(ctx, req.(*UpdateAzureCredentialsMsg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Cluster_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "cluster_manager_api.Cluster",
 	HandlerType: (*ClusterServer)(nil),
@@ -1861,12 +3381,44 @@ var _Cluster_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Cluster_DeleteCluster_Handler,
 		},
 		{
+			MethodName: "AdjustClusterNodes",
+			Handler:    _Cluster_AdjustClusterNodes_Handler,
+		},
+		{
 			MethodName: "GetClusterList",
 			Handler:    _Cluster_GetClusterList_Handler,
 		},
 		{
+			MethodName: "ProvisionTiller",
+			Handler:    _Cluster_ProvisionTiller_Handler,
+		},
+		{
+			MethodName: "InstallHelmChart",
+			Handler:    _Cluster_InstallHelmChart_Handler,
+		},
+		{
+			MethodName: "DeleteHelmChart",
+			Handler:    _Cluster_DeleteHelmChart_Handler,
+		},
+		{
 			MethodName: "GetVersionInformation",
 			Handler:    _Cluster_GetVersionInformation_Handler,
+		},
+		{
+			MethodName: "GetUpgradeClusterInformation",
+			Handler:    _Cluster_GetUpgradeClusterInformation_Handler,
+		},
+		{
+			MethodName: "UpgradeCluster",
+			Handler:    _Cluster_UpgradeCluster_Handler,
+		},
+		{
+			MethodName: "UpdateAWSCredentials",
+			Handler:    _Cluster_UpdateAWSCredentials_Handler,
+		},
+		{
+			MethodName: "UpdateAzureCredentials",
+			Handler:    _Cluster_UpdateAzureCredentials_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1876,106 +3428,154 @@ var _Cluster_serviceDesc = grpc.ServiceDesc{
 func init() { proto.RegisterFile("api.proto", fileDescriptor_00212fb1f9d3bf1c) }
 
 var fileDescriptor_00212fb1f9d3bf1c = []byte{
-	// 1610 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x58, 0xcb, 0x72, 0x1b, 0x4d,
-	0x15, 0x46, 0x92, 0xed, 0x58, 0xc7, 0xb6, 0x6c, 0xb7, 0x2f, 0x31, 0x22, 0x04, 0x31, 0xb9, 0x62,
-	0x62, 0x29, 0x38, 0x45, 0x91, 0x32, 0x01, 0xa2, 0xd8, 0x24, 0x08, 0x63, 0xca, 0xc8, 0x21, 0xa6,
-	0x52, 0x05, 0x43, 0x6b, 0xd4, 0x19, 0x37, 0x9e, 0x99, 0x1e, 0xba, 0x7b, 0x64, 0x3b, 0xb0, 0x48,
-	0xb1, 0xc8, 0x86, 0x1d, 0x3c, 0x02, 0x8f, 0x40, 0x15, 0x2b, 0xaa, 0xa8, 0xe2, 0x15, 0x78, 0x05,
-	0x1e, 0x20, 0x6b, 0x16, 0x29, 0xaa, 0x2f, 0x23, 0x8d, 0x2e, 0xb6, 0xec, 0xe4, 0x5f, 0xfc, 0x2b,
-	0x4f, 0x9f, 0x3e, 0x77, 0x7d, 0xe7, 0xeb, 0x6e, 0x43, 0x11, 0xc7, 0xb4, 0x1a, 0x73, 0x26, 0x19,
-	0x5a, 0xf2, 0x82, 0x44, 0x48, 0xc2, 0xdd, 0x10, 0x47, 0xd8, 0x27, 0xdc, 0xc5, 0x31, 0x2d, 0xdf,
-	0xf0, 0x19, 0xf3, 0x03, 0x52, 0xc3, 0x31, 0xad, 0xe1, 0x28, 0x62, 0x12, 0x4b, 0xca, 0x22, 0x61,
-	0x4c, 0xca, 0x0f, 0xf4, 0x1f, 0x6f, 0xc3, 0x27, 0xd1, 0x86, 0x38, 0xc1, 0xbe, 0x4f, 0x78, 0x8d,
-	0xc5, 0x5a, 0x63, 0x58, 0xdb, 0xe1, 0xb0, 0xb0, 0xcd, 0x09, 0x96, 0x64, 0xdb, 0x04, 0xda, 0x13,
-	0x3e, 0x42, 0x30, 0x11, 0xe1, 0x90, 0xac, 0xe5, 0x2a, 0xb9, 0xfb, 0xc5, 0xa6, 0xfe, 0x46, 0x3f,
-	0x85, 0xe9, 0x98, 0xb3, 0x0e, 0x6d, 0x13, 0xbe, 0x96, 0xaf, 0xe4, 0xee, 0xcf, 0x6c, 0x56, 0xab,
-	0x23, 0x72, 0xab, 0xf6, 0x39, 0xdb, 0xb7, 0x16, 0x07, 0x31, 0xf1, 0x9a, 0x5d, 0x7b, 0xe7, 0xb7,
-	0x80, 0xfa, 0xd4, 0x9a, 0x24, 0x0e, 0xce, 0x50, 0x09, 0xf2, 0xec, 0x58, 0xc7, 0x9c, 0x6e, 0xe6,
-	0xd9, 0x31, 0xda, 0x82, 0x6b, 0x36, 0x80, 0x0d, 0x58, 0x19, 0x1d, 0xd0, 0xc8, 0x1a, 0x92, 0x84,
-	0xcd, 0xd4, 0xc0, 0xf9, 0x7b, 0x0e, 0xe6, 0x5e, 0x10, 0x39, 0xa6, 0xa6, 0xef, 0x42, 0x01, 0x9f,
-	0x08, 0xeb, 0xfd, 0xd6, 0x48, 0xef, 0xf5, 0xc3, 0x83, 0x6d, 0x4e, 0xda, 0x24, 0x92, 0x14, 0x07,
-	0xa2, 0xa9, 0xf4, 0xd1, 0xf7, 0x61, 0x12, 0xbf, 0x4d, 0x38, 0x59, 0x2b, 0x68, 0xc3, 0x3b, 0xa3,
-	0x0d, 0x95, 0x46, 0xd6, 0xd4, 0xd8, 0xa0, 0x72, 0xa6, 0x8f, 0x13, 0x3a, 0x97, 0x5e, 0x5f, 0x3c,
-	0x98, 0xef, 0x25, 0x3d, 0xba, 0x29, 0x4f, 0x07, 0x9b, 0x72, 0xf7, 0xa2, 0xa6, 0xec, 0x10, 0x89,
-	0x69, 0xd0, 0xdf, 0x9a, 0x7f, 0xe4, 0x60, 0x61, 0x87, 0x04, 0x64, 0xec, 0x2f, 0xfe, 0x65, 0xeb,
-	0xce, 0x13, 0x40, 0x7d, 0x79, 0x8f, 0x6e, 0xd0, 0x2a, 0x4c, 0x09, 0x89, 0x65, 0x62, 0x12, 0x2f,
-	0x36, 0xed, 0xca, 0xf9, 0x5b, 0x0e, 0x16, 0x7b, 0xcd, 0xfd, 0x19, 0x15, 0x52, 0xd5, 0x6d, 0x6b,
-	0xcc, 0x7d, 0x6a, 0x8d, 0xf9, 0x2f, 0x1c, 0x01, 0x4b, 0xfd, 0x49, 0x8e, 0x2e, 0xf2, 0x09, 0x4c,
-	0xdb, 0x88, 0xaa, 0xcc, 0xc2, 0xa5, 0x66, 0xa3, 0x6b, 0xe1, 0x34, 0x60, 0x26, 0xb3, 0xa1, 0x9c,
-	0xd3, 0xb6, 0xfd, 0xe5, 0xf3, 0xb4, 0xdd, 0xc5, 0x42, 0x3e, 0x83, 0x85, 0x5e, 0x57, 0x0b, 0x7d,
-	0x5d, 0x65, 0xb0, 0x38, 0x04, 0xb5, 0xcf, 0x71, 0x88, 0x6e, 0x02, 0x1c, 0x27, 0x2d, 0xe2, 0xb1,
-	0xe8, 0x0d, 0xf5, 0x6d, 0x7b, 0x32, 0x12, 0xe7, 0x7d, 0x01, 0xbe, 0x7a, 0x2e, 0xc5, 0x8c, 0x84,
-	0xf1, 0x37, 0x60, 0xe6, 0xf8, 0xb1, 0x70, 0x3b, 0x84, 0x0b, 0xca, 0x22, 0x9b, 0x04, 0x1c, 0x3f,
-	0x16, 0xaf, 0x8c, 0x04, 0xfd, 0xc0, 0x60, 0xc0, 0xc0, 0xf5, 0x5b, 0xe3, 0x49, 0xad, 0x7e, 0x78,
-	0xa0, 0x82, 0xfd, 0xe4, 0x2b, 0x06, 0x0b, 0xf5, 0x14, 0x0b, 0x13, 0x97, 0x76, 0xb0, 0x9b, 0x3a,
-	0xb0, 0x88, 0x78, 0x0e, 0x53, 0x9d, 0xf0, 0x04, 0x73, 0xb2, 0x76, 0x4d, 0xfb, 0x78, 0x30, 0xde,
-	0xc7, 0xab, 0xbd, 0x43, 0xcc, 0x89, 0x75, 0x63, 0xad, 0xd1, 0xb7, 0x61, 0xf1, 0x88, 0xfa, 0x47,
-	0x2e, 0xee, 0x60, 0x1a, 0xe0, 0x16, 0x0d, 0xa8, 0x3c, 0x5b, 0x9b, 0xd4, 0xa8, 0x59, 0x50, 0x1b,
-	0xf5, 0x8c, 0x1c, 0xdd, 0x81, 0x52, 0x44, 0xe4, 0x09, 0xe3, 0xc7, 0xee, 0x1b, 0xdc, 0xe2, 0xd4,
-	0x5b, 0x9b, 0xd2, 0xad, 0x99, 0xb3, 0xd2, 0xe7, 0x5a, 0xf8, 0x6c, 0x15, 0x96, 0x53, 0x74, 0xba,
-	0x34, 0x7a, 0xc3, 0x78, 0xa8, 0x8f, 0x0f, 0xe7, 0x5f, 0x93, 0xb0, 0x3c, 0xaa, 0x2d, 0xe8, 0x57,
-	0x30, 0xd3, 0xc6, 0x12, 0xbb, 0x1e, 0x89, 0x14, 0x4b, 0x99, 0xd1, 0xfa, 0xde, 0xa5, 0xdb, 0xaa,
-	0xe6, 0x6d, 0x07, 0x4b, 0xbc, 0xad, 0xcd, 0x9b, 0xd0, 0xee, 0x7e, 0xa3, 0x1f, 0xc3, 0x8c, 0xd7,
-	0x1b, 0xa7, 0xab, 0x10, 0x53, 0xd6, 0x0e, 0xfd, 0x1a, 0x8a, 0x9c, 0x08, 0x96, 0x70, 0x8f, 0xa4,
-	0xbf, 0xfa, 0x8f, 0xae, 0x94, 0xde, 0x3e, 0xb7, 0x68, 0x4c, 0x38, 0x69, 0x2b, 0xc4, 0x8b, 0x66,
-	0xcf, 0x23, 0xf2, 0x60, 0x9e, 0x46, 0x42, 0xe2, 0xc8, 0x23, 0xae, 0xcf, 0x59, 0x12, 0x8b, 0xb5,
-	0x09, 0x3d, 0xa2, 0x5b, 0x57, 0x0a, 0xd2, 0xb0, 0x3e, 0x5e, 0x28, 0x17, 0xcd, 0x12, 0xcd, 0x2e,
-	0x45, 0xf9, 0x15, 0xcc, 0xf5, 0xf5, 0x49, 0xcd, 0x13, 0x27, 0xbe, 0x02, 0xb8, 0xc1, 0xbe, 0x5d,
-	0xa1, 0x0d, 0x40, 0x59, 0x34, 0xb8, 0x6f, 0x59, 0x44, 0x0c, 0x67, 0x14, 0x9b, 0x8b, 0xd9, 0x9d,
-	0xd7, 0x6a, 0xa3, 0xfc, 0x47, 0x58, 0x19, 0x59, 0x20, 0x5a, 0x81, 0xa9, 0x4e, 0xec, 0xb9, 0xdd,
-	0xb9, 0x9e, 0xec, 0xc4, 0x5e, 0xa3, 0x8d, 0xd6, 0x61, 0x51, 0x10, 0x2f, 0xe1, 0xca, 0xb5, 0x2e,
-	0x56, 0x69, 0x98, 0x11, 0x9b, 0x4f, 0x37, 0x74, 0xca, 0x8d, 0x36, 0xaa, 0xc0, 0x2c, 0xc5, 0xa1,
-	0xcb, 0x59, 0x40, 0x5c, 0xcc, 0x23, 0x3b, 0xf8, 0x40, 0x71, 0xd8, 0x64, 0x01, 0xa9, 0xf3, 0xa8,
-	0x1c, 0xc0, 0xc2, 0x60, 0xe5, 0x6a, 0xa4, 0xe5, 0x59, 0xdc, 0x1d, 0x69, 0xf5, 0x8d, 0xbe, 0x09,
-	0xb3, 0x21, 0x8d, 0xdc, 0xdf, 0x27, 0x38, 0x92, 0x0a, 0xe2, 0x2a, 0xe0, 0x64, 0x73, 0x26, 0xa4,
-	0xd1, 0x2f, 0xac, 0x48, 0xab, 0xe0, 0xd3, 0x9e, 0x4a, 0xc1, 0xaa, 0xe0, 0xd3, 0x54, 0xc5, 0x99,
-	0xd7, 0x57, 0x04, 0xcb, 0x02, 0x7b, 0xc2, 0x77, 0x3e, 0xe6, 0xf5, 0xf9, 0x6b, 0x25, 0xa3, 0x99,
-	0xf7, 0x08, 0x96, 0x2c, 0x93, 0x64, 0xa7, 0xc1, 0x62, 0x71, 0x34, 0xca, 0x07, 0x5c, 0x56, 0xed,
-	0xa2, 0xd1, 0x33, 0x6f, 0xa2, 0xce, 0x90, 0xac, 0xfc, 0x21, 0x07, 0x68, 0x58, 0x55, 0xd1, 0x99,
-	0x4f, 0x65, 0x97, 0xce, 0x4c, 0x5b, 0xc0, 0xa7, 0x69, 0x0c, 0xf4, 0x75, 0x50, 0x2b, 0xd7, 0x63,
-	0x61, 0x48, 0xa5, 0xfd, 0x2d, 0x8a, 0x3e, 0x95, 0xdb, 0x5a, 0x80, 0x6e, 0x43, 0x49, 0x6d, 0x4b,
-	0x4e, 0x88, 0xab, 0x38, 0x97, 0xd8, 0xdf, 0x61, 0xd6, 0xa7, 0xf2, 0x25, 0x27, 0xe4, 0x40, 0xc9,
-	0x94, 0x93, 0x56, 0x42, 0x83, 0xb6, 0xdb, 0x56, 0x1a, 0x86, 0x86, 0x8b, 0x5a, 0xb2, 0x63, 0xb7,
-	0x7d, 0xd6, 0xcd, 0x61, 0xd2, 0xc6, 0x60, 0x69, 0x0a, 0x65, 0x98, 0xf6, 0x58, 0x18, 0xd3, 0x80,
-	0x70, 0x4b, 0x2a, 0xdd, 0xb5, 0x3e, 0xfd, 0x02, 0x2c, 0x55, 0x41, 0x9a, 0xed, 0xd4, 0xe9, 0x67,
-	0xd7, 0xce, 0x29, 0x94, 0xfa, 0x07, 0x17, 0x39, 0x30, 0x27, 0x88, 0xc7, 0x89, 0x74, 0x8f, 0xc9,
-	0x59, 0x0f, 0x7d, 0x33, 0x46, 0xb8, 0x4b, 0xce, 0xba, 0x18, 0x54, 0x3a, 0xd8, 0xf3, 0x88, 0x10,
-	0x4a, 0x35, 0x83, 0x41, 0x4e, 0x64, 0x5d, 0xcb, 0x77, 0xc9, 0x59, 0x66, 0x4c, 0x0a, 0xd9, 0x31,
-	0x71, 0xde, 0xe7, 0x60, 0x61, 0xf0, 0xbc, 0x56, 0x98, 0xc7, 0x71, 0x9c, 0xc1, 0x3c, 0x8e, 0x15,
-	0x8e, 0x57, 0x61, 0x4a, 0x92, 0x08, 0x47, 0x69, 0x73, 0xed, 0x4a, 0x57, 0x86, 0x85, 0x38, 0x61,
-	0xbc, 0x6d, 0xbd, 0x77, 0xd7, 0xe8, 0x1e, 0xcc, 0x8b, 0xa4, 0x25, 0x3c, 0x4e, 0xf5, 0x45, 0x5c,
-	0xf9, 0x34, 0x4d, 0x2d, 0x65, 0xc5, 0x8d, 0xb6, 0xf3, 0x1b, 0x28, 0x9b, 0x3c, 0x0c, 0x90, 0x0e,
-	0x08, 0xef, 0x50, 0x8f, 0xd4, 0x3d, 0x8f, 0x25, 0x91, 0x44, 0x5f, 0x83, 0xa2, 0x17, 0x50, 0x12,
-	0xc9, 0x5e, 0x52, 0xd3, 0x46, 0xd0, 0x68, 0xa3, 0x5b, 0x30, 0x67, 0x37, 0x4d, 0xd5, 0x36, 0xbd,
-	0x59, 0x23, 0x3c, 0xd0, 0x32, 0xe7, 0x9f, 0x85, 0x41, 0xda, 0x36, 0x87, 0x91, 0xca, 0x3e, 0x60,
-	0x9e, 0x41, 0xb3, 0xf5, 0x9c, 0xae, 0xd1, 0x8b, 0x51, 0xc4, 0x7b, 0xc9, 0x4b, 0x4f, 0x1f, 0xf5,
-	0x1e, 0x42, 0xc9, 0x1a, 0xd9, 0x8a, 0x2c, 0xff, 0xd6, 0x2e, 0xf0, 0x35, 0xaa, 0x11, 0xcd, 0x01,
-	0x37, 0x9f, 0x47, 0xba, 0xbb, 0x96, 0x74, 0x77, 0xc7, 0x90, 0xee, 0x3b, 0x05, 0x92, 0xdd, 0x61,
-	0x7e, 0x1a, 0xba, 0x72, 0xa4, 0x9c, 0x95, 0xbf, 0x80, 0xb3, 0x0a, 0xe3, 0x39, 0x6b, 0x62, 0x98,
-	0xb3, 0xfe, 0x9d, 0x87, 0xeb, 0xe7, 0xdc, 0x03, 0xd0, 0x0d, 0x28, 0xaa, 0xe8, 0x22, 0xc6, 0x5e,
-	0x9a, 0x4e, 0x4f, 0xa0, 0x78, 0x23, 0xe6, 0xb4, 0x83, 0x25, 0xc9, 0xcc, 0x07, 0x58, 0x91, 0x1a,
-	0x8d, 0xd7, 0x30, 0x1d, 0x62, 0xef, 0x88, 0x46, 0xfa, 0x54, 0x54, 0xbd, 0xfb, 0xe1, 0x55, 0xae,
-	0x21, 0x55, 0xf3, 0xb9, 0x67, 0x5c, 0x98, 0x07, 0x5f, 0xea, 0xaf, 0xfc, 0xe7, 0x1c, 0x2c, 0x0e,
-	0xed, 0x2b, 0xc8, 0x25, 0x82, 0xf0, 0x4c, 0xfb, 0xba, 0x6b, 0xd5, 0xc2, 0x23, 0x26, 0x52, 0x0c,
-	0xeb, 0x6f, 0x25, 0x8b, 0x19, 0x97, 0xb6, 0x75, 0xfa, 0x1b, 0x6d, 0xc2, 0x8a, 0xc7, 0x22, 0xc9,
-	0x59, 0xe0, 0xc6, 0x01, 0x8e, 0x48, 0x97, 0x94, 0xcc, 0x78, 0x2d, 0xd9, 0xcd, 0x7d, 0xb5, 0x67,
-	0xe9, 0x69, 0xf3, 0xc3, 0x04, 0x5c, 0xb3, 0xf9, 0xa3, 0x3f, 0xc0, 0x5c, 0x5f, 0x41, 0xe8, 0xce,
-	0xf8, 0xa2, 0xf7, 0x84, 0x5f, 0xbe, 0x37, 0x5e, 0x4d, 0xb3, 0xbd, 0x53, 0xfe, 0xd3, 0x7f, 0xfe,
-	0xfb, 0xd7, 0xfc, 0x72, 0x79, 0x5e, 0xbf, 0xd6, 0x3b, 0xdf, 0xa9, 0x59, 0xbb, 0xad, 0xdc, 0x3a,
-	0x62, 0x00, 0xbd, 0xdb, 0x3e, 0x72, 0xce, 0x3b, 0x3d, 0x32, 0x61, 0x6f, 0x8f, 0xd1, 0x31, 0x31,
-	0xaf, 0xeb, 0x98, 0x8b, 0x68, 0x30, 0x26, 0x3a, 0x85, 0xb9, 0xbe, 0x27, 0xd4, 0x39, 0xd5, 0x0e,
-	0x3e, 0x0f, 0xcf, 0xa9, 0x76, 0xf8, 0x35, 0x96, 0x46, 0x5e, 0x1f, 0x8a, 0xfc, 0x2e, 0x07, 0xa5,
-	0xfe, 0x97, 0x0d, 0xba, 0x3b, 0xa6, 0x16, 0xfb, 0x46, 0x2b, 0xdf, 0xbf, 0x84, 0x9e, 0x89, 0x7e,
-	0x43, 0x47, 0x5f, 0x45, 0xcb, 0x03, 0xd1, 0x6b, 0x81, 0x8a, 0xf7, 0x16, 0x56, 0x7a, 0x47, 0x71,
-	0xf6, 0x48, 0x75, 0xc6, 0x1c, 0xdb, 0x17, 0x36, 0x3e, 0x7b, 0xb4, 0x0f, 0x37, 0xde, 0xa2, 0xf1,
-	0xd9, 0xc7, 0xdc, 0x5f, 0xea, 0xff, 0xcb, 0xa1, 0x33, 0x58, 0xb2, 0x49, 0x57, 0xf6, 0x8c, 0x9b,
-	0x4a, 0x7d, 0xbf, 0xe1, 0xbc, 0x86, 0xd9, 0x03, 0x1c, 0x8a, 0x24, 0xf2, 0x2b, 0xdb, 0x3f, 0xdf,
-	0x7e, 0x89, 0x1e, 0x1d, 0x49, 0x19, 0x8b, 0xad, 0x5a, 0xcd, 0xa7, 0xf2, 0x28, 0x69, 0x55, 0x3d,
-	0x16, 0xd6, 0x84, 0x51, 0xd8, 0xf0, 0x22, 0x4f, 0xa6, 0x75, 0x6d, 0xd8, 0x5c, 0x36, 0x70, 0x4c,
-	0xcb, 0x2b, 0xb8, 0x1d, 0xd2, 0xe8, 0x69, 0x56, 0xaf, 0x4a, 0xd9, 0xe6, 0x54, 0xe7, 0x61, 0x75,
-	0xb3, 0xfa, 0x70, 0x3d, 0x9f, 0xcf, 0x6d, 0x2e, 0xe0, 0x38, 0x0e, 0xa8, 0x21, 0xf5, 0xda, 0xef,
-	0x04, 0x8b, 0xb6, 0x86, 0x24, 0xfc, 0x97, 0x70, 0x73, 0x8f, 0x71, 0x52, 0xc1, 0x2d, 0x96, 0xc8,
-	0xca, 0x88, 0x6c, 0x3f, 0x29, 0xbb, 0xd6, 0x94, 0xfe, 0x6f, 0xd3, 0xa3, 0xff, 0x07, 0x00, 0x00,
-	0xff, 0xff, 0x0f, 0xb1, 0x6b, 0x55, 0xdb, 0x12, 0x00, 0x00,
+	// 2377 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x5a, 0xcd, 0x73, 0x1c, 0x47,
+	0x15, 0x67, 0x56, 0x1f, 0xd6, 0x3e, 0x49, 0x2b, 0xa9, 0xb5, 0x96, 0xe4, 0x89, 0x49, 0xe4, 0x89,
+	0x9d, 0xd8, 0x8a, 0xa5, 0x35, 0x0e, 0x1f, 0x29, 0xc5, 0x29, 0xbc, 0x96, 0x13, 0x47, 0x28, 0x32,
+	0x66, 0x64, 0x5b, 0x54, 0xaa, 0x60, 0xd3, 0x9a, 0x69, 0x8f, 0x3a, 0x9a, 0x9d, 0x19, 0x7a, 0x7a,
+	0x57, 0x96, 0xc3, 0xc1, 0x50, 0x85, 0xff, 0x00, 0x38, 0xc0, 0x91, 0x2a, 0xce, 0x1c, 0x28, 0xaa,
+	0x38, 0x51, 0x15, 0x0e, 0xf0, 0x07, 0x50, 0xfc, 0x01, 0x5c, 0x38, 0x53, 0x9c, 0x39, 0xa4, 0xa8,
+	0xfe, 0x98, 0xdd, 0x99, 0xd9, 0xd9, 0x0f, 0x39, 0xae, 0x94, 0x39, 0x59, 0xfd, 0xe6, 0x7d, 0xfc,
+	0xde, 0xeb, 0xf7, 0x5e, 0xbf, 0xee, 0x35, 0x94, 0x71, 0x44, 0x37, 0x22, 0x16, 0xf2, 0x10, 0x2d,
+	0x3a, 0x7e, 0x2b, 0xe6, 0x84, 0x35, 0x9a, 0x38, 0xc0, 0x1e, 0x61, 0x0d, 0x1c, 0x51, 0xf3, 0xbc,
+	0x17, 0x86, 0x9e, 0x4f, 0x6a, 0x38, 0xa2, 0x35, 0x1c, 0x04, 0x21, 0xc7, 0x9c, 0x86, 0x41, 0xac,
+	0x44, 0xcc, 0xab, 0xf2, 0x1f, 0x67, 0xdd, 0x23, 0xc1, 0x7a, 0x7c, 0x8c, 0x3d, 0x8f, 0xb0, 0x5a,
+	0x18, 0x49, 0x8e, 0x5e, 0x6e, 0x8b, 0xc1, 0xfc, 0x16, 0x23, 0x98, 0x93, 0x2d, 0x65, 0x68, 0x37,
+	0xf6, 0x10, 0x82, 0xf1, 0x00, 0x37, 0xc9, 0x8a, 0xb1, 0x6a, 0x5c, 0x2e, 0xdb, 0xf2, 0x6f, 0xf4,
+	0x3d, 0x98, 0x8a, 0x58, 0xd8, 0xa6, 0x2e, 0x61, 0x2b, 0xa5, 0x55, 0xe3, 0xf2, 0xf4, 0xf5, 0x8d,
+	0x8d, 0x02, 0x6c, 0x1b, 0x19, 0x65, 0xf7, 0xb4, 0xc4, 0x5e, 0x44, 0x1c, 0xbb, 0x23, 0x6f, 0x7d,
+	0x02, 0x28, 0xc3, 0x66, 0x93, 0xc8, 0x3f, 0x41, 0x15, 0x28, 0x85, 0x47, 0xd2, 0xe6, 0x94, 0x5d,
+	0x0a, 0x8f, 0xd0, 0x26, 0x9c, 0xd1, 0x06, 0xb4, 0xc1, 0xd5, 0x62, 0x83, 0x8a, 0xb6, 0xcd, 0x49,
+	0xd3, 0x4e, 0x04, 0xac, 0x3f, 0x1a, 0x30, 0x7b, 0x87, 0xf0, 0x21, 0x3e, 0x7d, 0x0b, 0xc6, 0xf0,
+	0x71, 0xac, 0xb5, 0xbf, 0x5e, 0xa8, 0xbd, 0xbe, 0xbf, 0xb7, 0xc5, 0x88, 0x4b, 0x02, 0x4e, 0xb1,
+	0x1f, 0xdb, 0x82, 0x1f, 0xbd, 0x0b, 0x13, 0xf8, 0x49, 0x8b, 0x91, 0x95, 0x31, 0x29, 0x78, 0xa9,
+	0x58, 0x50, 0x70, 0xa4, 0x45, 0x95, 0x0c, 0x32, 0x53, 0x71, 0x1c, 0x97, 0x58, 0xba, 0x71, 0x71,
+	0x60, 0xae, 0x0b, 0xba, 0x38, 0x28, 0x37, 0xf3, 0x41, 0x79, 0x63, 0x50, 0x50, 0x6e, 0x13, 0x8e,
+	0xa9, 0x9f, 0x0d, 0xcd, 0x9f, 0x0c, 0x98, 0xbf, 0x4d, 0x7c, 0x32, 0x74, 0xc7, 0x5f, 0xb6, 0xe8,
+	0xdc, 0x00, 0x94, 0xc1, 0x5d, 0x1c, 0xa0, 0x25, 0x98, 0x8c, 0x39, 0xe6, 0x2d, 0x05, 0xbc, 0x6c,
+	0xeb, 0x95, 0xf5, 0x3b, 0x03, 0x16, 0xba, 0xc1, 0xfd, 0x88, 0xc6, 0x5c, 0xf8, 0xad, 0x7d, 0x34,
+	0x9e, 0xd7, 0xc7, 0xd2, 0x0b, 0xcf, 0x80, 0xc5, 0x2c, 0xc8, 0x62, 0x27, 0x6f, 0xc0, 0x94, 0xb6,
+	0x28, 0xdc, 0x1c, 0x1b, 0xa9, 0x36, 0x3a, 0x12, 0xd6, 0x36, 0x4c, 0xa7, 0x3e, 0x08, 0xe5, 0xd4,
+	0xd5, 0x3b, 0x5f, 0xa2, 0x6e, 0x27, 0x17, 0x4a, 0xa9, 0x5c, 0xe8, 0x46, 0x75, 0x2c, 0x13, 0xd5,
+	0x10, 0x16, 0x7a, 0x52, 0xed, 0xcb, 0x28, 0x44, 0xaf, 0x02, 0x1c, 0xb5, 0x0e, 0x88, 0x13, 0x06,
+	0x8f, 0xa8, 0xa7, 0xc3, 0x93, 0xa2, 0x58, 0xcf, 0xc6, 0xe0, 0x5c, 0xdf, 0x16, 0x53, 0x98, 0xc6,
+	0xaf, 0xc1, 0xf4, 0xd1, 0x3b, 0x71, 0xa3, 0x4d, 0x58, 0x4c, 0xc3, 0x40, 0x83, 0x80, 0xa3, 0x77,
+	0xe2, 0x87, 0x8a, 0x82, 0xde, 0x53, 0x39, 0xa0, 0xd2, 0xf5, 0xca, 0xf0, 0xa6, 0x56, 0xdf, 0xdf,
+	0x13, 0xc6, 0x3e, 0xfc, 0x9a, 0xca, 0x85, 0x7a, 0x92, 0x0b, 0xe3, 0x23, 0x2b, 0xd8, 0x49, 0x14,
+	0xe8, 0x8c, 0xf8, 0x00, 0x26, 0xdb, 0xcd, 0x63, 0xcc, 0xc8, 0xca, 0x19, 0xa9, 0xe3, 0xea, 0x70,
+	0x1d, 0x0f, 0x77, 0xf7, 0x31, 0x23, 0x5a, 0x8d, 0x96, 0x46, 0x6f, 0xc1, 0xc2, 0x21, 0xf5, 0x0e,
+	0x1b, 0xb8, 0x8d, 0xa9, 0x8f, 0x0f, 0xa8, 0x4f, 0xf9, 0xc9, 0xca, 0x84, 0xcc, 0x9a, 0x79, 0xf1,
+	0xa1, 0x9e, 0xa2, 0xa3, 0x4b, 0x50, 0x09, 0x08, 0x3f, 0x0e, 0xd9, 0x51, 0xe3, 0x11, 0x3e, 0x60,
+	0xd4, 0x59, 0x99, 0x94, 0xa1, 0x99, 0xd5, 0xd4, 0x0f, 0x24, 0xf1, 0xd6, 0x12, 0x54, 0x93, 0xec,
+	0x6c, 0xd0, 0xe0, 0x51, 0xc8, 0x9a, 0xf2, 0xf8, 0xb0, 0x3e, 0x9f, 0x80, 0x6a, 0x51, 0x58, 0xd0,
+	0x0f, 0x61, 0xda, 0xc5, 0x1c, 0x37, 0x1c, 0x12, 0x88, 0x2e, 0xa5, 0x4a, 0xeb, 0x3b, 0x23, 0x87,
+	0x55, 0xd4, 0xdb, 0x6d, 0xcc, 0xf1, 0x96, 0x14, 0xb7, 0xc1, 0xed, 0xfc, 0x8d, 0xde, 0x87, 0x69,
+	0xa7, 0x5b, 0x4e, 0xa7, 0x69, 0x4c, 0x69, 0x39, 0xf4, 0x23, 0x28, 0x33, 0x12, 0x87, 0x2d, 0xe6,
+	0x90, 0x64, 0xd7, 0xbf, 0x7b, 0x2a, 0x78, 0xf7, 0x98, 0xce, 0xc6, 0x16, 0x23, 0xae, 0xc8, 0xf8,
+	0xd8, 0xee, 0x6a, 0x44, 0x0e, 0xcc, 0xd1, 0x20, 0xe6, 0x38, 0x70, 0x48, 0xc3, 0x63, 0x61, 0x2b,
+	0x8a, 0x57, 0xc6, 0x65, 0x89, 0x6e, 0x9e, 0xca, 0xc8, 0xb6, 0xd6, 0x71, 0x47, 0xa8, 0xb0, 0x2b,
+	0x34, 0xbd, 0x8c, 0xcd, 0x87, 0x30, 0x9b, 0x89, 0x93, 0xa8, 0x27, 0x46, 0x3c, 0x91, 0xe0, 0x2a,
+	0xf7, 0xf5, 0x0a, 0xad, 0x03, 0x4a, 0x67, 0x43, 0xe3, 0x49, 0x18, 0x10, 0xd5, 0x33, 0xca, 0xf6,
+	0x42, 0xfa, 0xcb, 0xc7, 0xe2, 0x83, 0xf9, 0x53, 0x38, 0x5b, 0xe8, 0x20, 0x3a, 0x0b, 0x93, 0xed,
+	0xc8, 0x69, 0x74, 0xea, 0x7a, 0xa2, 0x1d, 0x39, 0xdb, 0x2e, 0x5a, 0x83, 0x85, 0x98, 0x38, 0x2d,
+	0x26, 0x54, 0x4b, 0x67, 0x05, 0x87, 0x2a, 0xb1, 0xb9, 0xe4, 0x83, 0x84, 0xbc, 0xed, 0xa2, 0x55,
+	0x98, 0xa1, 0xb8, 0xd9, 0x60, 0xa1, 0x4f, 0x1a, 0x98, 0x05, 0xba, 0xf0, 0x81, 0xe2, 0xa6, 0x1d,
+	0xfa, 0xa4, 0xce, 0x02, 0xd3, 0x87, 0xf9, 0xbc, 0xe7, 0xa2, 0xa4, 0xf9, 0x49, 0xd4, 0x29, 0x69,
+	0xf1, 0x37, 0xba, 0x00, 0x33, 0x4d, 0x1a, 0x34, 0x7e, 0xd2, 0xc2, 0x01, 0x17, 0x29, 0x2e, 0x0c,
+	0x4e, 0xd8, 0xd3, 0x4d, 0x1a, 0xfc, 0x40, 0x93, 0x24, 0x0b, 0x7e, 0xdc, 0x65, 0x19, 0xd3, 0x2c,
+	0xf8, 0x71, 0xc2, 0x62, 0xcd, 0xc9, 0x11, 0x41, 0x77, 0x81, 0xdd, 0xd8, 0xb3, 0xbe, 0x28, 0xc9,
+	0xf3, 0x57, 0x53, 0x8a, 0x3b, 0xef, 0x21, 0x2c, 0xea, 0x4e, 0x92, 0xae, 0x06, 0x9d, 0x8b, 0xc5,
+	0x59, 0x9e, 0x53, 0xb9, 0xa1, 0x17, 0xdb, 0x5d, 0x71, 0x1b, 0xb5, 0x7b, 0x68, 0xe6, 0x7f, 0x0c,
+	0x40, 0xbd, 0xac, 0xa2, 0x9d, 0x79, 0x94, 0x77, 0xda, 0x99, 0x0a, 0x0b, 0x78, 0x34, 0xb1, 0x81,
+	0xbe, 0x0e, 0x62, 0xd5, 0x70, 0xc2, 0x66, 0x93, 0x72, 0xbd, 0x17, 0x65, 0x8f, 0xf2, 0x2d, 0x49,
+	0x40, 0x17, 0xa1, 0x22, 0x3e, 0x73, 0x46, 0x48, 0x43, 0xf4, 0x5c, 0xa2, 0xf7, 0x61, 0xc6, 0xa3,
+	0xfc, 0x3e, 0x23, 0x64, 0x4f, 0xd0, 0x84, 0x92, 0x83, 0x16, 0xf5, 0xdd, 0x86, 0x2b, 0x38, 0x54,
+	0x1b, 0x2e, 0x4b, 0xca, 0x6d, 0xfd, 0xd9, 0x0b, 0x3b, 0x18, 0x26, 0xb4, 0x8d, 0x30, 0x81, 0x60,
+	0xc2, 0x94, 0x13, 0x36, 0x23, 0xea, 0x13, 0xa6, 0x9b, 0x4a, 0x67, 0x2d, 0x4f, 0x3f, 0x1f, 0x73,
+	0xe1, 0x90, 0xec, 0x76, 0xe2, 0xf4, 0xd3, 0x6b, 0xeb, 0x31, 0x54, 0xb2, 0x85, 0x8b, 0x2c, 0x98,
+	0x8d, 0x89, 0xc3, 0x08, 0x6f, 0x1c, 0x91, 0x93, 0x6e, 0xf6, 0x4d, 0x2b, 0xe2, 0x0e, 0x39, 0xe9,
+	0xe4, 0xa0, 0xe0, 0xc1, 0x8e, 0x43, 0xe2, 0x58, 0xb0, 0xa6, 0x72, 0x90, 0x11, 0x5e, 0x97, 0xf4,
+	0x1d, 0x72, 0x92, 0x2a, 0x93, 0xb1, 0x74, 0x99, 0x58, 0xcf, 0x0c, 0x98, 0xcf, 0x9f, 0xd7, 0x22,
+	0xe7, 0x71, 0x14, 0xa5, 0x72, 0x1e, 0x47, 0x22, 0x8f, 0x97, 0x60, 0x92, 0x93, 0x00, 0x07, 0x49,
+	0x70, 0xf5, 0x4a, 0x7a, 0x86, 0xe3, 0xf8, 0x38, 0x64, 0xae, 0xd6, 0xde, 0x59, 0xa3, 0x37, 0x61,
+	0x2e, 0x6e, 0x1d, 0xc4, 0x0e, 0xa3, 0x72, 0x10, 0x17, 0x3a, 0x55, 0x50, 0x2b, 0x69, 0xf2, 0xb6,
+	0x6b, 0xfd, 0x18, 0x4c, 0x85, 0x43, 0x25, 0xd2, 0x1e, 0x61, 0x6d, 0xea, 0x90, 0xba, 0xe3, 0x84,
+	0xad, 0x80, 0xa3, 0x57, 0xa0, 0xec, 0xf8, 0x94, 0x04, 0xbc, 0x0b, 0x6a, 0x4a, 0x11, 0xb6, 0x5d,
+	0xf4, 0x3a, 0xcc, 0xea, 0x8f, 0xca, 0x6b, 0x0d, 0x6f, 0x46, 0x11, 0xf7, 0x24, 0xcd, 0xfa, 0xf3,
+	0x58, 0xbe, 0x6d, 0xab, 0xc3, 0x48, 0xa0, 0xf7, 0x43, 0x47, 0x65, 0xb3, 0xd6, 0x9c, 0xac, 0xd1,
+	0x9d, 0xa2, 0xc6, 0x3b, 0xe2, 0xd0, 0x93, 0x69, 0xbd, 0xfb, 0x50, 0xd1, 0x42, 0xda, 0x23, 0xdd,
+	0x7f, 0x6b, 0x03, 0x74, 0x15, 0x05, 0xc2, 0xce, 0xa9, 0xf9, 0x72, 0x4d, 0x77, 0x47, 0x37, 0xdd,
+	0x9d, 0x21, 0x4d, 0xf7, 0xa9, 0x48, 0x92, 0x9d, 0xde, 0xfe, 0xd4, 0x33, 0x72, 0x24, 0x3d, 0xab,
+	0x34, 0xa0, 0x67, 0x8d, 0x0d, 0xef, 0x59, 0xe3, 0xbd, 0x3d, 0xeb, 0x9f, 0x06, 0x2c, 0xf7, 0x99,
+	0x03, 0xd0, 0x43, 0x58, 0x74, 0xc2, 0x80, 0xb3, 0xd0, 0x6f, 0x44, 0x3e, 0x0e, 0x48, 0x23, 0x08,
+	0x5d, 0x79, 0xc2, 0x8d, 0xf5, 0xbd, 0x26, 0x28, 0xe9, 0x5d, 0xec, 0x1c, 0xd2, 0x40, 0x2a, 0xb1,
+	0x17, 0xb4, 0x8a, 0x7b, 0x42, 0xc3, 0x5d, 0xa1, 0x00, 0x6d, 0xc3, 0x8c, 0x98, 0x07, 0x08, 0xd3,
+	0x0a, 0xc7, 0x4f, 0xa5, 0x70, 0x5a, 0xc9, 0x2a, 0x55, 0x17, 0x60, 0x06, 0x47, 0xb4, 0x41, 0x02,
+	0x37, 0x0a, 0x69, 0xc0, 0x75, 0xe7, 0x98, 0xc6, 0x11, 0x7d, 0x5f, 0x93, 0xac, 0x77, 0x61, 0x6e,
+	0xa7, 0x75, 0x40, 0x58, 0x40, 0x38, 0x89, 0x3f, 0xc2, 0x07, 0xc4, 0x2f, 0x0c, 0x71, 0x15, 0x26,
+	0xda, 0xd8, 0x6f, 0x25, 0x31, 0x56, 0x0b, 0xeb, 0x0f, 0x06, 0x2c, 0xf4, 0x40, 0x10, 0xa9, 0xdd,
+	0x8a, 0x09, 0x4b, 0xe9, 0xe8, 0xac, 0x85, 0xee, 0xc3, 0x30, 0x4e, 0x6a, 0x45, 0xfe, 0x2d, 0x68,
+	0x51, 0xc8, 0xb8, 0xde, 0x22, 0xf9, 0x77, 0xa6, 0xb8, 0xc7, 0x73, 0xc5, 0x7d, 0x03, 0x26, 0x7d,
+	0x01, 0x34, 0x5e, 0x99, 0x90, 0xa1, 0xb9, 0x58, 0x18, 0x9a, 0x9c, 0x57, 0xb6, 0x96, 0xb1, 0xfe,
+	0x5a, 0x02, 0x24, 0x87, 0x58, 0xd1, 0x3a, 0xef, 0x53, 0xdf, 0x57, 0x37, 0xb2, 0x95, 0xee, 0x45,
+	0x4f, 0x61, 0x4e, 0x96, 0xe8, 0x3c, 0x94, 0x05, 0xf4, 0x38, 0xc2, 0x4e, 0xe2, 0x7e, 0x97, 0x20,
+	0xe4, 0x92, 0xbe, 0xac, 0x9a, 0x50, 0xb2, 0x14, 0xc1, 0x4f, 0x70, 0x1d, 0x53, 0x57, 0x75, 0xf5,
+	0x29, 0x7b, 0x5a, 0xd3, 0xf6, 0xa9, 0x4b, 0xd0, 0x15, 0x98, 0xc7, 0xae, 0x48, 0xd3, 0x8e, 0x3e,
+	0xe5, 0x53, 0xd9, 0x9e, 0x93, 0xf4, 0xbb, 0x1d, 0x72, 0xe6, 0x16, 0x33, 0x99, 0xbd, 0xc5, 0x24,
+	0xb7, 0xaa, 0x33, 0xcf, 0x7b, 0xab, 0x9a, 0x3a, 0xfd, 0xad, 0xca, 0xba, 0x09, 0xd5, 0x5c, 0x14,
+	0x8b, 0x0f, 0xf0, 0x15, 0x38, 0xd3, 0x24, 0x71, 0x8c, 0xbd, 0x24, 0x76, 0xc9, 0xd2, 0xfa, 0xbc,
+	0x04, 0x8b, 0xb2, 0xb6, 0x7d, 0xff, 0x43, 0xe2, 0x37, 0xb7, 0x0e, 0x31, 0xe3, 0x83, 0x77, 0xa2,
+	0x0e, 0x93, 0x5c, 0x9a, 0xd2, 0x2d, 0xf1, 0x4a, 0x9f, 0xf3, 0x3f, 0x20, 0x8c, 0x3a, 0x0a, 0xd4,
+	0x1e, 0xe1, 0x9c, 0x06, 0x9e, 0xad, 0x05, 0x85, 0xcf, 0x8e, 0x30, 0x34, 0xf0, 0xb6, 0xac, 0x35,
+	0x74, 0x50, 0xd9, 0x4a, 0xe6, 0xa5, 0xdb, 0x83, 0x3a, 0x9c, 0xcd, 0x07, 0xf0, 0xb4, 0x9b, 0xf0,
+	0xeb, 0x52, 0x72, 0xcb, 0xff, 0xea, 0xf6, 0xa0, 0x9a, 0xde, 0x83, 0xf2, 0xcb, 0x1a, 0xdc, 0x9b,
+	0x50, 0xcd, 0x05, 0xe6, 0xb4, 0xb1, 0xbd, 0x0b, 0xd5, 0xa2, 0x38, 0x64, 0x1b, 0x8a, 0x31, 0xa0,
+	0xa1, 0x94, 0x32, 0x0d, 0x45, 0x0e, 0x4d, 0xf9, 0xd4, 0x2c, 0x6c, 0xd6, 0x83, 0x3b, 0x16, 0x82,
+	0x71, 0x46, 0xa2, 0x50, 0x47, 0x5f, 0xfe, 0xdd, 0xdd, 0x92, 0xf1, 0xf4, 0x96, 0x2c, 0xc1, 0xa4,
+	0xec, 0xf3, 0xb1, 0x3e, 0x38, 0xf4, 0xca, 0xfa, 0x9b, 0x01, 0xaf, 0xdd, 0x21, 0xfc, 0x41, 0xe4,
+	0x31, 0xec, 0x26, 0x27, 0x63, 0x6a, 0x68, 0x16, 0x19, 0x94, 0xde, 0x4e, 0xa3, 0x78, 0x3b, 0xbf,
+	0xd2, 0x97, 0xae, 0x24, 0x4e, 0xe3, 0xdd, 0x38, 0x59, 0xdf, 0x87, 0x0b, 0x83, 0xdc, 0x28, 0xde,
+	0x6f, 0x13, 0xa6, 0xf4, 0x86, 0x24, 0xf7, 0xba, 0xce, 0xda, 0xfa, 0xbb, 0x01, 0x0b, 0x59, 0x75,
+	0xff, 0x27, 0xa1, 0x48, 0x67, 0xdd, 0x44, 0x36, 0xeb, 0x2e, 0xc1, 0x62, 0xd6, 0xa5, 0xc2, 0xb0,
+	0x58, 0xbf, 0x18, 0x83, 0xf9, 0xba, 0xfb, 0x69, 0x2b, 0x1e, 0xf6, 0x08, 0xbc, 0xdf, 0x79, 0x7c,
+	0x99, 0x90, 0xd8, 0xdf, 0x2b, 0xc6, 0x9e, 0x53, 0x95, 0x25, 0x14, 0xbd, 0xc6, 0x98, 0x7f, 0x31,
+	0x60, 0xb9, 0x0f, 0x17, 0xda, 0x82, 0x32, 0x76, 0x5d, 0x3d, 0x50, 0x19, 0xa7, 0x1a, 0xa8, 0xa6,
+	0xb0, 0xeb, 0xaa, 0x69, 0xea, 0x13, 0x98, 0x61, 0xa4, 0x19, 0xb6, 0x93, 0x49, 0x4f, 0xbd, 0x04,
+	0x8e, 0x88, 0x5f, 0x29, 0xb6, 0xa5, 0x7c, 0x66, 0x5e, 0x53, 0x2a, 0xa5, 0x05, 0x73, 0x1d, 0x96,
+	0xfb, 0xf0, 0x75, 0x06, 0x27, 0xa3, 0x3b, 0x38, 0xdd, 0x42, 0x30, 0xdf, 0x79, 0x2b, 0x72, 0x0e,
+	0x71, 0xe0, 0x91, 0xd8, 0xba, 0x08, 0x28, 0x63, 0xbb, 0x78, 0xb7, 0x38, 0x2c, 0x3f, 0x88, 0xc4,
+	0x5d, 0x33, 0x9b, 0x5c, 0xfd, 0xf6, 0xec, 0xc5, 0xbc, 0x04, 0x59, 0x6f, 0xc1, 0xb9, 0x22, 0xab,
+	0xc5, 0x10, 0x1f, 0x77, 0x98, 0x73, 0x69, 0xdc, 0x0f, 0xe4, 0x8b, 0xba, 0x35, 0x59, 0xeb, 0xf0,
+	0x4a, 0xb1, 0xe5, 0x42, 0xa0, 0xd7, 0xff, 0x3d, 0x0b, 0x67, 0x74, 0xb0, 0xd1, 0x67, 0x30, 0x9b,
+	0xb9, 0x2e, 0xa0, 0x4b, 0xc3, 0xef, 0x43, 0xbb, 0xb1, 0x67, 0xbe, 0x39, 0x9c, 0x4d, 0x1a, 0xb7,
+	0xcc, 0x9f, 0xff, 0xe3, 0x5f, 0xbf, 0x2a, 0x55, 0xcd, 0x39, 0xf9, 0x63, 0x54, 0xfb, 0x1b, 0x35,
+	0x2d, 0xb7, 0x69, 0xac, 0xa1, 0x10, 0xa0, 0xfb, 0x98, 0x8d, 0xac, 0x7e, 0x8f, 0x23, 0x29, 0xb3,
+	0x17, 0x87, 0xf0, 0x28, 0x9b, 0xcb, 0xd2, 0xe6, 0x02, 0xca, 0xdb, 0x44, 0x8f, 0x61, 0x36, 0xf3,
+	0x0b, 0x41, 0x1f, 0x6f, 0xf3, 0xbf, 0x7e, 0xf4, 0xf1, 0xb6, 0xf7, 0xc7, 0x86, 0xc4, 0xf2, 0x5a,
+	0x8f, 0xe5, 0xa7, 0x46, 0x2e, 0xcd, 0x55, 0x85, 0x5e, 0x1a, 0xa9, 0x16, 0xfb, 0xd8, 0xef, 0x2d,
+	0x9b, 0x24, 0xda, 0x56, 0x51, 0xb4, 0x9f, 0x1a, 0x50, 0xc9, 0xfe, 0x76, 0x80, 0xde, 0x18, 0x12,
+	0x4e, 0xfd, 0x2b, 0x88, 0x79, 0x79, 0x04, 0x3e, 0x05, 0xe0, 0xbc, 0x04, 0xb0, 0x84, 0xaa, 0x39,
+	0x00, 0x35, 0x5f, 0xd8, 0x7b, 0x6a, 0xc0, 0x5c, 0x6e, 0x08, 0x47, 0xc5, 0xbe, 0xf5, 0x5e, 0x78,
+	0xcc, 0x2b, 0xa3, 0x30, 0x2a, 0x14, 0xe7, 0x24, 0x8a, 0x45, 0xab, 0x92, 0xa0, 0x50, 0x83, 0x9c,
+	0x88, 0xc2, 0xcf, 0x0c, 0x98, 0xcf, 0xcf, 0xa0, 0xa8, 0xd8, 0xbf, 0x82, 0x59, 0xdf, 0x5c, 0x1b,
+	0x89, 0x33, 0x93, 0x0c, 0xe6, 0x4c, 0x82, 0xe2, 0x90, 0xf8, 0x4d, 0x81, 0xe1, 0x33, 0x98, 0xcb,
+	0x4d, 0x6a, 0x68, 0x50, 0x86, 0x65, 0x00, 0x5c, 0x19, 0x85, 0x51, 0xd9, 0xaf, 0x4a, 0xfb, 0x95,
+	0xb5, 0x8c, 0x7d, 0xf4, 0x04, 0xce, 0x76, 0x1f, 0x1c, 0xd3, 0x0f, 0x87, 0xd6, 0x90, 0xc7, 0xc9,
+	0x81, 0xf5, 0x97, 0x7e, 0xc0, 0xec, 0xad, 0xbf, 0xe4, 0x86, 0xf9, 0x7b, 0x03, 0xce, 0x0f, 0x1a,
+	0x60, 0xd0, 0x37, 0xfb, 0xe9, 0x1f, 0x34, 0xba, 0x99, 0xdf, 0x3e, 0xb5, 0x94, 0xc2, 0xf9, 0x9a,
+	0xc4, 0x79, 0x0e, 0x2d, 0xe7, 0x93, 0xb5, 0xa5, 0xe4, 0xd0, 0x33, 0x03, 0x2a, 0x59, 0x1d, 0x7d,
+	0x4a, 0xa6, 0x67, 0x86, 0xea, 0x53, 0x32, 0x05, 0x83, 0x89, 0x65, 0x49, 0x14, 0xe7, 0xad, 0x7e,
+	0x28, 0x44, 0xc6, 0xfc, 0xc6, 0x80, 0x6a, 0xd1, 0x49, 0x84, 0xae, 0xf6, 0x31, 0x53, 0x78, 0x54,
+	0x9a, 0x1b, 0x23, 0x73, 0xf7, 0x83, 0xd6, 0xe5, 0xa8, 0xe1, 0xe3, 0x58, 0x40, 0xfb, 0xad, 0x01,
+	0x4b, 0xc5, 0xa7, 0x0f, 0x1a, 0x68, 0xae, 0xf7, 0x90, 0x34, 0xaf, 0x9d, 0x82, 0x5f, 0x01, 0xbc,
+	0x28, 0x01, 0xbe, 0x6a, 0x9d, 0x2b, 0x04, 0x28, 0x44, 0x36, 0x8d, 0xb5, 0x5b, 0x5f, 0x18, 0xbf,
+	0xac, 0xff, 0xd7, 0x40, 0x27, 0xb0, 0xa8, 0x03, 0xbf, 0xba, 0xab, 0xf4, 0xaf, 0xd6, 0xef, 0x6d,
+	0x5b, 0x1f, 0xc3, 0xcc, 0x1e, 0x6e, 0xc6, 0xad, 0xc0, 0x5b, 0xdd, 0xba, 0xbb, 0x75, 0x1f, 0xbd,
+	0x7d, 0xc8, 0x79, 0x14, 0x6f, 0xd6, 0x6a, 0x1e, 0xe5, 0x87, 0xad, 0x83, 0x0d, 0x27, 0x6c, 0xd6,
+	0x62, 0xc5, 0xb0, 0xee, 0x04, 0x0e, 0x4f, 0xf6, 0x67, 0x5d, 0x83, 0x5c, 0xc7, 0x11, 0x35, 0xcf,
+	0xca, 0xe7, 0x8f, 0x9b, 0x69, 0xbe, 0x0d, 0x1a, 0x5e, 0x9f, 0x6c, 0x5f, 0xdb, 0xb8, 0xbe, 0x71,
+	0x6d, 0xad, 0x54, 0x32, 0xae, 0xcf, 0xe3, 0x28, 0xf2, 0xa9, 0x7a, 0x31, 0xad, 0x7d, 0x1a, 0x87,
+	0xc1, 0x66, 0x0f, 0x85, 0x3d, 0x80, 0x57, 0x77, 0x43, 0x46, 0x56, 0xf1, 0x41, 0xd8, 0xe2, 0xab,
+	0x05, 0x68, 0x9f, 0x0b, 0xdd, 0xc1, 0xa4, 0xfc, 0xaf, 0x1c, 0x6f, 0xff, 0x2f, 0x00, 0x00, 0xff,
+	0xff, 0x41, 0xcc, 0x1c, 0xa3, 0x38, 0x22, 0x00, 0x00,
 }

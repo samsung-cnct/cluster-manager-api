@@ -5,6 +5,10 @@
 
 - [api.proto](#api.proto)
     - [AWSCredentials](#cluster_manager_api.AWSCredentials)
+    - [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg)
+    - [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec)
+    - [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec)
+    - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
     - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
     - [AzureCredentials](#cluster_manager_api.AzureCredentials)
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
@@ -19,16 +23,33 @@
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec)
-    - [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
+    - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
+    - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
+    - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
+    - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
+    - [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg)
+    - [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply)
     - [GetVersionMsg](#cluster_manager_api.GetVersionMsg)
     - [GetVersionReply](#cluster_manager_api.GetVersionReply)
     - [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation)
+    - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
+    - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
+    - [KubernetesLabel](#cluster_manager_api.KubernetesLabel)
+    - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
+    - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
+    - [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg)
+    - [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply)
+    - [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg)
+    - [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsReply)
+    - [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg)
+    - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
+    - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
   
   
   
@@ -37,6 +58,10 @@
 
 - [api.proto](#api.proto)
     - [AWSCredentials](#cluster_manager_api.AWSCredentials)
+    - [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg)
+    - [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec)
+    - [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec)
+    - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
     - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
     - [AzureCredentials](#cluster_manager_api.AzureCredentials)
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
@@ -51,16 +76,33 @@
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec)
-    - [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
+    - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
+    - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
+    - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
+    - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
+    - [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg)
+    - [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply)
     - [GetVersionMsg](#cluster_manager_api.GetVersionMsg)
     - [GetVersionReply](#cluster_manager_api.GetVersionReply)
     - [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation)
+    - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
+    - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
+    - [KubernetesLabel](#cluster_manager_api.KubernetesLabel)
+    - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
+    - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
+    - [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg)
+    - [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply)
+    - [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg)
+    - [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsReply)
+    - [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg)
+    - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
+    - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
   
   
   
@@ -95,6 +137,68 @@ The credentials to use for creating the cluster
 
 
 
+<a name="cluster_manager_api.AdjustClusterMsg"></a>
+
+### AdjustClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 3; AdjustClusterAKSSpec azure = 4; |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec"></a>
+
+### AdjustClusterMsg.AdjustClusterVMWareSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| add_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to add to the cluster |
+| remove_nodes | [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec) | repeated | Machines which we want to remove from the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec"></a>
+
+### AdjustClusterMsg.VMWareRemoveMachineSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| host | [string](#string) |  | The host for SSH access |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterReply"></a>
+
+### AdjustClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
 <a name="cluster_manager_api.AzureClusterServiceAccount"></a>
 
 ### AzureClusterServiceAccount
@@ -329,27 +433,9 @@ For when some things are already created
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  | This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster |
-| private_key | [string](#string) |  | Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently. |
-| machines | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
-
-
-
-
-
-
-<a name="cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec"></a>
-
-### CreateClusterVMWareSpec.VMWareMachineSpec
-The credentials to use for creating the cluster
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| username | [string](#string) |  | The username for SSH access |
-| host | [string](#string) |  | The host for SSH access |
-| port | [int32](#int32) |  | The port for SSH access |
-| control_plane_version | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| control_plane_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| worker_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| api_endpoint | [string](#string) |  | This should be a value like ip:port that will be a virtual IP/port Passed back to external customers to be able to communicate to the cluster |
 
 
 
@@ -384,6 +470,77 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Could the cluster be destroyed |
 | status | [string](#string) |  | Status of the request |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteHelmChartMsg"></a>
+
+### DeleteHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [string](#string) |  | Chart Name |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteHelmChartReply"></a>
+
+### DeleteHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericHelmChart"></a>
+
+### GenericHelmChart
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the name of the deployment |
+| namespace | [string](#string) |  | What is the namespace to deploy the application to |
+| repo | [string](#string) |  | What is the chart repository |
+| chart | [string](#string) |  | What is the chart name |
+| values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericTillerSetting"></a>
+
+### GenericTillerSetting
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | What is the tiller namespace |
+| version | [string](#string) |  | What is the version of tiller/helm |
 
 
 
@@ -457,6 +614,40 @@ The credentials to use for creating the cluster
 
 
 
+<a name="cluster_manager_api.GetUpgradeClusterInformationMsg"></a>
+
+### GetUpgradeClusterInformationMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetUpgradeClusterInformationReply"></a>
+
+### GetUpgradeClusterInformationReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Can the cluster be upgraded |
+| versions | [string](#string) | repeated | What versions are possible right now |
+
+
+
+
+
+
 <a name="cluster_manager_api.GetVersionMsg"></a>
 
 ### GetVersionMsg
@@ -503,6 +694,211 @@ Reply for version request
 
 
 
+
+<a name="cluster_manager_api.InstallHelmChartMsg"></a>
+
+### InstallHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.InstallHelmChartReply"></a>
+
+### InstallHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.KubernetesLabel"></a>
+
+### KubernetesLabel
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | The name of a label |
+| value | [string](#string) |  | The value of a label |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerMsg"></a>
+
+### ProvisionTillerMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| namespace | [string](#string) |  | Namespace tiller should be installed in |
+| version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
+| cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
+| admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerReply"></a>
+
+### ProvisionTillerReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAWSCredentialsMsg"></a>
+
+### UpdateAWSCredentialsMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Cluster name |
+| credentials | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | Credentials to build the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAWSCredentialsReply"></a>
+
+### UpdateAWSCredentialsReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAzureCredentialsMsg"></a>
+
+### UpdateAzureCredentialsMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Cluster name |
+| credentials | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Credentials to build the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAzureCredentialsReply"></a>
+
+### UpdateAzureCredentialsReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpgradeClusterMsg"></a>
+
+### UpgradeClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+| version | [string](#string) |  | What version are we upgrading to? |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpgradeClusterReply"></a>
+
+### UpgradeClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
+<a name="cluster_manager_api.VMWareMachineSpec"></a>
+
+### VMWareMachineSpec
+The specification for a specific node
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| username | [string](#string) |  | The username for SSH access |
+| host | [string](#string) |  | The host for SSH access |
+| port | [int32](#int32) |  | The port for SSH access |
+| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| labels | [KubernetesLabel](#cluster_manager_api.KubernetesLabel) | repeated | The labels for the machines |
+
+
+
+
+
  
 
  
@@ -520,8 +916,16 @@ Reply for version request
 | CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterReply) | Will provision a cluster |
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterReply) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply) | Will delete a cluster |
+| AdjustClusterNodes | [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg) | [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply) | Will adjust a provision a cluster |
 | GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListReply) | Will retrieve a list of clusters |
+| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply) | Will install (or reinstall) tiller |
+| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
+| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply) | Will delete deployed helm chart |
 | GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionReply) | Will return version information about api server |
+| GetUpgradeClusterInformation | [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg) | [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply) | Will return upgrade options for a given cluster |
+| UpgradeCluster | [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg) | [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply) | Will attempt to upgrade a cluster |
+| UpdateAWSCredentials | [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg) | [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply) | Will update aws credentials used for a cluster |
+| UpdateAzureCredentials | [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg) | [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsReply) | Will update azure credentials used for a cluster |
 
  
 
@@ -551,6 +955,68 @@ The credentials to use for creating the cluster
 
 
 
+<a name="cluster_manager_api.AdjustClusterMsg"></a>
+
+### AdjustClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 3; AdjustClusterAKSSpec azure = 4; |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec"></a>
+
+### AdjustClusterMsg.AdjustClusterVMWareSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| add_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to add to the cluster |
+| remove_nodes | [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec) | repeated | Machines which we want to remove from the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec"></a>
+
+### AdjustClusterMsg.VMWareRemoveMachineSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| host | [string](#string) |  | The host for SSH access |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterReply"></a>
+
+### AdjustClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
 <a name="cluster_manager_api.AzureClusterServiceAccount"></a>
 
 ### AzureClusterServiceAccount
@@ -785,27 +1251,9 @@ For when some things are already created
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  | This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster |
-| private_key | [string](#string) |  | Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently. |
-| machines | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
-
-
-
-
-
-
-<a name="cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec"></a>
-
-### CreateClusterVMWareSpec.VMWareMachineSpec
-The credentials to use for creating the cluster
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| username | [string](#string) |  | The username for SSH access |
-| host | [string](#string) |  | The host for SSH access |
-| port | [int32](#int32) |  | The port for SSH access |
-| control_plane_version | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| control_plane_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| worker_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| api_endpoint | [string](#string) |  | This should be a value like ip:port that will be a virtual IP/port Passed back to external customers to be able to communicate to the cluster |
 
 
 
@@ -840,6 +1288,77 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Could the cluster be destroyed |
 | status | [string](#string) |  | Status of the request |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteHelmChartMsg"></a>
+
+### DeleteHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [string](#string) |  | Chart Name |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteHelmChartReply"></a>
+
+### DeleteHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericHelmChart"></a>
+
+### GenericHelmChart
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the name of the deployment |
+| namespace | [string](#string) |  | What is the namespace to deploy the application to |
+| repo | [string](#string) |  | What is the chart repository |
+| chart | [string](#string) |  | What is the chart name |
+| values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericTillerSetting"></a>
+
+### GenericTillerSetting
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | What is the tiller namespace |
+| version | [string](#string) |  | What is the version of tiller/helm |
 
 
 
@@ -913,6 +1432,40 @@ The credentials to use for creating the cluster
 
 
 
+<a name="cluster_manager_api.GetUpgradeClusterInformationMsg"></a>
+
+### GetUpgradeClusterInformationMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetUpgradeClusterInformationReply"></a>
+
+### GetUpgradeClusterInformationReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Can the cluster be upgraded |
+| versions | [string](#string) | repeated | What versions are possible right now |
+
+
+
+
+
+
 <a name="cluster_manager_api.GetVersionMsg"></a>
 
 ### GetVersionMsg
@@ -959,6 +1512,211 @@ Reply for version request
 
 
 
+
+<a name="cluster_manager_api.InstallHelmChartMsg"></a>
+
+### InstallHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.InstallHelmChartReply"></a>
+
+### InstallHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.KubernetesLabel"></a>
+
+### KubernetesLabel
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | The name of a label |
+| value | [string](#string) |  | The value of a label |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerMsg"></a>
+
+### ProvisionTillerMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| namespace | [string](#string) |  | Namespace tiller should be installed in |
+| version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
+| cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
+| admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerReply"></a>
+
+### ProvisionTillerReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAWSCredentialsMsg"></a>
+
+### UpdateAWSCredentialsMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Cluster name |
+| credentials | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | Credentials to build the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAWSCredentialsReply"></a>
+
+### UpdateAWSCredentialsReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAzureCredentialsMsg"></a>
+
+### UpdateAzureCredentialsMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Cluster name |
+| credentials | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Credentials to build the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAzureCredentialsReply"></a>
+
+### UpdateAzureCredentialsReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpgradeClusterMsg"></a>
+
+### UpgradeClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+| version | [string](#string) |  | What version are we upgrading to? |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpgradeClusterReply"></a>
+
+### UpgradeClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
+<a name="cluster_manager_api.VMWareMachineSpec"></a>
+
+### VMWareMachineSpec
+The specification for a specific node
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| username | [string](#string) |  | The username for SSH access |
+| host | [string](#string) |  | The host for SSH access |
+| port | [int32](#int32) |  | The port for SSH access |
+| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| labels | [KubernetesLabel](#cluster_manager_api.KubernetesLabel) | repeated | The labels for the machines |
+
+
+
+
+
  
 
  
@@ -976,8 +1734,16 @@ Reply for version request
 | CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterReply) | Will provision a cluster |
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterReply) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply) | Will delete a cluster |
+| AdjustClusterNodes | [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg) | [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply) | Will adjust a provision a cluster |
 | GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListReply) | Will retrieve a list of clusters |
+| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply) | Will install (or reinstall) tiller |
+| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
+| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply) | Will delete deployed helm chart |
 | GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionReply) | Will return version information about api server |
+| GetUpgradeClusterInformation | [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg) | [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply) | Will return upgrade options for a given cluster |
+| UpgradeCluster | [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg) | [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply) | Will attempt to upgrade a cluster |
+| UpdateAWSCredentials | [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg) | [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply) | Will update aws credentials used for a cluster |
+| UpdateAzureCredentials | [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg) | [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsReply) | Will update azure credentials used for a cluster |
 
  
 

@@ -63,16 +63,71 @@ service Cluster {
             delete : "/api/v1/cluster"
         };
     }
+    // Will adjust a provision a cluster
+    rpc AdjustClusterNodes (AdjustClusterMsg) returns (AdjustClusterReply) {
+        option (google.api.http) = {
+            post : "/api/v1/cluster"
+            body : "*"
+        };
+    }
     // Will retrieve a list of clusters
     rpc GetClusterList (GetClusterListMsg) returns (GetClusterListReply) {
         option (google.api.http) = {
             get : "/api/v1/cluster/list"
         };
     }
+    // Will install (or reinstall) tiller
+    rpc ProvisionTiller (ProvisionTillerMsg) returns (ProvisionTillerReply) {
+        option (google.api.http) = {
+            post : "/api/v1/tiller"
+            body : "*"
+        };
+    }
+    // Will install (or reinstall) helm chart
+    // This will be destructive if a chart has already been deployed with the same name
+    rpc InstallHelmChart (InstallHelmChartMsg) returns (InstallHelmChartReply) {
+        option (google.api.http) = {
+            put : "/api/v1/helm"
+            body : "*"
+        };
+    }
+    // Will delete deployed helm chart
+    rpc DeleteHelmChart (DeleteHelmChartMsg) returns (DeleteHelmChartReply) {
+        option (google.api.http) = {
+            delete : "/api/v1/helm"
+        };
+    }
     // Will return version information about api server
     rpc GetVersionInformation (GetVersionMsg) returns (GetVersionReply) {
         option (google.api.http) = {
             get : "/api/v1/version"
+        };
+    }
+    // Will return upgrade options for a given cluster
+    rpc GetUpgradeClusterInformation (GetUpgradeClusterInformationMsg) returns (GetUpgradeClusterInformationReply) {
+        option (google.api.http) = {
+            get : "/api/v1/cluster/upgrade"
+        };
+    }
+    // Will attempt to upgrade a cluster
+    rpc UpgradeCluster (UpgradeClusterMsg) returns (UpgradeClusterReply) {
+        option (google.api.http) = {
+            post : "/api/v1/cluster/upgrade"
+            body : "*"
+        };
+    }
+    // Will update aws credentials used for a cluster
+    rpc UpdateAWSCredentials (UpdateAWSCredentialsMsg) returns (UpdateAWSCredentialsReply) {
+        option (google.api.http) = {
+            post : "/api/v1/credentials/aws"
+            body : "*"
+        };
+    }
+    // Will update azure credentials used for a cluster
+    rpc UpdateAzureCredentials (UpdateAzureCredentialsMsg) returns (UpdateAzureCredentialsReply) {
+        option (google.api.http) = {
+            post : "/api/v1/credentials/azure"
+            body : "*"
         };
     }
 }
@@ -306,22 +361,215 @@ message CreateClusterAKSSpec {
 }
 
 message CreateClusterVMWareSpec {
-    // The credentials to use for creating the cluster
-    message VMWareMachineSpec {
-        // The username for SSH access
-        string username = 1;
-        // The host for SSH access
-        string host = 2;
-        // The port for SSH access
-        int32 port = 3;
-        // The k8s version for the control plane. This node is only a master if this field is defined.
-        string control_plane_version = 4;
+    // Machines which comprise the cluster
+    repeated VMWareMachineSpec control_plane_nodes = 3;
+    // Machines which comprise the cluster
+    repeated VMWareMachineSpec worker_nodes = 4;
+    // This should be a value like ip:port that will be a virtual IP/port
+    // Passed back to external customers to be able to communicate to the cluster
+    string api_endpoint = 5;
+}
+
+message KubernetesLabel {
+    // The name of a label
+    string name = 1;
+    // The value of a label
+    string value = 2;
+}
+
+// The specification for a specific node
+message VMWareMachineSpec {
+    // The username for SSH access
+    string username = 1;
+    // The host for SSH access
+    string host = 2;
+    // The port for SSH access
+    int32 port = 3;
+    // The k8s version for the control plane. This node is only a master if this field is defined.
+    string password = 4;
+    // The labels for the machines
+    repeated KubernetesLabel labels = 5;
+}
+
+
+message ProvisionTillerMsg {
+    // Cluster tiller should be installed on
+    string cluster = 1;
+    // Namespace tiller should be installed in
+    string namespace = 2;
+    // Versino of tiller/helm to install / upgrade to
+    string version = 3;
+    // Is the tiller a cluster-wide tiller?
+    // Should it have cluster-wide admin privileges?
+    bool cluster_wide = 4;
+    // Namespaces that it should be able to admin on
+    repeated string admin_namespaces = 5;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 6;
+    // AWS Credentials
+    AWSCredentials aws = 7;
+    // Azure Credentials
+    AzureCredentials azure = 8;
+}
+
+message ProvisionTillerReply {
+    // Was the operation successful
+    bool ok = 1;
+    // What messages were given
+    string message = 2;
+}
+
+message InstallHelmChartMsg {
+    // Cluster tiller should be installed on
+    string cluster = 1;
+    // Tiller settings
+    GenericTillerSetting tiller = 2;
+    // Chart Settings
+    GenericHelmChart chart = 3;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 6;
+    // AWS Credentials
+    AWSCredentials aws = 7;
+    // Azure Credentials
+    AzureCredentials azure = 8;
+}
+
+message InstallHelmChartReply {
+    // Was the operation successful
+    bool ok = 1;
+    // What messages were given
+    string message = 2;
+}
+
+message DeleteHelmChartMsg {
+    // Cluster tiller should be installed on
+    string cluster = 1;
+    // Tiller settings
+    GenericTillerSetting tiller = 2;
+    // Chart Name
+    string chart = 3;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 6;
+    // AWS Credentials
+    AWSCredentials aws = 7;
+    // Azure Credentials
+    AzureCredentials azure = 8;
+}
+
+message DeleteHelmChartReply {
+    // Was the operation successful
+    bool ok = 1;
+    // What messages were given
+    string message = 2;
+}
+
+message GenericTillerSetting {
+    // What is the tiller namespace
+    string namespace = 1;
+    // What is the version of tiller/helm
+    string version = 2;
+}
+
+message GenericHelmChart {
+    // What is the name of the deployment
+    string name = 1;
+    // What is the namespace to deploy the application to
+    string namespace = 2;
+    // What is the chart repository
+    string repo = 3;
+    // What is the chart name
+    string chart = 4;
+    // What are the options (nested yaml - the Values.yaml contents)
+    string values = 5;
+}
+
+message GetUpgradeClusterInformationMsg {
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
+    // What is the cluster that we are considering for upgrade
+    string name = 4;
+}
+
+message GetUpgradeClusterInformationReply {
+    // Can the cluster be upgraded
+    bool ok = 1;
+    // What versions are possible right now
+    repeated string versions = 2;
+}
+
+message UpgradeClusterMsg {
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
+    // What is the cluster that we are considering for upgrade
+    string name = 4;
+    // What version are we upgrading to?
+    string version = 5;
+}
+
+message UpgradeClusterReply {
+    // Was this a successful request
+    bool ok = 1;
+}
+
+message AdjustClusterMsg {
+    // What is the cluster that we are considering for upgrade
+    string name = 1;
+    // Provider changes
+    oneof provider_changes {
+        // The AWS specification
+        //AdjustClusterAWSSpec aws = 3;
+        //AdjustClusterAKSSpec azure = 4;
+        AdjustClusterVMWareSpec vmware = 5;
     }
 
-    // This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster
-    string namespace = 1;
-    // Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently.
-    string private_key = 2;
-    // Machines which comprise the cluster
-    repeated VMWareMachineSpec machines = 3;
+    message AdjustClusterVMWareSpec {
+        // Machines which we want to add to the cluster
+        repeated VMWareMachineSpec add_nodes = 1;
+        // Machines which we want to remove from the cluster
+        repeated VMWareRemoveMachineSpec remove_nodes = 2;
+    }
+
+    message VMWareRemoveMachineSpec {
+        // The host for SSH access
+        string host = 1;
+    }
+
 }
+
+message AdjustClusterReply {
+    // Was this a successful request
+    bool ok = 1;
+}
+
+message UpdateAWSCredentialsMsg {
+    // Cluster name
+    string name = 1;
+    // Credentials to build the cluster
+    AWSCredentials credentials = 2;
+}
+
+message UpdateAWSCredentialsReply {
+    // Was this a successful request
+    bool ok = 1;
+}
+
+message UpdateAzureCredentialsMsg {
+    // Cluster name
+    string name = 1;
+    // Credentials to build the cluster
+    AzureCredentials credentials = 2;
+}
+
+message UpdateAzureCredentialsReply {
+    // Was this a successful request
+    bool ok = 1;
+}
+
