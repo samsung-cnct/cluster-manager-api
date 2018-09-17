@@ -53,12 +53,33 @@ func (a *VMWareClient) SetClient(client pb.ClusterClient) {
 }
 
 func (a *VMWareClient) CreateCluster(input CreateClusterInput) (CreateClusterOutput, error) {
-	var machines []*pb.MachineSpec
-	for _, j := range input.VMWare.Machines {
-		machines = append(machines, &pb.MachineSpec{
+	var workerNodes []*pb.MachineSpec
+	var controlPlaneNodes []*pb.MachineSpec
+
+	for _, j := range input.VMWare.ControlPlaneNodes {
+		//var labels []KubernetesLabel
+		//for _, k := range j.Labels {
+		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
+		//}
+		controlPlaneNodes = append(controlPlaneNodes, &pb.MachineSpec{
 			Host:     j.Host,
 			Port:     int32(j.Port),
 			Username: j.Username,
+			// Password: j.Password,
+			// Labels = labels
+		})
+	}
+	for _, j := range input.VMWare.WorkerNodes {
+		//var labels []KubernetesLabel
+		//for _, k := range j.Labels {
+		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
+		//}
+		workerNodes = append(workerNodes, &pb.MachineSpec{
+			Host:     j.Host,
+			Port:     int32(j.Port),
+			Username: j.Username,
+			// Password: j.Password,
+			// Labels = labels
 		})
 	}
 	result, err := a.client.CreateCluster(context.Background(), &pb.CreateClusterMsg{
@@ -67,7 +88,9 @@ func (a *VMWareClient) CreateCluster(input CreateClusterInput) (CreateClusterOut
 			Name:       VMWareProvider,
 			K8SVersion: input.K8SVersion,
 			Vmware: &pb.CreateClusterVMWareSpec{
-				Machines: machines,
+				//Controlplanenodes: controlPlaneNodes,
+				//Workernodes: workerNodes,
+				//Apiendpoint: input.VMWare.APIEndpoint,
 			},
 			HighAvailability: input.HighAvailability,
 			NetworkFabric:    input.NetworkFabric,

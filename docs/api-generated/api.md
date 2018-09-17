@@ -19,6 +19,7 @@
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec)
+    - [CreateClusterVMWareSpec.KubernetesLabel](#cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel)
     - [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
@@ -51,6 +52,7 @@
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec)
+    - [CreateClusterVMWareSpec.KubernetesLabel](#cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel)
     - [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
@@ -329,7 +331,25 @@ For when some things are already created
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| machines | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| control_plane_nodes | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| worker_nodes | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| api_endpoint | [string](#string) |  | This should be a value like ip:port that will be a virtual IP/port Passed back to external customers to be able to communicate to the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel"></a>
+
+### CreateClusterVMWareSpec.KubernetesLabel
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | The name of a label |
+| value | [string](#string) |  | The value of a label |
 
 
 
@@ -339,7 +359,7 @@ For when some things are already created
 <a name="cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec"></a>
 
 ### CreateClusterVMWareSpec.VMWareMachineSpec
-The credentials to use for creating the cluster
+The specification for a specific node
 
 
 | Field | Type | Label | Description |
@@ -348,6 +368,7 @@ The credentials to use for creating the cluster
 | host | [string](#string) |  | The host for SSH access |
 | port | [int32](#int32) |  | The port for SSH access |
 | password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| labels | [CreateClusterVMWareSpec.KubernetesLabel](#cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel) | repeated | The labels for the machines |
 
 
 
@@ -783,7 +804,25 @@ For when some things are already created
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| machines | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| control_plane_nodes | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| worker_nodes | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| api_endpoint | [string](#string) |  | This should be a value like ip:port that will be a virtual IP/port Passed back to external customers to be able to communicate to the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel"></a>
+
+### CreateClusterVMWareSpec.KubernetesLabel
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | The name of a label |
+| value | [string](#string) |  | The value of a label |
 
 
 
@@ -793,7 +832,7 @@ For when some things are already created
 <a name="cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec"></a>
 
 ### CreateClusterVMWareSpec.VMWareMachineSpec
-The credentials to use for creating the cluster
+The specification for a specific node
 
 
 | Field | Type | Label | Description |
@@ -802,6 +841,7 @@ The credentials to use for creating the cluster
 | host | [string](#string) |  | The host for SSH access |
 | port | [int32](#int32) |  | The port for SSH access |
 | password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| labels | [CreateClusterVMWareSpec.KubernetesLabel](#cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel) | repeated | The labels for the machines |
 
 
 

@@ -17,25 +17,46 @@ func vmwareGetClient() (cmavmware.VMWareClientInterface, error) {
 }
 
 func vmwareCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
-	var machines []cmavmware.MachineSpec
+	var controlPlaneNodes []cmavmware.MachineSpec
+	var workerNodes []cmavmware.MachineSpec
 	client, err := vmwareGetClient()
 	if err != nil {
 		return &pb.CreateClusterReply{}, err
 	}
 	defer client.Close()
-	for _, j := range in.Provider.GetVmware().Machines {
-		machines = append(machines, cmavmware.MachineSpec{
+	for _, j := range in.Provider.GetVmware().ControlPlaneNodes {
+		var labels []cmavmware.KubernetesLabel
+		for _, k := range j.Labels {
+			labels = append(labels, cmavmware.KubernetesLabel{Name: k.Name, Value: k.Value})
+		}
+		controlPlaneNodes = append(controlPlaneNodes, cmavmware.MachineSpec{
 			Host:     j.Host,
 			Username: j.Username,
 			Port:     int(j.Port),
 			Password: j.Password,
+			Labels: labels,
+		})
+	}
+	for _, j := range in.Provider.GetVmware().WorkerNodes {
+		var labels []cmavmware.KubernetesLabel
+		for _, k := range j.Labels {
+			labels = append(labels, cmavmware.KubernetesLabel{Name: k.Name, Value: k.Value})
+		}
+		workerNodes = append(workerNodes, cmavmware.MachineSpec{
+			Host:     j.Host,
+			Username: j.Username,
+			Port:     int(j.Port),
+			Password: j.Password,
+			Labels: labels,
 		})
 	}
 	result, err := client.CreateCluster(cmavmware.CreateClusterInput{
 		Name:       in.Name,
 		K8SVersion: in.Provider.K8SVersion,
 		VMWare: cmavmware.VMWareSpec{
-			Machines: machines,
+			ControlPlaneNodes: controlPlaneNodes,
+			WorkerNodes: workerNodes,
+			APIEndpoint: in.Provider.GetVmware().ApiEndpoint,
 		},
 		HighAvailability: in.Provider.HighAvailability,
 		NetworkFabric:    in.Provider.NetworkFabric,

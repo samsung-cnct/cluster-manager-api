@@ -13,10 +13,10 @@
 package swagger
 
 import (
+	"github.com/elazarl/go-bindata-assetfs"
 	"bytes"
 	"compress/gzip"
 	"fmt"
-	"github.com/elazarl/go-bindata-assetfs"
 	"io"
 	"io/ioutil"
 	"os"
@@ -288,14 +288,14 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"swagger-ui/favicon-16x16.png":               swaggerUiFavicon16x16Png,
-	"swagger-ui/favicon-32x32.png":               swaggerUiFavicon32x32Png,
-	"swagger-ui/index.html":                      swaggerUiIndexHtml,
-	"swagger-ui/oauth2-redirect.html":            swaggerUiOauth2RedirectHtml,
-	"swagger-ui/swagger-ui-bundle.js":            swaggerUiSwaggerUiBundleJs,
+	"swagger-ui/favicon-16x16.png": swaggerUiFavicon16x16Png,
+	"swagger-ui/favicon-32x32.png": swaggerUiFavicon32x32Png,
+	"swagger-ui/index.html": swaggerUiIndexHtml,
+	"swagger-ui/oauth2-redirect.html": swaggerUiOauth2RedirectHtml,
+	"swagger-ui/swagger-ui-bundle.js": swaggerUiSwaggerUiBundleJs,
 	"swagger-ui/swagger-ui-standalone-preset.js": swaggerUiSwaggerUiStandalonePresetJs,
-	"swagger-ui/swagger-ui.css":                  swaggerUiSwaggerUiCss,
-	"swagger-ui/swagger-ui.js":                   swaggerUiSwaggerUiJs,
+	"swagger-ui/swagger-ui.css": swaggerUiSwaggerUiCss,
+	"swagger-ui/swagger-ui.js": swaggerUiSwaggerUiJs,
 }
 
 // AssetDir returns the file names below a certain
@@ -337,17 +337,16 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
-
 var _bintree = &bintree{nil, map[string]*bintree{
-	"swagger-ui": {nil, map[string]*bintree{
-		"favicon-16x16.png":               {swaggerUiFavicon16x16Png, map[string]*bintree{}},
-		"favicon-32x32.png":               {swaggerUiFavicon32x32Png, map[string]*bintree{}},
-		"index.html":                      {swaggerUiIndexHtml, map[string]*bintree{}},
-		"oauth2-redirect.html":            {swaggerUiOauth2RedirectHtml, map[string]*bintree{}},
-		"swagger-ui-bundle.js":            {swaggerUiSwaggerUiBundleJs, map[string]*bintree{}},
-		"swagger-ui-standalone-preset.js": {swaggerUiSwaggerUiStandalonePresetJs, map[string]*bintree{}},
-		"swagger-ui.css":                  {swaggerUiSwaggerUiCss, map[string]*bintree{}},
-		"swagger-ui.js":                   {swaggerUiSwaggerUiJs, map[string]*bintree{}},
+	"swagger-ui": &bintree{nil, map[string]*bintree{
+		"favicon-16x16.png": &bintree{swaggerUiFavicon16x16Png, map[string]*bintree{}},
+		"favicon-32x32.png": &bintree{swaggerUiFavicon32x32Png, map[string]*bintree{}},
+		"index.html": &bintree{swaggerUiIndexHtml, map[string]*bintree{}},
+		"oauth2-redirect.html": &bintree{swaggerUiOauth2RedirectHtml, map[string]*bintree{}},
+		"swagger-ui-bundle.js": &bintree{swaggerUiSwaggerUiBundleJs, map[string]*bintree{}},
+		"swagger-ui-standalone-preset.js": &bintree{swaggerUiSwaggerUiStandalonePresetJs, map[string]*bintree{}},
+		"swagger-ui.css": &bintree{swaggerUiSwaggerUiCss, map[string]*bintree{}},
+		"swagger-ui.js": &bintree{swaggerUiSwaggerUiJs, map[string]*bintree{}},
 	}},
 }}
 
@@ -397,6 +396,7 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
+
 
 func assetFS() *assetfs.AssetFS {
 	assetInfo := func(path string) (os.FileInfo, error) {

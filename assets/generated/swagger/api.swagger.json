@@ -380,6 +380,19 @@
       },
       "title": "For when some things are already created"
     },
+    "CreateClusterVMWareSpecKubernetesLabel": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "The name of a label"
+        },
+        "value": {
+          "type": "string",
+          "title": "The value of a label"
+        }
+      }
+    },
     "CreateClusterVMWareSpecVMWareMachineSpec": {
       "type": "object",
       "properties": {
@@ -399,9 +412,16 @@
         "password": {
           "type": "string",
           "description": "The k8s version for the control plane. This node is only a master if this field is defined."
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CreateClusterVMWareSpecKubernetesLabel"
+          },
+          "title": "The labels for the machines"
         }
       },
-      "title": "The credentials to use for creating the cluster"
+      "title": "The specification for a specific node"
     },
     "GetVersionReplyVersionInformation": {
       "type": "object",
@@ -638,12 +658,23 @@
     "cluster_manager_apiCreateClusterVMWareSpec": {
       "type": "object",
       "properties": {
-        "machines": {
+        "control_plane_nodes": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/CreateClusterVMWareSpecVMWareMachineSpec"
           },
           "title": "Machines which comprise the cluster"
+        },
+        "worker_nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CreateClusterVMWareSpecVMWareMachineSpec"
+          },
+          "title": "Machines which comprise the cluster"
+        },
+        "api_endpoint": {
+          "type": "string",
+          "title": "This should be a value like ip:port that will be a virtual IP/port\nPassed back to external customers to be able to communicate to the cluster"
         }
       }
     },

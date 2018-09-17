@@ -306,7 +306,14 @@ message CreateClusterAKSSpec {
 }
 
 message CreateClusterVMWareSpec {
-    // The credentials to use for creating the cluster
+    message KubernetesLabel {
+        // The name of a label
+        string name = 1;
+        // The value of a label
+        string value = 2;
+    }
+
+    // The specification for a specific node
     message VMWareMachineSpec {
         // The username for SSH access
         string username = 1;
@@ -316,8 +323,15 @@ message CreateClusterVMWareSpec {
         int32 port = 3;
         // The k8s version for the control plane. This node is only a master if this field is defined.
         string password = 4;
+        // The labels for the machines
+        repeated KubernetesLabel labels = 5;
     }
 
     // Machines which comprise the cluster
-    repeated VMWareMachineSpec machines = 3;
+    repeated VMWareMachineSpec control_plane_nodes = 3;
+    // Machines which comprise the cluster
+    repeated VMWareMachineSpec worker_nodes = 4;
+    // This should be a value like ip:port that will be a virtual IP/port
+    // Passed back to external customers to be able to communicate to the cluster
+    string api_endpoint = 5;
 }

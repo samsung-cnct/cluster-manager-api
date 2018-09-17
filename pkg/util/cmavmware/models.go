@@ -39,7 +39,9 @@ type ListClusterOutput struct {
 }
 
 type VMWareSpec struct {
-	Machines []MachineSpec
+	ControlPlaneNodes []MachineSpec
+	WorkerNodes []MachineSpec
+	APIEndpoint string
 }
 
 type ClusterItem struct {
@@ -60,4 +62,10 @@ type MachineSpec struct {
 	Host     string
 	Port     int
 	Password string
+	Labels []KubernetesLabel
+}
+
+type KubernetesLabel struct {
+	Name string
+	Value     string
 }
