@@ -25,19 +25,18 @@ func vmwareCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error
 	defer client.Close()
 	for _, j := range in.Provider.GetVmware().Machines {
 		machines = append(machines, cmavmware.MachineSpec{
-			Host:                j.Host,
-			Username:            j.Username,
-			Port:                int(j.Port),
-			ControlPlaneVersion: j.ControlPlaneVersion,
+			Host:     j.Host,
+			Username: j.Username,
+			Port:     int(j.Port),
+			Password: j.Password,
 		})
 	}
 	result, err := client.CreateCluster(cmavmware.CreateClusterInput{
 		Name:       in.Name,
 		K8SVersion: in.Provider.K8SVersion,
 		VMWare: cmavmware.VMWareSpec{
-			Namespace:  in.Provider.GetVmware().Namespace,
-			PrivateKey: in.Provider.GetVmware().PrivateKey,
-			Machines:   machines,
+			Namespace: in.Provider.GetVmware().Namespace,
+			Machines:  machines,
 		},
 		HighAvailability: in.Provider.HighAvailability,
 		NetworkFabric:    in.Provider.NetworkFabric,

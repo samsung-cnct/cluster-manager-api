@@ -396,7 +396,7 @@
           "format": "int32",
           "title": "The port for SSH access"
         },
-        "control_plane_version": {
+        "password": {
           "type": "string",
           "description": "The k8s version for the control plane. This node is only a master if this field is defined."
         }
@@ -641,10 +641,6 @@
         "namespace": {
           "type": "string",
           "title": "This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster"
-        },
-        "private_key": {
-          "type": "string",
-          "description": "Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently."
         },
         "machines": {
           "type": "array",

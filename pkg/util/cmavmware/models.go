@@ -39,9 +39,8 @@ type ListClusterOutput struct {
 }
 
 type VMWareSpec struct {
-	Namespace  string
-	PrivateKey string
-	Machines   []MachineSpec
+	Namespace string
+	Machines  []MachineSpec
 }
 
 type ClusterItem struct {
@@ -58,8 +57,8 @@ type ClusterDetailItem struct {
 }
 
 type MachineSpec struct {
-	Username            string
-	Host                string
-	Port                int
-	ControlPlaneVersion string
+	Username string
+	Host     string
+	Port     int
+	Password string
 }

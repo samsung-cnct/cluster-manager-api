@@ -56,10 +56,9 @@ func (a *VMWareClient) CreateCluster(input CreateClusterInput) (CreateClusterOut
 	var machines []*pb.MachineSpec
 	for _, j := range input.VMWare.Machines {
 		machines = append(machines, &pb.MachineSpec{
-			Host:                j.Host,
-			Port:                int32(j.Port),
-			Username:            j.Username,
-			ControlPlaneVersion: j.ControlPlaneVersion,
+			Host:     j.Host,
+			Port:     int32(j.Port),
+			Username: j.Username,
 		})
 	}
 	result, err := a.client.CreateCluster(context.Background(), &pb.CreateClusterMsg{
@@ -68,9 +67,8 @@ func (a *VMWareClient) CreateCluster(input CreateClusterInput) (CreateClusterOut
 			Name:       VMWareProvider,
 			K8SVersion: input.K8SVersion,
 			Vmware: &pb.CreateClusterVMWareSpec{
-				Namespace:  input.VMWare.Namespace,
-				PrivateKey: input.VMWare.PrivateKey,
-				Machines:   machines,
+				Namespace: input.VMWare.Namespace,
+				Machines:  machines,
 			},
 			HighAvailability: input.HighAvailability,
 			NetworkFabric:    input.NetworkFabric,

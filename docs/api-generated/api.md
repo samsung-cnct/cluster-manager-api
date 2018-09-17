@@ -330,7 +330,6 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | namespace | [string](#string) |  | This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster |
-| private_key | [string](#string) |  | Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently. |
 | machines | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
 
 
@@ -349,7 +348,7 @@ The credentials to use for creating the cluster
 | username | [string](#string) |  | The username for SSH access |
 | host | [string](#string) |  | The host for SSH access |
 | port | [int32](#int32) |  | The port for SSH access |
-| control_plane_version | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
 
 
 
@@ -786,7 +785,6 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | namespace | [string](#string) |  | This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster |
-| private_key | [string](#string) |  | Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently. |
 | machines | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
 
 
@@ -805,7 +803,7 @@ The credentials to use for creating the cluster
 | username | [string](#string) |  | The username for SSH access |
 | host | [string](#string) |  | The host for SSH access |
 | port | [int32](#int32) |  | The port for SSH access |
-| control_plane_version | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
 
 
 

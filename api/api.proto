@@ -315,13 +315,11 @@ message CreateClusterVMWareSpec {
         // The port for SSH access
         int32 port = 3;
         // The k8s version for the control plane. This node is only a master if this field is defined.
-        string control_plane_version = 4;
+        string password = 4;
     }
 
     // This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster
     string namespace = 1;
-    // Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently.
-    string private_key = 2;
     // Machines which comprise the cluster
     repeated VMWareMachineSpec machines = 3;
 }
