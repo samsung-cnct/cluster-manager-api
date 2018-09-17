@@ -367,6 +367,7 @@ The credentials to use for creating the cluster
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 
@@ -399,6 +400,7 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 
@@ -432,6 +434,7 @@ The credentials to use for creating the cluster
 | name | [string](#string) |  | Name of the cluster to be looked up |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 
@@ -820,6 +823,7 @@ The credentials to use for creating the cluster
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 
@@ -852,6 +856,7 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 
@@ -885,6 +890,7 @@ The credentials to use for creating the cluster
 | name | [string](#string) |  | Name of the cluster to be looked up |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 

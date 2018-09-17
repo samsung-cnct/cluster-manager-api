@@ -98,6 +98,8 @@ message GetClusterMsg {
     AWSCredentials aws = 2;
     // Azure Credentials
     AzureCredentials azure = 3;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 4;
 }
 
 message GetClusterReply {
@@ -114,6 +116,8 @@ message DeleteClusterMsg {
     AWSCredentials aws = 2;
     // Azure Credentials
     AzureCredentials azure = 3;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 4;
 }
 
 message DeleteClusterReply {
@@ -128,6 +132,8 @@ message GetClusterListMsg {
     AWSCredentials aws = 1;
     // Azure Credentials
     AzureCredentials azure = 2;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 4;
 }
 
 message GetClusterListReply {

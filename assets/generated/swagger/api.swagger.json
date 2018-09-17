@@ -88,6 +88,13 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "provider",
+            "description": "Name of the providers (aws/aks/vmware/etc).",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -158,6 +165,13 @@
           {
             "name": "azure.subscription_id",
             "description": "The Subscription for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "description": "Name of the providers (aws/aks/vmware/etc).",
             "in": "query",
             "required": false,
             "type": "string"
@@ -251,6 +265,13 @@
           {
             "name": "azure.subscription_id",
             "description": "The Subscription for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "description": "Name of the providers (aws/aks/vmware/etc).",
             "in": "query",
             "required": false,
             "type": "string"
