@@ -34,7 +34,7 @@ func vmwareCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error
 			Username: j.Username,
 			Port:     int(j.Port),
 			Password: j.Password,
-			Labels: labels,
+			Labels:   labels,
 		})
 	}
 	for _, j := range in.Provider.GetVmware().WorkerNodes {
@@ -47,7 +47,7 @@ func vmwareCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error
 			Username: j.Username,
 			Port:     int(j.Port),
 			Password: j.Password,
-			Labels: labels,
+			Labels:   labels,
 		})
 	}
 	result, err := client.CreateCluster(cmavmware.CreateClusterInput{
@@ -55,8 +55,8 @@ func vmwareCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error
 		K8SVersion: in.Provider.K8SVersion,
 		VMWare: cmavmware.VMWareSpec{
 			ControlPlaneNodes: controlPlaneNodes,
-			WorkerNodes: workerNodes,
-			APIEndpoint: in.Provider.GetVmware().ApiEndpoint,
+			WorkerNodes:       workerNodes,
+			APIEndpoint:       in.Provider.GetVmware().ApiEndpoint,
 		},
 		HighAvailability: in.Provider.HighAvailability,
 		NetworkFabric:    in.Provider.NetworkFabric,

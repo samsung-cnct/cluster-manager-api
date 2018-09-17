@@ -23,13 +23,25 @@
     - [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
+    - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
+    - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
+    - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
+    - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
+    - [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg)
+    - [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply)
     - [GetVersionMsg](#cluster_manager_api.GetVersionMsg)
     - [GetVersionReply](#cluster_manager_api.GetVersionReply)
     - [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation)
+    - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
+    - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
+    - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
+    - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
+    - [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg)
+    - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
   
   
   
@@ -56,13 +68,25 @@
     - [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
+    - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
+    - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
+    - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
+    - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
     - [GetClusterReply](#cluster_manager_api.GetClusterReply)
+    - [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg)
+    - [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply)
     - [GetVersionMsg](#cluster_manager_api.GetVersionMsg)
     - [GetVersionReply](#cluster_manager_api.GetVersionReply)
     - [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation)
+    - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
+    - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
+    - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
+    - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
+    - [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg)
+    - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
   
   
   
@@ -409,6 +433,77 @@ The specification for a specific node
 
 
 
+<a name="cluster_manager_api.DeleteHelmChartMsg"></a>
+
+### DeleteHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [string](#string) |  | Chart Name |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteHelmChartReply"></a>
+
+### DeleteHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericHelmChart"></a>
+
+### GenericHelmChart
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the name of the deployment |
+| namespace | [string](#string) |  | What is the namespace to deploy the application to |
+| repo | [string](#string) |  | What is the chart repository |
+| chart | [string](#string) |  | What is the chart name |
+| values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericTillerSetting"></a>
+
+### GenericTillerSetting
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | What is the tiller namespace |
+| version | [string](#string) |  | What is the version of tiller/helm |
+
+
+
+
+
+
 <a name="cluster_manager_api.GetClusterListMsg"></a>
 
 ### GetClusterListMsg
@@ -476,6 +571,40 @@ The specification for a specific node
 
 
 
+<a name="cluster_manager_api.GetUpgradeClusterInformationMsg"></a>
+
+### GetUpgradeClusterInformationMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetUpgradeClusterInformationReply"></a>
+
+### GetUpgradeClusterInformationReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Can the cluster be upgraded |
+| versions | [string](#string) | repeated | What versions are possible right now |
+
+
+
+
+
+
 <a name="cluster_manager_api.GetVersionMsg"></a>
 
 ### GetVersionMsg
@@ -522,6 +651,114 @@ Reply for version request
 
 
 
+
+<a name="cluster_manager_api.InstallHelmChartMsg"></a>
+
+### InstallHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.InstallHelmChartReply"></a>
+
+### InstallHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerMsg"></a>
+
+### ProvisionTillerMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| namespace | [string](#string) |  | Namespace tiller should be installed in |
+| version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
+| cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
+| admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerReply"></a>
+
+### ProvisionTillerReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpgradeClusterMsg"></a>
+
+### UpgradeClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+| version | [string](#string) |  | What version are we upgrading to? |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpgradeClusterReply"></a>
+
+### UpgradeClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
  
 
  
@@ -540,7 +777,12 @@ Reply for version request
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterReply) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply) | Will delete a cluster |
 | GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListReply) | Will retrieve a list of clusters |
+| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply) | Will install (or reinstall) tiller |
+| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
+| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply) | Will delete deployed helm chart |
 | GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionReply) | Will return version information about api server |
+| GetUpgradeClusterInformation | [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg) | [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply) | Will return upgrade options for a given cluster |
+| UpgradeCluster | [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg) | [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply) | Will attempt to upgrade a cluster |
 
  
 
@@ -882,6 +1124,77 @@ The specification for a specific node
 
 
 
+<a name="cluster_manager_api.DeleteHelmChartMsg"></a>
+
+### DeleteHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [string](#string) |  | Chart Name |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.DeleteHelmChartReply"></a>
+
+### DeleteHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericHelmChart"></a>
+
+### GenericHelmChart
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the name of the deployment |
+| namespace | [string](#string) |  | What is the namespace to deploy the application to |
+| repo | [string](#string) |  | What is the chart repository |
+| chart | [string](#string) |  | What is the chart name |
+| values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericTillerSetting"></a>
+
+### GenericTillerSetting
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | What is the tiller namespace |
+| version | [string](#string) |  | What is the version of tiller/helm |
+
+
+
+
+
+
 <a name="cluster_manager_api.GetClusterListMsg"></a>
 
 ### GetClusterListMsg
@@ -949,6 +1262,40 @@ The specification for a specific node
 
 
 
+<a name="cluster_manager_api.GetUpgradeClusterInformationMsg"></a>
+
+### GetUpgradeClusterInformationMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+
+
+
+
+
+
+<a name="cluster_manager_api.GetUpgradeClusterInformationReply"></a>
+
+### GetUpgradeClusterInformationReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Can the cluster be upgraded |
+| versions | [string](#string) | repeated | What versions are possible right now |
+
+
+
+
+
+
 <a name="cluster_manager_api.GetVersionMsg"></a>
 
 ### GetVersionMsg
@@ -995,6 +1342,114 @@ Reply for version request
 
 
 
+
+<a name="cluster_manager_api.InstallHelmChartMsg"></a>
+
+### InstallHelmChartMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.InstallHelmChartReply"></a>
+
+### InstallHelmChartReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerMsg"></a>
+
+### ProvisionTillerMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  | Cluster tiller should be installed on |
+| namespace | [string](#string) |  | Namespace tiller should be installed in |
+| version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
+| cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
+| admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+
+
+
+
+
+
+<a name="cluster_manager_api.ProvisionTillerReply"></a>
+
+### ProvisionTillerReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was the operation successful |
+| message | [string](#string) |  | What messages were given |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpgradeClusterMsg"></a>
+
+### UpgradeClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+| version | [string](#string) |  | What version are we upgrading to? |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpgradeClusterReply"></a>
+
+### UpgradeClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
  
 
  
@@ -1013,7 +1468,12 @@ Reply for version request
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterReply) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply) | Will delete a cluster |
 | GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListReply) | Will retrieve a list of clusters |
+| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply) | Will install (or reinstall) tiller |
+| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
+| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply) | Will delete deployed helm chart |
 | GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionReply) | Will return version information about api server |
+| GetUpgradeClusterInformation | [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg) | [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply) | Will return upgrade options for a given cluster |
+| UpgradeCluster | [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg) | [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply) | Will attempt to upgrade a cluster |
 
  
 

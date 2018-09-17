@@ -87,7 +87,7 @@ func (a *VMWareClient) CreateCluster(input CreateClusterInput) (CreateClusterOut
 		Provider: &pb.CreateClusterProviderSpec{
 			Name:       VMWareProvider,
 			K8SVersion: input.K8SVersion,
-			Vmware: &pb.CreateClusterVMWareSpec{
+			Vmware:     &pb.CreateClusterVMWareSpec{
 				//Controlplanenodes: controlPlaneNodes,
 				//Workernodes: workerNodes,
 				//Apiendpoint: input.VMWare.APIEndpoint,

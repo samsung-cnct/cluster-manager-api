@@ -69,10 +69,44 @@ service Cluster {
             get : "/api/v1/cluster/list"
         };
     }
+    // Will install (or reinstall) tiller
+    rpc ProvisionTiller (ProvisionTillerMsg) returns (ProvisionTillerReply) {
+        option (google.api.http) = {
+            post : "/api/v1/tiller"
+            body : "*"
+        };
+    }
+    // Will install (or reinstall) helm chart
+    // This will be destructive if a chart has already been deployed with the same name
+    rpc InstallHelmChart (InstallHelmChartMsg) returns (InstallHelmChartReply) {
+        option (google.api.http) = {
+            put : "/api/v1/helm"
+            body : "*"
+        };
+    }
+    // Will delete deployed helm chart
+    rpc DeleteHelmChart (DeleteHelmChartMsg) returns (DeleteHelmChartReply) {
+        option (google.api.http) = {
+            delete : "/api/v1/helm"
+        };
+    }
     // Will return version information about api server
     rpc GetVersionInformation (GetVersionMsg) returns (GetVersionReply) {
         option (google.api.http) = {
             get : "/api/v1/version"
+        };
+    }
+    // Will return upgrade options for a given cluster
+    rpc GetUpgradeClusterInformation (GetUpgradeClusterInformationMsg) returns (GetUpgradeClusterInformationReply) {
+        option (google.api.http) = {
+            get : "/api/v1/cluster/upgrade"
+        };
+    }
+    // Will attempt to upgrade a cluster
+    rpc UpgradeCluster (UpgradeClusterMsg) returns (UpgradeClusterReply) {
+        option (google.api.http) = {
+            post : "/api/v1/cluster/upgrade"
+            body : "*"
         };
     }
 }
@@ -334,4 +368,131 @@ message CreateClusterVMWareSpec {
     // This should be a value like ip:port that will be a virtual IP/port
     // Passed back to external customers to be able to communicate to the cluster
     string api_endpoint = 5;
+}
+
+message ProvisionTillerMsg {
+    // Cluster tiller should be installed on
+    string cluster = 1;
+    // Namespace tiller should be installed in
+    string namespace = 2;
+    // Versino of tiller/helm to install / upgrade to
+    string version = 3;
+    // Is the tiller a cluster-wide tiller?
+    // Should it have cluster-wide admin privileges?
+    bool cluster_wide = 4;
+    // Namespaces that it should be able to admin on
+    repeated string admin_namespaces = 5;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 6;
+    // AWS Credentials
+    AWSCredentials aws = 7;
+    // Azure Credentials
+    AzureCredentials azure = 8;
+}
+
+message ProvisionTillerReply {
+    // Was the operation successful
+    bool ok = 1;
+    // What messages were given
+    string message = 2;
+}
+
+message InstallHelmChartMsg {
+    // Cluster tiller should be installed on
+    string cluster = 1;
+    // Tiller settings
+    GenericTillerSetting tiller = 2;
+    // Chart Settings
+    GenericHelmChart chart = 3;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 6;
+    // AWS Credentials
+    AWSCredentials aws = 7;
+    // Azure Credentials
+    AzureCredentials azure = 8;
+}
+
+message InstallHelmChartReply {
+    // Was the operation successful
+    bool ok = 1;
+    // What messages were given
+    string message = 2;
+}
+
+message DeleteHelmChartMsg {
+    // Cluster tiller should be installed on
+    string cluster = 1;
+    // Tiller settings
+    GenericTillerSetting tiller = 2;
+    // Chart Name
+    string chart = 3;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 6;
+    // AWS Credentials
+    AWSCredentials aws = 7;
+    // Azure Credentials
+    AzureCredentials azure = 8;
+}
+
+message DeleteHelmChartReply {
+    // Was the operation successful
+    bool ok = 1;
+    // What messages were given
+    string message = 2;
+}
+
+message GenericTillerSetting {
+    // What is the tiller namespace
+    string namespace = 1;
+    // What is the version of tiller/helm
+    string version = 2;
+}
+
+message GenericHelmChart {
+    // What is the name of the deployment
+    string name = 1;
+    // What is the namespace to deploy the application to
+    string namespace = 2;
+    // What is the chart repository
+    string repo = 3;
+    // What is the chart name
+    string chart = 4;
+    // What are the options (nested yaml - the Values.yaml contents)
+    string values = 5;
+}
+
+message GetUpgradeClusterInformationMsg {
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
+    // What is the cluster that we are considering for upgrade
+    string name = 4;
+}
+
+message GetUpgradeClusterInformationReply {
+    // Can the cluster be upgraded
+    bool ok = 1;
+    // What versions are possible right now
+    repeated string versions = 2;
+}
+
+message UpgradeClusterMsg {
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
+    // What is the cluster that we are considering for upgrade
+    string name = 4;
+    // What version are we upgrading to?
+    string version = 5;
+}
+
+message UpgradeClusterReply {
+    // Was this a successful request
+    bool ok = 1;
 }
