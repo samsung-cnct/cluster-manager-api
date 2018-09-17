@@ -4,6 +4,7 @@ import (
 	"fmt"
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmaaws"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/aws"
 	"github.com/spf13/viper"
 )
 
@@ -23,6 +24,10 @@ func awsCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
 		return &pb.CreateClusterReply{}, err
 	}
 	defer client.Close()
+	awsSecretClient, err := awsk8sutil.CreateFromDefaults()
+	if err != nil {
+		return &pb.CreateClusterReply{}, err
+	}
 	for _, j := range in.Provider.GetAws().InstanceGroups {
 		instanceGroups = append(instanceGroups, cmaaws.InstanceGroup{
 			Type:        j.Type,
@@ -56,6 +61,20 @@ func awsCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
 	if err != nil {
 		return &pb.CreateClusterReply{}, err
 	}
+
+	// Cluster Creation was successful, going to save the credentials
+	err = awsSecretClient.CreateCredentials(in.Name, awsk8sutil.Credentials{
+		Region:          in.Provider.GetAws().Credentials.Region,
+		SecretKeyID:     in.Provider.GetAws().Credentials.SecretKeyId,
+		SecretAccessKey: in.Provider.GetAws().Credentials.SecretAccessKey,
+	})
+
+	if err != nil {
+		// TODO Unsure what to do if we suddenly can't persist the credentails to kubernetes
+		// TODO Going to log for now
+		logger.Errorf("Could not set AWS credentials into kubernetes, this is bad")
+	}
+
 	return &pb.CreateClusterReply{
 		Ok: true,
 		Cluster: &pb.ClusterItem{

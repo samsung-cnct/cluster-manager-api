@@ -100,11 +100,13 @@ func init() {
 	// using standard library "flag" package
 	rootCmd.Flags().Int("port", 9050, "Port to listen on")
 	rootCmd.Flags().String("kubeconfig", "", "Location of kubeconfig file")
+	rootCmd.Flags().String("kubernetes-namespace", "default", "What namespace to operate on")
 
 	//pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	//pflag.Parse()
 	viper.BindPFlag("port", rootCmd.Flags().Lookup("port"))
 	viper.BindPFlag("kubeconfig", rootCmd.Flags().Lookup("kubeconfig"))
+	viper.BindPFlag("kubernetes-namespace", rootCmd.Flags().Lookup("kubernetes-namespace"))
 
 	viper.AutomaticEnv()
 	rootCmd.Flags().AddGoFlagSet(flag.CommandLine)
