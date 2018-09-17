@@ -520,7 +520,12 @@ message AdjustClusterMsg {
         // Machines which we want to add to the cluster
         repeated VMWareMachineSpec add_nodes = 1;
         // Machines which we want to remove from the cluster
-        repeated VMWareMachineSpec remove_nodes = 2;
+        repeated VMWareRemoveMachineSpec remove_nodes = 2;
+    }
+
+    message VMWareRemoveMachineSpec {
+        // The host for SSH access
+        string host = 1;
     }
 
 }

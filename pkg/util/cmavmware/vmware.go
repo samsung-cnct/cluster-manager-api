@@ -182,11 +182,7 @@ func (a *VMWareClient) AdjustCluster(input AdjustClusterInput) (AdjustClusterOut
 		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
 		//}
 		removeNodes = append(removeNodes, &pb.MachineSpec{
-			Host:     j.Host,
-			Port:     int32(j.Port),
-			Username: j.Username,
-			// Password: j.Password,
-			// Labels = labels
+			Host: j.Host,
 		})
 	}
 	//result, err := a.client.AdjustCluster(context.Background(), &pb.AdjustClusterMsg{

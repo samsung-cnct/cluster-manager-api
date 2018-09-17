@@ -71,11 +71,14 @@ type KubernetesLabel struct {
 }
 
 type AdjustClusterInput struct {
-	Name string
-	AddNodes []MachineSpec
-	RemoveNodes       []MachineSpec
+	Name        string
+	AddNodes    []MachineSpec
+	RemoveNodes []RemoveMachineSpec
 }
 
 type AdjustClusterOutput struct {
+}
 
+type RemoveMachineSpec struct {
+	Host string
 }

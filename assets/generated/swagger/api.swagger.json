@@ -601,9 +601,18 @@
         "remove_nodes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/cluster_manager_apiVMWareMachineSpec"
+            "$ref": "#/definitions/AdjustClusterMsgVMWareRemoveMachineSpec"
           },
           "title": "Machines which we want to remove from the cluster"
+        }
+      }
+    },
+    "AdjustClusterMsgVMWareRemoveMachineSpec": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string",
+          "title": "The host for SSH access"
         }
       }
     },

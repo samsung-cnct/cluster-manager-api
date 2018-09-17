@@ -141,7 +141,7 @@ func vmwareDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error
 
 func vmwareAdjustCluster(in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply, error) {
 	var addNodes []cmavmware.MachineSpec
-	var removeNodes []cmavmware.MachineSpec
+	var removeNodes []cmavmware.RemoveMachineSpec
 	client, err := vmwareGetClient()
 	if err != nil {
 		return &pb.AdjustClusterReply{}, err
@@ -161,21 +161,13 @@ func vmwareAdjustCluster(in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply, error
 		})
 	}
 	for _, j := range in.GetVmware().RemoveNodes {
-		var labels []cmavmware.KubernetesLabel
-		for _, k := range j.Labels {
-			labels = append(labels, cmavmware.KubernetesLabel{Name: k.Name, Value: k.Value})
-		}
-		removeNodes = append(removeNodes, cmavmware.MachineSpec{
-			Host:     j.Host,
-			Username: j.Username,
-			Port:     int(j.Port),
-			Password: j.Password,
-			Labels:   labels,
+		removeNodes = append(removeNodes, cmavmware.RemoveMachineSpec{
+			Host: j.Host,
 		})
 	}
 	_, err = client.AdjustCluster(cmavmware.AdjustClusterInput{
-		Name:       in.Name,
-		AddNodes: addNodes,
+		Name:        in.Name,
+		AddNodes:    addNodes,
 		RemoveNodes: removeNodes,
 	})
 	if err != nil {

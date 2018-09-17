@@ -7,6 +7,7 @@
     - [AWSCredentials](#cluster_manager_api.AWSCredentials)
     - [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg)
     - [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec)
+    - [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec)
     - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
     - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
     - [AzureCredentials](#cluster_manager_api.AzureCredentials)
@@ -55,6 +56,7 @@
     - [AWSCredentials](#cluster_manager_api.AWSCredentials)
     - [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg)
     - [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec)
+    - [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec)
     - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
     - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
     - [AzureCredentials](#cluster_manager_api.AzureCredentials)
@@ -152,7 +154,22 @@ The credentials to use for creating the cluster
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | add_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to add to the cluster |
-| remove_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to remove from the cluster |
+| remove_nodes | [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec) | repeated | Machines which we want to remove from the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec"></a>
+
+### AdjustClusterMsg.VMWareRemoveMachineSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| host | [string](#string) |  | The host for SSH access |
 
 
 
@@ -891,7 +908,22 @@ The credentials to use for creating the cluster
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | add_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to add to the cluster |
-| remove_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to remove from the cluster |
+| remove_nodes | [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec) | repeated | Machines which we want to remove from the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec"></a>
+
+### AdjustClusterMsg.VMWareRemoveMachineSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| host | [string](#string) |  | The host for SSH access |
 
 
 
