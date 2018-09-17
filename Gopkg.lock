@@ -296,7 +296,15 @@
   name = "github.com/samsung-cnct/cma-aks"
   packages = ["pkg/generated/api"]
   pruneopts = "UT"
-  revision = "a8d4514fa4cfe1c4a0054fe2f7c6114f854c3d72"
+  revision = "8328350fa04a09d7340fa10f5d9985b4faf67999"
+
+[[projects]]
+  branch = "master"
+  digest = "1:c481c4e7a530cc443a404e13abb679a46fbb7b5f45eb3c233332ae9101cc87b9"
+  name = "github.com/samsung-cnct/cma-vmware"
+  packages = ["pkg/generated/api"]
+  pruneopts = "UT"
+  revision = "1a35ee8e0447a1c14b45b19ca98f60b47fd65110"
 
 [[projects]]
   digest = "1:30e06e6d62a1d694e3cdbff29d8a9a96022e05a487d0c6eaf0ef898965ef28fb"
@@ -476,14 +484,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:f969b1b8bcb2a5162a5dc797b261eff0c2f099d7fc63c143ada31b002709f6a5"
+  digest = "1:42448f154e7d40907ae03cbdf99dbcfa3feb927c4521e0f01c52c6142e4891d5"
   name = "google.golang.org/genproto"
   packages = [
     "googleapis/api/annotations",
     "googleapis/rpc/status",
   ]
   pruneopts = "UT"
-  revision = "5a2fd4cab2d6d4a18e70c34937662526cd0c4bd1"
+  revision = "4b56f30a1fd96a133a036b62cdd2a249883dd89b"
 
 [[projects]]
   digest = "1:dc0c170b110c22d9a4eccf08ab58490608053eac450bf456f3aaf9b30a668781"
@@ -557,7 +565,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:0770b2868f2034e8fa01b7ad6abd7552557ce9b9c4a919e8497ef2b0d038a880"
+  digest = "1:910ec974550174f4ca48b9f4a3caec16b693e584c3762dc726dc0dcf28f8e318"
   name = "k8s.io/api"
   packages = [
     "admissionregistration/v1alpha1",
@@ -593,7 +601,7 @@
     "storage/v1beta1",
   ]
   pruneopts = "UT"
-  revision = "49f236fe119e127d67dec93a9d41ae1c5ed5079e"
+  revision = "f456898a08e4bbc5891694118f3819f324de12ff"
 
 [[projects]]
   branch = "master"
@@ -714,7 +722,7 @@
     "util/integer",
   ]
   pruneopts = "UT"
-  revision = "37c3c02ec96533daec0dbda1f39a6b1d68505c79"
+  revision = "86dcffcddee1697a1aabb08f1a7d6cc7e62079ef"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -730,6 +738,7 @@
     "github.com/onsi/gomega",
     "github.com/philips/go-bindata-assetfs",
     "github.com/samsung-cnct/cma-aks/pkg/generated/api",
+    "github.com/samsung-cnct/cma-vmware/pkg/generated/api",
     "github.com/soheilhy/cmux",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",

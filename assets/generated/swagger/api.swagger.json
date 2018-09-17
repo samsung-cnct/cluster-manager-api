@@ -359,6 +359,29 @@
       },
       "title": "For when some things are already created"
     },
+    "CreateClusterVMWareSpecVMWareMachineSpec": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "title": "The username for SSH access"
+        },
+        "host": {
+          "type": "string",
+          "title": "The host for SSH access"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "title": "The port for SSH access"
+        },
+        "control_plane_version": {
+          "type": "string",
+          "description": "The k8s version for the control plane. This node is only a master if this field is defined."
+        }
+      },
+      "title": "The credentials to use for creating the cluster"
+    },
     "GetVersionReplyVersionInformation": {
       "type": "object",
       "properties": {
@@ -563,6 +586,9 @@
         "azure": {
           "$ref": "#/definitions/cluster_manager_apiCreateClusterAKSSpec"
         },
+        "vmware": {
+          "$ref": "#/definitions/cluster_manager_apiCreateClusterVMWareSpec"
+        },
         "high_availability": {
           "type": "boolean",
           "format": "boolean",
@@ -585,6 +611,26 @@
         "cluster": {
           "$ref": "#/definitions/cluster_manager_apiClusterItem",
           "title": "The details of the cluster request response"
+        }
+      }
+    },
+    "cluster_manager_apiCreateClusterVMWareSpec": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "title": "This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster"
+        },
+        "private_key": {
+          "type": "string",
+          "description": "Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently."
+        },
+        "machines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CreateClusterVMWareSpecVMWareMachineSpec"
+          },
+          "title": "Machines which comprise the cluster"
         }
       }
     },
