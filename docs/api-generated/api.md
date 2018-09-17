@@ -329,7 +329,6 @@ For when some things are already created
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  | This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster |
 | machines | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
 
 
@@ -784,7 +783,6 @@ For when some things are already created
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  | This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster |
 | machines | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
 
 

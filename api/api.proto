@@ -318,8 +318,6 @@ message CreateClusterVMWareSpec {
         string password = 4;
     }
 
-    // This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster
-    string namespace = 1;
     // Machines which comprise the cluster
     repeated VMWareMachineSpec machines = 3;
 }

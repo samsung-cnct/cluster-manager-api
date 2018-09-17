@@ -638,10 +638,6 @@
     "cluster_manager_apiCreateClusterVMWareSpec": {
       "type": "object",
       "properties": {
-        "namespace": {
-          "type": "string",
-          "title": "This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster"
-        },
         "machines": {
           "type": "array",
           "items": {

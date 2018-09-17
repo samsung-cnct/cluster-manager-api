@@ -39,8 +39,7 @@ type ListClusterOutput struct {
 }
 
 type VMWareSpec struct {
-	Namespace string
-	Machines  []MachineSpec
+	Machines []MachineSpec
 }
 
 type ClusterItem struct {

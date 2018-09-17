@@ -35,8 +35,7 @@ func vmwareCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error
 		Name:       in.Name,
 		K8SVersion: in.Provider.K8SVersion,
 		VMWare: cmavmware.VMWareSpec{
-			Namespace: in.Provider.GetVmware().Namespace,
-			Machines:  machines,
+			Machines: machines,
 		},
 		HighAvailability: in.Provider.HighAvailability,
 		NetworkFabric:    in.Provider.NetworkFabric,

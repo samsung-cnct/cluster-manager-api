@@ -67,8 +67,7 @@ func (a *VMWareClient) CreateCluster(input CreateClusterInput) (CreateClusterOut
 			Name:       VMWareProvider,
 			K8SVersion: input.K8SVersion,
 			Vmware: &pb.CreateClusterVMWareSpec{
-				Namespace: input.VMWare.Namespace,
-				Machines:  machines,
+				Machines: machines,
 			},
 			HighAvailability: input.HighAvailability,
 			NetworkFabric:    input.NetworkFabric,
