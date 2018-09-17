@@ -181,6 +181,31 @@
           "Cluster"
         ]
       },
+      "post": {
+        "summary": "Will adjust a provision a cluster",
+        "operationId": "AdjustClusterNodes",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiAdjustClusterReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiAdjustClusterMsg"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      },
       "put": {
         "summary": "Will provision a cluster",
         "operationId": "CreateCluster",
@@ -563,6 +588,25 @@
     }
   },
   "definitions": {
+    "AdjustClusterMsgAdjustClusterVMWareSpec": {
+      "type": "object",
+      "properties": {
+        "add_nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cluster_manager_apiVMWareMachineSpec"
+          },
+          "title": "Machines which we want to add to the cluster"
+        },
+        "remove_nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cluster_manager_apiVMWareMachineSpec"
+          },
+          "title": "Machines which we want to remove from the cluster"
+        }
+      }
+    },
     "CreateClusterAKSSpecAKSInstanceGroup": {
       "type": "object",
       "properties": {
@@ -642,49 +686,6 @@
       },
       "title": "For when some things are already created"
     },
-    "CreateClusterVMWareSpecKubernetesLabel": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "title": "The name of a label"
-        },
-        "value": {
-          "type": "string",
-          "title": "The value of a label"
-        }
-      }
-    },
-    "CreateClusterVMWareSpecVMWareMachineSpec": {
-      "type": "object",
-      "properties": {
-        "username": {
-          "type": "string",
-          "title": "The username for SSH access"
-        },
-        "host": {
-          "type": "string",
-          "title": "The host for SSH access"
-        },
-        "port": {
-          "type": "integer",
-          "format": "int32",
-          "title": "The port for SSH access"
-        },
-        "password": {
-          "type": "string",
-          "description": "The k8s version for the control plane. This node is only a master if this field is defined."
-        },
-        "labels": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CreateClusterVMWareSpecKubernetesLabel"
-          },
-          "title": "The labels for the machines"
-        }
-      },
-      "title": "The specification for a specific node"
-    },
     "GetVersionReplyVersionInformation": {
       "type": "object",
       "properties": {
@@ -735,6 +736,29 @@
         }
       },
       "title": "The credentials to use for creating the cluster"
+    },
+    "cluster_manager_apiAdjustClusterMsg": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "What is the cluster that we are considering for upgrade"
+        },
+        "vmware": {
+          "$ref": "#/definitions/AdjustClusterMsgAdjustClusterVMWareSpec",
+          "title": "The AWS specification\nAdjustClusterAWSSpec aws = 3;\nAdjustClusterAKSSpec azure = 4;"
+        }
+      }
+    },
+    "cluster_manager_apiAdjustClusterReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Was this a successful request"
+        }
+      }
     },
     "cluster_manager_apiAzureClusterServiceAccount": {
       "type": "object",
@@ -923,14 +947,14 @@
         "control_plane_nodes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/CreateClusterVMWareSpecVMWareMachineSpec"
+            "$ref": "#/definitions/cluster_manager_apiVMWareMachineSpec"
           },
           "title": "Machines which comprise the cluster"
         },
         "worker_nodes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/CreateClusterVMWareSpecVMWareMachineSpec"
+            "$ref": "#/definitions/cluster_manager_apiVMWareMachineSpec"
           },
           "title": "Machines which comprise the cluster"
         },
@@ -1111,6 +1135,19 @@
         }
       }
     },
+    "cluster_manager_apiKubernetesLabel": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "The name of a label"
+        },
+        "value": {
+          "type": "string",
+          "title": "The value of a label"
+        }
+      }
+    },
     "cluster_manager_apiProvisionTillerMsg": {
       "type": "object",
       "properties": {
@@ -1200,6 +1237,36 @@
           "title": "Was this a successful request"
         }
       }
+    },
+    "cluster_manager_apiVMWareMachineSpec": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "title": "The username for SSH access"
+        },
+        "host": {
+          "type": "string",
+          "title": "The host for SSH access"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "title": "The port for SSH access"
+        },
+        "password": {
+          "type": "string",
+          "description": "The k8s version for the control plane. This node is only a master if this field is defined."
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cluster_manager_apiKubernetesLabel"
+          },
+          "title": "The labels for the machines"
+        }
+      },
+      "title": "The specification for a specific node"
     }
   },
   "externalDocs": {

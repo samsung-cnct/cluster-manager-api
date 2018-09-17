@@ -92,3 +92,15 @@ func (s *Server) UpgradeCluster(ctx context.Context, in *pb.UpgradeClusterMsg) (
 	}
 	return &pb.UpgradeClusterReply{}, fmt.Errorf("upgrades not supported yet")
 }
+
+// Will adjust a provision a cluster
+func (s *Server) AdjustClusterNodes(ctx context.Context, in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply, error) {
+	vmware := in.GetVmware()
+	if vmware != nil {
+		return vmwareAdjustCluster(in)
+	}
+	return &pb.AdjustClusterReply{
+		Ok: false,
+	}, nil
+
+}

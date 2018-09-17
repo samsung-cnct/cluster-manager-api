@@ -5,6 +5,9 @@
 
 - [api.proto](#api.proto)
     - [AWSCredentials](#cluster_manager_api.AWSCredentials)
+    - [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg)
+    - [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec)
+    - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
     - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
     - [AzureCredentials](#cluster_manager_api.AzureCredentials)
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
@@ -19,8 +22,6 @@
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec)
-    - [CreateClusterVMWareSpec.KubernetesLabel](#cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel)
-    - [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
     - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
@@ -38,10 +39,12 @@
     - [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation)
     - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
     - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
+    - [KubernetesLabel](#cluster_manager_api.KubernetesLabel)
     - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
     - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
     - [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg)
     - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
+    - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
   
   
   
@@ -50,6 +53,9 @@
 
 - [api.proto](#api.proto)
     - [AWSCredentials](#cluster_manager_api.AWSCredentials)
+    - [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg)
+    - [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec)
+    - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
     - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
     - [AzureCredentials](#cluster_manager_api.AzureCredentials)
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
@@ -64,8 +70,6 @@
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
     - [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec)
-    - [CreateClusterVMWareSpec.KubernetesLabel](#cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel)
-    - [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
     - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
@@ -83,10 +87,12 @@
     - [GetVersionReply.VersionInformation](#cluster_manager_api.GetVersionReply.VersionInformation)
     - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
     - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
+    - [KubernetesLabel](#cluster_manager_api.KubernetesLabel)
     - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
     - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
     - [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg)
     - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
+    - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
   
   
   
@@ -115,6 +121,53 @@ The credentials to use for creating the cluster
 | secret_key_id | [string](#string) |  | The SecretKeyId for API Access |
 | secret_access_key | [string](#string) |  | The SecretAccessKey for API access |
 | region | [string](#string) |  | The Region for API access |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg"></a>
+
+### AdjustClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 3; AdjustClusterAKSSpec azure = 4; |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec"></a>
+
+### AdjustClusterMsg.AdjustClusterVMWareSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| add_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to add to the cluster |
+| remove_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to remove from the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterReply"></a>
+
+### AdjustClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
 
 
 
@@ -355,44 +408,9 @@ For when some things are already created
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| control_plane_nodes | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
-| worker_nodes | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| control_plane_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| worker_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
 | api_endpoint | [string](#string) |  | This should be a value like ip:port that will be a virtual IP/port Passed back to external customers to be able to communicate to the cluster |
-
-
-
-
-
-
-<a name="cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel"></a>
-
-### CreateClusterVMWareSpec.KubernetesLabel
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  | The name of a label |
-| value | [string](#string) |  | The value of a label |
-
-
-
-
-
-
-<a name="cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec"></a>
-
-### CreateClusterVMWareSpec.VMWareMachineSpec
-The specification for a specific node
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| username | [string](#string) |  | The username for SSH access |
-| host | [string](#string) |  | The host for SSH access |
-| port | [int32](#int32) |  | The port for SSH access |
-| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
-| labels | [CreateClusterVMWareSpec.KubernetesLabel](#cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel) | repeated | The labels for the machines |
 
 
 
@@ -688,6 +706,22 @@ Reply for version request
 
 
 
+<a name="cluster_manager_api.KubernetesLabel"></a>
+
+### KubernetesLabel
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | The name of a label |
+| value | [string](#string) |  | The value of a label |
+
+
+
+
+
+
 <a name="cluster_manager_api.ProvisionTillerMsg"></a>
 
 ### ProvisionTillerMsg
@@ -759,6 +793,25 @@ Reply for version request
 
 
 
+
+<a name="cluster_manager_api.VMWareMachineSpec"></a>
+
+### VMWareMachineSpec
+The specification for a specific node
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| username | [string](#string) |  | The username for SSH access |
+| host | [string](#string) |  | The host for SSH access |
+| port | [int32](#int32) |  | The port for SSH access |
+| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| labels | [KubernetesLabel](#cluster_manager_api.KubernetesLabel) | repeated | The labels for the machines |
+
+
+
+
+
  
 
  
@@ -776,6 +829,7 @@ Reply for version request
 | CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterReply) | Will provision a cluster |
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterReply) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply) | Will delete a cluster |
+| AdjustClusterNodes | [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg) | [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply) | Will adjust a provision a cluster |
 | GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListReply) | Will retrieve a list of clusters |
 | ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply) | Will install (or reinstall) tiller |
 | InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
@@ -812,6 +866,53 @@ The credentials to use for creating the cluster
 
 
 
+<a name="cluster_manager_api.AdjustClusterMsg"></a>
+
+### AdjustClusterMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 3; AdjustClusterAKSSpec azure = 4; |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec"></a>
+
+### AdjustClusterMsg.AdjustClusterVMWareSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| add_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to add to the cluster |
+| remove_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to remove from the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterReply"></a>
+
+### AdjustClusterReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
 <a name="cluster_manager_api.AzureClusterServiceAccount"></a>
 
 ### AzureClusterServiceAccount
@@ -1046,44 +1147,9 @@ For when some things are already created
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| control_plane_nodes | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
-| worker_nodes | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| control_plane_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+| worker_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
 | api_endpoint | [string](#string) |  | This should be a value like ip:port that will be a virtual IP/port Passed back to external customers to be able to communicate to the cluster |
-
-
-
-
-
-
-<a name="cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel"></a>
-
-### CreateClusterVMWareSpec.KubernetesLabel
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  | The name of a label |
-| value | [string](#string) |  | The value of a label |
-
-
-
-
-
-
-<a name="cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec"></a>
-
-### CreateClusterVMWareSpec.VMWareMachineSpec
-The specification for a specific node
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| username | [string](#string) |  | The username for SSH access |
-| host | [string](#string) |  | The host for SSH access |
-| port | [int32](#int32) |  | The port for SSH access |
-| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
-| labels | [CreateClusterVMWareSpec.KubernetesLabel](#cluster_manager_api.CreateClusterVMWareSpec.KubernetesLabel) | repeated | The labels for the machines |
 
 
 
@@ -1379,6 +1445,22 @@ Reply for version request
 
 
 
+<a name="cluster_manager_api.KubernetesLabel"></a>
+
+### KubernetesLabel
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | The name of a label |
+| value | [string](#string) |  | The value of a label |
+
+
+
+
+
+
 <a name="cluster_manager_api.ProvisionTillerMsg"></a>
 
 ### ProvisionTillerMsg
@@ -1450,6 +1532,25 @@ Reply for version request
 
 
 
+
+<a name="cluster_manager_api.VMWareMachineSpec"></a>
+
+### VMWareMachineSpec
+The specification for a specific node
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| username | [string](#string) |  | The username for SSH access |
+| host | [string](#string) |  | The host for SSH access |
+| port | [int32](#int32) |  | The port for SSH access |
+| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| labels | [KubernetesLabel](#cluster_manager_api.KubernetesLabel) | repeated | The labels for the machines |
+
+
+
+
+
  
 
  
@@ -1467,6 +1568,7 @@ Reply for version request
 | CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterReply) | Will provision a cluster |
 | GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterReply) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
 | DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply) | Will delete a cluster |
+| AdjustClusterNodes | [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg) | [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply) | Will adjust a provision a cluster |
 | GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListReply) | Will retrieve a list of clusters |
 | ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply) | Will install (or reinstall) tiller |
 | InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |

@@ -69,3 +69,13 @@ type KubernetesLabel struct {
 	Name  string
 	Value string
 }
+
+type AdjustClusterInput struct {
+	Name string
+	AddNodes []MachineSpec
+	RemoveNodes       []MachineSpec
+}
+
+type AdjustClusterOutput struct {
+
+}

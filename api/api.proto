@@ -63,6 +63,13 @@ service Cluster {
             delete : "/api/v1/cluster"
         };
     }
+    // Will adjust a provision a cluster
+    rpc AdjustClusterNodes (AdjustClusterMsg) returns (AdjustClusterReply) {
+        option (google.api.http) = {
+            post : "/api/v1/cluster"
+            body : "*"
+        };
+    }
     // Will retrieve a list of clusters
     rpc GetClusterList (GetClusterListMsg) returns (GetClusterListReply) {
         option (google.api.http) = {
@@ -340,27 +347,6 @@ message CreateClusterAKSSpec {
 }
 
 message CreateClusterVMWareSpec {
-    message KubernetesLabel {
-        // The name of a label
-        string name = 1;
-        // The value of a label
-        string value = 2;
-    }
-
-    // The specification for a specific node
-    message VMWareMachineSpec {
-        // The username for SSH access
-        string username = 1;
-        // The host for SSH access
-        string host = 2;
-        // The port for SSH access
-        int32 port = 3;
-        // The k8s version for the control plane. This node is only a master if this field is defined.
-        string password = 4;
-        // The labels for the machines
-        repeated KubernetesLabel labels = 5;
-    }
-
     // Machines which comprise the cluster
     repeated VMWareMachineSpec control_plane_nodes = 3;
     // Machines which comprise the cluster
@@ -369,6 +355,28 @@ message CreateClusterVMWareSpec {
     // Passed back to external customers to be able to communicate to the cluster
     string api_endpoint = 5;
 }
+
+message KubernetesLabel {
+    // The name of a label
+    string name = 1;
+    // The value of a label
+    string value = 2;
+}
+
+// The specification for a specific node
+message VMWareMachineSpec {
+    // The username for SSH access
+    string username = 1;
+    // The host for SSH access
+    string host = 2;
+    // The port for SSH access
+    int32 port = 3;
+    // The k8s version for the control plane. This node is only a master if this field is defined.
+    string password = 4;
+    // The labels for the machines
+    repeated KubernetesLabel labels = 5;
+}
+
 
 message ProvisionTillerMsg {
     // Cluster tiller should be installed on
@@ -493,6 +501,31 @@ message UpgradeClusterMsg {
 }
 
 message UpgradeClusterReply {
+    // Was this a successful request
+    bool ok = 1;
+}
+
+message AdjustClusterMsg {
+    // What is the cluster that we are considering for upgrade
+    string name = 1;
+    // Provider changes
+    oneof provider_changes {
+        // The AWS specification
+        //AdjustClusterAWSSpec aws = 3;
+        //AdjustClusterAKSSpec azure = 4;
+        AdjustClusterVMWareSpec vmware = 5;
+    }
+
+    message AdjustClusterVMWareSpec {
+        // Machines which we want to add to the cluster
+        repeated VMWareMachineSpec add_nodes = 1;
+        // Machines which we want to remove from the cluster
+        repeated VMWareMachineSpec remove_nodes = 2;
+    }
+
+}
+
+message AdjustClusterReply {
     // Was this a successful request
     bool ok = 1;
 }
