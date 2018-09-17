@@ -22,3 +22,7 @@ helpers:
     enabled: false
     endpoint: cma-aws-grpc.cnct.io:443
     insecure: false
+  vmware:
+    enabled: false
+    endpoint: cma-vmware-grpc.cnct.io:443
+    insecure: false
