@@ -89,7 +89,7 @@ func (c *Client) GetCredentials(name string) (credentials Credentials, err error
 		return
 	}
 	if result.Type != corev1.SecretTypeOpaque {
-		err = fmt.Errorf("secret %s is not of type %s, but rather is of type %s", name, corev1.SecretTypeOpaque, secretResult.Type)
+		err = fmt.Errorf("secret %s is not of type %s, but rather is of type %s", name, corev1.SecretTypeOpaque, result.Type)
 		return
 	}
 	if result.Labels[SecretAzureCredentialsLabel] != "true" {

@@ -6,7 +6,26 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmaaws"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/aws"
 	"github.com/spf13/viper"
+	"golang.org/x/net/context"
 )
+
+func (s *Server) UpdateAWSCredentials(ctx context.Context, in *pb.UpdateAWSCredentialsMsg) (*pb.UpdateAWSCredentialsReply, error) {
+	awsSecretClient, err := awsk8sutil.CreateFromDefaults()
+	if err != nil {
+		return &pb.UpdateAWSCredentialsReply{}, err
+	}
+	// TODO Add an UPDATE command
+	awsSecretClient.DeleteCredentials(in.Name)
+	err = awsSecretClient.CreateCredentials(in.Name, awsk8sutil.Credentials{
+		Region:          in.Credentials.Region,
+		SecretKeyID:     in.Credentials.SecretKeyId,
+		SecretAccessKey: in.Credentials.SecretAccessKey,
+	})
+	if err != nil {
+		return &pb.UpdateAWSCredentialsReply{}, err
+	}
+	return &pb.UpdateAWSCredentialsReply{Ok: true}, nil
+}
 
 func awsGetClient() (cmaaws.ClientInterface, error) {
 	hostname := viper.GetString("cmaaws-endpoint")

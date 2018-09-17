@@ -116,6 +116,20 @@ service Cluster {
             body : "*"
         };
     }
+    // Will update aws credentials used for a cluster
+    rpc UpdateAWSCredentials (UpdateAWSCredentialsMsg) returns (UpdateAWSCredentialsReply) {
+        option (google.api.http) = {
+            post : "/api/v1/credentials/aws"
+            body : "*"
+        };
+    }
+    // Will update azure credentials used for a cluster
+    rpc UpdateAzureCredentials (UpdateAzureCredentialsMsg) returns (UpdateAzureCredentialsReply) {
+        option (google.api.http) = {
+            post : "/api/v1/credentials/azure"
+            body : "*"
+        };
+    }
 }
 
 message CreateClusterMsg {
@@ -534,3 +548,28 @@ message AdjustClusterReply {
     // Was this a successful request
     bool ok = 1;
 }
+
+message UpdateAWSCredentialsMsg {
+    // Cluster name
+    string name = 1;
+    // Credentials to build the cluster
+    AWSCredentials credentials = 2;
+}
+
+message UpdateAWSCredentialsReply {
+    // Was this a successful request
+    bool ok = 1;
+}
+
+message UpdateAzureCredentialsMsg {
+    // Cluster name
+    string name = 1;
+    // Credentials to build the cluster
+    AzureCredentials credentials = 2;
+}
+
+message UpdateAzureCredentialsReply {
+    // Was this a successful request
+    bool ok = 1;
+}
+

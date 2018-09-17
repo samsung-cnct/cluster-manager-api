@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/viper"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/typed/core/v1"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"os"
@@ -33,6 +34,9 @@ func (c *Client) CreateNewClients() error {
 		}
 	}
 	coreClient, err := kubernetes.NewForConfig(c.config)
+	if err != nil {
+		return err
+	}
 	c.secretClient = coreClient.CoreV1().Secrets(viper.GetString("kubernetes-namespace"))
 	return err
 }

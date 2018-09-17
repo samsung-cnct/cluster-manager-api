@@ -43,6 +43,10 @@
     - [KubernetesLabel](#cluster_manager_api.KubernetesLabel)
     - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
     - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
+    - [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg)
+    - [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply)
+    - [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg)
+    - [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsReply)
     - [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg)
     - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
     - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
@@ -92,6 +96,10 @@
     - [KubernetesLabel](#cluster_manager_api.KubernetesLabel)
     - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
     - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
+    - [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg)
+    - [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply)
+    - [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg)
+    - [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsReply)
     - [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg)
     - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
     - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
@@ -777,6 +785,68 @@ Reply for version request
 
 
 
+<a name="cluster_manager_api.UpdateAWSCredentialsMsg"></a>
+
+### UpdateAWSCredentialsMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Cluster name |
+| credentials | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | Credentials to build the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAWSCredentialsReply"></a>
+
+### UpdateAWSCredentialsReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAzureCredentialsMsg"></a>
+
+### UpdateAzureCredentialsMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Cluster name |
+| credentials | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Credentials to build the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAzureCredentialsReply"></a>
+
+### UpdateAzureCredentialsReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
 <a name="cluster_manager_api.UpgradeClusterMsg"></a>
 
 ### UpgradeClusterMsg
@@ -854,6 +924,8 @@ The specification for a specific node
 | GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionReply) | Will return version information about api server |
 | GetUpgradeClusterInformation | [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg) | [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply) | Will return upgrade options for a given cluster |
 | UpgradeCluster | [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg) | [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply) | Will attempt to upgrade a cluster |
+| UpdateAWSCredentials | [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg) | [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply) | Will update aws credentials used for a cluster |
+| UpdateAzureCredentials | [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg) | [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsReply) | Will update azure credentials used for a cluster |
 
  
 
@@ -1531,6 +1603,68 @@ Reply for version request
 
 
 
+<a name="cluster_manager_api.UpdateAWSCredentialsMsg"></a>
+
+### UpdateAWSCredentialsMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Cluster name |
+| credentials | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | Credentials to build the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAWSCredentialsReply"></a>
+
+### UpdateAWSCredentialsReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAzureCredentialsMsg"></a>
+
+### UpdateAzureCredentialsMsg
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Cluster name |
+| credentials | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Credentials to build the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.UpdateAzureCredentialsReply"></a>
+
+### UpdateAzureCredentialsReply
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  | Was this a successful request |
+
+
+
+
+
+
 <a name="cluster_manager_api.UpgradeClusterMsg"></a>
 
 ### UpgradeClusterMsg
@@ -1608,6 +1742,8 @@ The specification for a specific node
 | GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionReply) | Will return version information about api server |
 | GetUpgradeClusterInformation | [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg) | [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply) | Will return upgrade options for a given cluster |
 | UpgradeCluster | [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg) | [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply) | Will attempt to upgrade a cluster |
+| UpdateAWSCredentials | [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg) | [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply) | Will update aws credentials used for a cluster |
+| UpdateAzureCredentials | [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg) | [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsReply) | Will update azure credentials used for a cluster |
 
  
 

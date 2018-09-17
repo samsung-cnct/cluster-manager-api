@@ -6,7 +6,28 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmaaks"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/azure"
 	"github.com/spf13/viper"
+	"golang.org/x/net/context"
 )
+
+func (s *Server) UpdateAzureCredentials(ctx context.Context, in *pb.UpdateAzureCredentialsMsg) (*pb.UpdateAzureCredentialsReply, error) {
+	azureSecretClient, err := azurek8sutil.CreateFromDefaults()
+	if err != nil {
+		return &pb.UpdateAzureCredentialsReply{}, err
+	}
+	// TODO Add an UPDATE command
+	azureSecretClient.DeleteCredentials(in.Name)
+	err = azureSecretClient.CreateCredentials(in.Name, azurek8sutil.Credentials{
+		AppID:          in.Credentials.AppId,
+		Tenant:         in.Credentials.Tenant,
+		Password:       in.Credentials.Password,
+		SubscriptionID: in.Credentials.SubscriptionId,
+	})
+	if err != nil {
+		return &pb.UpdateAzureCredentialsReply{}, err
+	}
+	return &pb.UpdateAzureCredentialsReply{Ok: true}, nil
+
+}
 
 func azureGetClient() (cmaaks.AKSClientInterface, error) {
 	hostname := viper.GetString("cmaaks-endpoint")

@@ -414,6 +414,60 @@
         ]
       }
     },
+    "/api/v1/credentials/aws": {
+      "post": {
+        "summary": "Will update aws credentials used for a cluster",
+        "operationId": "UpdateAWSCredentials",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiUpdateAWSCredentialsReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiUpdateAWSCredentialsMsg"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/api/v1/credentials/azure": {
+      "post": {
+        "summary": "Will update azure credentials used for a cluster",
+        "operationId": "UpdateAzureCredentials",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiUpdateAzureCredentialsReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiUpdateAzureCredentialsMsg"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
     "/api/v1/helm": {
       "delete": {
         "summary": "Will delete deployed helm chart",
@@ -1209,6 +1263,52 @@
         "message": {
           "type": "string",
           "title": "What messages were given"
+        }
+      }
+    },
+    "cluster_manager_apiUpdateAWSCredentialsMsg": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Cluster name"
+        },
+        "credentials": {
+          "$ref": "#/definitions/cluster_manager_apiAWSCredentials",
+          "title": "Credentials to build the cluster"
+        }
+      }
+    },
+    "cluster_manager_apiUpdateAWSCredentialsReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Was this a successful request"
+        }
+      }
+    },
+    "cluster_manager_apiUpdateAzureCredentialsMsg": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Cluster name"
+        },
+        "credentials": {
+          "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
+          "title": "Credentials to build the cluster"
+        }
+      }
+    },
+    "cluster_manager_apiUpdateAzureCredentialsReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Was this a successful request"
         }
       }
     },
