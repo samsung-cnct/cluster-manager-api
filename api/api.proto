@@ -98,6 +98,8 @@ message GetClusterMsg {
     AWSCredentials aws = 2;
     // Azure Credentials
     AzureCredentials azure = 3;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 4;
 }
 
 message GetClusterReply {
@@ -114,6 +116,8 @@ message DeleteClusterMsg {
     AWSCredentials aws = 2;
     // Azure Credentials
     AzureCredentials azure = 3;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 4;
 }
 
 message DeleteClusterReply {
@@ -128,6 +132,8 @@ message GetClusterListMsg {
     AWSCredentials aws = 1;
     // Azure Credentials
     AzureCredentials azure = 2;
+    // Name of the providers (aws/aks/vmware/etc)
+    string provider = 4;
 }
 
 message GetClusterListReply {
@@ -167,6 +173,7 @@ message CreateClusterProviderSpec {
         // The AWS specification
         CreateClusterAWSSpec aws = 3;
         CreateClusterAKSSpec azure = 4;
+        CreateClusterVMWareSpec vmware = 7;
     }
 
     // Whether or not the cluster is HA
@@ -298,4 +305,23 @@ message CreateClusterAKSSpec {
     }
 }
 
+message CreateClusterVMWareSpec {
+    // The credentials to use for creating the cluster
+    message VMWareMachineSpec {
+        // The username for SSH access
+        string username = 1;
+        // The host for SSH access
+        string host = 2;
+        // The port for SSH access
+        int32 port = 3;
+        // The k8s version for the control plane. This node is only a master if this field is defined.
+        string control_plane_version = 4;
+    }
 
+    // This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster
+    string namespace = 1;
+    // Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently.
+    string private_key = 2;
+    // Machines which comprise the cluster
+    repeated VMWareMachineSpec machines = 3;
+}

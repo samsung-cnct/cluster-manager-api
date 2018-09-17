@@ -18,6 +18,8 @@
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
+    - [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec)
+    - [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
@@ -48,6 +50,8 @@
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
+    - [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec)
+    - [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
@@ -292,6 +296,7 @@ For when some things are already created
 | k8s_version | [string](#string) |  | The version of Kubernetes |
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
 | azure | [CreateClusterAKSSpec](#cluster_manager_api.CreateClusterAKSSpec) |  |  |
+| vmware | [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec) |  |  |
 | high_availability | [bool](#bool) |  | Whether or not the cluster is HA |
 | network_fabric | [string](#string) |  | The fabric to be used |
 
@@ -316,6 +321,41 @@ For when some things are already created
 
 
 
+<a name="cluster_manager_api.CreateClusterVMWareSpec"></a>
+
+### CreateClusterVMWareSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster |
+| private_key | [string](#string) |  | Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently. |
+| machines | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec"></a>
+
+### CreateClusterVMWareSpec.VMWareMachineSpec
+The credentials to use for creating the cluster
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| username | [string](#string) |  | The username for SSH access |
+| host | [string](#string) |  | The host for SSH access |
+| port | [int32](#int32) |  | The port for SSH access |
+| control_plane_version | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+
+
+
+
+
+
 <a name="cluster_manager_api.DeleteClusterMsg"></a>
 
 ### DeleteClusterMsg
@@ -327,6 +367,7 @@ For when some things are already created
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 
@@ -359,6 +400,7 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 
@@ -392,6 +434,7 @@ For when some things are already created
 | name | [string](#string) |  | Name of the cluster to be looked up |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 
@@ -709,6 +752,7 @@ For when some things are already created
 | k8s_version | [string](#string) |  | The version of Kubernetes |
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
 | azure | [CreateClusterAKSSpec](#cluster_manager_api.CreateClusterAKSSpec) |  |  |
+| vmware | [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec) |  |  |
 | high_availability | [bool](#bool) |  | Whether or not the cluster is HA |
 | network_fabric | [string](#string) |  | The fabric to be used |
 
@@ -733,6 +777,41 @@ For when some things are already created
 
 
 
+<a name="cluster_manager_api.CreateClusterVMWareSpec"></a>
+
+### CreateClusterVMWareSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | This namespace along with the clustername with CreateClusterProviderSpec uniquely identify a managed cluster |
+| private_key | [string](#string) |  | Private key for all nodes in the cluster; note that in the Cluster API SSH provider these can be specified independently. |
+| machines | [CreateClusterVMWareSpec.VMWareMachineSpec](#cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec) | repeated | Machines which comprise the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterVMWareSpec.VMWareMachineSpec"></a>
+
+### CreateClusterVMWareSpec.VMWareMachineSpec
+The credentials to use for creating the cluster
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| username | [string](#string) |  | The username for SSH access |
+| host | [string](#string) |  | The host for SSH access |
+| port | [int32](#int32) |  | The port for SSH access |
+| control_plane_version | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+
+
+
+
+
+
 <a name="cluster_manager_api.DeleteClusterMsg"></a>
 
 ### DeleteClusterMsg
@@ -744,6 +823,7 @@ For when some things are already created
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 
@@ -776,6 +856,7 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 
@@ -809,6 +890,7 @@ For when some things are already created
 | name | [string](#string) |  | Name of the cluster to be looked up |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
 

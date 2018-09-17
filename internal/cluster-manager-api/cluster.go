@@ -14,6 +14,10 @@ func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*p
 	if aws != nil {
 		return awsCreateCluster(in)
 	}
+	vmware := in.Provider.GetVmware()
+	if vmware != nil {
+		return vmwareCreateCluster(in)
+	}
 	return &pb.CreateClusterReply{
 		Ok: true,
 		Cluster: &pb.ClusterItem{
@@ -30,6 +34,8 @@ func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetC
 	}
 	if in.GetAws() != nil && in.GetAws().Region != "" {
 		return awsGetCluster(in)
+	} else {
+		return vmwareGetCluster(in)
 	}
 	return &pb.GetClusterReply{
 		Ok: true,
@@ -48,6 +54,8 @@ func (s *Server) DeleteCluster(ctx context.Context, in *pb.DeleteClusterMsg) (*p
 	}
 	if in.GetAws() != nil && in.GetAws().Region != "" {
 		return awsDeleteCluster(in)
+	} else {
+		return vmwareDeleteCluster(in)
 	}
 	return &pb.DeleteClusterReply{Ok: true, Status: "Deleting, but not really"}, nil
 }
@@ -58,6 +66,8 @@ func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (
 	}
 	if in.GetAws() != nil && in.GetAws().Region != "" {
 		return awsGetClusterList(in)
+	} else {
+		return vmwareGetClusterList(in)
 	}
 	reply = &pb.GetClusterListReply{}
 	return
