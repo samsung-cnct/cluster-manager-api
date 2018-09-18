@@ -47,7 +47,7 @@ service Cluster {
     // Will provision a cluster
     rpc CreateCluster (CreateClusterMsg) returns (CreateClusterReply) {
         option (google.api.http) = {
-            put : "/api/v1/cluster"
+            post : "/api/v1/cluster"
             body : "*"
         };
     }
@@ -66,7 +66,7 @@ service Cluster {
     // Will adjust a provision a cluster
     rpc AdjustClusterNodes (AdjustClusterMsg) returns (AdjustClusterReply) {
         option (google.api.http) = {
-            post : "/api/v1/cluster"
+            put : "/api/v1/cluster"
             body : "*"
         };
     }
@@ -87,7 +87,7 @@ service Cluster {
     // This will be destructive if a chart has already been deployed with the same name
     rpc InstallHelmChart (InstallHelmChartMsg) returns (InstallHelmChartReply) {
         option (google.api.http) = {
-            put : "/api/v1/helm"
+            post : "/api/v1/helm"
             body : "*"
         };
     }
@@ -112,21 +112,21 @@ service Cluster {
     // Will attempt to upgrade a cluster
     rpc UpgradeCluster (UpgradeClusterMsg) returns (UpgradeClusterReply) {
         option (google.api.http) = {
-            post : "/api/v1/cluster/upgrade"
+            put : "/api/v1/cluster/upgrade"
             body : "*"
         };
     }
     // Will update aws credentials used for a cluster
     rpc UpdateAWSCredentials (UpdateAWSCredentialsMsg) returns (UpdateAWSCredentialsReply) {
         option (google.api.http) = {
-            post : "/api/v1/credentials/aws"
+            put : "/api/v1/credentials/aws"
             body : "*"
         };
     }
     // Will update azure credentials used for a cluster
     rpc UpdateAzureCredentials (UpdateAzureCredentialsMsg) returns (UpdateAzureCredentialsReply) {
         option (google.api.http) = {
-            post : "/api/v1/credentials/azure"
+            put : "/api/v1/credentials/azure"
             body : "*"
         };
     }

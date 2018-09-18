@@ -84,31 +84,6 @@
         ]
       },
       "post": {
-        "summary": "Will adjust a provision a cluster",
-        "operationId": "AdjustClusterNodes",
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/cluster_manager_apiAdjustClusterReply"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/cluster_manager_apiAdjustClusterMsg"
-            }
-          }
-        ],
-        "tags": [
-          "Cluster"
-        ]
-      },
-      "put": {
         "summary": "Will provision a cluster",
         "operationId": "CreateCluster",
         "responses": {
@@ -126,6 +101,31 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/cluster_manager_apiCreateClusterMsg"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      },
+      "put": {
+        "summary": "Will adjust a provision a cluster",
+        "operationId": "AdjustClusterNodes",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiAdjustClusterReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiAdjustClusterMsg"
             }
           }
         ],
@@ -241,7 +241,7 @@
           "Cluster"
         ]
       },
-      "post": {
+      "put": {
         "summary": "Will attempt to upgrade a cluster",
         "operationId": "UpgradeCluster",
         "responses": {
@@ -268,7 +268,7 @@
       }
     },
     "/api/v1/credentials/aws": {
-      "post": {
+      "put": {
         "summary": "Will update aws credentials used for a cluster",
         "operationId": "UpdateAWSCredentials",
         "responses": {
@@ -295,7 +295,7 @@
       }
     },
     "/api/v1/credentials/azure": {
-      "post": {
+      "put": {
         "summary": "Will update azure credentials used for a cluster",
         "operationId": "UpdateAzureCredentials",
         "responses": {
@@ -374,7 +374,7 @@
           "Cluster"
         ]
       },
-      "put": {
+      "post": {
         "summary": "Will install (or reinstall) helm chart\nThis will be destructive if a chart has already been deployed with the same name",
         "operationId": "InstallHelmChart",
         "responses": {
