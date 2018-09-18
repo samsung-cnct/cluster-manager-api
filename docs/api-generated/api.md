@@ -451,8 +451,6 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
@@ -488,8 +486,6 @@ For when some things are already created
 | tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
 | chart | [string](#string) |  | Chart Name |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
@@ -589,8 +585,6 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of the cluster to be looked up |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
@@ -623,8 +617,6 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 
 
@@ -707,8 +699,6 @@ Reply for version request
 | tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
 | chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
@@ -761,8 +751,6 @@ Reply for version request
 | cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
 | admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
@@ -856,8 +844,6 @@ Reply for version request
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 | version | [string](#string) |  | What version are we upgrading to? |
 
@@ -1269,8 +1255,6 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
@@ -1306,8 +1290,6 @@ For when some things are already created
 | tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
 | chart | [string](#string) |  | Chart Name |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
@@ -1407,8 +1389,6 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of the cluster to be looked up |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
@@ -1441,8 +1421,6 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 
 
@@ -1525,8 +1503,6 @@ Reply for version request
 | tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
 | chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
@@ -1579,8 +1555,6 @@ Reply for version request
 | cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
 | admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 
 
 
@@ -1674,8 +1648,6 @@ Reply for version request
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
-| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 | version | [string](#string) |  | What version are we upgrading to? |
 

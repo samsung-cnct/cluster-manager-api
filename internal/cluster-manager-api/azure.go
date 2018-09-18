@@ -111,13 +111,21 @@ func azureGetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 		return &pb.GetClusterReply{}, err
 	}
 	defer client.Close()
+	azureSecretClient, err := azurek8sutil.CreateFromDefaults()
+	if err != nil {
+		return &pb.GetClusterReply{}, err
+	}
+	credentials, err := azureSecretClient.GetCredentials(in.Name)
+	if err != nil {
+		return &pb.GetClusterReply{}, err
+	}
 	result, err := client.GetCluster(cmaaks.GetClusterInput{
 		Name: in.Name,
 		Credentials: cmaaks.Credentials{
-			AppID:          in.GetAzure().AppId,
-			Tenant:         in.GetAzure().Tenant,
-			Password:       in.GetAzure().Password,
-			SubscriptionID: in.GetAzure().SubscriptionId,
+			AppID:          credentials.AppID,
+			Tenant:         credentials.Tenant,
+			Password:       credentials.Password,
+			SubscriptionID: credentials.SubscriptionID,
 		},
 	})
 	if err != nil {
@@ -171,13 +179,21 @@ func azureDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error)
 		return &pb.DeleteClusterReply{}, err
 	}
 	defer client.Close()
+	azureSecretClient, err := azurek8sutil.CreateFromDefaults()
+	if err != nil {
+		return &pb.DeleteClusterReply{}, err
+	}
+	credentials, err := azureSecretClient.GetCredentials(in.Name)
+	if err != nil {
+		return &pb.DeleteClusterReply{}, err
+	}
 	result, err := client.DeleteCluster(cmaaks.DeleteClusterInput{
 		Name: in.Name,
 		Credentials: cmaaks.Credentials{
-			AppID:          in.GetAzure().AppId,
-			Tenant:         in.GetAzure().Tenant,
-			Password:       in.GetAzure().Password,
-			SubscriptionID: in.GetAzure().SubscriptionId,
+			AppID:          credentials.AppID,
+			Tenant:         credentials.Tenant,
+			Password:       credentials.Password,
+			SubscriptionID: credentials.SubscriptionID,
 		},
 	})
 	if err != nil {

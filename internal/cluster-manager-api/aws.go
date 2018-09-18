@@ -110,12 +110,20 @@ func awsGetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 		return &pb.GetClusterReply{}, err
 	}
 	defer client.Close()
+	awsSecretClient, err := awsk8sutil.CreateFromDefaults()
+	if err != nil {
+		return &pb.GetClusterReply{}, err
+	}
+	credentials, err := awsSecretClient.GetCredentials(in.Name)
+	if err != nil {
+		return &pb.GetClusterReply{}, err
+	}
 	result, err := client.GetCluster(cmaaws.GetClusterInput{
 		Name: in.Name,
 		Credentials: cmaaws.Credentials{
-			Region:          in.GetAws().Region,
-			SecretKeyID:     in.GetAws().SecretKeyId,
-			SecretAccessKey: in.GetAws().SecretAccessKey,
+			Region:          credentials.Region,
+			SecretKeyID:     credentials.SecretKeyID,
+			SecretAccessKey: credentials.SecretAccessKey,
 		},
 	})
 	if err != nil {
@@ -168,12 +176,20 @@ func awsDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
 		return &pb.DeleteClusterReply{}, err
 	}
 	defer client.Close()
+	awsSecretClient, err := awsk8sutil.CreateFromDefaults()
+	if err != nil {
+		return &pb.DeleteClusterReply{}, err
+	}
+	credentials, err := awsSecretClient.GetCredentials(in.Name)
+	if err != nil {
+		return &pb.DeleteClusterReply{}, err
+	}
 	result, err := client.DeleteCluster(cmaaws.DeleteClusterInput{
 		Name: in.Name,
 		Credentials: cmaaws.Credentials{
-			Region:          in.GetAws().Region,
-			SecretKeyID:     in.GetAws().SecretKeyId,
-			SecretAccessKey: in.GetAws().SecretAccessKey,
+			Region:          credentials.Region,
+			SecretKeyID:     credentials.SecretKeyID,
+			SecretAccessKey: credentials.SecretAccessKey,
 		},
 	})
 	if err != nil {
