@@ -30,35 +30,27 @@ func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*p
 }
 
 func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
-	if in.GetAzure() != nil && in.GetAzure().AppId != "" {
-		return azureGetCluster(in)
-	}
-	if in.GetAws() != nil && in.GetAws().Region != "" {
+	switch in.Provider {
+	case "aws":
 		return awsGetCluster(in)
-	} else {
+	case "azure":
+		return azureGetCluster(in)
+	case "vmware":
 		return vmwareGetCluster(in)
 	}
-	return &pb.GetClusterReply{
-		Ok: true,
-		Cluster: &pb.ClusterDetailItem{
-			Id:         "abc123",
-			Name:       "dummyName",
-			Status:     "Placeholder",
-			Kubeconfig: "undefined still",
-		},
-	}, nil
+	return &pb.GetClusterReply{Ok: false}, fmt.Errorf("no provider selected")
 }
 
 func (s *Server) DeleteCluster(ctx context.Context, in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
-	if in.GetAzure() != nil && in.GetAzure().AppId != "" {
+	switch in.Provider {
+	case "aws":
 		return azureDeleteCluster(in)
-	}
-	if in.GetAws() != nil && in.GetAws().Region != "" {
-		return awsDeleteCluster(in)
-	} else {
+	case "azure":
+		return azureDeleteCluster(in)
+	case "vmware":
 		return vmwareDeleteCluster(in)
 	}
-	return &pb.DeleteClusterReply{Ok: true, Status: "Deleting, but not really"}, nil
+	return &pb.DeleteClusterReply{Ok: false}, fmt.Errorf("no provider selected")
 }
 
 func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (reply *pb.GetClusterListReply, err error) {

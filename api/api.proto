@@ -149,10 +149,6 @@ message CreateClusterReply {
 message GetClusterMsg {
     // Name of the cluster to be looked up
     string name = 1;
-    // AWS Credentials
-    AWSCredentials aws = 2;
-    // Azure Credentials
-    AzureCredentials azure = 3;
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 4;
 }
@@ -167,10 +163,6 @@ message GetClusterReply {
 message DeleteClusterMsg {
     // What is the cluster's name to destroy
     string name = 1;
-    // AWS Credentials
-    AWSCredentials aws = 2;
-    // Azure Credentials
-    AzureCredentials azure = 3;
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 4;
 }
@@ -406,10 +398,6 @@ message ProvisionTillerMsg {
     repeated string admin_namespaces = 5;
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 6;
-    // AWS Credentials
-    AWSCredentials aws = 7;
-    // Azure Credentials
-    AzureCredentials azure = 8;
 }
 
 message ProvisionTillerReply {
@@ -428,10 +416,6 @@ message InstallHelmChartMsg {
     GenericHelmChart chart = 3;
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 6;
-    // AWS Credentials
-    AWSCredentials aws = 7;
-    // Azure Credentials
-    AzureCredentials azure = 8;
 }
 
 message InstallHelmChartReply {
@@ -450,10 +434,6 @@ message DeleteHelmChartMsg {
     string chart = 3;
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 6;
-    // AWS Credentials
-    AWSCredentials aws = 7;
-    // Azure Credentials
-    AzureCredentials azure = 8;
 }
 
 message DeleteHelmChartReply {
@@ -486,10 +466,6 @@ message GenericHelmChart {
 message GetUpgradeClusterInformationMsg {
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 1;
-    // AWS Credentials
-    AWSCredentials aws = 2;
-    // Azure Credentials
-    AzureCredentials azure = 3;
     // What is the cluster that we are considering for upgrade
     string name = 4;
 }
@@ -504,10 +480,6 @@ message GetUpgradeClusterInformationReply {
 message UpgradeClusterMsg {
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 1;
-    // AWS Credentials
-    AWSCredentials aws = 2;
-    // Azure Credentials
-    AzureCredentials azure = 3;
     // What is the cluster that we are considering for upgrade
     string name = 4;
     // What version are we upgrading to?
