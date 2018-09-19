@@ -146,7 +146,9 @@ The credentials to use for creating the cluster
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
-| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 3; AdjustClusterAKSSpec azure = 4; |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 4; AdjustClusterAKSSpec azure = 5; |
 
 
 
@@ -451,6 +453,8 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
@@ -585,6 +589,8 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of the cluster to be looked up |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
@@ -617,6 +623,8 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 
 
@@ -844,6 +852,8 @@ Reply for version request
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 | version | [string](#string) |  | What version are we upgrading to? |
 
@@ -950,7 +960,9 @@ The credentials to use for creating the cluster
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
-| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 3; AdjustClusterAKSSpec azure = 4; |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
+| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 4; AdjustClusterAKSSpec azure = 5; |
 
 
 
@@ -1255,6 +1267,8 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
@@ -1389,6 +1403,8 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of the cluster to be looked up |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
 
 
@@ -1421,6 +1437,8 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 
 
@@ -1648,6 +1666,8 @@ Reply for version request
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 | version | [string](#string) |  | What version are we upgrading to? |
 

@@ -2,6 +2,7 @@ package azurek8sutil
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -51,16 +52,25 @@ func (c *Client) createSecret(secret *corev1.Secret) (err error) {
 	return
 }
 
-func (c *Client) getSecret(name string) (secret corev1.Secret, err error) {
+func (c *Client) getSecret(name string) (secret *corev1.Secret, err error) {
 	if c.secretClient == nil {
-		return corev1.Secret{}, fmt.Errorf("secret client is not initialized")
+		return &corev1.Secret{}, fmt.Errorf("secret client is not initialized")
 	}
 
 	secretResult, err := c.secretClient.Get(name, v1.GetOptions{})
 	if err != nil {
 		return
 	}
-	secret = *secretResult
+	secret = secretResult
+	return
+}
+
+func (c *Client) updateSecret(secret *corev1.Secret) (err error) {
+	if c.secretClient == nil {
+		return fmt.Errorf("secret client is not initialized")
+	}
+
+	_, err = c.secretClient.Update(secret)
 	return
 }
 
@@ -147,6 +157,32 @@ func (c *Client) CreateCredentials(name string, credentials Credentials) (err er
 	}
 
 	return c.createSecret(secret)
+}
+
+func (c *Client) UpdateOrCreateCredentials(name string, credentials Credentials) (err error) {
+	// Let's try getting the credentials
+	secret, err := c.getSecret(c.getAdjustedName(name))
+
+	// If we had an error, then we need to create,
+	if err != nil {
+		logrus.Errorf("Chose to create")
+		return c.CreateCredentials(name, credentials)
+	} else {
+		// If we had no error, then we need to update
+		logrus.Errorf("Chose to update")
+		return c.updateCredentials(name, credentials, secret)
+	}
+}
+
+func (c *Client) updateCredentials(name string, credentials Credentials, secret *corev1.Secret) error {
+	// Ensuring Labels are set
+	secret.Labels[SecretAzureCredentialsLabel] = "true"
+	secret.Data[CredentialsAppIDDataMap] = []byte(credentials.AppID)
+	secret.Data[CredentialsTenantDataMap] = []byte(credentials.Tenant)
+	secret.Data[CredentialsPasswordDataMap] = []byte(credentials.Password)
+	secret.Data[CredentialsSubscriptionIDDataMap] = []byte(credentials.SubscriptionID)
+
+	return c.updateSecret(secret)
 }
 
 func (c *Client) getAdjustedName(name string) string {

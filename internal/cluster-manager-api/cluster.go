@@ -9,11 +9,11 @@ import (
 func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
 	azure := in.Provider.GetAzure()
 	if azure != nil {
-		return azureCreateCluster(in)
+		return s.azure.CreateCluster(in)
 	}
 	aws := in.Provider.GetAws()
 	if aws != nil {
-		return awsCreateCluster(in)
+		return s.aws.CreateCluster(in)
 	}
 	vmware := in.Provider.GetVmware()
 	if vmware != nil {
@@ -32,9 +32,9 @@ func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*p
 func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 	switch in.Provider {
 	case "aws":
-		return awsGetCluster(in)
+		return s.aws.GetCluster(in)
 	case "azure":
-		return azureGetCluster(in)
+		return s.azure.GetCluster(in)
 	case "vmware":
 		return vmwareGetCluster(in)
 	}
@@ -44,9 +44,9 @@ func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetC
 func (s *Server) DeleteCluster(ctx context.Context, in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
 	switch in.Provider {
 	case "aws":
-		return azureDeleteCluster(in)
+		return s.aws.DeleteCluster(in)
 	case "azure":
-		return azureDeleteCluster(in)
+		return s.azure.DeleteCluster(in)
 	case "vmware":
 		return vmwareDeleteCluster(in)
 	}
@@ -55,10 +55,10 @@ func (s *Server) DeleteCluster(ctx context.Context, in *pb.DeleteClusterMsg) (*p
 
 func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (reply *pb.GetClusterListReply, err error) {
 	if in.GetAzure() != nil && in.GetAzure().AppId != "" {
-		return azureGetClusterList(in)
+		return s.azure.GetClusterList(in)
 	}
 	if in.GetAws() != nil && in.GetAws().Region != "" {
-		return awsGetClusterList(in)
+		return s.aws.GetClusterList(in)
 	} else {
 		return vmwareGetClusterList(in)
 	}

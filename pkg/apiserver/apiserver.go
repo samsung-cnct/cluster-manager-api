@@ -72,5 +72,7 @@ func addgRPCRestGateway(router *http.ServeMux, grpcPortNumber int) {
 }
 
 func newgRPCServiceServer() *service.Server {
-	return new(service.Server)
+	// TODO Handle Errors better here
+	server, _ := service.NewServerFromDefaults()
+	return server
 }

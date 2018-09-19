@@ -149,6 +149,10 @@ message CreateClusterReply {
 message GetClusterMsg {
     // Name of the cluster to be looked up
     string name = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 4;
 }
@@ -163,6 +167,10 @@ message GetClusterReply {
 message DeleteClusterMsg {
     // What is the cluster's name to destroy
     string name = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 4;
 }
@@ -466,6 +474,10 @@ message GenericHelmChart {
 message GetUpgradeClusterInformationMsg {
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
     // What is the cluster that we are considering for upgrade
     string name = 4;
 }
@@ -480,6 +492,10 @@ message GetUpgradeClusterInformationReply {
 message UpgradeClusterMsg {
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
     // What is the cluster that we are considering for upgrade
     string name = 4;
     // What version are we upgrading to?
@@ -494,12 +510,16 @@ message UpgradeClusterReply {
 message AdjustClusterMsg {
     // What is the cluster that we are considering for upgrade
     string name = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
     // Provider changes
     oneof provider_changes {
         // The AWS specification
-        //AdjustClusterAWSSpec aws = 3;
-        //AdjustClusterAKSSpec azure = 4;
-        AdjustClusterVMWareSpec vmware = 5;
+        //AdjustClusterAWSSpec aws = 4;
+        //AdjustClusterAKSSpec azure = 5;
+        AdjustClusterVMWareSpec vmware = 6;
     }
 
     message AdjustClusterVMWareSpec {

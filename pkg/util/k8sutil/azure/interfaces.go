@@ -16,6 +16,7 @@ type ClientInterface interface {
 	GetCredentials(name string) (Credentials, error)
 	DeleteCredentials(name string) error
 	ListCredentials() ([]string, error)
+	UpdateOrCreateCredentials(name string, credentials Credentials) error
 
 	CreateNewClients() error
 	SetConfig(config *rest.Config)
