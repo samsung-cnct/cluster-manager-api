@@ -80,7 +80,7 @@ func (c *Client) CreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply,
 }
 
 func (c *Client) GetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
-	credentials, updateCache, err := c.reconcileCredentials(in.Name, in.Azure, c.secretClient)
+	credentials, updateCache, err := c.reconcileCredentials(in.Name, in.Azure)
 	if err != nil {
 		return &pb.GetClusterReply{}, err
 	}
@@ -100,7 +100,7 @@ func (c *Client) GetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 
 	// Processing output
 	if updateCache {
-		err = c.updateCachedCredentials(in.Name, credentials, c.secretClient)
+		err = c.updateCachedCredentials(in.Name, credentials)
 		if err != nil {
 			// Could not update the credentials, let's log that
 			logrus.Errorf("could not update credentials for cluster -->%s<--, error was %s", in.Name, err)
@@ -145,7 +145,7 @@ func (c *Client) GetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListRep
 }
 
 func (c *Client) DeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
-	credentials, err := c.secretClient.GetCredentials(in.Name)
+	credentials, _, err := c.reconcileCredentials(in.Name, in.Azure)
 	if err != nil {
 		return &pb.DeleteClusterReply{}, err
 	}
@@ -161,13 +161,91 @@ func (c *Client) DeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply,
 	if err != nil {
 		return &pb.DeleteClusterReply{}, err
 	}
+
+	// Deleting credentials
+	err = c.secretClient.DeleteCredentials(in.Name)
+	if err != nil {
+		// Could not delete the credentials, let's log that
+		logrus.Errorf("could not delete credentials for cluster -->%s<--, error was %s", in.Name, err)
+	}
+
 	return &pb.DeleteClusterReply{
 		Ok:     true,
 		Status: result.Status,
 	}, nil
 }
 
-func (c *Client) reconcileCredentials(clusterName string, providedCredentials *pb.AzureCredentials, azureSecretClient azurek8sutil.ClientInterface) (credentials azurek8sutil.Credentials, updateCache bool, err error) {
+func (c *Client) GetClusterUpgrades(in *pb.GetUpgradeClusterInformationMsg) (output *pb.GetUpgradeClusterInformationReply, err error) {
+	output = &pb.GetUpgradeClusterInformationReply{}
+	credentials, updateCache, err := c.reconcileCredentials(in.Name, in.Azure)
+	if err != nil {
+		return
+	}
+
+	result, err := c.cmaAKSClient.GetClusterUpgrades(cmaaks.GetClusterUpgradesInput{
+		Name: in.Name,
+		Credentials: cmaaks.Credentials{
+			AppID:          credentials.AppID,
+			Tenant:         credentials.Tenant,
+			Password:       credentials.Password,
+			SubscriptionID: credentials.SubscriptionID,
+		},
+	})
+	if err != nil {
+		return
+	}
+
+	// Processing output
+	if updateCache {
+		updateErr := c.updateCachedCredentials(in.Name, credentials)
+		if updateErr != nil {
+			// Could not update the credentials, let's log that
+			logrus.Errorf("could not update credentials for cluster -->%s<--, error was %s", in.Name, updateErr)
+		}
+	}
+
+	for _, j := range result.Versions {
+		output.Versions = append(output.Versions, j)
+	}
+
+	return
+}
+
+func (c *Client) ClusterUpgrade(in *pb.UpgradeClusterMsg) (output *pb.UpgradeClusterReply, err error) {
+	output = &pb.UpgradeClusterReply{}
+	credentials, updateCache, err := c.reconcileCredentials(in.Name, in.Azure)
+	if err != nil {
+		return
+	}
+
+	_, err = c.cmaAKSClient.ClusterUpgrade(cmaaks.ClusterUpgradeInput{
+		Name:    in.Name,
+		Version: in.Version,
+		Credentials: cmaaks.Credentials{
+			AppID:          credentials.AppID,
+			Tenant:         credentials.Tenant,
+			Password:       credentials.Password,
+			SubscriptionID: credentials.SubscriptionID,
+		},
+	})
+	if err != nil {
+		return
+	}
+
+	// Processing output
+	if updateCache {
+		updateErr := c.updateCachedCredentials(in.Name, credentials)
+		if updateErr != nil {
+			// Could not update the credentials, let's log that
+			logrus.Errorf("could not update credentials for cluster -->%s<--, error was %s", in.Name, updateErr)
+		}
+	}
+
+	output.Ok = true
+	return
+}
+
+func (c *Client) reconcileCredentials(clusterName string, providedCredentials *pb.AzureCredentials) (credentials azurek8sutil.Credentials, updateCache bool, err error) {
 	logrus.Errorf("Reconciling credentials")
 	if providedCredentials != nil &&
 		providedCredentials.AppId != "" &&
@@ -182,7 +260,7 @@ func (c *Client) reconcileCredentials(clusterName string, providedCredentials *p
 			SubscriptionID: providedCredentials.SubscriptionId,
 		}, true, nil
 	}
-	cacheResult, err := azureSecretClient.GetCredentials(clusterName)
+	cacheResult, err := c.secretClient.GetCredentials(clusterName)
 	if err != nil {
 		return azurek8sutil.Credentials{}, false, err
 	}
@@ -190,7 +268,7 @@ func (c *Client) reconcileCredentials(clusterName string, providedCredentials *p
 	return cacheResult, false, nil
 }
 
-func (c *Client) updateCachedCredentials(clusterName string, credentials azurek8sutil.Credentials, azureSecretClient azurek8sutil.ClientInterface) (err error) {
+func (c *Client) updateCachedCredentials(clusterName string, credentials azurek8sutil.Credentials) (err error) {
 	logrus.Errorf("Updating cached credentials")
-	return azureSecretClient.UpdateOrCreateCredentials(clusterName, credentials)
+	return c.secretClient.UpdateOrCreateCredentials(clusterName, credentials)
 }

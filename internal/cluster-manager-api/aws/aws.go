@@ -8,9 +8,7 @@ import (
 )
 
 func (c *Client) UpdateCredentials(in *pb.UpdateAWSCredentialsMsg) (*pb.UpdateAWSCredentialsReply, error) {
-	// TODO Add an UPDATE command
-	c.secretClient.DeleteCredentials(in.Name)
-	err := c.secretClient.CreateCredentials(in.Name, awsk8sutil.Credentials{
+	err := c.secretClient.UpdateOrCreateCredentials(in.Name, awsk8sutil.Credentials{
 		Region:          in.Credentials.Region,
 		SecretKeyID:     in.Credentials.SecretKeyId,
 		SecretAccessKey: in.Credentials.SecretAccessKey,
@@ -65,7 +63,7 @@ func (c *Client) CreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply,
 	})
 
 	if err != nil {
-		// TODO Unsure what to do if we suddenly can't persist the credentails to kubernetes
+		// TODO Unsure what to do if we suddenly can't persist the credentials to kubernetes
 		// TODO Going to log for now
 		logrus.Errorf("Could not set AWS credentials into kubernetes, this is bad")
 	}
@@ -81,7 +79,7 @@ func (c *Client) CreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply,
 }
 
 func (c *Client) GetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
-	credentials, err := c.secretClient.GetCredentials(in.Name)
+	credentials, updateCache, err := c.reconcileCredentials(in.Name, in.Aws)
 	if err != nil {
 		return &pb.GetClusterReply{}, err
 	}
@@ -96,6 +94,16 @@ func (c *Client) GetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 	if err != nil {
 		return &pb.GetClusterReply{}, err
 	}
+
+	// Processing output
+	if updateCache {
+		err = c.updateCachedCredentials(in.Name, credentials)
+		if err != nil {
+			// Could not update the credentials, let's log that
+			logrus.Errorf("could not update credentials for cluster -->%s<--, error was %s", in.Name, err)
+		}
+	}
+
 	return &pb.GetClusterReply{
 		Ok: true,
 		Cluster: &pb.ClusterDetailItem{
@@ -133,7 +141,7 @@ func (c *Client) GetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListRep
 }
 
 func (c *Client) DeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
-	credentials, err := c.secretClient.GetCredentials(in.Name)
+	credentials, _, err := c.reconcileCredentials(in.Name, in.Aws)
 	if err != nil {
 		return &pb.DeleteClusterReply{}, err
 	}
@@ -148,8 +156,42 @@ func (c *Client) DeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply,
 	if err != nil {
 		return &pb.DeleteClusterReply{}, err
 	}
+
+	// Deleting credentials
+	err = c.secretClient.DeleteCredentials(in.Name)
+	if err != nil {
+		// Could not delete the credentials, let's log that
+		logrus.Errorf("could not delete credentials for cluster -->%s<--, error was %s", in.Name, err)
+	}
+
 	return &pb.DeleteClusterReply{
 		Ok:     true,
 		Status: result.Status,
 	}, nil
+}
+
+func (c *Client) reconcileCredentials(clusterName string, providedCredentials *pb.AWSCredentials) (credentials awsk8sutil.Credentials, updateCache bool, err error) {
+	logrus.Errorf("Reconciling credentials")
+	if providedCredentials != nil &&
+		providedCredentials.Region != "" &&
+		providedCredentials.SecretKeyId != "" &&
+		providedCredentials.SecretAccessKey != "" {
+		logrus.Errorf("Using provided credentials")
+		return awsk8sutil.Credentials{
+			Region:          providedCredentials.Region,
+			SecretKeyID:     providedCredentials.SecretKeyId,
+			SecretAccessKey: providedCredentials.SecretAccessKey,
+		}, true, nil
+	}
+	cacheResult, err := c.secretClient.GetCredentials(clusterName)
+	if err != nil {
+		return awsk8sutil.Credentials{}, false, err
+	}
+	logrus.Errorf("Using cached credentials")
+	return cacheResult, false, nil
+}
+
+func (c *Client) updateCachedCredentials(clusterName string, credentials awsk8sutil.Credentials) (err error) {
+	logrus.Errorf("Updating cached credentials")
+	return c.secretClient.UpdateOrCreateCredentials(clusterName, credentials)
 }

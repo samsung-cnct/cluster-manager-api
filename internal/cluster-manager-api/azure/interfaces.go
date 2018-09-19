@@ -7,7 +7,7 @@ import (
 )
 
 type Client struct {
-	cmaAKSClient cmaaks.AKSClientInterface
+	cmaAKSClient cmaaks.ClientInterface
 	secretClient azurek8sutil.ClientInterface
 }
 
@@ -17,5 +17,8 @@ type ClientInterface interface {
 	GetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListReply, error)
 	DeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error)
 	UpdateCredentials(in *pb.UpdateAzureCredentialsMsg) (*pb.UpdateAzureCredentialsReply, error)
+	GetClusterUpgrades(in *pb.GetUpgradeClusterInformationMsg) (output *pb.GetUpgradeClusterInformationReply, err error)
+	ClusterUpgrade(in *pb.UpgradeClusterMsg) (output *pb.UpgradeClusterReply, err error)
+
 	Close() error
 }

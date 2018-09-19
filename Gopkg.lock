@@ -292,11 +292,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:1dd0d928fde4ca5152585acf90f1dcad5d2ad325a66b7cb9cc6af9d1e3e6d1d4"
+  digest = "1:7d7c9d8d28c4132b00cd0ace8b565c16e6362234055191736e63ec12b8d5444c"
   name = "github.com/samsung-cnct/cma-aks"
   packages = ["pkg/generated/api"]
   pruneopts = "UT"
-  revision = "8328350fa04a09d7340fa10f5d9985b4faf67999"
+  revision = "d4e31a83ebd273eeb6b47b7992c93ad0ce1b47a5"
 
 [[projects]]
   branch = "master"
@@ -305,6 +305,14 @@
   packages = ["pkg/generated/api"]
   pruneopts = "UT"
   revision = "1a35ee8e0447a1c14b45b19ca98f60b47fd65110"
+
+[[projects]]
+  digest = "1:d867dfa6751c8d7a435821ad3b736310c2ed68945d05b50fb9d23aee0540c8cc"
+  name = "github.com/sirupsen/logrus"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "3e01752db0189b9157070a0e1668a620f9a85da2"
+  version = "v1.0.6"
 
 [[projects]]
   digest = "1:30e06e6d62a1d694e3cdbff29d8a9a96022e05a487d0c6eaf0ef898965ef28fb"
@@ -414,14 +422,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:374fc90fcb026e9a367e3fad29e988e5dd944b68ca3f24a184d77abc5307dda4"
+  digest = "1:e10551220bea6da5274318545537df1012268056be6484b83a3338328050cde0"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "d0be0721c37eeb5299f245a996a483160fc36940"
+  revision = "ee1b12c67af419cf5a9be3bdbeea7fc1c5f32f11"
 
 [[projects]]
   digest = "1:436b24586f8fee329e0dd65fd67c817681420cda1d7f934345c13fe78c212a73"
@@ -467,7 +475,7 @@
   revision = "fbb02b2291d28baffd63558aa44b4b56f178d650"
 
 [[projects]]
-  digest = "1:328b5e4f197d928c444a51a75385f4b978915c0e75521f0ad6a3db976c97a7d3"
+  digest = "1:6247f76e55a1e1a5c19a81e2d4b4dff6730461eeb5bbb0a16dd4a8ec8637ee93"
   name = "google.golang.org/appengine"
   packages = [
     "internal",
@@ -479,19 +487,19 @@
     "urlfetch",
   ]
   pruneopts = "UT"
-  revision = "b1f26356af11148e710935ed1ac8a7f5702c7612"
-  version = "v1.1.0"
+  revision = "ae0ab99deb4dc413a2b4bd6c8bdd0eb67f1e4d06"
+  version = "v1.2.0"
 
 [[projects]]
   branch = "master"
-  digest = "1:42448f154e7d40907ae03cbdf99dbcfa3feb927c4521e0f01c52c6142e4891d5"
+  digest = "1:ec1919b8b80839559effbe3eabcebf92238d12d3dd9182e51deb5da3ed12e5e9"
   name = "google.golang.org/genproto"
   packages = [
     "googleapis/api/annotations",
     "googleapis/rpc/status",
   ]
   pruneopts = "UT"
-  revision = "4b56f30a1fd96a133a036b62cdd2a249883dd89b"
+  revision = "c3f76f3b92d1ffa4c58a9ff842a58b8877655e0f"
 
 [[projects]]
   digest = "1:dc0c170b110c22d9a4eccf08ab58490608053eac450bf456f3aaf9b30a668781"
@@ -663,7 +671,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:90aa602796c4fc2324efb7b0ece69121c969b36ee1d084143a53af2fa8871524"
+  digest = "1:113d81649dbf825c3761f4b032aa8f29c0a5f9893251185398091f7882619092"
   name = "k8s.io/client-go"
   packages = [
     "discovery",
@@ -723,7 +731,7 @@
     "util/integer",
   ]
   pruneopts = "UT"
-  revision = "86dcffcddee1697a1aabb08f1a7d6cc7e62079ef"
+  revision = "780aa459ed9ebdc179d410d8055616db2a6f41ea"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -740,6 +748,7 @@
     "github.com/philips/go-bindata-assetfs",
     "github.com/samsung-cnct/cma-aks/pkg/generated/api",
     "github.com/samsung-cnct/cma-vmware/pkg/generated/api",
+    "github.com/sirupsen/logrus",
     "github.com/soheilhy/cmux",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",

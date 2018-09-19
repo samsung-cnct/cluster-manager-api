@@ -80,3 +80,20 @@ type InstanceGroup struct {
 	MinQuantity int
 	MaxQuantity int
 }
+
+type GetClusterUpgradesInput struct {
+	Name        string
+	Credentials Credentials
+}
+
+type GetClusterUpgradesOutput struct {
+	Versions []string
+}
+
+type ClusterUpgradeInput struct {
+	Name        string
+	Credentials Credentials
+	Version     string
+}
+
+type ClusterUpgradeOutput struct{}

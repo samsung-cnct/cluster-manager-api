@@ -68,8 +68,11 @@ func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (
 
 // Will return upgrade options for a given cluster
 func (s *Server) GetUpgradeClusterInformation(ctx context.Context, in *pb.GetUpgradeClusterInformationMsg) (*pb.GetUpgradeClusterInformationReply, error) {
-	//TODO this is just temporary stuff until cma-vmware catches up
-	if in.Provider == "vmware" {
+	switch in.Provider {
+	case "azure":
+		return s.azure.GetClusterUpgrades(in)
+	case "vmware":
+		//TODO this is just temporary stuff until cma-vmware catches up
 		return &pb.GetUpgradeClusterInformationReply{Ok: true, Versions: []string{"1.10.8", "1.11.3"}}, nil
 	}
 
@@ -78,8 +81,11 @@ func (s *Server) GetUpgradeClusterInformation(ctx context.Context, in *pb.GetUpg
 
 // Will attempt to upgrade a cluster
 func (s *Server) UpgradeCluster(ctx context.Context, in *pb.UpgradeClusterMsg) (*pb.UpgradeClusterReply, error) {
-	//TODO this is just temporary stuff until cma-vmware catches up
-	if in.Provider == "vmware" {
+	switch in.Provider {
+	case "azure":
+		return s.azure.ClusterUpgrade(in)
+	case "vmware":
+		//TODO this is just temporary stuff until cma-vmware catches up
 		return &pb.UpgradeClusterReply{Ok: false}, nil
 	}
 	return &pb.UpgradeClusterReply{}, fmt.Errorf("upgrades not supported yet")

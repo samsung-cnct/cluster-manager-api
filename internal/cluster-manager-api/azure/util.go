@@ -40,7 +40,7 @@ func (c *Client) CreateNewClients() error {
 	return nil
 }
 
-func getCMAAKSClient() (cmaaks.AKSClientInterface, error) {
+func getCMAAKSClient() (cmaaks.ClientInterface, error) {
 	hostname := viper.GetString(CMAAKEndpointViperVariableName)
 	if hostname == "" {
 		return nil, fmt.Errorf("azure support is not enabled")
