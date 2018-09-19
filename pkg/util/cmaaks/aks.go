@@ -8,13 +8,8 @@ import (
 	"google.golang.org/grpc/credentials"
 )
 
-type AKSClient struct {
-	conn   *grpc.ClientConn
-	client pb.ClusterClient
-}
-
-func CreateNewClient(hostname string, insecure bool) (AKSClientInterface, error) {
-	output := AKSClient{}
+func CreateNewClient(hostname string, insecure bool) (ClientInterface, error) {
+	output := Client{}
 	err := output.CreateNewClient(hostname, insecure)
 	if err != nil {
 		return nil, err
@@ -22,7 +17,7 @@ func CreateNewClient(hostname string, insecure bool) (AKSClientInterface, error)
 	return &output, err
 }
 
-func (a *AKSClient) CreateNewClient(hostname string, insecure bool) error {
+func (a *Client) CreateNewClient(hostname string, insecure bool) error {
 	var err error
 	if insecure {
 		// This is for non TLS traffic
@@ -44,15 +39,15 @@ func (a *AKSClient) CreateNewClient(hostname string, insecure bool) error {
 	return nil
 }
 
-func (a *AKSClient) Close() error {
+func (a *Client) Close() error {
 	return a.conn.Close()
 }
 
-func (a *AKSClient) SetClient(client pb.ClusterClient) {
+func (a *Client) SetClient(client pb.ClusterClient) {
 	a.client = client
 }
 
-func (a *AKSClient) CreateCluster(input CreateClusterInput) (CreateClusterOutput, error) {
+func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, error) {
 	var instanceGroups []*pb.CreateClusterAKSSpec_AKSInstanceGroup
 	for _, j := range input.Azure.InstanceGroups {
 		instanceGroups = append(instanceGroups, &pb.CreateClusterAKSSpec_AKSInstanceGroup{
@@ -98,7 +93,7 @@ func (a *AKSClient) CreateCluster(input CreateClusterInput) (CreateClusterOutput
 	return output, nil
 }
 
-func (a *AKSClient) GetCluster(input GetClusterInput) (GetClusterOutput, error) {
+func (a *Client) GetCluster(input GetClusterInput) (GetClusterOutput, error) {
 	result, err := a.client.GetCluster(context.Background(), &pb.GetClusterMsg{
 		Name: input.Name,
 		Credentials: &pb.AzureCredentials{
@@ -122,7 +117,7 @@ func (a *AKSClient) GetCluster(input GetClusterInput) (GetClusterOutput, error) 
 	return output, nil
 }
 
-func (a *AKSClient) DeleteCluster(input DeleteClusterInput) (DeleteClusterOutput, error) {
+func (a *Client) DeleteCluster(input DeleteClusterInput) (DeleteClusterOutput, error) {
 	result, err := a.client.DeleteCluster(context.Background(), &pb.DeleteClusterMsg{
 		Name: input.Name,
 		Credentials: &pb.AzureCredentials{
@@ -141,7 +136,7 @@ func (a *AKSClient) DeleteCluster(input DeleteClusterInput) (DeleteClusterOutput
 	return output, nil
 }
 
-func (a *AKSClient) ListClusters(input ListClusterInput) (ListClusterOutput, error) {
+func (a *Client) ListClusters(input ListClusterInput) (ListClusterOutput, error) {
 	var clusters []ClusterItem
 	result, err := a.client.GetClusterList(context.Background(), &pb.GetClusterListMsg{
 		Credentials: &pb.AzureCredentials{
@@ -165,4 +160,50 @@ func (a *AKSClient) ListClusters(input ListClusterInput) (ListClusterOutput, err
 		Clusters: clusters,
 	}
 	return output, nil
+}
+
+func (a *Client) GetClusterUpgrades(input GetClusterUpgradesInput) (output GetClusterUpgradesOutput, err error) {
+	output = GetClusterUpgradesOutput{}
+	result, err := a.client.GetClusterUpgrades(context.Background(), &pb.GetClusterUpgradesMsg{
+		Name: input.Name,
+		Credentials: &pb.AzureCredentials{
+			AppId:          input.Credentials.AppID,
+			Tenant:         input.Credentials.Tenant,
+			Password:       input.Credentials.Password,
+			SubscriptionId: input.Credentials.SubscriptionID,
+		},
+	})
+	if err != nil {
+		return
+	}
+
+	// Processing the output
+	for _, j := range result.Upgrades {
+		output.Versions = append(output.Versions, j.Version)
+	}
+	return
+}
+
+func (a *Client) ClusterUpgrade(input ClusterUpgradeInput) (output ClusterUpgradeOutput, err error) {
+	output = ClusterUpgradeOutput{}
+	_, err = a.client.UpgradeCluster(context.Background(), &pb.UpgradeClusterMsg{
+		Name: input.Name,
+		Provider: &pb.UpgradeClusterProviderSpec{
+			Name:       AKSProvider,
+			K8SVersion: input.Version,
+			Azure: &pb.UpgradeClusterAKSSpec{
+				Credentials: &pb.AzureCredentials{
+					AppId:          input.Credentials.AppID,
+					Tenant:         input.Credentials.Tenant,
+					Password:       input.Credentials.Password,
+					SubscriptionId: input.Credentials.SubscriptionID,
+				},
+			},
+		},
+	})
+	if err != nil {
+		return
+	}
+
+	return
 }

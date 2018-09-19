@@ -41,6 +41,55 @@
             "type": "string"
           },
           {
+            "name": "aws.secret_key_id",
+            "description": "The SecretKeyId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.secret_access_key",
+            "description": "The SecretAccessKey for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.region",
+            "description": "The Region for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.app_id",
+            "description": "The AppId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.tenant",
+            "description": "The Tenant for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.password",
+            "description": "The Password for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.subscription_id",
+            "description": "The Subscription for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "provider",
             "description": "Name of the providers (aws/aks/vmware/etc).",
             "in": "query",
@@ -72,6 +121,55 @@
             "type": "string"
           },
           {
+            "name": "aws.secret_key_id",
+            "description": "The SecretKeyId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.secret_access_key",
+            "description": "The SecretAccessKey for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.region",
+            "description": "The Region for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.app_id",
+            "description": "The AppId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.tenant",
+            "description": "The Tenant for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.password",
+            "description": "The Password for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.subscription_id",
+            "description": "The Subscription for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "provider",
             "description": "Name of the providers (aws/aks/vmware/etc).",
             "in": "query",
@@ -84,31 +182,6 @@
         ]
       },
       "post": {
-        "summary": "Will adjust a provision a cluster",
-        "operationId": "AdjustClusterNodes",
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/cluster_manager_apiAdjustClusterReply"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/cluster_manager_apiAdjustClusterMsg"
-            }
-          }
-        ],
-        "tags": [
-          "Cluster"
-        ]
-      },
-      "put": {
         "summary": "Will provision a cluster",
         "operationId": "CreateCluster",
         "responses": {
@@ -126,6 +199,31 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/cluster_manager_apiCreateClusterMsg"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      },
+      "put": {
+        "summary": "Will adjust a provision a cluster",
+        "operationId": "AdjustClusterNodes",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiAdjustClusterReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cluster_manager_apiAdjustClusterMsg"
             }
           }
         ],
@@ -230,6 +328,55 @@
             "type": "string"
           },
           {
+            "name": "aws.secret_key_id",
+            "description": "The SecretKeyId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.secret_access_key",
+            "description": "The SecretAccessKey for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.region",
+            "description": "The Region for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.app_id",
+            "description": "The AppId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.tenant",
+            "description": "The Tenant for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.password",
+            "description": "The Password for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.subscription_id",
+            "description": "The Subscription for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "name",
             "description": "What is the cluster that we are considering for upgrade.",
             "in": "query",
@@ -241,7 +388,7 @@
           "Cluster"
         ]
       },
-      "post": {
+      "put": {
         "summary": "Will attempt to upgrade a cluster",
         "operationId": "UpgradeCluster",
         "responses": {
@@ -268,7 +415,7 @@
       }
     },
     "/api/v1/credentials/aws": {
-      "post": {
+      "put": {
         "summary": "Will update aws credentials used for a cluster",
         "operationId": "UpdateAWSCredentials",
         "responses": {
@@ -295,7 +442,7 @@
       }
     },
     "/api/v1/credentials/azure": {
-      "post": {
+      "put": {
         "summary": "Will update azure credentials used for a cluster",
         "operationId": "UpdateAzureCredentials",
         "responses": {
@@ -374,7 +521,7 @@
           "Cluster"
         ]
       },
-      "put": {
+      "post": {
         "summary": "Will install (or reinstall) helm chart\nThis will be destructive if a chart has already been deployed with the same name",
         "operationId": "InstallHelmChart",
         "responses": {
@@ -611,9 +758,17 @@
           "type": "string",
           "title": "What is the cluster that we are considering for upgrade"
         },
+        "aws": {
+          "$ref": "#/definitions/cluster_manager_apiAWSCredentials",
+          "title": "AWS Credentials"
+        },
+        "azure": {
+          "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
+          "title": "Azure Credentials"
+        },
         "vmware": {
           "$ref": "#/definitions/AdjustClusterMsgAdjustClusterVMWareSpec",
-          "title": "The AWS specification\nAdjustClusterAWSSpec aws = 3;\nAdjustClusterAKSSpec azure = 4;"
+          "title": "The AWS specification\nAdjustClusterAWSSpec aws = 4;\nAdjustClusterAKSSpec azure = 5;"
         }
       }
     },
@@ -1106,6 +1261,14 @@
         "provider": {
           "type": "string",
           "title": "Name of the providers (aws/aks/vmware/etc)"
+        },
+        "aws": {
+          "$ref": "#/definitions/cluster_manager_apiAWSCredentials",
+          "title": "AWS Credentials"
+        },
+        "azure": {
+          "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
+          "title": "Azure Credentials"
         },
         "name": {
           "type": "string",

@@ -40,8 +40,10 @@ spec:
           value: "{{.Values.helpers.aks.insecure }}"
         {{- end }}
         {{- if .Values.helpers.vmware.enabled }}
-          - name: CLUSTERMANAGERAPI_CMAVMWARE_ENDPOINT
-            value: "{{.Values.helpers.vmware.endpoint }}"
-          - name: CLUSTERMANAGERAPI_CMAVMWARE_INSECURE
-            value: "{{.Values.helpers.vmware.insecure }}"
+        - name: CLUSTERMANAGERAPI_CMAVMWARE_ENDPOINT
+          value: "{{.Values.helpers.vmware.endpoint }}"
+        - name: CLUSTERMANAGERAPI_CMAVMWARE_INSECURE
+          value: "{{.Values.helpers.vmware.insecure }}"
         {{- end }}
+        - name: CLUSTERMANAGERAPI_KUBERNETES_NAMESPACE
+          value: "{{ .Release.Namespace}}"

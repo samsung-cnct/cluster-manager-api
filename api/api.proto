@@ -47,7 +47,7 @@ service Cluster {
     // Will provision a cluster
     rpc CreateCluster (CreateClusterMsg) returns (CreateClusterReply) {
         option (google.api.http) = {
-            put : "/api/v1/cluster"
+            post : "/api/v1/cluster"
             body : "*"
         };
     }
@@ -66,7 +66,7 @@ service Cluster {
     // Will adjust a provision a cluster
     rpc AdjustClusterNodes (AdjustClusterMsg) returns (AdjustClusterReply) {
         option (google.api.http) = {
-            post : "/api/v1/cluster"
+            put : "/api/v1/cluster"
             body : "*"
         };
     }
@@ -87,7 +87,7 @@ service Cluster {
     // This will be destructive if a chart has already been deployed with the same name
     rpc InstallHelmChart (InstallHelmChartMsg) returns (InstallHelmChartReply) {
         option (google.api.http) = {
-            put : "/api/v1/helm"
+            post : "/api/v1/helm"
             body : "*"
         };
     }
@@ -112,21 +112,21 @@ service Cluster {
     // Will attempt to upgrade a cluster
     rpc UpgradeCluster (UpgradeClusterMsg) returns (UpgradeClusterReply) {
         option (google.api.http) = {
-            post : "/api/v1/cluster/upgrade"
+            put : "/api/v1/cluster/upgrade"
             body : "*"
         };
     }
     // Will update aws credentials used for a cluster
     rpc UpdateAWSCredentials (UpdateAWSCredentialsMsg) returns (UpdateAWSCredentialsReply) {
         option (google.api.http) = {
-            post : "/api/v1/credentials/aws"
+            put : "/api/v1/credentials/aws"
             body : "*"
         };
     }
     // Will update azure credentials used for a cluster
     rpc UpdateAzureCredentials (UpdateAzureCredentialsMsg) returns (UpdateAzureCredentialsReply) {
         option (google.api.http) = {
-            post : "/api/v1/credentials/azure"
+            put : "/api/v1/credentials/azure"
             body : "*"
         };
     }
@@ -149,6 +149,10 @@ message CreateClusterReply {
 message GetClusterMsg {
     // Name of the cluster to be looked up
     string name = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 4;
 }
@@ -163,6 +167,10 @@ message GetClusterReply {
 message DeleteClusterMsg {
     // What is the cluster's name to destroy
     string name = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 4;
 }
@@ -466,6 +474,10 @@ message GenericHelmChart {
 message GetUpgradeClusterInformationMsg {
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
     // What is the cluster that we are considering for upgrade
     string name = 4;
 }
@@ -480,6 +492,10 @@ message GetUpgradeClusterInformationReply {
 message UpgradeClusterMsg {
     // Name of the providers (aws/aks/vmware/etc)
     string provider = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
     // What is the cluster that we are considering for upgrade
     string name = 4;
     // What version are we upgrading to?
@@ -494,12 +510,16 @@ message UpgradeClusterReply {
 message AdjustClusterMsg {
     // What is the cluster that we are considering for upgrade
     string name = 1;
+    // AWS Credentials
+    AWSCredentials aws = 2;
+    // Azure Credentials
+    AzureCredentials azure = 3;
     // Provider changes
     oneof provider_changes {
         // The AWS specification
-        //AdjustClusterAWSSpec aws = 3;
-        //AdjustClusterAKSSpec azure = 4;
-        AdjustClusterVMWareSpec vmware = 5;
+        //AdjustClusterAWSSpec aws = 4;
+        //AdjustClusterAKSSpec azure = 5;
+        AdjustClusterVMWareSpec vmware = 6;
     }
 
     message AdjustClusterVMWareSpec {
