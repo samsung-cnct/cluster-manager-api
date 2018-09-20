@@ -3,10 +3,12 @@ package vmware
 import (
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmavmware"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/cma"
 )
 
 type Client struct {
 	cmaVMWareClient cmavmware.ClientInterface
+	cmaK8sClient    cmak8sutil.ClientInterface
 }
 
 type ClientInterface interface {
@@ -18,5 +20,7 @@ type ClientInterface interface {
 	ClusterUpgrade(in *pb.UpgradeClusterMsg) (output *pb.UpgradeClusterReply, err error)
 	AdjustCluster(in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply, error)
 
+	SetCMAVMWareClient(client cmavmware.ClientInterface)
+	SetCMAK8sClient(client cmak8sutil.ClientInterface)
 	Close() error
 }

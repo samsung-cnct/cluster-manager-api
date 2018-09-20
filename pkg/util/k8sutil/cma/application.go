@@ -1,0 +1,113 @@
+package cmak8sutil
+
+import (
+	"github.com/samsung-cnct/cma-operator/pkg/apis/cma/v1alpha1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1"
+)
+
+func (c *Client) CreateApplication(name string, application Application) error {
+	adjustedName := c.getAdjustedName(name, application.Cluster)
+
+	annotations := make(map[string]string)
+	annotations[CallbackURLAnnotation] = application.CallbackURL
+	annotations[RequestIDAnnotation] = application.RequestID
+
+	_, err := c.applicationClient.Create(&v1alpha1.SDSApplication{
+		ObjectMeta: v1.ObjectMeta{Name: adjustedName, Annotations: annotations},
+		Spec: v1alpha1.SDSApplicationSpec{
+			PackageManager: v1alpha1.SDSPackageManagerRef{
+				Name: application.PackageManager,
+			},
+			Name: name,
+			Chart: v1alpha1.Chart{
+				Name: application.Chart.Name,
+				Repository: v1alpha1.ChartRepository{
+					Name: application.Chart.Repository.Name,
+					URL:  application.Chart.Repository.URL,
+				},
+				ChartPayload: application.Chart.ChartPayload,
+				Version:      application.Chart.Version,
+			},
+			Values: application.Values,
+			Cluster: v1alpha1.SDSClusterRef{
+				Name: application.Cluster,
+			},
+		},
+	})
+	return err
+}
+
+func (c *Client) getApplicationRaw(name string) (*v1alpha1.SDSApplication, error) {
+	return c.applicationClient.Get(name, v1.GetOptions{})
+}
+
+func (c *Client) GetApplication(name string, clusterName string) (Application, error) {
+	result, err := c.getApplicationRaw(c.getAdjustedName(name, clusterName))
+	if err != nil {
+		return Application{}, nil
+	}
+	return Application{
+		CallbackURL: result.Annotations[CallbackURLAnnotation],
+		Cluster:     result.Spec.Cluster.Name,
+		Chart: Chart{
+			Name: result.Spec.Chart.Name,
+			Repository: ChartRepository{
+				Name: result.Spec.Chart.Repository.Name,
+				URL:  result.Spec.Chart.Repository.URL,
+			},
+			ChartPayload: result.Spec.Chart.ChartPayload,
+			Version:      result.Spec.Chart.Version,
+		},
+		Namespace:      result.Spec.Namespace,
+		PackageManager: result.Spec.PackageManager.Name,
+		RequestID:      result.Annotations[RequestIDAnnotation],
+		Values:         result.Spec.Values,
+	}, nil
+}
+
+func (c *Client) UpdateOrCreateApplication(name string, application Application) error {
+	result, err := c.getApplicationRaw(c.getAdjustedName(name, application.Cluster))
+	if err != nil {
+		// Let's assume there is no application, so we create it
+		return c.CreateApplication(name, application)
+	}
+
+	result.Annotations[CallbackURLAnnotation] = application.CallbackURL
+	result.Annotations[RequestIDAnnotation] = application.RequestID
+	result.Spec = v1alpha1.SDSApplicationSpec{
+		PackageManager: v1alpha1.SDSPackageManagerRef{
+			Name: application.PackageManager,
+		},
+		Name: name,
+		Chart: v1alpha1.Chart{
+			Name: application.Chart.Name,
+			Repository: v1alpha1.ChartRepository{
+				Name: application.Chart.Repository.Name,
+				URL:  application.Chart.Repository.URL,
+			},
+			ChartPayload: application.Chart.ChartPayload,
+			Version:      application.Chart.Version,
+		},
+		Values: application.Values,
+		Cluster: v1alpha1.SDSClusterRef{
+			Name: application.Cluster,
+		},
+	}
+
+	_, err = c.applicationClient.Update(result)
+	return err
+}
+
+func (c *Client) DeleteApplication(name string, clusterName string) error {
+	return c.applicationClient.Delete(c.getAdjustedName(name, clusterName), nil)
+}
+
+func (c *Client) ChangeApplicationStatus(name string, clusterName string, status string) error {
+	result, err := c.getApplicationRaw(c.getAdjustedName(name, clusterName))
+	if err != nil {
+		return err
+	}
+	result.Status.Phase = v1alpha1.ApplicationPhase(status)
+	_, err = c.applicationClient.Update(result)
+	return err
+}

@@ -4,6 +4,7 @@ import (
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmaaws"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/aws"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/cma"
 	"github.com/sirupsen/logrus"
 )
 
@@ -66,6 +67,19 @@ func (c *Client) CreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply,
 		// TODO Unsure what to do if we suddenly can't persist the credentials to kubernetes
 		// TODO Going to log for now
 		logrus.Errorf("Could not set AWS credentials into kubernetes, this is bad")
+	}
+
+	// Now going to create K8S CR
+	err = c.cmaK8sClient.CreateCluster(in.Name, cmak8sutil.Cluster{
+		CallbackURL: in.Callback.Url,
+		Provider:    "aws",
+		RequestID:   in.Callback.RequestId,
+	})
+
+	if err != nil {
+		// TODO Unsure what to do if we suddenly can't persist the credentials to kubernetes
+		// TODO Going to log for now
+		logrus.Errorf("Could not set Cluster CR into kubernetes, this is bad")
 	}
 
 	return &pb.CreateClusterReply{
@@ -155,6 +169,24 @@ func (c *Client) DeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply,
 	})
 	if err != nil {
 		return &pb.DeleteClusterReply{}, err
+	}
+
+	// Now going to create K8S CR
+	err = c.cmaK8sClient.UpdateOrCreateCluster(in.Name, cmak8sutil.Cluster{
+		CallbackURL: in.Callback.Url,
+		Provider:    in.Provider.String(),
+		RequestID:   in.Callback.RequestId,
+	})
+	if err != nil {
+		// TODO Unsure what to do if we suddenly can't persist the credentials to kubernetes
+		// TODO Going to log for now
+		logrus.Errorf("Could not set Cluster CR into kubernetes, this is bad")
+	}
+	err = c.cmaK8sClient.DeleteCluster(in.Name)
+	if err != nil {
+		// TODO Unsure what to do if we suddenly can't persist the credentials to kubernetes
+		// TODO Going to log for now
+		logrus.Errorf("Could not set Cluster CR into kubernetes, this is bad")
 	}
 
 	// Deleting credentials

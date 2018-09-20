@@ -3,6 +3,7 @@ package vmware
 import (
 	"fmt"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmavmware"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/cma"
 	"github.com/spf13/viper"
 )
 
@@ -41,6 +42,14 @@ func getCMAVMWareClient() (cmavmware.ClientInterface, error) {
 	hostname := viper.GetString(CMAVMWareEndpointViperVariableName)
 	insecure := viper.GetBool(CMAVMWareInsecureViperVariableName)
 	return cmavmware.CreateNewClient(hostname, insecure)
+}
+
+func (c *Client) SetCMAVMWareClient(client cmavmware.ClientInterface) {
+	c.cmaVMWareClient = client
+}
+
+func (c *Client) SetCMAK8sClient(client cmak8sutil.ClientInterface) {
+	c.cmaK8sClient = client
 }
 
 func (c *Client) Close() error {

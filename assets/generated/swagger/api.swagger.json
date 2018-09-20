@@ -191,8 +191,15 @@
             "default": "undefined"
           },
           {
-            "name": "request_id",
-            "description": "A unique id to indicate this request.",
+            "name": "callback.url",
+            "description": "The URL to call back to.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "callback.request_id",
+            "description": "The ID of the request.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -524,15 +531,8 @@
             "type": "string"
           },
           {
-            "name": "tiller.namespace",
-            "description": "What is the tiller namespace.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "tiller.version",
-            "description": "What is the version of tiller/helm.",
+            "name": "package_manager",
+            "description": "What tiller should be used.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -610,6 +610,20 @@
           {
             "name": "request_id",
             "description": "A unique id to indicate this request.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "callback.url",
+            "description": "The URL to call back to.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "callback.request_id",
+            "description": "The ID of the request.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -872,9 +886,9 @@
           "$ref": "#/definitions/AdjustClusterMsgAdjustClusterVMWareSpec",
           "title": "The AWS specification\nAdjustClusterAWSSpec aws = 5;\nAdjustClusterAKSSpec azure = 6;"
         },
-        "request_id": {
-          "type": "string",
-          "title": "A unique id to indicate this request"
+        "callback": {
+          "$ref": "#/definitions/cluster_manager_apiCallback",
+          "title": "Callback information"
         }
       }
     },
@@ -923,6 +937,19 @@
         }
       },
       "title": "The credentials to use for creating the cluster"
+    },
+    "cluster_manager_apiCallback": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "title": "The URL to call back to"
+        },
+        "request_id": {
+          "type": "string",
+          "title": "The ID of the request"
+        }
+      }
     },
     "cluster_manager_apiClusterDetailItem": {
       "type": "object",
@@ -1021,9 +1048,9 @@
           "$ref": "#/definitions/cluster_manager_apiCreateClusterProviderSpec",
           "title": "The provider specification"
         },
-        "request_id": {
-          "type": "string",
-          "title": "A unique id to indicate this request"
+        "callback": {
+          "$ref": "#/definitions/cluster_manager_apiCallback",
+          "title": "Callback information"
         }
       }
     },
@@ -1149,19 +1176,6 @@
         }
       }
     },
-    "cluster_manager_apiGenericTillerSetting": {
-      "type": "object",
-      "properties": {
-        "namespace": {
-          "type": "string",
-          "title": "What is the tiller namespace"
-        },
-        "version": {
-          "type": "string",
-          "title": "What is the version of tiller/helm"
-        }
-      }
-    },
     "cluster_manager_apiGetClusterListReply": {
       "type": "object",
       "properties": {
@@ -1231,9 +1245,9 @@
           "type": "string",
           "title": "Cluster tiller should be installed on"
         },
-        "tiller": {
-          "$ref": "#/definitions/cluster_manager_apiGenericTillerSetting",
-          "title": "Tiller settings"
+        "package_manger": {
+          "type": "string",
+          "title": "What tiller should be used"
         },
         "chart": {
           "$ref": "#/definitions/cluster_manager_apiGenericHelmChart",
@@ -1251,9 +1265,9 @@
           "$ref": "#/definitions/cluster_manager_apiProvider",
           "title": "Name of the providers (aws/azure/vmware/etc)"
         },
-        "request_id": {
-          "type": "string",
-          "title": "A unique id to indicate this request"
+        "callback": {
+          "$ref": "#/definitions/cluster_manager_apiCallback",
+          "title": "Callback information"
         }
       }
     },
@@ -1333,9 +1347,9 @@
           "$ref": "#/definitions/cluster_manager_apiProvider",
           "title": "Name of the providers (aws/azure/vmware/etc)"
         },
-        "request_id": {
-          "type": "string",
-          "title": "A unique id to indicate this request"
+        "callback": {
+          "$ref": "#/definitions/cluster_manager_apiCallback",
+          "title": "Callback information"
         }
       }
     },
@@ -1422,9 +1436,9 @@
           "type": "string",
           "title": "What version are we upgrading to?"
         },
-        "request_id": {
-          "type": "string",
-          "title": "A unique id to indicate this request"
+        "callback": {
+          "$ref": "#/definitions/cluster_manager_apiCallback",
+          "title": "Callback information"
         }
       }
     },
