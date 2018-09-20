@@ -91,10 +91,17 @@
           },
           {
             "name": "provider",
-            "description": "Name of the providers (aws/aks/vmware/etc).",
+            "description": "Name of the providers (aws/azure/vmware/etc).",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "undefined",
+              "aws",
+              "azure",
+              "vmware"
+            ],
+            "default": "undefined"
           }
         ],
         "tags": [
@@ -171,10 +178,17 @@
           },
           {
             "name": "provider",
-            "description": "Name of the providers (aws/aks/vmware/etc).",
+            "description": "Name of the providers (aws/azure/vmware/etc).",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "undefined",
+              "aws",
+              "azure",
+              "vmware"
+            ],
+            "default": "undefined"
           }
         ],
         "tags": [
@@ -296,10 +310,17 @@
           },
           {
             "name": "provider",
-            "description": "Name of the providers (aws/aks/vmware/etc).",
+            "description": "Name of the providers (aws/azure/vmware/etc).",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "undefined",
+              "aws",
+              "azure",
+              "vmware"
+            ],
+            "default": "undefined"
           }
         ],
         "tags": [
@@ -322,10 +343,17 @@
         "parameters": [
           {
             "name": "provider",
-            "description": "Name of the providers (aws/aks/vmware/etc).",
+            "description": "Name of the providers (aws/azure/vmware/etc).",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "undefined",
+              "aws",
+              "azure",
+              "vmware"
+            ],
+            "default": "undefined"
           },
           {
             "name": "aws.secret_key_id",
@@ -511,10 +539,17 @@
           },
           {
             "name": "provider",
-            "description": "Name of the providers (aws/aks/vmware/etc).",
+            "description": "Name of the providers (aws/azure/vmware/etc).",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "undefined",
+              "aws",
+              "azure",
+              "vmware"
+            ],
+            "default": "undefined"
           }
         ],
         "tags": [
@@ -758,6 +793,10 @@
           "type": "string",
           "title": "What is the cluster that we are considering for upgrade"
         },
+        "provider": {
+          "$ref": "#/definitions/cluster_manager_apiProvider",
+          "title": "Name of the providers (aws/azure/vmware/etc)"
+        },
         "aws": {
           "$ref": "#/definitions/cluster_manager_apiAWSCredentials",
           "title": "AWS Credentials"
@@ -768,7 +807,7 @@
         },
         "vmware": {
           "$ref": "#/definitions/AdjustClusterMsgAdjustClusterVMWareSpec",
-          "title": "The AWS specification\nAdjustClusterAWSSpec aws = 4;\nAdjustClusterAKSSpec azure = 5;"
+          "title": "The AWS specification\nAdjustClusterAWSSpec aws = 5;\nAdjustClusterAKSSpec azure = 6;"
         }
       }
     },
@@ -1130,8 +1169,8 @@
           "title": "Chart Settings"
         },
         "provider": {
-          "type": "string",
-          "title": "Name of the providers (aws/aks/vmware/etc)"
+          "$ref": "#/definitions/cluster_manager_apiProvider",
+          "title": "Name of the providers (aws/azure/vmware/etc)"
         }
       }
     },
@@ -1162,6 +1201,16 @@
         }
       }
     },
+    "cluster_manager_apiProvider": {
+      "type": "string",
+      "enum": [
+        "undefined",
+        "aws",
+        "azure",
+        "vmware"
+      ],
+      "default": "undefined"
+    },
     "cluster_manager_apiProvisionTillerMsg": {
       "type": "object",
       "properties": {
@@ -1190,8 +1239,8 @@
           "title": "Namespaces that it should be able to admin on"
         },
         "provider": {
-          "type": "string",
-          "title": "Name of the providers (aws/aks/vmware/etc)"
+          "$ref": "#/definitions/cluster_manager_apiProvider",
+          "title": "Name of the providers (aws/azure/vmware/etc)"
         }
       }
     },
@@ -1259,8 +1308,8 @@
       "type": "object",
       "properties": {
         "provider": {
-          "type": "string",
-          "title": "Name of the providers (aws/aks/vmware/etc)"
+          "$ref": "#/definitions/cluster_manager_apiProvider",
+          "title": "Name of the providers (aws/azure/vmware/etc)"
         },
         "aws": {
           "$ref": "#/definitions/cluster_manager_apiAWSCredentials",

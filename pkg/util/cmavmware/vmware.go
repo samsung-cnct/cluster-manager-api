@@ -8,13 +8,8 @@ import (
 	"google.golang.org/grpc/credentials"
 )
 
-type VMWareClient struct {
-	conn   *grpc.ClientConn
-	client pb.ClusterClient
-}
-
-func CreateNewClient(hostname string, insecure bool) (VMWareClientInterface, error) {
-	output := VMWareClient{}
+func CreateNewClient(hostname string, insecure bool) (ClientInterface, error) {
+	output := Client{}
 	err := output.CreateNewClient(hostname, insecure)
 	if err != nil {
 		return nil, err
@@ -22,7 +17,7 @@ func CreateNewClient(hostname string, insecure bool) (VMWareClientInterface, err
 	return &output, err
 }
 
-func (a *VMWareClient) CreateNewClient(hostname string, insecure bool) error {
+func (a *Client) CreateNewClient(hostname string, insecure bool) error {
 	var err error
 	if insecure {
 		// This is for non TLS traffic
@@ -44,57 +39,52 @@ func (a *VMWareClient) CreateNewClient(hostname string, insecure bool) error {
 	return nil
 }
 
-func (a *VMWareClient) Close() error {
+func (a *Client) Close() error {
 	return a.conn.Close()
 }
 
-func (a *VMWareClient) SetClient(client pb.ClusterClient) {
+func (a *Client) SetClient(client pb.ClusterClient) {
 	a.client = client
 }
 
-func (a *VMWareClient) CreateCluster(input CreateClusterInput) (CreateClusterOutput, error) {
-	var workerNodes []*pb.MachineSpec
-	var controlPlaneNodes []*pb.MachineSpec
+func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, error) {
+	var workerNodes []*pb.VMWareMachineSpec
+	var controlPlaneNodes []*pb.VMWareMachineSpec
 
-	for _, j := range input.VMWare.ControlPlaneNodes {
-		//var labels []KubernetesLabel
-		//for _, k := range j.Labels {
-		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
-		//}
-		controlPlaneNodes = append(controlPlaneNodes, &pb.MachineSpec{
+	for _, j := range input.ControlPlaneNodes {
+		var labels []*pb.KubernetesLabel
+		for _, k := range j.Labels {
+			labels = append(labels, &pb.KubernetesLabel{Name: k.Name, Value: k.Value})
+		}
+		controlPlaneNodes = append(controlPlaneNodes, &pb.VMWareMachineSpec{
 			Host:     j.Host,
 			Port:     int32(j.Port),
 			Username: j.Username,
-			// Password: j.Password,
-			// Labels = labels
+			Password: j.Password,
+			Labels:   labels,
 		})
 	}
-	for _, j := range input.VMWare.WorkerNodes {
-		//var labels []KubernetesLabel
-		//for _, k := range j.Labels {
-		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
-		//}
-		workerNodes = append(workerNodes, &pb.MachineSpec{
+	for _, j := range input.WorkerNodes {
+		var labels []*pb.KubernetesLabel
+		for _, k := range j.Labels {
+			labels = append(labels, &pb.KubernetesLabel{Name: k.Name, Value: k.Value})
+		}
+		workerNodes = append(workerNodes, &pb.VMWareMachineSpec{
 			Host:     j.Host,
 			Port:     int32(j.Port),
 			Username: j.Username,
-			// Password: j.Password,
-			// Labels = labels
+			Password: j.Password,
+			Labels:   labels,
 		})
 	}
 	result, err := a.client.CreateCluster(context.Background(), &pb.CreateClusterMsg{
-		Name: input.Name,
-		Provider: &pb.CreateClusterProviderSpec{
-			Name:       VMWareProvider,
-			K8SVersion: input.K8SVersion,
-			Vmware:     &pb.CreateClusterVMWareSpec{
-				//Controlplanenodes: controlPlaneNodes,
-				//Workernodes: workerNodes,
-				//Apiendpoint: input.VMWare.APIEndpoint,
-			},
-			HighAvailability: input.HighAvailability,
-			NetworkFabric:    input.NetworkFabric,
-		},
+		Name:              input.Name,
+		K8SVersion:        input.K8SVersion,
+		ControlPlaneNodes: controlPlaneNodes,
+		WorkerNodes:       workerNodes,
+		ApiEndpoint:       input.APIEndpoint,
+		HighAvailability:  input.HighAvailability,
+		NetworkFabric:     input.NetworkFabric,
 	})
 	if err != nil {
 		return CreateClusterOutput{}, err
@@ -109,7 +99,7 @@ func (a *VMWareClient) CreateCluster(input CreateClusterInput) (CreateClusterOut
 	return output, nil
 }
 
-func (a *VMWareClient) GetCluster(input GetClusterInput) (GetClusterOutput, error) {
+func (a *Client) GetCluster(input GetClusterInput) (GetClusterOutput, error) {
 	result, err := a.client.GetCluster(context.Background(), &pb.GetClusterMsg{
 		Name: input.Name,
 	})
@@ -127,7 +117,7 @@ func (a *VMWareClient) GetCluster(input GetClusterInput) (GetClusterOutput, erro
 	return output, nil
 }
 
-func (a *VMWareClient) DeleteCluster(input DeleteClusterInput) (DeleteClusterOutput, error) {
+func (a *Client) DeleteCluster(input DeleteClusterInput) (DeleteClusterOutput, error) {
 	result, err := a.client.DeleteCluster(context.Background(), &pb.DeleteClusterMsg{
 		Name: input.Name,
 	})
@@ -140,7 +130,7 @@ func (a *VMWareClient) DeleteCluster(input DeleteClusterInput) (DeleteClusterOut
 	return output, nil
 }
 
-func (a *VMWareClient) ListClusters(input ListClusterInput) (ListClusterOutput, error) {
+func (a *Client) ListClusters(input ListClusterInput) (ListClusterOutput, error) {
 	var clusters []ClusterItem
 	result, err := a.client.GetClusterList(context.Background(), &pb.GetClusterListMsg{})
 	if err != nil {
@@ -159,42 +149,58 @@ func (a *VMWareClient) ListClusters(input ListClusterInput) (ListClusterOutput, 
 	return output, nil
 }
 
-func (a *VMWareClient) AdjustCluster(input AdjustClusterInput) (AdjustClusterOutput, error) {
-	var addNodes []*pb.MachineSpec
-	var removeNodes []*pb.MachineSpec
+func (a *Client) AdjustCluster(input AdjustClusterInput) (AdjustClusterOutput, error) {
+	var addNodes []*pb.VMWareMachineSpec
+	var removeNodes []*pb.AdjustClusterMsg_VMWareRemoveMachineSpec
 
 	for _, j := range input.AddNodes {
-		//var labels []KubernetesLabel
-		//for _, k := range j.Labels {
-		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
-		//}
-		addNodes = append(addNodes, &pb.MachineSpec{
+		var labels []*pb.KubernetesLabel
+		for _, k := range j.Labels {
+			labels = append(labels, &pb.KubernetesLabel{Name: k.Name, Value: k.Value})
+		}
+		addNodes = append(addNodes, &pb.VMWareMachineSpec{
 			Host:     j.Host,
 			Port:     int32(j.Port),
 			Username: j.Username,
-			// Password: j.Password,
-			// Labels = labels
+			Password: j.Password,
+			Labels:   labels,
 		})
 	}
 	for _, j := range input.RemoveNodes {
-		//var labels []KubernetesLabel
-		//for _, k := range j.Labels {
-		//	labels = append(labels, KubernetesLabel{Name: k.Name, Value: k.Value})
-		//}
-		removeNodes = append(removeNodes, &pb.MachineSpec{
+		removeNodes = append(removeNodes, &pb.AdjustClusterMsg_VMWareRemoveMachineSpec{
 			Host: j.Host,
 		})
 	}
-	//result, err := a.client.AdjustCluster(context.Background(), &pb.AdjustClusterMsg{
-	//	Name: input.Name,
-	//	Vmware:     &pb.CreateClusterVMWareSpec{
-	//		AddNodes: addNodes,
-	//		RemoveNodes: removeNodes,
-	//	},
-	//})
-	//if err != nil {
-	//	return AdjustClusterOutput{}, err
-	//}
-	output := AdjustClusterOutput{}
+	_, err := a.client.AdjustClusterNodes(context.Background(), &pb.AdjustClusterMsg{
+		Name:        input.Name,
+		AddNodes:    addNodes,
+		RemoveNodes: removeNodes,
+	})
+	if err != nil {
+		return AdjustClusterOutput{}, err
+	}
+	return AdjustClusterOutput{}, nil
+}
+
+func (a *Client) GetClusterUpgrades(input GetClusterUpgradesInput) (GetClusterUpgradesOutput, error) {
+	result, err := a.client.GetUpgradeClusterInformation(context.Background(), &pb.GetUpgradeClusterInformationMsg{
+		Name: input.Name,
+	})
+	if err != nil {
+		return GetClusterUpgradesOutput{}, err
+	}
+
+	output := GetClusterUpgradesOutput{}
+	for _, j := range result.Versions {
+		output.Versions = append(output.Versions, j)
+	}
 	return output, nil
+}
+
+func (a *Client) ClusterUpgrade(input ClusterUpgradeInput) (ClusterUpgradeOutput, error) {
+	_, err := a.client.UpgradeCluster(context.Background(), &pb.UpgradeClusterMsg{
+		Name:    input.Name,
+		Version: input.Version,
+	})
+	return ClusterUpgradeOutput{}, err
 }

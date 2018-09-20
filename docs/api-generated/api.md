@@ -51,6 +51,7 @@
     - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
     - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
   
+    - [Provider](#cluster_manager_api.Provider)
   
   
     - [Cluster](#cluster_manager_api.Cluster)
@@ -104,6 +105,7 @@
     - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
     - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
   
+    - [Provider](#cluster_manager_api.Provider)
   
   
     - [Cluster](#cluster_manager_api.Cluster)
@@ -146,9 +148,10 @@ The credentials to use for creating the cluster
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
-| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 4; AdjustClusterAKSSpec azure = 5; |
+| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 5; AdjustClusterAKSSpec azure = 6; |
 
 
 
@@ -455,7 +458,7 @@ For when some things are already created
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -489,7 +492,7 @@ For when some things are already created
 | cluster | [string](#string) |  | Cluster tiller should be installed on |
 | tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
 | chart | [string](#string) |  | Chart Name |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -557,7 +560,7 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -591,7 +594,7 @@ For when some things are already created
 | name | [string](#string) |  | Name of the cluster to be looked up |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -622,7 +625,7 @@ For when some things are already created
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
@@ -706,7 +709,7 @@ Reply for version request
 | cluster | [string](#string) |  | Cluster tiller should be installed on |
 | tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
 | chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -758,7 +761,7 @@ Reply for version request
 | version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
 | cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
 | admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -851,7 +854,7 @@ Reply for version request
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
@@ -896,6 +899,20 @@ The specification for a specific node
 
 
  
+
+
+<a name="cluster_manager_api.Provider"></a>
+
+### Provider
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| undefined | 0 |  |
+| aws | 1 |  |
+| azure | 2 |  |
+| vmware | 3 |  |
+
 
  
 
@@ -960,9 +977,10 @@ The credentials to use for creating the cluster
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
-| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 4; AdjustClusterAKSSpec azure = 5; |
+| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 5; AdjustClusterAKSSpec azure = 6; |
 
 
 
@@ -1269,7 +1287,7 @@ For when some things are already created
 | name | [string](#string) |  | What is the cluster&#39;s name to destroy |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -1303,7 +1321,7 @@ For when some things are already created
 | cluster | [string](#string) |  | Cluster tiller should be installed on |
 | tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
 | chart | [string](#string) |  | Chart Name |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -1371,7 +1389,7 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -1405,7 +1423,7 @@ For when some things are already created
 | name | [string](#string) |  | Name of the cluster to be looked up |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -1436,7 +1454,7 @@ For when some things are already created
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
@@ -1520,7 +1538,7 @@ Reply for version request
 | cluster | [string](#string) |  | Cluster tiller should be installed on |
 | tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
 | chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -1572,7 +1590,7 @@ Reply for version request
 | version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
 | cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
 | admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 
 
 
@@ -1665,7 +1683,7 @@ Reply for version request
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| provider | [string](#string) |  | Name of the providers (aws/aks/vmware/etc) |
+| provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
@@ -1710,6 +1728,20 @@ The specification for a specific node
 
 
  
+
+
+<a name="cluster_manager_api.Provider"></a>
+
+### Provider
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| undefined | 0 |  |
+| aws | 1 |  |
+| azure | 2 |  |
+| vmware | 3 |  |
+
 
  
 

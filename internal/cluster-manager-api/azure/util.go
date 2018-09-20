@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	CMAAKEndpointViperVariableName  = "cmaaks-endpoint"
+	CMAAKSEndpointViperVariableName = "cmaaks-endpoint"
 	CMAAKSInsecureViperVariableName = "cmaaks-insecure"
+	NotEnabledErrorMessage          = "azure support is not enabled"
 )
 
 func CreateFromDefaults() (ClientInterface, error) {
@@ -41,14 +42,22 @@ func (c *Client) CreateNewClients() error {
 }
 
 func getCMAAKSClient() (cmaaks.ClientInterface, error) {
-	hostname := viper.GetString(CMAAKEndpointViperVariableName)
-	if hostname == "" {
-		return nil, fmt.Errorf("azure support is not enabled")
+	if IsEnabled() == false {
+		return nil, fmt.Errorf(NotEnabledErrorMessage)
 	}
+
+	hostname := viper.GetString(CMAAKSEndpointViperVariableName)
 	insecure := viper.GetBool(CMAAKSInsecureViperVariableName)
 	return cmaaks.CreateNewClient(hostname, insecure)
 }
 
 func (c *Client) Close() error {
 	return c.cmaAKSClient.Close()
+}
+
+func IsEnabled() bool {
+	if viper.GetString(CMAAKSEndpointViperVariableName) == "" {
+		return false
+	}
+	return true
 }
