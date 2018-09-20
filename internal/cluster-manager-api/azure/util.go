@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmaaks"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/azure"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/cma"
 	"github.com/spf13/viper"
 )
 
@@ -49,6 +50,18 @@ func getCMAAKSClient() (cmaaks.ClientInterface, error) {
 	hostname := viper.GetString(CMAAKSEndpointViperVariableName)
 	insecure := viper.GetBool(CMAAKSInsecureViperVariableName)
 	return cmaaks.CreateNewClient(hostname, insecure)
+}
+
+func (c *Client) SetCMAAKSClient(client cmaaks.ClientInterface) {
+	c.cmaAKSClient = client
+}
+
+func (c *Client) SetSecretClient(client azurek8sutil.ClientInterface) {
+	c.secretClient = client
+}
+
+func (c *Client) SetCMAK8sClient(client cmak8sutil.ClientInterface) {
+	c.cmaK8sClient = client
 }
 
 func (c *Client) Close() error {

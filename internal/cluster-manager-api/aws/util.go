@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmaaws"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/aws"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/cma"
 	"github.com/spf13/viper"
 )
 
@@ -49,6 +50,18 @@ func getCMAAWSClient() (cmaaws.ClientInterface, error) {
 	hostname := viper.GetString(CMAAWSEndpointViperVariableName)
 	insecure := viper.GetBool(CMAAWSInsecureViperVariableName)
 	return cmaaws.CreateNewClient(hostname, insecure)
+}
+
+func (c *Client) SetCMAAWSClient(client cmaaws.ClientInterface) {
+	c.cmaAWSClient = client
+}
+
+func (c *Client) SetSecretClient(client awsk8sutil.ClientInterface) {
+	c.secretClient = client
+}
+
+func (c *Client) SetCMAK8sClient(client cmak8sutil.ClientInterface) {
+	c.cmaK8sClient = client
 }
 
 func (c *Client) Close() error {

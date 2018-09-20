@@ -139,11 +139,20 @@ enum Provider {
     vmware = 3;
 }
 
+message Callback {
+    // The URL to call back to
+    string url = 1;
+    // The ID of the request
+    string request_id = 2;
+}
+
 message CreateClusterMsg {
     // Name of the cluster to be provisioned
     string name = 1;
     // The provider specification
     CreateClusterProviderSpec provider = 2;
+    // Callback information
+    Callback callback = 3;
 }
 
 message CreateClusterReply {
@@ -180,6 +189,8 @@ message DeleteClusterMsg {
     AzureCredentials azure = 3;
     // Name of the providers (aws/azure/vmware/etc)
     Provider provider = 4;
+    // Callback information
+    Callback callback = 5;
 }
 
 message DeleteClusterReply {
@@ -398,7 +409,6 @@ message VMWareMachineSpec {
     repeated KubernetesLabel labels = 5;
 }
 
-
 message ProvisionTillerMsg {
     // Cluster tiller should be installed on
     string cluster = 1;
@@ -411,8 +421,14 @@ message ProvisionTillerMsg {
     bool cluster_wide = 4;
     // Namespaces that it should be able to admin on
     repeated string admin_namespaces = 5;
+    // AWS Credentials
+    AWSCredentials aws = 6;
+    // Azure Credentials
+    AzureCredentials azure = 7;
     // Name of the providers (aws/azure/vmware/etc)
-    Provider provider = 6;
+    Provider provider = 8;
+    // Callback information
+    Callback callback = 9;
 }
 
 message ProvisionTillerReply {
@@ -425,12 +441,18 @@ message ProvisionTillerReply {
 message InstallHelmChartMsg {
     // Cluster tiller should be installed on
     string cluster = 1;
-    // Tiller settings
-    GenericTillerSetting tiller = 2;
+    // What tiller should be used
+    string package_manger = 2;
     // Chart Settings
     GenericHelmChart chart = 3;
+    // AWS Credentials
+    AWSCredentials aws = 4;
+    // Azure Credentials
+    AzureCredentials azure = 5;
     // Name of the providers (aws/azure/vmware/etc)
     Provider provider = 6;
+    // Callback information
+    Callback callback = 7;
 }
 
 message InstallHelmChartReply {
@@ -443,12 +465,20 @@ message InstallHelmChartReply {
 message DeleteHelmChartMsg {
     // Cluster tiller should be installed on
     string cluster = 1;
-    // Tiller settings
-    GenericTillerSetting tiller = 2;
+    // What tiller should be used
+    string package_manager = 2;
     // Chart Name
     string chart = 3;
+    // AWS Credentials
+    AWSCredentials aws = 4;
+    // Azure Credentials
+    AzureCredentials azure = 5;
     // Name of the providers (aws/azure/vmware/etc)
     Provider provider = 6;
+    // A unique id to indicate this request
+    string request_id = 7;
+    // Callback information
+    Callback callback = 8;
 }
 
 message DeleteHelmChartReply {
@@ -456,13 +486,6 @@ message DeleteHelmChartReply {
     bool ok = 1;
     // What messages were given
     string message = 2;
-}
-
-message GenericTillerSetting {
-    // What is the tiller namespace
-    string namespace = 1;
-    // What is the version of tiller/helm
-    string version = 2;
 }
 
 message GenericHelmChart {
@@ -507,6 +530,8 @@ message UpgradeClusterMsg {
     string name = 4;
     // What version are we upgrading to?
     string version = 5;
+    // Callback information
+    Callback callback = 6;
 }
 
 message UpgradeClusterReply {
@@ -530,6 +555,8 @@ message AdjustClusterMsg {
         //AdjustClusterAKSSpec azure = 6;
         AdjustClusterVMWareSpec vmware = 7;
     }
+    // Callback information
+    Callback callback = 8;
 
     message AdjustClusterVMWareSpec {
         // Machines which we want to add to the cluster
@@ -542,7 +569,6 @@ message AdjustClusterMsg {
         // The host for SSH access
         string host = 1;
     }
-
 }
 
 message AdjustClusterReply {

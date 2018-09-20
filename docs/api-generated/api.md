@@ -11,6 +11,7 @@
     - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
     - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
     - [AzureCredentials](#cluster_manager_api.AzureCredentials)
+    - [Callback](#cluster_manager_api.Callback)
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
     - [ClusterItem](#cluster_manager_api.ClusterItem)
     - [CreateClusterAKSSpec](#cluster_manager_api.CreateClusterAKSSpec)
@@ -28,7 +29,6 @@
     - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
     - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
     - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
-    - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
@@ -65,6 +65,7 @@
     - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
     - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
     - [AzureCredentials](#cluster_manager_api.AzureCredentials)
+    - [Callback](#cluster_manager_api.Callback)
     - [ClusterDetailItem](#cluster_manager_api.ClusterDetailItem)
     - [ClusterItem](#cluster_manager_api.ClusterItem)
     - [CreateClusterAKSSpec](#cluster_manager_api.CreateClusterAKSSpec)
@@ -82,7 +83,6 @@
     - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
     - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
     - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
-    - [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
@@ -152,6 +152,7 @@ The credentials to use for creating the cluster
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 5; AdjustClusterAKSSpec azure = 6; |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -232,6 +233,22 @@ The credentials to use for creating the cluster
 | tenant | [string](#string) |  | The Tenant for API access |
 | password | [string](#string) |  | The Password for API access |
 | subscription_id | [string](#string) |  | The Subscription for API access |
+
+
+
+
+
+
+<a name="cluster_manager_api.Callback"></a>
+
+### Callback
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| url | [string](#string) |  | The URL to call back to |
+| request_id | [string](#string) |  | The ID of the request |
 
 
 
@@ -387,6 +404,7 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of the cluster to be provisioned |
 | provider | [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec) |  | The provider specification |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -459,6 +477,7 @@ For when some things are already created
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -490,9 +509,13 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cluster | [string](#string) |  | Cluster tiller should be installed on |
-| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| package_manager | [string](#string) |  | What tiller should be used |
 | chart | [string](#string) |  | Chart Name |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
+| request_id | [string](#string) |  | A unique id to indicate this request |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -528,22 +551,6 @@ For when some things are already created
 | repo | [string](#string) |  | What is the chart repository |
 | chart | [string](#string) |  | What is the chart name |
 | values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
-
-
-
-
-
-
-<a name="cluster_manager_api.GenericTillerSetting"></a>
-
-### GenericTillerSetting
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  | What is the tiller namespace |
-| version | [string](#string) |  | What is the version of tiller/helm |
 
 
 
@@ -707,9 +714,12 @@ Reply for version request
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cluster | [string](#string) |  | Cluster tiller should be installed on |
-| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| package_manger | [string](#string) |  | What tiller should be used |
 | chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -761,7 +771,10 @@ Reply for version request
 | version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
 | cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
 | admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -859,6 +872,7 @@ Reply for version request
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 | version | [string](#string) |  | What version are we upgrading to? |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -981,6 +995,7 @@ The credentials to use for creating the cluster
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 5; AdjustClusterAKSSpec azure = 6; |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -1061,6 +1076,22 @@ The credentials to use for creating the cluster
 | tenant | [string](#string) |  | The Tenant for API access |
 | password | [string](#string) |  | The Password for API access |
 | subscription_id | [string](#string) |  | The Subscription for API access |
+
+
+
+
+
+
+<a name="cluster_manager_api.Callback"></a>
+
+### Callback
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| url | [string](#string) |  | The URL to call back to |
+| request_id | [string](#string) |  | The ID of the request |
 
 
 
@@ -1216,6 +1247,7 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of the cluster to be provisioned |
 | provider | [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec) |  | The provider specification |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -1288,6 +1320,7 @@ For when some things are already created
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -1319,9 +1352,13 @@ For when some things are already created
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cluster | [string](#string) |  | Cluster tiller should be installed on |
-| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| package_manager | [string](#string) |  | What tiller should be used |
 | chart | [string](#string) |  | Chart Name |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
+| request_id | [string](#string) |  | A unique id to indicate this request |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -1357,22 +1394,6 @@ For when some things are already created
 | repo | [string](#string) |  | What is the chart repository |
 | chart | [string](#string) |  | What is the chart name |
 | values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
-
-
-
-
-
-
-<a name="cluster_manager_api.GenericTillerSetting"></a>
-
-### GenericTillerSetting
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| namespace | [string](#string) |  | What is the tiller namespace |
-| version | [string](#string) |  | What is the version of tiller/helm |
 
 
 
@@ -1536,9 +1557,12 @@ Reply for version request
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cluster | [string](#string) |  | Cluster tiller should be installed on |
-| tiller | [GenericTillerSetting](#cluster_manager_api.GenericTillerSetting) |  | Tiller settings |
+| package_manger | [string](#string) |  | What tiller should be used |
 | chart | [GenericHelmChart](#cluster_manager_api.GenericHelmChart) |  | Chart Settings |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -1590,7 +1614,10 @@ Reply for version request
 | version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
 | cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
 | admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
+| aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
+| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 
@@ -1688,6 +1715,7 @@ Reply for version request
 | azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 | version | [string](#string) |  | What version are we upgrading to? |
+| callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
 

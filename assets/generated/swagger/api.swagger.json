@@ -189,6 +189,20 @@
               "vmware"
             ],
             "default": "undefined"
+          },
+          {
+            "name": "callback.url",
+            "description": "The URL to call back to.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "callback.request_id",
+            "description": "The ID of the request.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -517,15 +531,8 @@
             "type": "string"
           },
           {
-            "name": "tiller.namespace",
-            "description": "What is the tiller namespace.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "tiller.version",
-            "description": "What is the version of tiller/helm.",
+            "name": "package_manager",
+            "description": "What tiller should be used.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -533,6 +540,55 @@
           {
             "name": "chart",
             "description": "Chart Name.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.secret_key_id",
+            "description": "The SecretKeyId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.secret_access_key",
+            "description": "The SecretAccessKey for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.region",
+            "description": "The Region for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.app_id",
+            "description": "The AppId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.tenant",
+            "description": "The Tenant for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.password",
+            "description": "The Password for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.subscription_id",
+            "description": "The Subscription for API access.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -550,6 +606,27 @@
               "vmware"
             ],
             "default": "undefined"
+          },
+          {
+            "name": "request_id",
+            "description": "A unique id to indicate this request.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "callback.url",
+            "description": "The URL to call back to.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "callback.request_id",
+            "description": "The ID of the request.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -808,6 +885,10 @@
         "vmware": {
           "$ref": "#/definitions/AdjustClusterMsgAdjustClusterVMWareSpec",
           "title": "The AWS specification\nAdjustClusterAWSSpec aws = 5;\nAdjustClusterAKSSpec azure = 6;"
+        },
+        "callback": {
+          "$ref": "#/definitions/cluster_manager_apiCallback",
+          "title": "Callback information"
         }
       }
     },
@@ -856,6 +937,19 @@
         }
       },
       "title": "The credentials to use for creating the cluster"
+    },
+    "cluster_manager_apiCallback": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "title": "The URL to call back to"
+        },
+        "request_id": {
+          "type": "string",
+          "title": "The ID of the request"
+        }
+      }
     },
     "cluster_manager_apiClusterDetailItem": {
       "type": "object",
@@ -953,6 +1047,10 @@
         "provider": {
           "$ref": "#/definitions/cluster_manager_apiCreateClusterProviderSpec",
           "title": "The provider specification"
+        },
+        "callback": {
+          "$ref": "#/definitions/cluster_manager_apiCallback",
+          "title": "Callback information"
         }
       }
     },
@@ -1078,19 +1176,6 @@
         }
       }
     },
-    "cluster_manager_apiGenericTillerSetting": {
-      "type": "object",
-      "properties": {
-        "namespace": {
-          "type": "string",
-          "title": "What is the tiller namespace"
-        },
-        "version": {
-          "type": "string",
-          "title": "What is the version of tiller/helm"
-        }
-      }
-    },
     "cluster_manager_apiGetClusterListReply": {
       "type": "object",
       "properties": {
@@ -1160,17 +1245,29 @@
           "type": "string",
           "title": "Cluster tiller should be installed on"
         },
-        "tiller": {
-          "$ref": "#/definitions/cluster_manager_apiGenericTillerSetting",
-          "title": "Tiller settings"
+        "package_manger": {
+          "type": "string",
+          "title": "What tiller should be used"
         },
         "chart": {
           "$ref": "#/definitions/cluster_manager_apiGenericHelmChart",
           "title": "Chart Settings"
         },
+        "aws": {
+          "$ref": "#/definitions/cluster_manager_apiAWSCredentials",
+          "title": "AWS Credentials"
+        },
+        "azure": {
+          "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
+          "title": "Azure Credentials"
+        },
         "provider": {
           "$ref": "#/definitions/cluster_manager_apiProvider",
           "title": "Name of the providers (aws/azure/vmware/etc)"
+        },
+        "callback": {
+          "$ref": "#/definitions/cluster_manager_apiCallback",
+          "title": "Callback information"
         }
       }
     },
@@ -1238,9 +1335,21 @@
           },
           "title": "Namespaces that it should be able to admin on"
         },
+        "aws": {
+          "$ref": "#/definitions/cluster_manager_apiAWSCredentials",
+          "title": "AWS Credentials"
+        },
+        "azure": {
+          "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
+          "title": "Azure Credentials"
+        },
         "provider": {
           "$ref": "#/definitions/cluster_manager_apiProvider",
           "title": "Name of the providers (aws/azure/vmware/etc)"
+        },
+        "callback": {
+          "$ref": "#/definitions/cluster_manager_apiCallback",
+          "title": "Callback information"
         }
       }
     },
@@ -1326,6 +1435,10 @@
         "version": {
           "type": "string",
           "title": "What version are we upgrading to?"
+        },
+        "callback": {
+          "$ref": "#/definitions/cluster_manager_apiCallback",
+          "title": "Callback information"
         }
       }
     },

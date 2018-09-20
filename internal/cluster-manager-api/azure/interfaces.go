@@ -4,11 +4,13 @@ import (
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmaaks"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/azure"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/cma"
 )
 
 type Client struct {
 	cmaAKSClient cmaaks.ClientInterface
 	secretClient azurek8sutil.ClientInterface
+	cmaK8sClient cmak8sutil.ClientInterface
 }
 
 type ClientInterface interface {
@@ -20,5 +22,8 @@ type ClientInterface interface {
 	GetClusterUpgrades(in *pb.GetUpgradeClusterInformationMsg) (output *pb.GetUpgradeClusterInformationReply, err error)
 	ClusterUpgrade(in *pb.UpgradeClusterMsg) (output *pb.UpgradeClusterReply, err error)
 
+	SetCMAAKSClient(client cmaaks.ClientInterface)
+	SetSecretClient(client azurek8sutil.ClientInterface)
+	SetCMAK8sClient(client cmak8sutil.ClientInterface)
 	Close() error
 }
