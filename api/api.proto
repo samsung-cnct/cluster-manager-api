@@ -144,6 +144,8 @@ message CreateClusterMsg {
     string name = 1;
     // The provider specification
     CreateClusterProviderSpec provider = 2;
+    // A unique id to indicate this request
+    string request_id = 3;
 }
 
 message CreateClusterReply {
@@ -180,6 +182,8 @@ message DeleteClusterMsg {
     AzureCredentials azure = 3;
     // Name of the providers (aws/azure/vmware/etc)
     Provider provider = 4;
+    // A unique id to indicate this request
+    string request_id = 5;
 }
 
 message DeleteClusterReply {
@@ -411,8 +415,14 @@ message ProvisionTillerMsg {
     bool cluster_wide = 4;
     // Namespaces that it should be able to admin on
     repeated string admin_namespaces = 5;
+    // AWS Credentials
+    AWSCredentials aws = 6;
+    // Azure Credentials
+    AzureCredentials azure = 7;
     // Name of the providers (aws/azure/vmware/etc)
-    Provider provider = 6;
+    Provider provider = 8;
+    // A unique id to indicate this request
+    string request_id = 9;
 }
 
 message ProvisionTillerReply {
@@ -429,8 +439,14 @@ message InstallHelmChartMsg {
     GenericTillerSetting tiller = 2;
     // Chart Settings
     GenericHelmChart chart = 3;
+    // AWS Credentials
+    AWSCredentials aws = 4;
+    // Azure Credentials
+    AzureCredentials azure = 5;
     // Name of the providers (aws/azure/vmware/etc)
     Provider provider = 6;
+    // A unique id to indicate this request
+    string request_id = 7;
 }
 
 message InstallHelmChartReply {
@@ -447,8 +463,14 @@ message DeleteHelmChartMsg {
     GenericTillerSetting tiller = 2;
     // Chart Name
     string chart = 3;
+    // AWS Credentials
+    AWSCredentials aws = 4;
+    // Azure Credentials
+    AzureCredentials azure = 5;
     // Name of the providers (aws/azure/vmware/etc)
     Provider provider = 6;
+    // A unique id to indicate this request
+    string request_id = 7;
 }
 
 message DeleteHelmChartReply {
@@ -507,6 +529,8 @@ message UpgradeClusterMsg {
     string name = 4;
     // What version are we upgrading to?
     string version = 5;
+    // A unique id to indicate this request
+    string request_id = 6;
 }
 
 message UpgradeClusterReply {
@@ -530,6 +554,8 @@ message AdjustClusterMsg {
         //AdjustClusterAKSSpec azure = 6;
         AdjustClusterVMWareSpec vmware = 7;
     }
+    // A unique id to indicate this request
+    string request_id = 8;
 
     message AdjustClusterVMWareSpec {
         // Machines which we want to add to the cluster

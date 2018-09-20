@@ -189,6 +189,13 @@
               "vmware"
             ],
             "default": "undefined"
+          },
+          {
+            "name": "request_id",
+            "description": "A unique id to indicate this request.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -538,6 +545,55 @@
             "type": "string"
           },
           {
+            "name": "aws.secret_key_id",
+            "description": "The SecretKeyId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.secret_access_key",
+            "description": "The SecretAccessKey for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "aws.region",
+            "description": "The Region for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.app_id",
+            "description": "The AppId for API Access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.tenant",
+            "description": "The Tenant for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.password",
+            "description": "The Password for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "azure.subscription_id",
+            "description": "The Subscription for API access.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "provider",
             "description": "Name of the providers (aws/azure/vmware/etc).",
             "in": "query",
@@ -550,6 +606,13 @@
               "vmware"
             ],
             "default": "undefined"
+          },
+          {
+            "name": "request_id",
+            "description": "A unique id to indicate this request.",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -808,6 +871,10 @@
         "vmware": {
           "$ref": "#/definitions/AdjustClusterMsgAdjustClusterVMWareSpec",
           "title": "The AWS specification\nAdjustClusterAWSSpec aws = 5;\nAdjustClusterAKSSpec azure = 6;"
+        },
+        "request_id": {
+          "type": "string",
+          "title": "A unique id to indicate this request"
         }
       }
     },
@@ -953,6 +1020,10 @@
         "provider": {
           "$ref": "#/definitions/cluster_manager_apiCreateClusterProviderSpec",
           "title": "The provider specification"
+        },
+        "request_id": {
+          "type": "string",
+          "title": "A unique id to indicate this request"
         }
       }
     },
@@ -1168,9 +1239,21 @@
           "$ref": "#/definitions/cluster_manager_apiGenericHelmChart",
           "title": "Chart Settings"
         },
+        "aws": {
+          "$ref": "#/definitions/cluster_manager_apiAWSCredentials",
+          "title": "AWS Credentials"
+        },
+        "azure": {
+          "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
+          "title": "Azure Credentials"
+        },
         "provider": {
           "$ref": "#/definitions/cluster_manager_apiProvider",
           "title": "Name of the providers (aws/azure/vmware/etc)"
+        },
+        "request_id": {
+          "type": "string",
+          "title": "A unique id to indicate this request"
         }
       }
     },
@@ -1238,9 +1321,21 @@
           },
           "title": "Namespaces that it should be able to admin on"
         },
+        "aws": {
+          "$ref": "#/definitions/cluster_manager_apiAWSCredentials",
+          "title": "AWS Credentials"
+        },
+        "azure": {
+          "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
+          "title": "Azure Credentials"
+        },
         "provider": {
           "$ref": "#/definitions/cluster_manager_apiProvider",
           "title": "Name of the providers (aws/azure/vmware/etc)"
+        },
+        "request_id": {
+          "type": "string",
+          "title": "A unique id to indicate this request"
         }
       }
     },
@@ -1326,6 +1421,10 @@
         "version": {
           "type": "string",
           "title": "What version are we upgrading to?"
+        },
+        "request_id": {
+          "type": "string",
+          "title": "A unique id to indicate this request"
         }
       }
     },
