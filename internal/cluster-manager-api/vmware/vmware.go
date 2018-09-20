@@ -1,29 +1,13 @@
-package cluster_manager_api
+package vmware
 
 import (
-	"fmt"
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmavmware"
-	"github.com/spf13/viper"
 )
 
-func vmwareGetClient() (cmavmware.VMWareClientInterface, error) {
-	hostname := viper.GetString("cmavmware-endpoint")
-	if hostname == "" {
-		return nil, fmt.Errorf("vmware support is not enabled")
-	}
-	insecure := viper.GetBool("cmavmware-insecure")
-	return cmavmware.CreateNewClient(hostname, insecure)
-}
-
-func vmwareCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
+func (c *Client) CreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
 	var controlPlaneNodes []cmavmware.MachineSpec
 	var workerNodes []cmavmware.MachineSpec
-	client, err := vmwareGetClient()
-	if err != nil {
-		return &pb.CreateClusterReply{}, err
-	}
-	defer client.Close()
 	for _, j := range in.Provider.GetVmware().ControlPlaneNodes {
 		var labels []cmavmware.KubernetesLabel
 		for _, k := range j.Labels {
@@ -50,16 +34,14 @@ func vmwareCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error
 			Labels:   labels,
 		})
 	}
-	result, err := client.CreateCluster(cmavmware.CreateClusterInput{
-		Name:       in.Name,
-		K8SVersion: in.Provider.K8SVersion,
-		VMWare: cmavmware.VMWareSpec{
-			ControlPlaneNodes: controlPlaneNodes,
-			WorkerNodes:       workerNodes,
-			APIEndpoint:       in.Provider.GetVmware().ApiEndpoint,
-		},
-		HighAvailability: in.Provider.HighAvailability,
-		NetworkFabric:    in.Provider.NetworkFabric,
+	result, err := c.cmaVMWareClient.CreateCluster(cmavmware.CreateClusterInput{
+		Name:              in.Name,
+		K8SVersion:        in.Provider.K8SVersion,
+		ControlPlaneNodes: controlPlaneNodes,
+		WorkerNodes:       workerNodes,
+		APIEndpoint:       in.Provider.GetVmware().ApiEndpoint,
+		HighAvailability:  in.Provider.HighAvailability,
+		NetworkFabric:     in.Provider.NetworkFabric,
 	})
 	if err != nil {
 		return &pb.CreateClusterReply{}, err
@@ -74,13 +56,8 @@ func vmwareCreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error
 	}, nil
 }
 
-func vmwareGetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
-	client, err := vmwareGetClient()
-	if err != nil {
-		return &pb.GetClusterReply{}, err
-	}
-	defer client.Close()
-	result, err := client.GetCluster(cmavmware.GetClusterInput{
+func (c *Client) GetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
+	result, err := c.cmaVMWareClient.GetCluster(cmavmware.GetClusterInput{
 		Name: in.Name,
 	})
 	if err != nil {
@@ -97,14 +74,9 @@ func vmwareGetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 	}, nil
 }
 
-func vmwareGetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListReply, error) {
+func (c *Client) GetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListReply, error) {
 	var clusters []*pb.ClusterItem
-	client, err := vmwareGetClient()
-	if err != nil {
-		return &pb.GetClusterListReply{}, err
-	}
-	defer client.Close()
-	result, err := client.ListClusters(cmavmware.ListClusterInput{})
+	result, err := c.cmaVMWareClient.ListClusters(cmavmware.ListClusterInput{})
 	if err != nil {
 		return &pb.GetClusterListReply{}, err
 	}
@@ -121,13 +93,8 @@ func vmwareGetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListReply, er
 	}, nil
 }
 
-func vmwareDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
-	client, err := vmwareGetClient()
-	if err != nil {
-		return &pb.DeleteClusterReply{}, err
-	}
-	defer client.Close()
-	result, err := client.DeleteCluster(cmavmware.DeleteClusterInput{
+func (c *Client) DeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error) {
+	result, err := c.cmaVMWareClient.DeleteCluster(cmavmware.DeleteClusterInput{
 		Name: in.Name,
 	})
 	if err != nil {
@@ -139,14 +106,38 @@ func vmwareDeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply, error
 	}, nil
 }
 
-func vmwareAdjustCluster(in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply, error) {
+func (c *Client) GetClusterUpgrades(in *pb.GetUpgradeClusterInformationMsg) (output *pb.GetUpgradeClusterInformationReply, err error) {
+	result, err := c.cmaVMWareClient.GetClusterUpgrades(cmavmware.GetClusterUpgradesInput{
+		Name: in.Name,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetUpgradeClusterInformationReply{
+		Ok:       true,
+		Versions: result.Versions,
+	}, nil
+
+}
+
+func (c *Client) ClusterUpgrade(in *pb.UpgradeClusterMsg) (output *pb.UpgradeClusterReply, err error) {
+	_, err = c.cmaVMWareClient.ClusterUpgrade(cmavmware.ClusterUpgradeInput{
+		Name:    in.Name,
+		Version: in.Version,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.UpgradeClusterReply{
+		Ok: true,
+	}, nil
+}
+
+func (c *Client) AdjustCluster(in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply, error) {
 	var addNodes []cmavmware.MachineSpec
 	var removeNodes []cmavmware.RemoveMachineSpec
-	client, err := vmwareGetClient()
-	if err != nil {
-		return &pb.AdjustClusterReply{}, err
-	}
-	defer client.Close()
 	for _, j := range in.GetVmware().AddNodes {
 		var labels []cmavmware.KubernetesLabel
 		for _, k := range j.Labels {
@@ -165,7 +156,7 @@ func vmwareAdjustCluster(in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply, error
 			Host: j.Host,
 		})
 	}
-	_, err = client.AdjustCluster(cmavmware.AdjustClusterInput{
+	_, err := c.cmaVMWareClient.AdjustCluster(cmavmware.AdjustClusterInput{
 		Name:        in.Name,
 		AddNodes:    addNodes,
 		RemoveNodes: removeNodes,

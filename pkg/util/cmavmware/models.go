@@ -5,11 +5,13 @@ const (
 )
 
 type CreateClusterInput struct {
-	Name             string
-	K8SVersion       string
-	VMWare           VMWareSpec
-	HighAvailability bool
-	NetworkFabric    string
+	Name              string
+	K8SVersion        string
+	ControlPlaneNodes []MachineSpec
+	WorkerNodes       []MachineSpec
+	APIEndpoint       string
+	HighAvailability  bool
+	NetworkFabric     string
 }
 
 type CreateClusterOutput struct {
@@ -36,12 +38,6 @@ type ListClusterInput struct{}
 
 type ListClusterOutput struct {
 	Clusters []ClusterItem
-}
-
-type VMWareSpec struct {
-	ControlPlaneNodes []MachineSpec
-	WorkerNodes       []MachineSpec
-	APIEndpoint       string
 }
 
 type ClusterItem struct {
@@ -82,3 +78,18 @@ type AdjustClusterOutput struct {
 type RemoveMachineSpec struct {
 	Host string
 }
+
+type GetClusterUpgradesInput struct {
+	Name string
+}
+
+type GetClusterUpgradesOutput struct {
+	Versions []string
+}
+
+type ClusterUpgradeInput struct {
+	Name    string
+	Version string
+}
+
+type ClusterUpgradeOutput struct{}

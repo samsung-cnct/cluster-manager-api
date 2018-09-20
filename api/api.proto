@@ -132,6 +132,13 @@ service Cluster {
     }
 }
 
+enum Provider {
+    undefined = 0;
+    aws = 1;
+    azure = 2;
+    vmware = 3;
+}
+
 message CreateClusterMsg {
     // Name of the cluster to be provisioned
     string name = 1;
@@ -153,8 +160,8 @@ message GetClusterMsg {
     AWSCredentials aws = 2;
     // Azure Credentials
     AzureCredentials azure = 3;
-    // Name of the providers (aws/aks/vmware/etc)
-    string provider = 4;
+    // Name of the providers (aws/azure/vmware/etc)
+    Provider provider = 4;
 }
 
 message GetClusterReply {
@@ -171,8 +178,8 @@ message DeleteClusterMsg {
     AWSCredentials aws = 2;
     // Azure Credentials
     AzureCredentials azure = 3;
-    // Name of the providers (aws/aks/vmware/etc)
-    string provider = 4;
+    // Name of the providers (aws/azure/vmware/etc)
+    Provider provider = 4;
 }
 
 message DeleteClusterReply {
@@ -187,8 +194,8 @@ message GetClusterListMsg {
     AWSCredentials aws = 1;
     // Azure Credentials
     AzureCredentials azure = 2;
-    // Name of the providers (aws/aks/vmware/etc)
-    string provider = 4;
+    // Name of the providers (aws/azure/vmware/etc)
+    Provider provider = 4;
 }
 
 message GetClusterListReply {
@@ -404,8 +411,8 @@ message ProvisionTillerMsg {
     bool cluster_wide = 4;
     // Namespaces that it should be able to admin on
     repeated string admin_namespaces = 5;
-    // Name of the providers (aws/aks/vmware/etc)
-    string provider = 6;
+    // Name of the providers (aws/azure/vmware/etc)
+    Provider provider = 6;
 }
 
 message ProvisionTillerReply {
@@ -422,8 +429,8 @@ message InstallHelmChartMsg {
     GenericTillerSetting tiller = 2;
     // Chart Settings
     GenericHelmChart chart = 3;
-    // Name of the providers (aws/aks/vmware/etc)
-    string provider = 6;
+    // Name of the providers (aws/azure/vmware/etc)
+    Provider provider = 6;
 }
 
 message InstallHelmChartReply {
@@ -440,8 +447,8 @@ message DeleteHelmChartMsg {
     GenericTillerSetting tiller = 2;
     // Chart Name
     string chart = 3;
-    // Name of the providers (aws/aks/vmware/etc)
-    string provider = 6;
+    // Name of the providers (aws/azure/vmware/etc)
+    Provider provider = 6;
 }
 
 message DeleteHelmChartReply {
@@ -472,8 +479,8 @@ message GenericHelmChart {
 }
 
 message GetUpgradeClusterInformationMsg {
-    // Name of the providers (aws/aks/vmware/etc)
-    string provider = 1;
+    // Name of the providers (aws/azure/vmware/etc)
+    Provider provider = 1;
     // AWS Credentials
     AWSCredentials aws = 2;
     // Azure Credentials
@@ -490,8 +497,8 @@ message GetUpgradeClusterInformationReply {
 }
 
 message UpgradeClusterMsg {
-    // Name of the providers (aws/aks/vmware/etc)
-    string provider = 1;
+    // Name of the providers (aws/azure/vmware/etc)
+    Provider provider = 1;
     // AWS Credentials
     AWSCredentials aws = 2;
     // Azure Credentials
@@ -510,16 +517,18 @@ message UpgradeClusterReply {
 message AdjustClusterMsg {
     // What is the cluster that we are considering for upgrade
     string name = 1;
+    // Name of the providers (aws/azure/vmware/etc)
+    Provider provider = 2;
     // AWS Credentials
-    AWSCredentials aws = 2;
+    AWSCredentials aws = 3;
     // Azure Credentials
-    AzureCredentials azure = 3;
+    AzureCredentials azure = 4;
     // Provider changes
     oneof provider_changes {
         // The AWS specification
-        //AdjustClusterAWSSpec aws = 4;
-        //AdjustClusterAKSSpec azure = 5;
-        AdjustClusterVMWareSpec vmware = 6;
+        //AdjustClusterAWSSpec aws = 5;
+        //AdjustClusterAKSSpec azure = 6;
+        AdjustClusterVMWareSpec vmware = 7;
     }
 
     message AdjustClusterVMWareSpec {

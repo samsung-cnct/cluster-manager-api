@@ -10,6 +10,7 @@ import (
 const (
 	CMAAWSEndpointViperVariableName = "cmaaws-endpoint"
 	CMAAWSInsecureViperVariableName = "cmaaws-insecure"
+	NotEnabledErrorMessage          = "aws support is not enabled"
 )
 
 func CreateFromDefaults() (ClientInterface, error) {
@@ -41,14 +42,22 @@ func (c *Client) CreateNewClients() error {
 }
 
 func getCMAAWSClient() (cmaaws.ClientInterface, error) {
-	hostname := viper.GetString(CMAAWSEndpointViperVariableName)
-	if hostname == "" {
-		return nil, fmt.Errorf("azure support is not enabled")
+	if IsEnabled() == false {
+		return nil, fmt.Errorf(NotEnabledErrorMessage)
 	}
+
+	hostname := viper.GetString(CMAAWSEndpointViperVariableName)
 	insecure := viper.GetBool(CMAAWSInsecureViperVariableName)
 	return cmaaws.CreateNewClient(hostname, insecure)
 }
 
 func (c *Client) Close() error {
 	return c.cmaAWSClient.Close()
+}
+
+func IsEnabled() bool {
+	if viper.GetString(CMAAWSEndpointViperVariableName) == "" {
+		return false
+	}
+	return true
 }
