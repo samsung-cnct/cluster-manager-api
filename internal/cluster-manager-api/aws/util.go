@@ -39,6 +39,13 @@ func (c *Client) CreateNewClients() error {
 		return err
 	}
 
+	c.cmaK8sClient, err = cmak8sutil.CreateFromDefaults()
+	if err != nil {
+		// Closing because we created the client but then errored
+		c.Close()
+		return err
+	}
+
 	return nil
 }
 

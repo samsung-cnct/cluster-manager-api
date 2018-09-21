@@ -129,11 +129,11 @@ func (c *Client) DeleteCluster(in *pb.DeleteClusterMsg) (*pb.DeleteClusterReply,
 		// TODO Going to log for now
 		logrus.Errorf("Could not set Cluster CR into kubernetes, this is bad")
 	}
-	err = c.cmaK8sClient.DeleteCluster(in.Name)
+	err = c.cmaK8sClient.ChangeClusterStatus(in.Name, v1alpha1.ClusterPhaseDeleting)
 	if err != nil {
 		// TODO Unsure what to do if we suddenly can't persist the credentials to kubernetes
 		// TODO Going to log for now
-		logrus.Errorf("Could not set Cluster CR into kubernetes, this is bad")
+		logrus.Errorf("Could not set AKS credentials into kubernetes, this is bad")
 	}
 	return &pb.DeleteClusterReply{
 		Ok:     true,
