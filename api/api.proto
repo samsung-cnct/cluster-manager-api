@@ -360,8 +360,6 @@ message CreateClusterAKSSpec {
     string location = 1;
     // Credentials to build the cluster
     AzureCredentials credentials = 2;
-    // Cluster service account used to talk to azure (ex: creating load balancer)
-    AzureClusterServiceAccount clusterAccount = 3;
     // Instance groups
     repeated AKSInstanceGroup instance_groups = 4;
 

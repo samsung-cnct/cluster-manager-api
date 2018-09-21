@@ -902,20 +902,6 @@
         }
       }
     },
-    "cluster_manager_apiAzureClusterServiceAccount": {
-      "type": "object",
-      "properties": {
-        "client_id": {
-          "type": "string",
-          "title": "The ClientId (aka: AppID)"
-        },
-        "client_secret": {
-          "type": "string",
-          "title": "The ClientSecret (aka: password)"
-        }
-      },
-      "title": "the account used by the cluster to create azure resources (ex: load balancer)"
-    },
     "cluster_manager_apiAzureCredentials": {
       "type": "object",
       "properties": {
@@ -999,10 +985,6 @@
         "credentials": {
           "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
           "title": "Credentials to build the cluster"
-        },
-        "clusterAccount": {
-          "$ref": "#/definitions/cluster_manager_apiAzureClusterServiceAccount",
-          "title": "Cluster service account used to talk to azure (ex: creating load balancer)"
         },
         "instance_groups": {
           "type": "array",
