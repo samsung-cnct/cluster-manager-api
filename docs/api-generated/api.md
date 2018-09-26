@@ -300,7 +300,6 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | location | [string](#string) |  | The Azure Data Center |
 | credentials | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Credentials to build the cluster |
-| clusterAccount | [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount) |  | Cluster service account used to talk to azure (ex: creating load balancer) |
 | instance_groups | [CreateClusterAKSSpec.AKSInstanceGroup](#cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup) | repeated | Instance groups |
 
 
@@ -1143,7 +1142,6 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | location | [string](#string) |  | The Azure Data Center |
 | credentials | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Credentials to build the cluster |
-| clusterAccount | [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount) |  | Cluster service account used to talk to azure (ex: creating load balancer) |
 | instance_groups | [CreateClusterAKSSpec.AKSInstanceGroup](#cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup) | repeated | Instance groups |
 
 
