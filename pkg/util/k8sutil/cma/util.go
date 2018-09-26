@@ -101,3 +101,19 @@ func (c *Client) removeAdjustedName(name string, clusterName string) (string, er
 	}
 	return name[0:(inputLength - suffixLength - 1)], nil
 }
+
+func (c *Client) getAdjustedApplicationName(name string, packageManagerName string, clusterName string) string {
+	return name + "-" + packageManagerName + "-" + clusterName
+}
+
+func (c *Client) removeAdjustedApplicationName(name string, packageManagerName string, clusterName string) (string, error) {
+	inputLength := len(name)
+	suffixLength := len(packageManagerName + "-" + clusterName)
+	if suffixLength >= inputLength {
+		return "", fmt.Errorf("input string is longer than suffix")
+	}
+	if name[(inputLength-suffixLength):] != packageManagerName+"-"+clusterName {
+		return "", fmt.Errorf("input string does not have the suffix")
+	}
+	return name[0:(inputLength - suffixLength - 1)], nil
+}

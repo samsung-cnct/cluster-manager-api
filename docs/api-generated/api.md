@@ -29,6 +29,7 @@
     - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
     - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
     - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
+    - [GenericHelmChart.ChartRepository](#cluster_manager_api.GenericHelmChart.ChartRepository)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
@@ -83,6 +84,7 @@
     - [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg)
     - [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply)
     - [GenericHelmChart](#cluster_manager_api.GenericHelmChart)
+    - [GenericHelmChart.ChartRepository](#cluster_manager_api.GenericHelmChart.ChartRepository)
     - [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg)
     - [GetClusterListReply](#cluster_manager_api.GetClusterListReply)
     - [GetClusterMsg](#cluster_manager_api.GetClusterMsg)
@@ -547,9 +549,27 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the name of the deployment |
 | namespace | [string](#string) |  | What is the namespace to deploy the application to |
-| repo | [string](#string) |  | What is the chart repository |
+| repo | [GenericHelmChart.ChartRepository](#cluster_manager_api.GenericHelmChart.ChartRepository) |  | What is the chart repository |
 | chart | [string](#string) |  | What is the chart name |
+| version | [string](#string) |  | What is the chart version |
 | values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
+| chart_payload | [bytes](#bytes) |  | The payload of a chart (for airgapped solutions, etc) |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericHelmChart.ChartRepository"></a>
+
+### GenericHelmChart.ChartRepository
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| url | [string](#string) |  | What is the URL for the chart repo |
+| name | [string](#string) |  | What is the repo name |
 
 
 
@@ -765,9 +785,11 @@ Reply for version request
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Name of the tiller / package manager |
 | cluster | [string](#string) |  | Cluster tiller should be installed on |
 | namespace | [string](#string) |  | Namespace tiller should be installed in |
-| version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
+| image | [string](#string) |  | image (if not the default) for tiller (quay.io/someguy/tiller) |
+| version | [string](#string) |  | Version of tiller/helm to install / upgrade to (v2.11.0, etc) |
 | cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
 | admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
@@ -1389,9 +1411,27 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | What is the name of the deployment |
 | namespace | [string](#string) |  | What is the namespace to deploy the application to |
-| repo | [string](#string) |  | What is the chart repository |
+| repo | [GenericHelmChart.ChartRepository](#cluster_manager_api.GenericHelmChart.ChartRepository) |  | What is the chart repository |
 | chart | [string](#string) |  | What is the chart name |
+| version | [string](#string) |  | What is the chart version |
 | values | [string](#string) |  | What are the options (nested yaml - the Values.yaml contents) |
+| chart_payload | [bytes](#bytes) |  | The payload of a chart (for airgapped solutions, etc) |
+
+
+
+
+
+
+<a name="cluster_manager_api.GenericHelmChart.ChartRepository"></a>
+
+### GenericHelmChart.ChartRepository
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| url | [string](#string) |  | What is the URL for the chart repo |
+| name | [string](#string) |  | What is the repo name |
 
 
 
@@ -1607,9 +1647,11 @@ Reply for version request
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Name of the tiller / package manager |
 | cluster | [string](#string) |  | Cluster tiller should be installed on |
 | namespace | [string](#string) |  | Namespace tiller should be installed in |
-| version | [string](#string) |  | Versino of tiller/helm to install / upgrade to |
+| image | [string](#string) |  | image (if not the default) for tiller (quay.io/someguy/tiller) |
+| version | [string](#string) |  | Version of tiller/helm to install / upgrade to (v2.11.0, etc) |
 | cluster_wide | [bool](#bool) |  | Is the tiller a cluster-wide tiller? Should it have cluster-wide admin privileges? |
 | admin_namespaces | [string](#string) | repeated | Namespaces that it should be able to admin on |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |

@@ -18,7 +18,8 @@ func (c *Client) CreateApplication(name string, application Application) error {
 			PackageManager: v1alpha1.SDSPackageManagerRef{
 				Name: application.PackageManager,
 			},
-			Name: name,
+			Name:      name,
+			Namespace: application.Namespace,
 			Chart: v1alpha1.Chart{
 				Name: application.Chart.Name,
 				Repository: v1alpha1.ChartRepository{
@@ -41,8 +42,8 @@ func (c *Client) getApplicationRaw(name string) (*v1alpha1.SDSApplication, error
 	return c.applicationClient.Get(name, v1.GetOptions{})
 }
 
-func (c *Client) GetApplication(name string, clusterName string) (Application, error) {
-	result, err := c.getApplicationRaw(c.getAdjustedName(name, clusterName))
+func (c *Client) GetApplication(name string, packageManager string, clusterName string) (Application, error) {
+	result, err := c.getApplicationRaw(c.getAdjustedApplicationName(name, packageManager, clusterName))
 	if err != nil {
 		return Application{}, nil
 	}
@@ -98,12 +99,12 @@ func (c *Client) UpdateOrCreateApplication(name string, application Application)
 	return err
 }
 
-func (c *Client) DeleteApplication(name string, clusterName string) error {
-	return c.applicationClient.Delete(c.getAdjustedName(name, clusterName), nil)
+func (c *Client) DeleteApplication(name string, packageManager string, clusterName string) error {
+	return c.applicationClient.Delete(c.getAdjustedApplicationName(name, packageManager, clusterName), nil)
 }
 
-func (c *Client) ChangeApplicationStatus(name string, clusterName string, status string) error {
-	result, err := c.getApplicationRaw(c.getAdjustedName(name, clusterName))
+func (c *Client) ChangeApplicationStatus(name string, packageManager string, clusterName string, status string) error {
+	result, err := c.getApplicationRaw(c.getAdjustedApplicationName(name, packageManager, clusterName))
 	if err != nil {
 		return err
 	}
