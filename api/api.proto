@@ -408,11 +408,15 @@ message VMWareMachineSpec {
 }
 
 message ProvisionTillerMsg {
+    // Name of the tiller / package manager
+    string name = 10;
     // Cluster tiller should be installed on
     string cluster = 1;
     // Namespace tiller should be installed in
     string namespace = 2;
-    // Versino of tiller/helm to install / upgrade to
+    // image (if not the default) for tiller (quay.io/someguy/tiller)
+    string image = 11;
+    // Version of tiller/helm to install / upgrade to (v2.11.0, etc)
     string version = 3;
     // Is the tiller a cluster-wide tiller?
     // Should it have cluster-wide admin privileges?
@@ -492,11 +496,22 @@ message GenericHelmChart {
     // What is the namespace to deploy the application to
     string namespace = 2;
     // What is the chart repository
-    string repo = 3;
+    ChartRepository repo = 3;
     // What is the chart name
     string chart = 4;
+    // What is the chart version
+    string version = 5;
     // What are the options (nested yaml - the Values.yaml contents)
-    string values = 5;
+    string values = 6;
+    // The payload of a chart (for airgapped solutions, etc)
+    bytes chart_payload = 7;
+
+    message ChartRepository {
+        // What is the URL for the chart repo
+        string url = 1;
+        // What is the repo name
+        string name = 2;
+    }
 }
 
 message GetUpgradeClusterInformationMsg {

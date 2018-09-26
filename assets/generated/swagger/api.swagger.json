@@ -812,6 +812,19 @@
       },
       "title": "For when some things are already created"
     },
+    "GenericHelmChartChartRepository": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "title": "What is the URL for the chart repo"
+        },
+        "name": {
+          "type": "string",
+          "title": "What is the repo name"
+        }
+      }
+    },
     "GetVersionReplyVersionInformation": {
       "type": "object",
       "properties": {
@@ -1145,16 +1158,25 @@
           "title": "What is the namespace to deploy the application to"
         },
         "repo": {
-          "type": "string",
+          "$ref": "#/definitions/GenericHelmChartChartRepository",
           "title": "What is the chart repository"
         },
         "chart": {
           "type": "string",
           "title": "What is the chart name"
         },
+        "version": {
+          "type": "string",
+          "title": "What is the chart version"
+        },
         "values": {
           "type": "string",
           "title": "What are the options (nested yaml - the Values.yaml contents)"
+        },
+        "chart_payload": {
+          "type": "string",
+          "format": "byte",
+          "title": "The payload of a chart (for airgapped solutions, etc)"
         }
       }
     },
@@ -1293,6 +1315,10 @@
     "cluster_manager_apiProvisionTillerMsg": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the tiller / package manager"
+        },
         "cluster": {
           "type": "string",
           "title": "Cluster tiller should be installed on"
@@ -1301,9 +1327,13 @@
           "type": "string",
           "title": "Namespace tiller should be installed in"
         },
+        "image": {
+          "type": "string",
+          "title": "image (if not the default) for tiller (quay.io/someguy/tiller)"
+        },
         "version": {
           "type": "string",
-          "title": "Versino of tiller/helm to install / upgrade to"
+          "title": "Version of tiller/helm to install / upgrade to (v2.11.0, etc)"
         },
         "cluster_wide": {
           "type": "boolean",
