@@ -54,7 +54,6 @@ func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, e
 			Name:        j.Name,
 			Type:        j.Type,
 			MinQuantity: int32(j.MinQuantity),
-			MaxQuantity: int32(j.MaxQuantity),
 		})
 	}
 	result, err := a.client.CreateCluster(context.Background(), &pb.CreateClusterMsg{
