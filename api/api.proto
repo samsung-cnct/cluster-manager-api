@@ -139,6 +139,23 @@ enum Provider {
     vmware = 3;
 }
 
+enum ClusterStatus {
+    // Not set
+    STATUS_UNSPECIFIED = 0;
+    // The PROVISIONING state indicates the cluster is being created.
+    PROVISIONING = 1;
+    // The RUNNING state indicates the cluster has been created and is fully usable.
+    RUNNING = 2;
+    // The RECONCILING state indicates that some work is actively being done on the cluster, such as upgrading the master or node software.
+    RECONCILING = 3;
+    // The STOPPING state indicates the cluster is being deleted
+    STOPPING = 4;
+    // The ERROR state indicates the cluster may be unusable
+    ERROR = 5;
+    // The DEGRADED state indicates the cluster requires user action to restore full functionality
+    DEGRADED = 6;
+}
+
 message Callback {
     // The URL to call back to
     string url = 1;
@@ -221,8 +238,10 @@ message ClusterItem {
     string id = 1;
     // Name of the cluster
     string name = 2;
-    // What is the status of the cluster
-    string status = 3;
+    // Additional information about the status of the cluster
+    string status_message = 3;
+    // The status of the cluster
+    ClusterStatus status = 4;
 }
 
 message ClusterDetailItem {
@@ -230,10 +249,12 @@ message ClusterDetailItem {
     string id = 1;
     // Name of the cluster
     string name = 2;
-    // What is the status of the cluster
-    string status = 3;
+    // Additional information about the status of the cluster
+    string status_message = 3;
     // What is the kubeconfig to connect to the cluster
     string kubeconfig = 4;
+    // The status of the cluster
+    ClusterStatus status = 5;
 }
 
 message CreateClusterProviderSpec {

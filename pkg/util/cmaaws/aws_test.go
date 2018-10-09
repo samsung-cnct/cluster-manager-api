@@ -29,7 +29,7 @@ var _ = Describe("CMAAWS API Functions", func() {
 			It("return the apiserver message", func() {
 				Expect(response.Cluster.ID).To(Equal(MockGoodCreateClusterReply.Cluster.Id))
 				Expect(response.Cluster.Name).To(Equal(MockGoodCreateClusterReply.Cluster.Name))
-				Expect(response.Cluster.Status).To(Equal(MockGoodCreateClusterReply.Cluster.Status))
+				Expect(response.Cluster.Status).To(Equal(MockGoodCreateClusterReply.Cluster.Status.String()))
 			})
 			It("should not error", func() {
 				Expect(err).NotTo(HaveOccurred())
@@ -64,7 +64,7 @@ var _ = Describe("CMAAWS API Functions", func() {
 			It("return the apiserver message", func() {
 				Expect(response.Cluster.ID).To(Equal(MockGoodGetClusterReply.Cluster.Id))
 				Expect(response.Cluster.Name).To(Equal(MockGoodGetClusterReply.Cluster.Name))
-				Expect(response.Cluster.Status).To(Equal(MockGoodGetClusterReply.Cluster.Status))
+				Expect(response.Cluster.Status).To(Equal(MockGoodGetClusterReply.Cluster.Status.String()))
 				Expect(response.Cluster.Kubeconfig).To(Equal(MockGoodGetClusterReply.Cluster.Kubeconfig))
 			})
 			It("should not error", func() {
@@ -132,7 +132,7 @@ var _ = Describe("CMAAWS API Functions", func() {
 			})
 			It("return the apiserver message", func() {
 				Expect(response.Clusters).To(HaveLen(2))
-				Expect(response.Clusters[0].Status).To(BeEquivalentTo(MockGoodGetClusterListReply.Clusters[0].Status))
+				Expect(response.Clusters[0].Status).To(BeEquivalentTo(MockGoodGetClusterListReply.Clusters[0].Status.String()))
 				Expect(response.Clusters[1].ID).To(BeEquivalentTo(MockGoodGetClusterListReply.Clusters[1].Id))
 				Expect(response.Clusters[0].Name).To(BeEquivalentTo(MockGoodGetClusterListReply.Clusters[0].Name))
 			})

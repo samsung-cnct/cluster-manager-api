@@ -24,7 +24,7 @@ func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*p
 		Cluster: &pb.ClusterItem{
 			Id:     "abc123",
 			Name:   "dummyName",
-			Status: "Placeholder",
+			Status: pb.ClusterStatus_STATUS_UNSPECIFIED,
 		},
 	}, nil
 }
