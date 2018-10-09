@@ -961,13 +961,17 @@
           "type": "string",
           "title": "Name of the cluster"
         },
-        "status": {
+        "status_message": {
           "type": "string",
-          "title": "What is the status of the cluster"
+          "title": "Additional information about the status of the cluster"
         },
         "kubeconfig": {
           "type": "string",
           "title": "What is the kubeconfig to connect to the cluster"
+        },
+        "status": {
+          "$ref": "#/definitions/cluster_manager_apiClusterStatus",
+          "title": "The status of the cluster"
         }
       }
     },
@@ -982,11 +986,29 @@
           "type": "string",
           "title": "Name of the cluster"
         },
-        "status": {
+        "status_message": {
           "type": "string",
-          "title": "What is the status of the cluster"
+          "title": "Additional information about the status of the cluster"
+        },
+        "status": {
+          "$ref": "#/definitions/cluster_manager_apiClusterStatus",
+          "title": "The status of the cluster"
         }
       }
+    },
+    "cluster_manager_apiClusterStatus": {
+      "type": "string",
+      "enum": [
+        "STATUS_UNSPECIFIED",
+        "PROVISIONING",
+        "RUNNING",
+        "RECONCILING",
+        "STOPPING",
+        "ERROR",
+        "DEGRADED"
+      ],
+      "default": "STATUS_UNSPECIFIED",
+      "title": "- STATUS_UNSPECIFIED: Not set\n - PROVISIONING: The PROVISIONING state indicates the cluster is being created.\n - RUNNING: The RUNNING state indicates the cluster has been created and is fully usable.\n - RECONCILING: The RECONCILING state indicates that some work is actively being done on the cluster, such as upgrading the master or node software.\n - STOPPING: The STOPPING state indicates the cluster is being deleted\n - ERROR: The ERROR state indicates the cluster may be unusable\n - DEGRADED: The DEGRADED state indicates the cluster requires user action to restore full functionality"
     },
     "cluster_manager_apiCreateClusterAKSSpec": {
       "type": "object",

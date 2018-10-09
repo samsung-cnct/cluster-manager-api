@@ -93,7 +93,7 @@ func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, e
 		Cluster: ClusterItem{
 			ID:     result.Cluster.Id,
 			Name:   result.Cluster.Name,
-			Status: result.Cluster.Status,
+			Status: result.Cluster.Status.String(),
 		},
 	}
 	return output, nil
@@ -115,7 +115,7 @@ func (a *Client) GetCluster(input GetClusterInput) (GetClusterOutput, error) {
 		Cluster: ClusterDetailItem{
 			ID:         result.Cluster.Id,
 			Name:       result.Cluster.Name,
-			Status:     result.Cluster.Status,
+			Status:     result.Cluster.Status.String(),
 			Kubeconfig: result.Cluster.Kubeconfig,
 		},
 	}
@@ -156,7 +156,7 @@ func (a *Client) ListClusters(input ListClusterInput) (ListClusterOutput, error)
 		clusters = append(clusters, ClusterItem{
 			ID:     j.Id,
 			Name:   j.Name,
-			Status: j.Status,
+			Status: j.Status.String(),
 		})
 	}
 	output := ListClusterOutput{

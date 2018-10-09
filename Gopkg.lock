@@ -399,12 +399,12 @@
   revision = "5e9d8eebcc199e94246aa0021b21c5feca0021db"
 
 [[projects]]
-  digest = "1:dc2d85c13ac22c22a1f3170a41a8e1b897fa05134aaf533f16df44f66a25b4a1"
+  digest = "1:3f53e9e4dfbb664cd62940c9c4b65a2171c66acd0b7621a1a6b8e78513525a52"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   pruneopts = "UT"
-  revision = "a67f783a3814b8729bd2dac5780b5f78f8dbd64d"
-  version = "v1.1.0"
+  revision = "ad15b42461921f1fb3529b058c6786c6a45d5162"
+  version = "v1.1.1"
 
 [[projects]]
   digest = "1:30e06e6d62a1d694e3cdbff29d8a9a96022e05a487d0c6eaf0ef898965ef28fb"
@@ -467,11 +467,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:6b22f4662a13ea79039e977c6fd89f603f01b239cc9bfc344740aaadefa9dfef"
+  digest = "1:0051e5811e3bbbfb91ad3abcc2ffbf68bbca130879df71af82d2a1b76dd8651a"
   name = "gitlab.com/mvenezia/cma-aws"
   packages = ["pkg/generated/api"]
   pruneopts = "UT"
-  revision = "a97d0fa02b8cafd473afb332a5c15982941247e6"
+  revision = "5604753d83d8639803f1f88460daa2085c559dfc"
 
 [[projects]]
   branch = "master"
@@ -666,7 +666,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:17df07c4092d58ff193b67aaa89240d7c96b92a02505e3700a7a0460f1c1b27d"
+  digest = "1:6ae8fe37fa028920a8cd6d8349b99b6f179cd04d14ef77f527aadd344524acc3"
   name = "k8s.io/api"
   packages = [
     "admissionregistration/v1alpha1",
@@ -700,7 +700,7 @@
     "storage/v1beta1",
   ]
   pruneopts = "UT"
-  revision = "ded30614edd77e131ec4fb340f049041faebe692"
+  revision = "942fd07262c19357041a676f7170ed250f58b69a"
 
 [[projects]]
   digest = "1:758efcf9cc97ed132a9f9f9e2b638a0cd401a2b1b9a98e91d037de46a84d2f5e"

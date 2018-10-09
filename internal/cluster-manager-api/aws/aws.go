@@ -88,7 +88,7 @@ func (c *Client) CreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply,
 		Cluster: &pb.ClusterItem{
 			Id:     result.Cluster.ID,
 			Name:   result.Cluster.Name,
-			Status: result.Cluster.Status,
+			Status: pb.ClusterStatus(pb.ClusterStatus_value[result.Cluster.Status]),
 		},
 	}, nil
 }
@@ -124,7 +124,7 @@ func (c *Client) GetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 		Cluster: &pb.ClusterDetailItem{
 			Id:         result.Cluster.ID,
 			Name:       result.Cluster.Name,
-			Status:     result.Cluster.Status,
+			Status: pb.ClusterStatus(pb.ClusterStatus_value[result.Cluster.Status]),
 			Kubeconfig: result.Cluster.Kubeconfig,
 		},
 	}, nil
@@ -146,7 +146,7 @@ func (c *Client) GetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListRep
 		clusters = append(clusters, &pb.ClusterItem{
 			Id:     j.ID,
 			Name:   j.Name,
-			Status: j.Status,
+			Status: pb.ClusterStatus(pb.ClusterStatus_value[j.Status]),
 		})
 	}
 	return &pb.GetClusterListReply{

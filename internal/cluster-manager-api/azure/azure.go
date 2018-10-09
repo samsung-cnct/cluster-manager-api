@@ -89,7 +89,7 @@ func (c *Client) CreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply,
 		Cluster: &pb.ClusterItem{
 			Id:     result.Cluster.ID,
 			Name:   result.Cluster.Name,
-			Status: result.Cluster.Status,
+			Status: pb.ClusterStatus_PROVISIONING,
 		},
 	}, nil
 }
@@ -122,12 +122,17 @@ func (c *Client) GetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 		}
 	}
 
+	enumeratedStatus, found := pb.ClusterStatus_value[result.Cluster.Status]
+	if !found {
+		enumeratedStatus = 0
+	}
+
 	return &pb.GetClusterReply{
 		Ok: true,
 		Cluster: &pb.ClusterDetailItem{
 			Id:         result.Cluster.ID,
 			Name:       result.Cluster.Name,
-			Status:     result.Cluster.Status,
+			Status:     pb.ClusterStatus(enumeratedStatus),
 			Kubeconfig: result.Cluster.Kubeconfig,
 		},
 	}, nil
@@ -147,10 +152,14 @@ func (c *Client) GetClusterList(in *pb.GetClusterListMsg) (*pb.GetClusterListRep
 		return &pb.GetClusterListReply{}, err
 	}
 	for _, j := range result.Clusters {
+		enumeratedStatus, found := pb.ClusterStatus_value[j.Status]
+		if !found {
+			enumeratedStatus = 0
+		}
 		clusters = append(clusters, &pb.ClusterItem{
 			Id:     j.ID,
 			Name:   j.Name,
-			Status: j.Status,
+			Status: pb.ClusterStatus(enumeratedStatus),
 		})
 	}
 	return &pb.GetClusterListReply{

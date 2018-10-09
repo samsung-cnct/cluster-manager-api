@@ -52,6 +52,7 @@
     - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
     - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
   
+    - [ClusterStatus](#cluster_manager_api.ClusterStatus)
     - [Provider](#cluster_manager_api.Provider)
   
   
@@ -107,6 +108,7 @@
     - [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply)
     - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
   
+    - [ClusterStatus](#cluster_manager_api.ClusterStatus)
     - [Provider](#cluster_manager_api.Provider)
   
   
@@ -267,8 +269,9 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  | ID of the cluster |
 | name | [string](#string) |  | Name of the cluster |
-| status | [string](#string) |  | What is the status of the cluster |
+| status_message | [string](#string) |  | Additional information about the status of the cluster |
 | kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
+| status | [ClusterStatus](#cluster_manager_api.ClusterStatus) |  | The status of the cluster |
 
 
 
@@ -285,7 +288,8 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  | ID of the cluster |
 | name | [string](#string) |  | Name of the cluster |
-| status | [string](#string) |  | What is the status of the cluster |
+| status_message | [string](#string) |  | Additional information about the status of the cluster |
+| status | [ClusterStatus](#cluster_manager_api.ClusterStatus) |  | The status of the cluster |
 
 
 
@@ -934,6 +938,23 @@ The specification for a specific node
 
 
  
+
+
+<a name="cluster_manager_api.ClusterStatus"></a>
+
+### ClusterStatus
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| STATUS_UNSPECIFIED | 0 | Not set |
+| PROVISIONING | 1 | The PROVISIONING state indicates the cluster is being created. |
+| RUNNING | 2 | The RUNNING state indicates the cluster has been created and is fully usable. |
+| RECONCILING | 3 | The RECONCILING state indicates that some work is actively being done on the cluster, such as upgrading the master or node software. |
+| STOPPING | 4 | The STOPPING state indicates the cluster is being deleted |
+| ERROR | 5 | The ERROR state indicates the cluster may be unusable |
+| DEGRADED | 6 | The DEGRADED state indicates the cluster requires user action to restore full functionality |
+
 
 
 <a name="cluster_manager_api.Provider"></a>
@@ -1129,8 +1150,9 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  | ID of the cluster |
 | name | [string](#string) |  | Name of the cluster |
-| status | [string](#string) |  | What is the status of the cluster |
+| status_message | [string](#string) |  | Additional information about the status of the cluster |
 | kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
+| status | [ClusterStatus](#cluster_manager_api.ClusterStatus) |  | The status of the cluster |
 
 
 
@@ -1147,7 +1169,8 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  | ID of the cluster |
 | name | [string](#string) |  | Name of the cluster |
-| status | [string](#string) |  | What is the status of the cluster |
+| status_message | [string](#string) |  | Additional information about the status of the cluster |
+| status | [ClusterStatus](#cluster_manager_api.ClusterStatus) |  | The status of the cluster |
 
 
 
@@ -1796,6 +1819,23 @@ The specification for a specific node
 
 
  
+
+
+<a name="cluster_manager_api.ClusterStatus"></a>
+
+### ClusterStatus
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| STATUS_UNSPECIFIED | 0 | Not set |
+| PROVISIONING | 1 | The PROVISIONING state indicates the cluster is being created. |
+| RUNNING | 2 | The RUNNING state indicates the cluster has been created and is fully usable. |
+| RECONCILING | 3 | The RECONCILING state indicates that some work is actively being done on the cluster, such as upgrading the master or node software. |
+| STOPPING | 4 | The STOPPING state indicates the cluster is being deleted |
+| ERROR | 5 | The ERROR state indicates the cluster may be unusable |
+| DEGRADED | 6 | The DEGRADED state indicates the cluster requires user action to restore full functionality |
+
 
 
 <a name="cluster_manager_api.Provider"></a>
