@@ -371,11 +371,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:5efe0b6653488a14b741eb514ec71dd6ba11cdbeae4422be069c943eefe3b746"
+  digest = "1:62a5a8de0eb6d4780af66954a69a812f088c6a05a349007a11b96f01dcdde497"
   name = "github.com/samsung-cnct/cma-aks"
   packages = ["pkg/generated/api"]
   pruneopts = "UT"
-  revision = "b45b7c878c7c7bf82627fc8380502b174ee8b943"
+  revision = "33ca60decef88e52e81471eb18f2262339b298ba"
 
 [[projects]]
   branch = "master"
@@ -392,11 +392,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:4745e0c4c1c5077ed06185adaa2e075595b54c1301f10d77b3a7e6c5d1a18677"
+  digest = "1:4b21e6e28c66cec039c26ec8c06afe74c287e9bce2538c69656c2023c94ae1ff"
   name = "github.com/samsung-cnct/cma-vmware"
   packages = ["pkg/generated/api"]
   pruneopts = "UT"
-  revision = "5e9d8eebcc199e94246aa0021b21c5feca0021db"
+  revision = "7fd0dfcf21939f3385b4b65d2db687269904a138"
 
 [[projects]]
   digest = "1:3f53e9e4dfbb664cd62940c9c4b65a2171c66acd0b7621a1a6b8e78513525a52"
@@ -471,7 +471,7 @@
   name = "gitlab.com/mvenezia/cma-aws"
   packages = ["pkg/generated/api"]
   pruneopts = "UT"
-  revision = "5604753d83d8639803f1f88460daa2085c559dfc"
+  revision = "175afbeb2296eefc768f069f221a1605a5ee15ff"
 
 [[projects]]
   branch = "master"
@@ -700,7 +700,7 @@
     "storage/v1beta1",
   ]
   pruneopts = "UT"
-  revision = "942fd07262c19357041a676f7170ed250f58b69a"
+  revision = "e3c5c37695fbce2b0b46845e3bb4806c4b8faf47"
 
 [[projects]]
   digest = "1:758efcf9cc97ed132a9f9f9e2b638a0cd401a2b1b9a98e91d037de46a84d2f5e"
