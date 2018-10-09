@@ -21,7 +21,7 @@ var (
 		Cluster: &pb.ClusterItem{
 			Id:     "TestID",
 			Name:   "TestName",
-			Status: "TestStatus",
+			Status: pb.ClusterStatus_PROVISIONING,
 		},
 	}
 	MockGoodGetClusterReply = pb.GetClusterReply{
@@ -29,7 +29,7 @@ var (
 		Cluster: &pb.ClusterDetailItem{
 			Id:         "TestID",
 			Name:       "TestName",
-			Status:     "TestStatus",
+			Status:     pb.ClusterStatus_RUNNING,
 			Kubeconfig: "TestKubeconfig",
 		},
 	}
@@ -40,8 +40,8 @@ var (
 	MockGoodGetClusterListReply = pb.GetClusterListReply{
 		Ok: true,
 		Clusters: []*pb.ClusterItem{
-			{Id: "Test1ID", Name: "Test1Name", Status: "Test1Status"},
-			{Id: "Test2ID", Name: "Test2Name", Status: "Test2Status"},
+			{Id: "Test1ID", Name: "Test1Name", Status: pb.ClusterStatus_RUNNING},
+			{Id: "Test2ID", Name: "Test2Name", Status: pb.ClusterStatus_PROVISIONING},
 		},
 	}
 	MockGoodGetVersionReply = pb.GetVersionReply{
