@@ -22,6 +22,10 @@ func (c *Client) UpdateCredentials(in *pb.UpdateAWSCredentialsMsg) (*pb.UpdateAW
 }
 
 func (c *Client) CreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply, error) {
+	err := c.validateCreateClusterInput(in)
+	if err != nil {
+		return nil, err
+	}
 	var instanceGroups []cmaaws.InstanceGroup
 	for _, j := range in.Provider.GetAws().InstanceGroups {
 		instanceGroups = append(instanceGroups, cmaaws.InstanceGroup{
@@ -124,7 +128,7 @@ func (c *Client) GetCluster(in *pb.GetClusterMsg) (*pb.GetClusterReply, error) {
 		Cluster: &pb.ClusterDetailItem{
 			Id:         result.Cluster.ID,
 			Name:       result.Cluster.Name,
-			Status: pb.ClusterStatus(pb.ClusterStatus_value[result.Cluster.Status]),
+			Status:     pb.ClusterStatus(pb.ClusterStatus_value[result.Cluster.Status]),
 			Kubeconfig: result.Cluster.Kubeconfig,
 		},
 	}, nil
