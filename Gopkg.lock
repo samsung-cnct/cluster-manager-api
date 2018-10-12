@@ -371,15 +371,15 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:62a5a8de0eb6d4780af66954a69a812f088c6a05a349007a11b96f01dcdde497"
+  digest = "1:e9df07552d2373ab5e6f8c52f29b929237fbeb453ca3a77f9243e8e666b1ea28"
   name = "github.com/samsung-cnct/cma-aks"
   packages = ["pkg/generated/api"]
   pruneopts = "UT"
-  revision = "33ca60decef88e52e81471eb18f2262339b298ba"
+  revision = "e154af4954293ba28db7166b7c524f2678aeecdc"
 
 [[projects]]
   branch = "master"
-  digest = "1:6b08916e42c00f59b250b74aa5bc983e5ae85cbe3f51e6c4011139205c3fdf2c"
+  digest = "1:87cc7081aa29100719fafe19fba4e68ceff08c10a5390911ad8f00f3a327578c"
   name = "github.com/samsung-cnct/cma-operator"
   packages = [
     "pkg/apis/cma/v1alpha1",
@@ -388,7 +388,7 @@
     "pkg/generated/cma/client/clientset/versioned/typed/cma/v1alpha1",
   ]
   pruneopts = "UT"
-  revision = "9ef27b7b0fe27eade81be891188dca0c8f8cf87f"
+  revision = "46a243c5e2ef92da1c2f94104c81c8997d99a568"
 
 [[projects]]
   branch = "master"
@@ -396,7 +396,7 @@
   name = "github.com/samsung-cnct/cma-vmware"
   packages = ["pkg/generated/api"]
   pruneopts = "UT"
-  revision = "7fd0dfcf21939f3385b4b65d2db687269904a138"
+  revision = "adb3d8300b804297a96a9898f4ad945fc3d81b7e"
 
 [[projects]]
   digest = "1:3f53e9e4dfbb664cd62940c9c4b65a2171c66acd0b7621a1a6b8e78513525a52"
@@ -479,7 +479,7 @@
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
   pruneopts = "UT"
-  revision = "e3636079e1a4c1f337f212cc5cd2aca108f6c900"
+  revision = "7c1a557ab941a71c619514f229f0b27ccb0c27cf"
 
 [[projects]]
   branch = "master"
@@ -499,7 +499,7 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "146acd28ed5894421fb5aac80ca93bc1b1f46f87"
+  revision = "49bb7cea24b1df9410e1712aa6433dae904ff66a"
 
 [[projects]]
   branch = "master"
@@ -514,14 +514,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:850d28ab022512e2cd3cf511a77f363c29e22689b4031f2050871f5de47ae4a0"
+  digest = "1:f5aa274a0377f85735edc7fedfb0811d3cbc20af91633797cb359e29c3272271"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "4497e2df6f9e69048a54498c7affbbec3294ad47"
+  revision = "fa43e7bc11baaae89f3f902b2b4d832b68234844"
 
 [[projects]]
   digest = "1:bb8277a2ca2bcad6ff7f413b939375924099be908cedd1314baa21ecd08df477"
@@ -666,7 +666,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:6ae8fe37fa028920a8cd6d8349b99b6f179cd04d14ef77f527aadd344524acc3"
+  digest = "1:e77103eb194b363b0a5d257edd309213132ce8171fd0fd3739d47c7c9d9b9ea0"
   name = "k8s.io/api"
   packages = [
     "admissionregistration/v1alpha1",
@@ -700,7 +700,7 @@
     "storage/v1beta1",
   ]
   pruneopts = "UT"
-  revision = "e3c5c37695fbce2b0b46845e3bb4806c4b8faf47"
+  revision = "26c7a45db37856b19f05ba5aa21d2df4b81ecff3"
 
 [[projects]]
   digest = "1:758efcf9cc97ed132a9f9f9e2b638a0cd401a2b1b9a98e91d037de46a84d2f5e"

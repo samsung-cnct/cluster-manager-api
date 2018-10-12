@@ -15,6 +15,9 @@ func (c *Client) CreateCluster(name string, cluster Cluster) error {
 		Spec: v1alpha1.SDSClusterSpec{
 			Provider: cluster.Provider,
 		},
+		Status: v1alpha1.SDSClusterStatus{
+			Phase: cluster.Phase,
+		},
 	})
 	return err
 }
@@ -32,6 +35,7 @@ func (c *Client) GetCluster(name string) (Cluster, error) {
 		CallbackURL: result.Annotations[CallbackURLAnnotation],
 		Provider:    result.Spec.Provider,
 		RequestID:   result.Annotations[RequestIDAnnotation],
+		Phase:       result.Status.Phase,
 	}, nil
 }
 
@@ -45,6 +49,7 @@ func (c *Client) UpdateOrCreateCluster(name string, cluster Cluster) error {
 	result.Annotations[CallbackURLAnnotation] = cluster.CallbackURL
 	result.Annotations[RequestIDAnnotation] = cluster.RequestID
 	result.Spec.Provider = cluster.Provider
+	result.Status.Phase = cluster.Phase
 
 	_, err = c.clusterClient.Update(result)
 	return err

@@ -1,5 +1,7 @@
 package cmak8sutil
 
+import "github.com/samsung-cnct/cma-operator/pkg/apis/cma/v1alpha1"
+
 type Application struct {
 	CallbackURL    string
 	Cluster        string
@@ -9,6 +11,7 @@ type Application struct {
 	RequestID      string
 	TillerSettings TillerSettings
 	Values         string
+	Phase          v1alpha1.ApplicationPhase
 }
 
 type Chart struct {
@@ -27,6 +30,7 @@ type Cluster struct {
 	CallbackURL string
 	Provider    string
 	RequestID   string
+	Phase       v1alpha1.Phase
 }
 
 type PackageManager struct {
@@ -39,6 +43,7 @@ type PackageManager struct {
 	Namespace       string
 	RequestID       string
 	Version         string
+	Phase           v1alpha1.PackageManagerPhase
 }
 
 type TillerSettings struct {
