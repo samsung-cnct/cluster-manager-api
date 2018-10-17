@@ -21,6 +21,7 @@ type ClientInterface interface {
 	UpdateCredentials(in *pb.UpdateAzureCredentialsMsg) (*pb.UpdateAzureCredentialsReply, error)
 	GetClusterUpgrades(in *pb.GetUpgradeClusterInformationMsg) (output *pb.GetUpgradeClusterInformationReply, err error)
 	ClusterUpgrade(in *pb.UpgradeClusterMsg) (output *pb.UpgradeClusterReply, err error)
+	AdjustCluster(in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply, error)
 
 	SetCMAAKSClient(client cmaaks.ClientInterface)
 	SetSecretClient(client azurek8sutil.ClientInterface)

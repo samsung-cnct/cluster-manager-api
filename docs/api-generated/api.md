@@ -6,6 +6,7 @@
 - [api.proto](#api.proto)
     - [AWSCredentials](#cluster_manager_api.AWSCredentials)
     - [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg)
+    - [AdjustClusterMsg.AdjustClusterAKSSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec)
     - [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec)
     - [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec)
     - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
@@ -62,6 +63,7 @@
 - [api.proto](#api.proto)
     - [AWSCredentials](#cluster_manager_api.AWSCredentials)
     - [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg)
+    - [AdjustClusterMsg.AdjustClusterAKSSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec)
     - [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec)
     - [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec)
     - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
@@ -154,9 +156,27 @@ The credentials to use for creating the cluster
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 | provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
-| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 5; AdjustClusterAKSSpec azure = 6; |
+| azure | [AdjustClusterMsg.AdjustClusterAKSSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 5; |
+| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  |  |
 | callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec"></a>
+
+### AdjustClusterMsg.AdjustClusterAKSSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| credentials | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Credentials to build the cluster |
+| node_pool | [string](#string) |  | Node Pool Name |
+| add_count | [int32](#int32) |  | umber to increase by |
+| remove_count | [int32](#int32) |  | number to decrease by |
 
 
 
@@ -1035,9 +1055,27 @@ The credentials to use for creating the cluster
 | name | [string](#string) |  | What is the cluster that we are considering for upgrade |
 | provider | [Provider](#cluster_manager_api.Provider) |  | Name of the providers (aws/azure/vmware/etc) |
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
-| azure | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Azure Credentials |
-| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 5; AdjustClusterAKSSpec azure = 6; |
+| azure | [AdjustClusterMsg.AdjustClusterAKSSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 5; |
+| vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  |  |
 | callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec"></a>
+
+### AdjustClusterMsg.AdjustClusterAKSSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| credentials | [AzureCredentials](#cluster_manager_api.AzureCredentials) |  | Credentials to build the cluster |
+| node_pool | [string](#string) |  | Node Pool Name |
+| add_count | [int32](#int32) |  | umber to increase by |
+| remove_count | [int32](#int32) |  | number to decrease by |
 
 
 

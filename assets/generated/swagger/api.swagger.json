@@ -705,6 +705,29 @@
     }
   },
   "definitions": {
+    "AdjustClusterMsgAdjustClusterAKSSpec": {
+      "type": "object",
+      "properties": {
+        "credentials": {
+          "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
+          "title": "Credentials to build the cluster"
+        },
+        "node_pool": {
+          "type": "string",
+          "title": "Node Pool Name"
+        },
+        "add_count": {
+          "type": "integer",
+          "format": "int32",
+          "title": "umber to increase by"
+        },
+        "remove_count": {
+          "type": "integer",
+          "format": "int32",
+          "title": "number to decrease by"
+        }
+      }
+    },
     "AdjustClusterMsgAdjustClusterVMWareSpec": {
       "type": "object",
       "properties": {
@@ -892,12 +915,11 @@
           "title": "AWS Credentials"
         },
         "azure": {
-          "$ref": "#/definitions/cluster_manager_apiAzureCredentials",
-          "title": "Azure Credentials"
+          "$ref": "#/definitions/AdjustClusterMsgAdjustClusterAKSSpec",
+          "title": "The AWS specification\nAdjustClusterAWSSpec aws = 5;"
         },
         "vmware": {
-          "$ref": "#/definitions/AdjustClusterMsgAdjustClusterVMWareSpec",
-          "title": "The AWS specification\nAdjustClusterAWSSpec aws = 5;\nAdjustClusterAKSSpec azure = 6;"
+          "$ref": "#/definitions/AdjustClusterMsgAdjustClusterVMWareSpec"
         },
         "callback": {
           "$ref": "#/definitions/cluster_manager_apiCallback",

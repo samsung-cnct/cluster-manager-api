@@ -580,13 +580,11 @@ message AdjustClusterMsg {
     Provider provider = 2;
     // AWS Credentials
     AWSCredentials aws = 3;
-    // Azure Credentials
-    AzureCredentials azure = 4;
     // Provider changes
     oneof provider_changes {
         // The AWS specification
         //AdjustClusterAWSSpec aws = 5;
-        //AdjustClusterAKSSpec azure = 6;
+        AdjustClusterAKSSpec azure = 6;
         AdjustClusterVMWareSpec vmware = 7;
     }
     // Callback information
@@ -603,6 +601,18 @@ message AdjustClusterMsg {
         // The host for SSH access
         string host = 1;
     }
+
+    message AdjustClusterAKSSpec {
+        // Credentials to build the cluster
+        AzureCredentials credentials = 1;
+        // Node Pool Name
+        string node_pool = 2;
+        // umber to increase by
+        int32 add_count = 3;
+        // number to decrease by
+        int32 remove_count = 4;
+    }
+
 }
 
 message AdjustClusterReply {

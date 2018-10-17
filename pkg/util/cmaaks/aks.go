@@ -206,3 +206,44 @@ func (a *Client) ClusterUpgrade(input ClusterUpgradeInput) (output ClusterUpgrad
 
 	return
 }
+
+func (a *Client) GetClusterNodeCount(input GetClusterNodeCountInput) (output GetClusterNodeCountOutput, err error) {
+	output = GetClusterNodeCountOutput{}
+	result, err := a.client.GetClusterNodeCount(context.Background(), &pb.GetClusterNodeCountMsg{
+		Name: input.Name,
+		Credentials: &pb.AzureCredentials{
+			AppId:          input.Credentials.AppID,
+			Tenant:         input.Credentials.Tenant,
+			Password:       input.Credentials.Password,
+			SubscriptionId: input.Credentials.SubscriptionID,
+		},
+	})
+	if err != nil {
+		return
+	}
+	output = GetClusterNodeCountOutput{
+		Name:  result.Name,
+		Count: result.Count,
+	}
+	return output, nil
+}
+
+func (a *Client) ScaleCluster(input ScaleClusterInput) (output ScaleClusterOutput, err error) {
+	output = ScaleClusterOutput{}
+	_, err = a.client.ScaleCluster(context.Background(), &pb.ScaleClusterMsg{
+		Name: input.Name,
+		Credentials: &pb.AzureCredentials{
+			AppId:          input.Credentials.AppID,
+			Tenant:         input.Credentials.Tenant,
+			Password:       input.Credentials.Password,
+			SubscriptionId: input.Credentials.SubscriptionID,
+		},
+		NodePool: input.NodePool,
+		Count:    input.Count,
+	})
+	if err != nil {
+		return output, err
+	}
+
+	return output, nil
+}

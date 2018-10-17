@@ -1,6 +1,7 @@
 package azure
 
 import (
+	"fmt"
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/cmaaks"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/azure"
@@ -331,4 +332,93 @@ func (c *Client) reconcileCredentials(clusterName string, providedCredentials *p
 func (c *Client) updateCachedCredentials(clusterName string, credentials azurek8sutil.Credentials) (err error) {
 	logrus.Errorf("Updating cached credentials")
 	return c.secretClient.UpdateOrCreateCredentials(clusterName, credentials)
+}
+
+func (c *Client) AdjustCluster(in *pb.AdjustClusterMsg) (output *pb.AdjustClusterReply, err error) {
+	output = &pb.AdjustClusterReply{}
+	credentials, updateCache, err := c.reconcileCredentials(in.Name, in.GetAzure().Credentials)
+	if err != nil {
+		return
+	}
+
+	// find out the current number of nodes in the provided node pool
+	currentNodePool, err := c.cmaAKSClient.GetClusterNodeCount(cmaaks.GetClusterNodeCountInput{
+		Name: in.Name,
+		Credentials: cmaaks.Credentials{
+			AppID:          credentials.AppID,
+			Tenant:         credentials.Tenant,
+			Password:       credentials.Password,
+			SubscriptionID: credentials.SubscriptionID,
+		},
+	})
+	if err != nil {
+		return
+	}
+
+	var newCount int32
+	// check if adding
+	if in.GetAzure().AddCount > 0 {
+		newCount = currentNodePool.Count + in.GetAzure().AddCount
+		// check if removing
+	} else if in.GetAzure().RemoveCount > 0 {
+		if currentNodePool.Count-in.GetAzure().RemoveCount < 1 {
+			return output, fmt.Errorf("can not scale below 1 node on cluster -->%s<---", in.Name)
+		}
+		newCount = currentNodePool.Count - in.GetAzure().RemoveCount
+	}
+
+	// check that we are increasing or decreasing the number of nodes if not change then use existing count
+	if newCount == 0 {
+		newCount = currentNodePool.Count
+	}
+
+	_, err = c.cmaAKSClient.ScaleCluster(cmaaks.ScaleClusterInput{
+		Name: in.Name,
+		Credentials: cmaaks.Credentials{
+			AppID:          credentials.AppID,
+			Tenant:         credentials.Tenant,
+			Password:       credentials.Password,
+			SubscriptionID: credentials.SubscriptionID,
+		},
+		NodePool: in.GetAzure().NodePool,
+		Count:    newCount,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("unable to scaling cluster -->%s<--: error was %s", in.Name, err)
+	}
+
+	// Processing output
+	if updateCache {
+		updateErr := c.updateCachedCredentials(in.Name, credentials)
+		if updateErr != nil {
+			// Could not update the credentials, let's log that
+			logrus.Errorf("could not update credentials for cluster -->%s<--, error was %s", in.Name, updateErr)
+		}
+	}
+
+	// Now going to create K8S CR
+	err = c.cmaK8sClient.UpdateOrCreateCluster(in.Name, cmak8sutil.Cluster{
+		CallbackURL: in.Callback.Url,
+		Provider:    in.Provider.String(),
+		RequestID:   in.Callback.RequestId,
+	})
+	if err != nil {
+		// TODO Unsure what to do if we suddenly can't persist the credentials to kubernetes
+		// TODO Going to log for now
+		logrus.Errorf("Could not set Cluster CR into kubernetes, this is bad")
+	}
+	err = c.cmaK8sClient.ChangeClusterStatus(in.Name, v1alpha1.ClusterPhaseUpgrading)
+	if err != nil {
+		// TODO Unsure what to do if we suddenly can't persist the credentials to kubernetes
+		// TODO Going to log for now
+		logrus.Errorf("Could not set Cluster CR into kubernetes, this is bad")
+	}
+
+	if err != nil {
+		return &pb.AdjustClusterReply{}, err
+	}
+
+	return &pb.AdjustClusterReply{
+		Ok:     true,
+	}, nil
 }

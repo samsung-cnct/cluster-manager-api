@@ -145,6 +145,9 @@ func (s *Server) UpgradeCluster(ctx context.Context, in *pb.UpgradeClusterMsg) (
 
 // Will adjust a provision a cluster
 func (s *Server) AdjustClusterNodes(ctx context.Context, in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply, error) {
+
+	//TODO: if you pass an empty provider and a valid one program crashes with nil pointer, how better to error for that?
+
 	switch in.Provider {
 	case pb.Provider_vmware:
 		if s.vmware != nil {
@@ -152,7 +155,14 @@ func (s *Server) AdjustClusterNodes(ctx context.Context, in *pb.AdjustClusterMsg
 		} else {
 			return nil, status.Error(codes.Unimplemented, vmware.NotEnabledErrorMessage)
 		}
-	case pb.Provider_aws, pb.Provider_azure:
+	case pb.Provider_azure:
+		if s.azure != nil {
+			return s.azure.AdjustCluster(in)
+		} else {
+			return nil, status.Error(codes.Unimplemented, azure.NotEnabledErrorMessage)
+		}
+
+	case pb.Provider_aws:
 		return nil, status.Error(codes.Unimplemented, AdjustNodesNotImplementedErrorMessage)
 	}
 	return nil, status.Error(codes.InvalidArgument, InvalidProviderErrorMessage)

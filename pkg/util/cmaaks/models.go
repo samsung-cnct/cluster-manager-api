@@ -97,3 +97,22 @@ type ClusterUpgradeInput struct {
 }
 
 type ClusterUpgradeOutput struct{}
+
+type GetClusterNodeCountInput struct {
+	Name        string
+	Credentials Credentials
+}
+
+type GetClusterNodeCountOutput struct {
+	Name  string
+	Count int32
+}
+
+type ScaleClusterInput struct {
+	Name        string
+	Credentials Credentials
+	NodePool    string
+	Count       int32
+}
+
+type ScaleClusterOutput struct {}

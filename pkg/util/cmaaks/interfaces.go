@@ -17,6 +17,8 @@ type ClientInterface interface {
 	ListClusters(ListClusterInput) (ListClusterOutput, error)
 	GetClusterUpgrades(input GetClusterUpgradesInput) (GetClusterUpgradesOutput, error)
 	ClusterUpgrade(input ClusterUpgradeInput) (ClusterUpgradeOutput, error)
+	GetClusterNodeCount(input GetClusterNodeCountInput) (GetClusterNodeCountOutput, error)
+	ScaleCluster(input ScaleClusterInput) (ScaleClusterOutput, error)
 
 	CreateNewClient(string, bool) error
 	Close() error
