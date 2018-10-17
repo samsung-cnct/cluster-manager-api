@@ -60,7 +60,7 @@ func (s *Server) InstallHelmChart(ctx context.Context, in *pb.InstallHelmChartMs
 		return &pb.InstallHelmChartReply{}, fmt.Errorf("cluster %s is not ready for a request to provision tiller", in.Cluster)
 	}
 
-	err = s.cmak8s.UpdateOrCreateApplication(in.Chart.Name, cmak8sutil.Application{
+	err = s.cmak8s.UpdateOrCreateApplication(in.Chart.Name, in.PackageManger, cmak8sutil.Application{
 		CallbackURL: in.Callback.Url,
 		Cluster:     in.Cluster,
 		Chart: cmak8sutil.Chart{

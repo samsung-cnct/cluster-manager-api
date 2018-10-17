@@ -5,8 +5,8 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func (c *Client) CreateApplication(name string, application Application) error {
-	adjustedName := c.getAdjustedName(name, application.Cluster)
+func (c *Client) CreateApplication(name string, packageManager string, application Application) error {
+	adjustedName := c.getAdjustedApplicationName(name, packageManager, application.Cluster)
 
 	annotations := make(map[string]string)
 	annotations[CallbackURLAnnotation] = application.CallbackURL
@@ -66,11 +66,11 @@ func (c *Client) GetApplication(name string, packageManager string, clusterName 
 	}, nil
 }
 
-func (c *Client) UpdateOrCreateApplication(name string, application Application) error {
-	result, err := c.getApplicationRaw(c.getAdjustedName(name, application.Cluster))
+func (c *Client) UpdateOrCreateApplication(name string, packageManager string, application Application) error {
+	result, err := c.getApplicationRaw(c.getAdjustedApplicationName(name, packageManager, application.Cluster))
 	if err != nil {
 		// Let's assume there is no application, so we create it
-		return c.CreateApplication(name, application)
+		return c.CreateApplication(name, packageManager, application)
 	}
 
 	result.Annotations[CallbackURLAnnotation] = application.CallbackURL

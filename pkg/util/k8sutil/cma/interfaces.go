@@ -20,9 +20,9 @@ type Client struct {
 }
 
 type ClientInterface interface {
-	CreateApplication(name string, application Application) error
+	CreateApplication(name string, packageManager string, application Application) error
 	GetApplication(name string, packageManager string, clusterName string) (Application, error)
-	UpdateOrCreateApplication(name string, application Application) error
+	UpdateOrCreateApplication(name string, packageManager string, application Application) error
 	DeleteApplication(name string, packageManager string, clusterName string) error
 	ChangeApplicationStatus(name string, packageManager string, clusterName string, status string) error
 
