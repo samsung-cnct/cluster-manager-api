@@ -72,6 +72,7 @@ func (s *Server) InstallHelmChart(ctx context.Context, in *pb.InstallHelmChartMs
 			ChartPayload: in.Chart.ChartPayload,
 			Version:      in.Chart.Version,
 		},
+		Values:         in.Chart.Values,
 		Namespace:      in.Chart.Namespace,
 		PackageManager: in.PackageManger,
 		RequestID:      in.Callback.RequestId,
