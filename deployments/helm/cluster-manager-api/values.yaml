@@ -5,37 +5,37 @@
 
 name: cluster-manager-api
 image:
-  repo: quay.io/samsung_cnct/cluster-manager-api:prod
+   repo: quay.io/samsung_cnct/cluster-manager-api:0.1.1
 
 port: 80
 service:
-  port: 80
-  type: ClusterIP
+   port: 80
+   type: ClusterIP
 ingress:
-  rest:
-    name: cma
-    host: cma.ontario.cluster.cnct.io
-  grpc:
-    name: cma-grpc
-    host: cma-grpc.ontario.cluster.cnct.io
+   rest:
+      name: cma
+      host: cma.ontario.cluster.cnct.io
+   grpc:
+      name: cma-grpc
+      host: cma-grpc.ontario.cluster.cnct.io
 issuer:
-  email: mvenezia@gmail.com
-  region: us-east-1
-  accesskey:
-    id: ""
-    secret: ""
-  hostedzoneid: ""
+   email: mvenezia@gmail.com
+   region: us-east-1
+   accesskey:
+      id: ""
+      secret: ""
+   hostedzoneid: ""
 
 helpers:
-  aks:
-    enabled: false
-    endpoint: cma-aks-grpc.cnct.io:443
-    insecure: false
-  aws:
-    enabled: false
-    endpoint: cma-aws-grpc.cnct.io:443
-    insecure: false
-  vmware:
-    enabled: false
-    endpoint: cma-vmware-grpc.cnct.io:443
-    insecure: false
+   aks:
+      enabled: false
+      endpoint: cma-aks-grpc.cnct.io:443
+      insecure: false
+   aws:
+      enabled: false
+      endpoint: cma-aws-grpc.cnct.io:443
+      insecure: false
+   vmware:
+      enabled: false
+      endpoint: cma-vmware-grpc.cnct.io:443
+      insecure: false
