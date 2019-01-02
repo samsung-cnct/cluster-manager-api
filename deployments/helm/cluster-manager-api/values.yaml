@@ -5,7 +5,7 @@
 
 name: cluster-manager-api
 image:
-   repo: quay.io/samsung_cnct/cluster-manager-api:0.1.1
+   repo: quay.io/samsung_cnct/cluster-manager-api:0.1.2
 
 port: 80
 service:
