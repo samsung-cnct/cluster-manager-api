@@ -174,10 +174,12 @@ func (s *Server) AdjustClusterNodes(ctx context.Context, in *pb.AdjustClusterMsg
 func (s *Server) setBearerToken(clusterReply *pb.GetClusterReply, err error) (*pb.GetClusterReply, error) {
 	secretName := clusterReply.Cluster.GetName() + "-" + k8sutil.SDSServiceAccountName + "-token"
 	secret, err := k8sutil.GetSecret(secretName, viper.GetString("kubernetes-namespace"))
-	if err != nil {
-		clusterReply.Cluster.Bearertoken = ""
-	} else {
-		clusterReply.Cluster.Bearertoken = string(secret.Data["token"][:])
+	if clusterReply.Cluster != nil {
+		if err != nil {
+			clusterReply.Cluster.Bearertoken = ""
+		} else {
+			clusterReply.Cluster.Bearertoken = string(secret.Data["token"][:])
+		}
 	}
 
 	return clusterReply, err
