@@ -291,8 +291,8 @@ The credentials to use for creating the cluster
 | name | [string](#string) |  | Name of the cluster |
 | status_message | [string](#string) |  | Additional information about the status of the cluster |
 | kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
-| bearertoken | [string](#string) |  | What is the admin bearer token |
 | status | [ClusterStatus](#cluster_manager_api.ClusterStatus) |  | The status of the cluster |
+| bearertoken | [string](#string) |  | What is the admin bearer token |
 
 
 
@@ -1191,8 +1191,8 @@ The credentials to use for creating the cluster
 | name | [string](#string) |  | Name of the cluster |
 | status_message | [string](#string) |  | Additional information about the status of the cluster |
 | kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
-| bearertoken | [string](#string) |  | What is the admin bearer token |
 | status | [ClusterStatus](#cluster_manager_api.ClusterStatus) |  | The status of the cluster |
+| bearertoken | [string](#string) |  | What is the admin bearer token |
 
 
 

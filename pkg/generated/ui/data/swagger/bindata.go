@@ -129,7 +129,7 @@ func swaggerUiIndexHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "swagger-ui/index.html", size: 1359, mode: os.FileMode(420), modTime: time.Unix(1546461269, 0)}
+	info := bindataFileInfo{name: "swagger-ui/index.html", size: 1359, mode: os.FileMode(420), modTime: time.Unix(1546466431, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

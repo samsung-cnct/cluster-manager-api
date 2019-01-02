@@ -253,10 +253,10 @@ message ClusterDetailItem {
     string status_message = 3;
     // What is the kubeconfig to connect to the cluster
     string kubeconfig = 4;
-    // What is the admin bearer token
-    string bearertoken = 5;
     // The status of the cluster
-    ClusterStatus status = 6;
+    ClusterStatus status = 5;
+    // What is the admin bearer token
+    string bearertoken = 6;
 }
 
 message CreateClusterProviderSpec {
