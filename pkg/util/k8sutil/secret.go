@@ -7,6 +7,10 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+const (
+	SDSServiceAccountName = "sds-sa"
+)
+
 func GetSecretList(namespace string, options v1.ListOptions) (result []corev1.Secret, err error) {
 	if DefaultConfig == nil {
 		DefaultConfig, _ = GenerateKubernetesConfig()

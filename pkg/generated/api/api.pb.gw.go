@@ -223,14 +223,14 @@ func RegisterClusterHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeM
 	defer func() {
 		if err != nil {
 			if cerr := conn.Close(); cerr != nil {
-				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+				grpclog.Printf("Failed to close conn to %s: %v", endpoint, cerr)
 			}
 			return
 		}
 		go func() {
 			<-ctx.Done()
 			if cerr := conn.Close(); cerr != nil {
-				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+				grpclog.Printf("Failed to close conn to %s: %v", endpoint, cerr)
 			}
 		}()
 	}()
@@ -244,8 +244,8 @@ func RegisterClusterHandler(ctx context.Context, mux *runtime.ServeMux, conn *gr
 	return RegisterClusterHandlerClient(ctx, mux, NewClusterClient(conn))
 }
 
-// RegisterClusterHandlerClient registers the http handlers for service Cluster
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ClusterClient".
+// RegisterClusterHandler registers the http handlers for service Cluster to "mux".
+// The handlers forward requests to the grpc endpoint over the given implementation of "ClusterClient".
 // Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ClusterClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
 // "ClusterClient" to call the correct interceptors.
