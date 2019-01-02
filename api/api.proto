@@ -255,6 +255,8 @@ message ClusterDetailItem {
     string kubeconfig = 4;
     // The status of the cluster
     ClusterStatus status = 5;
+    // What is the admin bearer token
+    string bearertoken = 6;
 }
 
 message CreateClusterProviderSpec {

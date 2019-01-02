@@ -5,6 +5,8 @@ import (
 	"github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api/azure"
 	"github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api/vmware"
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
+	"github.com/spf13/viper"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -33,19 +35,19 @@ func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetC
 	switch in.Provider {
 	case pb.Provider_aws:
 		if s.aws != nil {
-			return s.aws.GetCluster(in)
+			return s.setBearerToken(s.aws.GetCluster(in))
 		} else {
 			return nil, status.Error(codes.Unimplemented, aws.NotEnabledErrorMessage)
 		}
 	case pb.Provider_azure:
 		if s.azure != nil {
-			return s.azure.GetCluster(in)
+			return s.setBearerToken(s.azure.GetCluster(in))
 		} else {
 			return nil, status.Error(codes.Unimplemented, azure.NotEnabledErrorMessage)
 		}
 	case pb.Provider_vmware:
 		if s.vmware != nil {
-			return s.vmware.GetCluster(in)
+			return s.setBearerToken(s.vmware.GetCluster(in))
 		} else {
 			return nil, status.Error(codes.Unimplemented, vmware.NotEnabledErrorMessage)
 		}
@@ -166,4 +168,19 @@ func (s *Server) AdjustClusterNodes(ctx context.Context, in *pb.AdjustClusterMsg
 		return nil, status.Error(codes.Unimplemented, AdjustNodesNotImplementedErrorMessage)
 	}
 	return nil, status.Error(codes.InvalidArgument, InvalidProviderErrorMessage)
+}
+
+// Add bearer token info to GetCluster() call reply
+func (s *Server) setBearerToken(clusterReply *pb.GetClusterReply, err error) (*pb.GetClusterReply, error) {
+	secretName := clusterReply.Cluster.GetName() + "-" + k8sutil.SDSServiceAccountName + "-token"
+	secret, secretErr := k8sutil.GetSecret(secretName, viper.GetString("kubernetes-namespace"))
+	if clusterReply.Cluster != nil {
+		if secretErr != nil {
+			clusterReply.Cluster.Bearertoken = ""
+		} else {
+			clusterReply.Cluster.Bearertoken = string(secret.Data["token"][:])
+		}
+	}
+
+	return clusterReply, err
 }

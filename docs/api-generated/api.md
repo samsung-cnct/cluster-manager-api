@@ -1,5 +1,5 @@
 # Protocol Documentation
-<a name="top"></a>
+<a name="top"/>
 
 ## Table of Contents
 
@@ -121,14 +121,14 @@
 
 
 
-<a name="api.proto"></a>
+<a name="api.proto"/>
 <p align="right"><a href="#top">Top</a></p>
 
 ## api.proto
 
 
 
-<a name="cluster_manager_api.AWSCredentials"></a>
+<a name="cluster_manager_api.AWSCredentials"/>
 
 ### AWSCredentials
 The credentials to use for creating the cluster
@@ -145,7 +145,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AdjustClusterMsg"></a>
+<a name="cluster_manager_api.AdjustClusterMsg"/>
 
 ### AdjustClusterMsg
 
@@ -165,7 +165,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec"></a>
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec"/>
 
 ### AdjustClusterMsg.AdjustClusterAKSSpec
 
@@ -183,7 +183,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec"></a>
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec"/>
 
 ### AdjustClusterMsg.AdjustClusterVMWareSpec
 
@@ -199,7 +199,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec"></a>
+<a name="cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec"/>
 
 ### AdjustClusterMsg.VMWareRemoveMachineSpec
 
@@ -214,7 +214,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AdjustClusterReply"></a>
+<a name="cluster_manager_api.AdjustClusterReply"/>
 
 ### AdjustClusterReply
 
@@ -229,7 +229,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AzureClusterServiceAccount"></a>
+<a name="cluster_manager_api.AzureClusterServiceAccount"/>
 
 ### AzureClusterServiceAccount
 the account used by the cluster to create azure resources (ex: load balancer)
@@ -245,7 +245,7 @@ the account used by the cluster to create azure resources (ex: load balancer)
 
 
 
-<a name="cluster_manager_api.AzureCredentials"></a>
+<a name="cluster_manager_api.AzureCredentials"/>
 
 ### AzureCredentials
 The credentials to use for creating the cluster
@@ -263,7 +263,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.Callback"></a>
+<a name="cluster_manager_api.Callback"/>
 
 ### Callback
 
@@ -279,7 +279,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.ClusterDetailItem"></a>
+<a name="cluster_manager_api.ClusterDetailItem"/>
 
 ### ClusterDetailItem
 
@@ -292,13 +292,14 @@ The credentials to use for creating the cluster
 | status_message | [string](#string) |  | Additional information about the status of the cluster |
 | kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
 | status | [ClusterStatus](#cluster_manager_api.ClusterStatus) |  | The status of the cluster |
+| bearertoken | [string](#string) |  | What is the admin bearer token |
 
 
 
 
 
 
-<a name="cluster_manager_api.ClusterItem"></a>
+<a name="cluster_manager_api.ClusterItem"/>
 
 ### ClusterItem
 
@@ -316,7 +317,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.CreateClusterAKSSpec"></a>
+<a name="cluster_manager_api.CreateClusterAKSSpec"/>
 
 ### CreateClusterAKSSpec
 
@@ -333,7 +334,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup"></a>
+<a name="cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup"/>
 
 ### CreateClusterAKSSpec.AKSInstanceGroup
 Instance groups define a type and number of instances
@@ -351,7 +352,7 @@ Instance groups define a type and number of instances
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec"></a>
+<a name="cluster_manager_api.CreateClusterAWSSpec"/>
 
 ### CreateClusterAWSSpec
 
@@ -369,7 +370,7 @@ Instance groups define a type and number of instances
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter"></a>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter"/>
 
 ### CreateClusterAWSSpec.AWSDataCenter
 Which Data Center
@@ -385,7 +386,7 @@ Which Data Center
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup"></a>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup"/>
 
 ### CreateClusterAWSSpec.AWSInstanceGroup
 Instance groups define a type and number of instances
@@ -402,7 +403,7 @@ Instance groups define a type and number of instances
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems"></a>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems"/>
 
 ### CreateClusterAWSSpec.AWSPreconfiguredItems
 For when some things are already created
@@ -419,7 +420,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterMsg"></a>
+<a name="cluster_manager_api.CreateClusterMsg"/>
 
 ### CreateClusterMsg
 
@@ -436,7 +437,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterProviderSpec"></a>
+<a name="cluster_manager_api.CreateClusterProviderSpec"/>
 
 ### CreateClusterProviderSpec
 
@@ -457,7 +458,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterReply"></a>
+<a name="cluster_manager_api.CreateClusterReply"/>
 
 ### CreateClusterReply
 
@@ -473,7 +474,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterVMWareSpec"></a>
+<a name="cluster_manager_api.CreateClusterVMWareSpec"/>
 
 ### CreateClusterVMWareSpec
 
@@ -490,7 +491,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.DeleteClusterMsg"></a>
+<a name="cluster_manager_api.DeleteClusterMsg"/>
 
 ### DeleteClusterMsg
 
@@ -509,7 +510,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.DeleteClusterReply"></a>
+<a name="cluster_manager_api.DeleteClusterReply"/>
 
 ### DeleteClusterReply
 
@@ -525,7 +526,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.DeleteHelmChartMsg"></a>
+<a name="cluster_manager_api.DeleteHelmChartMsg"/>
 
 ### DeleteHelmChartMsg
 
@@ -547,7 +548,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.DeleteHelmChartReply"></a>
+<a name="cluster_manager_api.DeleteHelmChartReply"/>
 
 ### DeleteHelmChartReply
 
@@ -563,7 +564,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GenericHelmChart"></a>
+<a name="cluster_manager_api.GenericHelmChart"/>
 
 ### GenericHelmChart
 
@@ -584,7 +585,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GenericHelmChart.ChartRepository"></a>
+<a name="cluster_manager_api.GenericHelmChart.ChartRepository"/>
 
 ### GenericHelmChart.ChartRepository
 
@@ -600,7 +601,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterListMsg"></a>
+<a name="cluster_manager_api.GetClusterListMsg"/>
 
 ### GetClusterListMsg
 
@@ -617,7 +618,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterListReply"></a>
+<a name="cluster_manager_api.GetClusterListReply"/>
 
 ### GetClusterListReply
 
@@ -633,7 +634,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterMsg"></a>
+<a name="cluster_manager_api.GetClusterMsg"/>
 
 ### GetClusterMsg
 
@@ -651,7 +652,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterReply"></a>
+<a name="cluster_manager_api.GetClusterReply"/>
 
 ### GetClusterReply
 
@@ -667,7 +668,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetUpgradeClusterInformationMsg"></a>
+<a name="cluster_manager_api.GetUpgradeClusterInformationMsg"/>
 
 ### GetUpgradeClusterInformationMsg
 
@@ -685,7 +686,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetUpgradeClusterInformationReply"></a>
+<a name="cluster_manager_api.GetUpgradeClusterInformationReply"/>
 
 ### GetUpgradeClusterInformationReply
 
@@ -701,7 +702,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetVersionMsg"></a>
+<a name="cluster_manager_api.GetVersionMsg"/>
 
 ### GetVersionMsg
 Get version of API Server
@@ -711,7 +712,7 @@ Get version of API Server
 
 
 
-<a name="cluster_manager_api.GetVersionReply"></a>
+<a name="cluster_manager_api.GetVersionReply"/>
 
 ### GetVersionReply
 Reply for version request
@@ -727,7 +728,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.GetVersionReply.VersionInformation"></a>
+<a name="cluster_manager_api.GetVersionReply.VersionInformation"/>
 
 ### GetVersionReply.VersionInformation
 
@@ -748,7 +749,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.InstallHelmChartMsg"></a>
+<a name="cluster_manager_api.InstallHelmChartMsg"/>
 
 ### InstallHelmChartMsg
 
@@ -769,7 +770,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.InstallHelmChartReply"></a>
+<a name="cluster_manager_api.InstallHelmChartReply"/>
 
 ### InstallHelmChartReply
 
@@ -785,7 +786,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.KubernetesLabel"></a>
+<a name="cluster_manager_api.KubernetesLabel"/>
 
 ### KubernetesLabel
 
@@ -801,7 +802,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.ProvisionTillerMsg"></a>
+<a name="cluster_manager_api.ProvisionTillerMsg"/>
 
 ### ProvisionTillerMsg
 
@@ -826,7 +827,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.ProvisionTillerReply"></a>
+<a name="cluster_manager_api.ProvisionTillerReply"/>
 
 ### ProvisionTillerReply
 
@@ -842,7 +843,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpdateAWSCredentialsMsg"></a>
+<a name="cluster_manager_api.UpdateAWSCredentialsMsg"/>
 
 ### UpdateAWSCredentialsMsg
 
@@ -858,7 +859,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpdateAWSCredentialsReply"></a>
+<a name="cluster_manager_api.UpdateAWSCredentialsReply"/>
 
 ### UpdateAWSCredentialsReply
 
@@ -873,7 +874,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpdateAzureCredentialsMsg"></a>
+<a name="cluster_manager_api.UpdateAzureCredentialsMsg"/>
 
 ### UpdateAzureCredentialsMsg
 
@@ -889,7 +890,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpdateAzureCredentialsReply"></a>
+<a name="cluster_manager_api.UpdateAzureCredentialsReply"/>
 
 ### UpdateAzureCredentialsReply
 
@@ -904,7 +905,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpgradeClusterMsg"></a>
+<a name="cluster_manager_api.UpgradeClusterMsg"/>
 
 ### UpgradeClusterMsg
 
@@ -924,7 +925,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpgradeClusterReply"></a>
+<a name="cluster_manager_api.UpgradeClusterReply"/>
 
 ### UpgradeClusterReply
 
@@ -939,7 +940,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.VMWareMachineSpec"></a>
+<a name="cluster_manager_api.VMWareMachineSpec"/>
 
 ### VMWareMachineSpec
 The specification for a specific node
@@ -960,7 +961,7 @@ The specification for a specific node
  
 
 
-<a name="cluster_manager_api.ClusterStatus"></a>
+<a name="cluster_manager_api.ClusterStatus"/>
 
 ### ClusterStatus
 
@@ -977,7 +978,7 @@ The specification for a specific node
 
 
 
-<a name="cluster_manager_api.Provider"></a>
+<a name="cluster_manager_api.Provider"/>
 
 ### Provider
 
@@ -995,39 +996,39 @@ The specification for a specific node
  
 
 
-<a name="cluster_manager_api.Cluster"></a>
+<a name="cluster_manager_api.Cluster"/>
 
 ### Cluster
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterReply) | Will provision a cluster |
-| GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterReply) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
-| DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply) | Will delete a cluster |
-| AdjustClusterNodes | [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg) | [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply) | Will adjust a provision a cluster |
-| GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListReply) | Will retrieve a list of clusters |
-| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply) | Will install (or reinstall) tiller |
-| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
-| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply) | Will delete deployed helm chart |
-| GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionReply) | Will return version information about api server |
-| GetUpgradeClusterInformation | [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg) | [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply) | Will return upgrade options for a given cluster |
-| UpgradeCluster | [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg) | [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply) | Will attempt to upgrade a cluster |
-| UpdateAWSCredentials | [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg) | [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply) | Will update aws credentials used for a cluster |
-| UpdateAzureCredentials | [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg) | [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsReply) | Will update azure credentials used for a cluster |
+| CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
+| GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
+| DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
+| AdjustClusterNodes | [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg) | [AdjustClusterReply](#cluster_manager_api.AdjustClusterMsg) | Will adjust a provision a cluster |
+| GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListMsg) | Will retrieve a list of clusters |
+| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerMsg) | Will install (or reinstall) tiller |
+| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartMsg) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
+| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartMsg) | Will delete deployed helm chart |
+| GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionMsg) | Will return version information about api server |
+| GetUpgradeClusterInformation | [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg) | [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationMsg) | Will return upgrade options for a given cluster |
+| UpgradeCluster | [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg) | [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterMsg) | Will attempt to upgrade a cluster |
+| UpdateAWSCredentials | [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg) | [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsMsg) | Will update aws credentials used for a cluster |
+| UpdateAzureCredentials | [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg) | [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsMsg) | Will update azure credentials used for a cluster |
 
  
 
 
 
-<a name="api.proto"></a>
+<a name="api.proto"/>
 <p align="right"><a href="#top">Top</a></p>
 
 ## api.proto
 
 
 
-<a name="cluster_manager_api.AWSCredentials"></a>
+<a name="cluster_manager_api.AWSCredentials"/>
 
 ### AWSCredentials
 The credentials to use for creating the cluster
@@ -1044,7 +1045,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AdjustClusterMsg"></a>
+<a name="cluster_manager_api.AdjustClusterMsg"/>
 
 ### AdjustClusterMsg
 
@@ -1064,7 +1065,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec"></a>
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec"/>
 
 ### AdjustClusterMsg.AdjustClusterAKSSpec
 
@@ -1082,7 +1083,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec"></a>
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec"/>
 
 ### AdjustClusterMsg.AdjustClusterVMWareSpec
 
@@ -1098,7 +1099,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec"></a>
+<a name="cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec"/>
 
 ### AdjustClusterMsg.VMWareRemoveMachineSpec
 
@@ -1113,7 +1114,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AdjustClusterReply"></a>
+<a name="cluster_manager_api.AdjustClusterReply"/>
 
 ### AdjustClusterReply
 
@@ -1128,7 +1129,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.AzureClusterServiceAccount"></a>
+<a name="cluster_manager_api.AzureClusterServiceAccount"/>
 
 ### AzureClusterServiceAccount
 the account used by the cluster to create azure resources (ex: load balancer)
@@ -1144,7 +1145,7 @@ the account used by the cluster to create azure resources (ex: load balancer)
 
 
 
-<a name="cluster_manager_api.AzureCredentials"></a>
+<a name="cluster_manager_api.AzureCredentials"/>
 
 ### AzureCredentials
 The credentials to use for creating the cluster
@@ -1162,7 +1163,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.Callback"></a>
+<a name="cluster_manager_api.Callback"/>
 
 ### Callback
 
@@ -1178,7 +1179,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.ClusterDetailItem"></a>
+<a name="cluster_manager_api.ClusterDetailItem"/>
 
 ### ClusterDetailItem
 
@@ -1191,13 +1192,14 @@ The credentials to use for creating the cluster
 | status_message | [string](#string) |  | Additional information about the status of the cluster |
 | kubeconfig | [string](#string) |  | What is the kubeconfig to connect to the cluster |
 | status | [ClusterStatus](#cluster_manager_api.ClusterStatus) |  | The status of the cluster |
+| bearertoken | [string](#string) |  | What is the admin bearer token |
 
 
 
 
 
 
-<a name="cluster_manager_api.ClusterItem"></a>
+<a name="cluster_manager_api.ClusterItem"/>
 
 ### ClusterItem
 
@@ -1215,7 +1217,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.CreateClusterAKSSpec"></a>
+<a name="cluster_manager_api.CreateClusterAKSSpec"/>
 
 ### CreateClusterAKSSpec
 
@@ -1232,7 +1234,7 @@ The credentials to use for creating the cluster
 
 
 
-<a name="cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup"></a>
+<a name="cluster_manager_api.CreateClusterAKSSpec.AKSInstanceGroup"/>
 
 ### CreateClusterAKSSpec.AKSInstanceGroup
 Instance groups define a type and number of instances
@@ -1250,7 +1252,7 @@ Instance groups define a type and number of instances
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec"></a>
+<a name="cluster_manager_api.CreateClusterAWSSpec"/>
 
 ### CreateClusterAWSSpec
 
@@ -1268,7 +1270,7 @@ Instance groups define a type and number of instances
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter"></a>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSDataCenter"/>
 
 ### CreateClusterAWSSpec.AWSDataCenter
 Which Data Center
@@ -1284,7 +1286,7 @@ Which Data Center
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup"></a>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSInstanceGroup"/>
 
 ### CreateClusterAWSSpec.AWSInstanceGroup
 Instance groups define a type and number of instances
@@ -1301,7 +1303,7 @@ Instance groups define a type and number of instances
 
 
 
-<a name="cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems"></a>
+<a name="cluster_manager_api.CreateClusterAWSSpec.AWSPreconfiguredItems"/>
 
 ### CreateClusterAWSSpec.AWSPreconfiguredItems
 For when some things are already created
@@ -1318,7 +1320,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterMsg"></a>
+<a name="cluster_manager_api.CreateClusterMsg"/>
 
 ### CreateClusterMsg
 
@@ -1335,7 +1337,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterProviderSpec"></a>
+<a name="cluster_manager_api.CreateClusterProviderSpec"/>
 
 ### CreateClusterProviderSpec
 
@@ -1356,7 +1358,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterReply"></a>
+<a name="cluster_manager_api.CreateClusterReply"/>
 
 ### CreateClusterReply
 
@@ -1372,7 +1374,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.CreateClusterVMWareSpec"></a>
+<a name="cluster_manager_api.CreateClusterVMWareSpec"/>
 
 ### CreateClusterVMWareSpec
 
@@ -1389,7 +1391,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.DeleteClusterMsg"></a>
+<a name="cluster_manager_api.DeleteClusterMsg"/>
 
 ### DeleteClusterMsg
 
@@ -1408,7 +1410,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.DeleteClusterReply"></a>
+<a name="cluster_manager_api.DeleteClusterReply"/>
 
 ### DeleteClusterReply
 
@@ -1424,7 +1426,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.DeleteHelmChartMsg"></a>
+<a name="cluster_manager_api.DeleteHelmChartMsg"/>
 
 ### DeleteHelmChartMsg
 
@@ -1446,7 +1448,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.DeleteHelmChartReply"></a>
+<a name="cluster_manager_api.DeleteHelmChartReply"/>
 
 ### DeleteHelmChartReply
 
@@ -1462,7 +1464,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GenericHelmChart"></a>
+<a name="cluster_manager_api.GenericHelmChart"/>
 
 ### GenericHelmChart
 
@@ -1483,7 +1485,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GenericHelmChart.ChartRepository"></a>
+<a name="cluster_manager_api.GenericHelmChart.ChartRepository"/>
 
 ### GenericHelmChart.ChartRepository
 
@@ -1499,7 +1501,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterListMsg"></a>
+<a name="cluster_manager_api.GetClusterListMsg"/>
 
 ### GetClusterListMsg
 
@@ -1516,7 +1518,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterListReply"></a>
+<a name="cluster_manager_api.GetClusterListReply"/>
 
 ### GetClusterListReply
 
@@ -1532,7 +1534,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterMsg"></a>
+<a name="cluster_manager_api.GetClusterMsg"/>
 
 ### GetClusterMsg
 
@@ -1550,7 +1552,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetClusterReply"></a>
+<a name="cluster_manager_api.GetClusterReply"/>
 
 ### GetClusterReply
 
@@ -1566,7 +1568,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetUpgradeClusterInformationMsg"></a>
+<a name="cluster_manager_api.GetUpgradeClusterInformationMsg"/>
 
 ### GetUpgradeClusterInformationMsg
 
@@ -1584,7 +1586,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetUpgradeClusterInformationReply"></a>
+<a name="cluster_manager_api.GetUpgradeClusterInformationReply"/>
 
 ### GetUpgradeClusterInformationReply
 
@@ -1600,7 +1602,7 @@ For when some things are already created
 
 
 
-<a name="cluster_manager_api.GetVersionMsg"></a>
+<a name="cluster_manager_api.GetVersionMsg"/>
 
 ### GetVersionMsg
 Get version of API Server
@@ -1610,7 +1612,7 @@ Get version of API Server
 
 
 
-<a name="cluster_manager_api.GetVersionReply"></a>
+<a name="cluster_manager_api.GetVersionReply"/>
 
 ### GetVersionReply
 Reply for version request
@@ -1626,7 +1628,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.GetVersionReply.VersionInformation"></a>
+<a name="cluster_manager_api.GetVersionReply.VersionInformation"/>
 
 ### GetVersionReply.VersionInformation
 
@@ -1647,7 +1649,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.InstallHelmChartMsg"></a>
+<a name="cluster_manager_api.InstallHelmChartMsg"/>
 
 ### InstallHelmChartMsg
 
@@ -1668,7 +1670,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.InstallHelmChartReply"></a>
+<a name="cluster_manager_api.InstallHelmChartReply"/>
 
 ### InstallHelmChartReply
 
@@ -1684,7 +1686,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.KubernetesLabel"></a>
+<a name="cluster_manager_api.KubernetesLabel"/>
 
 ### KubernetesLabel
 
@@ -1700,7 +1702,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.ProvisionTillerMsg"></a>
+<a name="cluster_manager_api.ProvisionTillerMsg"/>
 
 ### ProvisionTillerMsg
 
@@ -1725,7 +1727,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.ProvisionTillerReply"></a>
+<a name="cluster_manager_api.ProvisionTillerReply"/>
 
 ### ProvisionTillerReply
 
@@ -1741,7 +1743,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpdateAWSCredentialsMsg"></a>
+<a name="cluster_manager_api.UpdateAWSCredentialsMsg"/>
 
 ### UpdateAWSCredentialsMsg
 
@@ -1757,7 +1759,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpdateAWSCredentialsReply"></a>
+<a name="cluster_manager_api.UpdateAWSCredentialsReply"/>
 
 ### UpdateAWSCredentialsReply
 
@@ -1772,7 +1774,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpdateAzureCredentialsMsg"></a>
+<a name="cluster_manager_api.UpdateAzureCredentialsMsg"/>
 
 ### UpdateAzureCredentialsMsg
 
@@ -1788,7 +1790,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpdateAzureCredentialsReply"></a>
+<a name="cluster_manager_api.UpdateAzureCredentialsReply"/>
 
 ### UpdateAzureCredentialsReply
 
@@ -1803,7 +1805,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpgradeClusterMsg"></a>
+<a name="cluster_manager_api.UpgradeClusterMsg"/>
 
 ### UpgradeClusterMsg
 
@@ -1823,7 +1825,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.UpgradeClusterReply"></a>
+<a name="cluster_manager_api.UpgradeClusterReply"/>
 
 ### UpgradeClusterReply
 
@@ -1838,7 +1840,7 @@ Reply for version request
 
 
 
-<a name="cluster_manager_api.VMWareMachineSpec"></a>
+<a name="cluster_manager_api.VMWareMachineSpec"/>
 
 ### VMWareMachineSpec
 The specification for a specific node
@@ -1859,7 +1861,7 @@ The specification for a specific node
  
 
 
-<a name="cluster_manager_api.ClusterStatus"></a>
+<a name="cluster_manager_api.ClusterStatus"/>
 
 ### ClusterStatus
 
@@ -1876,7 +1878,7 @@ The specification for a specific node
 
 
 
-<a name="cluster_manager_api.Provider"></a>
+<a name="cluster_manager_api.Provider"/>
 
 ### Provider
 
@@ -1894,26 +1896,26 @@ The specification for a specific node
  
 
 
-<a name="cluster_manager_api.Cluster"></a>
+<a name="cluster_manager_api.Cluster"/>
 
 ### Cluster
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterReply) | Will provision a cluster |
-| GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterReply) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
-| DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply) | Will delete a cluster |
-| AdjustClusterNodes | [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg) | [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply) | Will adjust a provision a cluster |
-| GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListReply) | Will retrieve a list of clusters |
-| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply) | Will install (or reinstall) tiller |
-| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
-| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartReply) | Will delete deployed helm chart |
-| GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionReply) | Will return version information about api server |
-| GetUpgradeClusterInformation | [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg) | [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationReply) | Will return upgrade options for a given cluster |
-| UpgradeCluster | [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg) | [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterReply) | Will attempt to upgrade a cluster |
-| UpdateAWSCredentials | [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg) | [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply) | Will update aws credentials used for a cluster |
-| UpdateAzureCredentials | [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg) | [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsReply) | Will update azure credentials used for a cluster |
+| CreateCluster | [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg) | [CreateClusterReply](#cluster_manager_api.CreateClusterMsg) | Will provision a cluster |
+| GetCluster | [GetClusterMsg](#cluster_manager_api.GetClusterMsg) | [GetClusterReply](#cluster_manager_api.GetClusterMsg) | Will retrieve the status of a cluster and its kubeconfig for connectivity |
+| DeleteCluster | [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg) | [DeleteClusterReply](#cluster_manager_api.DeleteClusterMsg) | Will delete a cluster |
+| AdjustClusterNodes | [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg) | [AdjustClusterReply](#cluster_manager_api.AdjustClusterMsg) | Will adjust a provision a cluster |
+| GetClusterList | [GetClusterListMsg](#cluster_manager_api.GetClusterListMsg) | [GetClusterListReply](#cluster_manager_api.GetClusterListMsg) | Will retrieve a list of clusters |
+| ProvisionTiller | [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg) | [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerMsg) | Will install (or reinstall) tiller |
+| InstallHelmChart | [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg) | [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartMsg) | Will install (or reinstall) helm chart This will be destructive if a chart has already been deployed with the same name |
+| DeleteHelmChart | [DeleteHelmChartMsg](#cluster_manager_api.DeleteHelmChartMsg) | [DeleteHelmChartReply](#cluster_manager_api.DeleteHelmChartMsg) | Will delete deployed helm chart |
+| GetVersionInformation | [GetVersionMsg](#cluster_manager_api.GetVersionMsg) | [GetVersionReply](#cluster_manager_api.GetVersionMsg) | Will return version information about api server |
+| GetUpgradeClusterInformation | [GetUpgradeClusterInformationMsg](#cluster_manager_api.GetUpgradeClusterInformationMsg) | [GetUpgradeClusterInformationReply](#cluster_manager_api.GetUpgradeClusterInformationMsg) | Will return upgrade options for a given cluster |
+| UpgradeCluster | [UpgradeClusterMsg](#cluster_manager_api.UpgradeClusterMsg) | [UpgradeClusterReply](#cluster_manager_api.UpgradeClusterMsg) | Will attempt to upgrade a cluster |
+| UpdateAWSCredentials | [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg) | [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsMsg) | Will update aws credentials used for a cluster |
+| UpdateAzureCredentials | [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg) | [UpdateAzureCredentialsReply](#cluster_manager_api.UpdateAzureCredentialsMsg) | Will update azure credentials used for a cluster |
 
  
 

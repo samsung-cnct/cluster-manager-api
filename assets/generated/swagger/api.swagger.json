@@ -994,6 +994,10 @@
         "status": {
           "$ref": "#/definitions/cluster_manager_apiClusterStatus",
           "title": "The status of the cluster"
+        },
+        "bearertoken": {
+          "type": "string",
+          "title": "What is the admin bearer token"
         }
       }
     },
