@@ -3,6 +3,7 @@ package cluster_manager_api
 import (
 	"github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api/aws"
 	"github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api/azure"
+	"github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api/ssh"
 	"github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api/vmware"
 	pb "github.com/samsung-cnct/cluster-manager-api/pkg/generated/api"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
@@ -28,6 +29,9 @@ func (s *Server) CreateCluster(ctx context.Context, in *pb.CreateClusterMsg) (*p
 	if in.Provider.GetVmware() != nil {
 		return s.vmware.CreateCluster(in)
 	}
+	if in.Provider.GetSsh() != nil {
+		return s.ssh.CreateCluster(in)
+	}
 	return nil, status.Error(codes.InvalidArgument, InvalidProviderErrorMessage)
 }
 
@@ -50,6 +54,12 @@ func (s *Server) GetCluster(ctx context.Context, in *pb.GetClusterMsg) (*pb.GetC
 			return s.setBearerToken(s.vmware.GetCluster(in))
 		} else {
 			return nil, status.Error(codes.Unimplemented, vmware.NotEnabledErrorMessage)
+		}
+	case pb.Provider_ssh:
+		if s.ssh != nil {
+			return s.setBearerToken(s.ssh.GetCluster(in))
+		} else {
+			return nil, status.Error(codes.Unimplemented, ssh.NotEnabledErrorMessage)
 		}
 	}
 	return nil, status.Error(codes.InvalidArgument, InvalidProviderErrorMessage)
@@ -75,6 +85,12 @@ func (s *Server) DeleteCluster(ctx context.Context, in *pb.DeleteClusterMsg) (*p
 		} else {
 			return nil, status.Error(codes.Unimplemented, vmware.NotEnabledErrorMessage)
 		}
+	case pb.Provider_ssh:
+		if s.ssh != nil {
+			return s.ssh.DeleteCluster(in)
+		} else {
+			return nil, status.Error(codes.Unimplemented, ssh.NotEnabledErrorMessage)
+		}
 	}
 	return nil, status.Error(codes.InvalidArgument, InvalidProviderErrorMessage)
 }
@@ -99,7 +115,13 @@ func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (
 		} else {
 			return nil, status.Error(codes.Unimplemented, vmware.NotEnabledErrorMessage)
 		}
-	}
+	case pb.Provider_ssh:
+		if s.ssh != nil {
+			return s.ssh.GetClusterList(in)
+		} else {
+			return nil, status.Error(codes.Unimplemented, ssh.NotEnabledErrorMessage)
+		}
+		}
 	return nil, status.Error(codes.InvalidArgument, InvalidProviderErrorMessage)
 }
 
@@ -117,6 +139,12 @@ func (s *Server) GetUpgradeClusterInformation(ctx context.Context, in *pb.GetUpg
 			return s.vmware.GetClusterUpgrades(in)
 		} else {
 			return nil, status.Error(codes.Unimplemented, vmware.NotEnabledErrorMessage)
+		}
+	case pb.Provider_ssh:
+		if s.ssh != nil {
+			return s.ssh.GetClusterUpgrades(in)
+		} else {
+			return nil, status.Error(codes.Unimplemented, ssh.NotEnabledErrorMessage)
 		}
 	case pb.Provider_aws:
 		return nil, status.Error(codes.Unimplemented, UpgradeNotImplementedErrorMessage)
@@ -139,6 +167,12 @@ func (s *Server) UpgradeCluster(ctx context.Context, in *pb.UpgradeClusterMsg) (
 		} else {
 			return nil, status.Error(codes.Unimplemented, vmware.NotEnabledErrorMessage)
 		}
+	case pb.Provider_ssh:
+		if s.ssh != nil {
+			return s.ssh.ClusterUpgrade(in)
+		} else {
+			return nil, status.Error(codes.Unimplemented, ssh.NotEnabledErrorMessage)
+		}
 	case pb.Provider_aws:
 		return nil, status.Error(codes.Unimplemented, UpgradeNotImplementedErrorMessage)
 	}
@@ -156,6 +190,12 @@ func (s *Server) AdjustClusterNodes(ctx context.Context, in *pb.AdjustClusterMsg
 			return s.vmware.AdjustCluster(in)
 		} else {
 			return nil, status.Error(codes.Unimplemented, vmware.NotEnabledErrorMessage)
+		}
+	case pb.Provider_ssh:
+		if s.ssh != nil {
+			return s.ssh.AdjustCluster(in)
+		} else {
+			return nil, status.Error(codes.Unimplemented, ssh.NotEnabledErrorMessage)
 		}
 	case pb.Provider_azure:
 		if s.azure != nil {

@@ -7,7 +7,9 @@
     - [AWSCredentials](#cluster_manager_api.AWSCredentials)
     - [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg)
     - [AdjustClusterMsg.AdjustClusterAKSSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec)
+    - [AdjustClusterMsg.AdjustClusterSshSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterSshSpec)
     - [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec)
+    - [AdjustClusterMsg.SshRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.SshRemoveMachineSpec)
     - [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec)
     - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
     - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
@@ -24,6 +26,7 @@
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
+    - [CreateClusterSshSpec](#cluster_manager_api.CreateClusterSshSpec)
     - [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
@@ -45,6 +48,7 @@
     - [KubernetesLabel](#cluster_manager_api.KubernetesLabel)
     - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
     - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
+    - [SshMachineSpec](#cluster_manager_api.SshMachineSpec)
     - [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg)
     - [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply)
     - [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg)
@@ -64,7 +68,9 @@
     - [AWSCredentials](#cluster_manager_api.AWSCredentials)
     - [AdjustClusterMsg](#cluster_manager_api.AdjustClusterMsg)
     - [AdjustClusterMsg.AdjustClusterAKSSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec)
+    - [AdjustClusterMsg.AdjustClusterSshSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterSshSpec)
     - [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec)
+    - [AdjustClusterMsg.SshRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.SshRemoveMachineSpec)
     - [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec)
     - [AdjustClusterReply](#cluster_manager_api.AdjustClusterReply)
     - [AzureClusterServiceAccount](#cluster_manager_api.AzureClusterServiceAccount)
@@ -81,6 +87,7 @@
     - [CreateClusterMsg](#cluster_manager_api.CreateClusterMsg)
     - [CreateClusterProviderSpec](#cluster_manager_api.CreateClusterProviderSpec)
     - [CreateClusterReply](#cluster_manager_api.CreateClusterReply)
+    - [CreateClusterSshSpec](#cluster_manager_api.CreateClusterSshSpec)
     - [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec)
     - [DeleteClusterMsg](#cluster_manager_api.DeleteClusterMsg)
     - [DeleteClusterReply](#cluster_manager_api.DeleteClusterReply)
@@ -102,6 +109,7 @@
     - [KubernetesLabel](#cluster_manager_api.KubernetesLabel)
     - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
     - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
+    - [SshMachineSpec](#cluster_manager_api.SshMachineSpec)
     - [UpdateAWSCredentialsMsg](#cluster_manager_api.UpdateAWSCredentialsMsg)
     - [UpdateAWSCredentialsReply](#cluster_manager_api.UpdateAWSCredentialsReply)
     - [UpdateAzureCredentialsMsg](#cluster_manager_api.UpdateAzureCredentialsMsg)
@@ -158,6 +166,7 @@ The credentials to use for creating the cluster
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AdjustClusterMsg.AdjustClusterAKSSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 5; |
 | vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  |  |
+| ssh | [AdjustClusterMsg.AdjustClusterSshSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterSshSpec) |  |  |
 | callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
@@ -183,6 +192,22 @@ The credentials to use for creating the cluster
 
 
 
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterSshSpec"/>
+
+### AdjustClusterMsg.AdjustClusterSshSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| add_nodes | [SshMachineSpec](#cluster_manager_api.SshMachineSpec) | repeated | Machines which we want to add to the cluster |
+| remove_nodes | [AdjustClusterMsg.SshRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.SshRemoveMachineSpec) | repeated | Machines which we want to remove from the cluster |
+
+
+
+
+
+
 <a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec"/>
 
 ### AdjustClusterMsg.AdjustClusterVMWareSpec
@@ -193,6 +218,21 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | add_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to add to the cluster |
 | remove_nodes | [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec) | repeated | Machines which we want to remove from the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.SshRemoveMachineSpec"/>
+
+### AdjustClusterMsg.SshRemoveMachineSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| host | [string](#string) |  |  |
 
 
 
@@ -450,6 +490,7 @@ For when some things are already created
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
 | azure | [CreateClusterAKSSpec](#cluster_manager_api.CreateClusterAKSSpec) |  |  |
 | vmware | [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec) |  |  |
+| ssh | [CreateClusterSshSpec](#cluster_manager_api.CreateClusterSshSpec) |  |  |
 | high_availability | [bool](#bool) |  | Whether or not the cluster is HA |
 | network_fabric | [string](#string) |  | The fabric to be used |
 
@@ -468,6 +509,23 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Whether or not the cluster was provisioned by this request |
 | cluster | [ClusterItem](#cluster_manager_api.ClusterItem) |  | The details of the cluster request response |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterSshSpec"/>
+
+### CreateClusterSshSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| control_plane_nodes | [SshMachineSpec](#cluster_manager_api.SshMachineSpec) | repeated | Machines which comprise the cluster |
+| worker_nodes | [SshMachineSpec](#cluster_manager_api.SshMachineSpec) | repeated | Machines which comprise the cluster |
+| api_endpoint | [string](#string) |  | This should be a value like ip:port that will be a virtual IP/port Passed back to external customers to be able to communicate to the cluster |
 
 
 
@@ -843,6 +901,25 @@ Reply for version request
 
 
 
+<a name="cluster_manager_api.SshMachineSpec"/>
+
+### SshMachineSpec
+The specification for a specific node
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| username | [string](#string) |  | The username for SSH access |
+| host | [string](#string) |  | The host for SSH access |
+| port | [int32](#int32) |  | The port for SSH access |
+| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| labels | [KubernetesLabel](#cluster_manager_api.KubernetesLabel) | repeated | The labels for the machines |
+
+
+
+
+
+
 <a name="cluster_manager_api.UpdateAWSCredentialsMsg"/>
 
 ### UpdateAWSCredentialsMsg
@@ -989,6 +1066,7 @@ The specification for a specific node
 | aws | 1 |  |
 | azure | 2 |  |
 | vmware | 3 |  |
+| ssh | 4 |  |
 
 
  
@@ -1058,6 +1136,7 @@ The credentials to use for creating the cluster
 | aws | [AWSCredentials](#cluster_manager_api.AWSCredentials) |  | AWS Credentials |
 | azure | [AdjustClusterMsg.AdjustClusterAKSSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterAKSSpec) |  | The AWS specification AdjustClusterAWSSpec aws = 5; |
 | vmware | [AdjustClusterMsg.AdjustClusterVMWareSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec) |  |  |
+| ssh | [AdjustClusterMsg.AdjustClusterSshSpec](#cluster_manager_api.AdjustClusterMsg.AdjustClusterSshSpec) |  |  |
 | callback | [Callback](#cluster_manager_api.Callback) |  | Callback information |
 
 
@@ -1083,6 +1162,22 @@ The credentials to use for creating the cluster
 
 
 
+<a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterSshSpec"/>
+
+### AdjustClusterMsg.AdjustClusterSshSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| add_nodes | [SshMachineSpec](#cluster_manager_api.SshMachineSpec) | repeated | Machines which we want to add to the cluster |
+| remove_nodes | [AdjustClusterMsg.SshRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.SshRemoveMachineSpec) | repeated | Machines which we want to remove from the cluster |
+
+
+
+
+
+
 <a name="cluster_manager_api.AdjustClusterMsg.AdjustClusterVMWareSpec"/>
 
 ### AdjustClusterMsg.AdjustClusterVMWareSpec
@@ -1093,6 +1188,21 @@ The credentials to use for creating the cluster
 | ----- | ---- | ----- | ----------- |
 | add_nodes | [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec) | repeated | Machines which we want to add to the cluster |
 | remove_nodes | [AdjustClusterMsg.VMWareRemoveMachineSpec](#cluster_manager_api.AdjustClusterMsg.VMWareRemoveMachineSpec) | repeated | Machines which we want to remove from the cluster |
+
+
+
+
+
+
+<a name="cluster_manager_api.AdjustClusterMsg.SshRemoveMachineSpec"/>
+
+### AdjustClusterMsg.SshRemoveMachineSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| host | [string](#string) |  |  |
 
 
 
@@ -1350,6 +1460,7 @@ For when some things are already created
 | aws | [CreateClusterAWSSpec](#cluster_manager_api.CreateClusterAWSSpec) |  | The AWS specification |
 | azure | [CreateClusterAKSSpec](#cluster_manager_api.CreateClusterAKSSpec) |  |  |
 | vmware | [CreateClusterVMWareSpec](#cluster_manager_api.CreateClusterVMWareSpec) |  |  |
+| ssh | [CreateClusterSshSpec](#cluster_manager_api.CreateClusterSshSpec) |  |  |
 | high_availability | [bool](#bool) |  | Whether or not the cluster is HA |
 | network_fabric | [string](#string) |  | The fabric to be used |
 
@@ -1368,6 +1479,23 @@ For when some things are already created
 | ----- | ---- | ----- | ----------- |
 | ok | [bool](#bool) |  | Whether or not the cluster was provisioned by this request |
 | cluster | [ClusterItem](#cluster_manager_api.ClusterItem) |  | The details of the cluster request response |
+
+
+
+
+
+
+<a name="cluster_manager_api.CreateClusterSshSpec"/>
+
+### CreateClusterSshSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| control_plane_nodes | [SshMachineSpec](#cluster_manager_api.SshMachineSpec) | repeated | Machines which comprise the cluster |
+| worker_nodes | [SshMachineSpec](#cluster_manager_api.SshMachineSpec) | repeated | Machines which comprise the cluster |
+| api_endpoint | [string](#string) |  | This should be a value like ip:port that will be a virtual IP/port Passed back to external customers to be able to communicate to the cluster |
 
 
 
@@ -1743,6 +1871,25 @@ Reply for version request
 
 
 
+<a name="cluster_manager_api.SshMachineSpec"/>
+
+### SshMachineSpec
+The specification for a specific node
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| username | [string](#string) |  | The username for SSH access |
+| host | [string](#string) |  | The host for SSH access |
+| port | [int32](#int32) |  | The port for SSH access |
+| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
+| labels | [KubernetesLabel](#cluster_manager_api.KubernetesLabel) | repeated | The labels for the machines |
+
+
+
+
+
+
 <a name="cluster_manager_api.UpdateAWSCredentialsMsg"/>
 
 ### UpdateAWSCredentialsMsg
@@ -1889,6 +2036,7 @@ The specification for a specific node
 | aws | 1 |  |
 | azure | 2 |  |
 | vmware | 3 |  |
+| ssh | 4 |  |
 
 
  

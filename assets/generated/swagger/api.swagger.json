@@ -99,7 +99,8 @@
               "undefined",
               "aws",
               "azure",
-              "vmware"
+              "vmware",
+              "ssh"
             ],
             "default": "undefined"
           }
@@ -186,7 +187,8 @@
               "undefined",
               "aws",
               "azure",
-              "vmware"
+              "vmware",
+              "ssh"
             ],
             "default": "undefined"
           },
@@ -332,7 +334,8 @@
               "undefined",
               "aws",
               "azure",
-              "vmware"
+              "vmware",
+              "ssh"
             ],
             "default": "undefined"
           }
@@ -365,7 +368,8 @@
               "undefined",
               "aws",
               "azure",
-              "vmware"
+              "vmware",
+              "ssh"
             ],
             "default": "undefined"
           },
@@ -603,7 +607,8 @@
               "undefined",
               "aws",
               "azure",
-              "vmware"
+              "vmware",
+              "ssh"
             ],
             "default": "undefined"
           },
@@ -728,6 +733,25 @@
         }
       }
     },
+    "AdjustClusterMsgAdjustClusterSshSpec": {
+      "type": "object",
+      "properties": {
+        "add_nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cluster_manager_apiSshMachineSpec"
+          },
+          "title": "Machines which we want to add to the cluster"
+        },
+        "remove_nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AdjustClusterMsgSshRemoveMachineSpec"
+          },
+          "title": "Machines which we want to remove from the cluster"
+        }
+      }
+    },
     "AdjustClusterMsgAdjustClusterVMWareSpec": {
       "type": "object",
       "properties": {
@@ -744,6 +768,14 @@
             "$ref": "#/definitions/AdjustClusterMsgVMWareRemoveMachineSpec"
           },
           "title": "Machines which we want to remove from the cluster"
+        }
+      }
+    },
+    "AdjustClusterMsgSshRemoveMachineSpec": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string"
         }
       }
     },
@@ -920,6 +952,9 @@
         },
         "vmware": {
           "$ref": "#/definitions/AdjustClusterMsgAdjustClusterVMWareSpec"
+        },
+        "ssh": {
+          "$ref": "#/definitions/AdjustClusterMsgAdjustClusterSshSpec"
         },
         "callback": {
           "$ref": "#/definitions/cluster_manager_apiCallback",
@@ -1118,6 +1153,9 @@
         "vmware": {
           "$ref": "#/definitions/cluster_manager_apiCreateClusterVMWareSpec"
         },
+        "ssh": {
+          "$ref": "#/definitions/cluster_manager_apiCreateClusterSshSpec"
+        },
         "high_availability": {
           "type": "boolean",
           "format": "boolean",
@@ -1140,6 +1178,29 @@
         "cluster": {
           "$ref": "#/definitions/cluster_manager_apiClusterItem",
           "title": "The details of the cluster request response"
+        }
+      }
+    },
+    "cluster_manager_apiCreateClusterSshSpec": {
+      "type": "object",
+      "properties": {
+        "control_plane_nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cluster_manager_apiSshMachineSpec"
+          },
+          "title": "Machines which comprise the cluster"
+        },
+        "worker_nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cluster_manager_apiSshMachineSpec"
+          },
+          "title": "Machines which comprise the cluster"
+        },
+        "api_endpoint": {
+          "type": "string",
+          "title": "This should be a value like ip:port that will be a virtual IP/port\nPassed back to external customers to be able to communicate to the cluster"
         }
       }
     },
@@ -1356,7 +1417,8 @@
         "undefined",
         "aws",
         "azure",
-        "vmware"
+        "vmware",
+        "ssh"
       ],
       "default": "undefined"
     },
@@ -1426,6 +1488,36 @@
           "title": "What messages were given"
         }
       }
+    },
+    "cluster_manager_apiSshMachineSpec": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "title": "The username for SSH access"
+        },
+        "host": {
+          "type": "string",
+          "title": "The host for SSH access"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "title": "The port for SSH access"
+        },
+        "password": {
+          "type": "string",
+          "description": "The k8s version for the control plane. This node is only a master if this field is defined."
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cluster_manager_apiKubernetesLabel"
+          },
+          "title": "The labels for the machines"
+        }
+      },
+      "title": "The specification for a specific node"
     },
     "cluster_manager_apiUpdateAWSCredentialsMsg": {
       "type": "object",

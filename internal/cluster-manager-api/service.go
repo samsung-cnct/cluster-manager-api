@@ -4,9 +4,10 @@ import (
 	"github.com/juju/loggo"
 	"github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api/aws"
 	"github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api/azure"
+	"github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api/ssh"
 	"github.com/samsung-cnct/cluster-manager-api/internal/cluster-manager-api/vmware"
 	"github.com/samsung-cnct/cluster-manager-api/pkg/util"
-	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/cma"
+	cmak8sutil "github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil/cma"
 )
 
 var (
@@ -17,6 +18,7 @@ type Server struct {
 	azure  azure.ClientInterface
 	aws    aws.ClientInterface
 	vmware vmware.ClientInterface
+	ssh    ssh.ClientInterface
 
 	cmak8s cmak8sutil.ClientInterface
 }
@@ -26,6 +28,7 @@ func NewServerFromDefaults() (*Server, error) {
 	var azureClient azure.ClientInterface
 	var vmwareClient vmware.ClientInterface
 	var cmak8sClient cmak8sutil.ClientInterface
+	var sshClient ssh.ClientInterface
 	var err error
 
 	if aws.IsEnabled() {
@@ -49,6 +52,13 @@ func NewServerFromDefaults() (*Server, error) {
 		}
 	}
 
+	if ssh.IsEnabled() {
+		sshClient, err = ssh.CreateFromDefaults()
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	cmak8sClient, err = cmak8sutil.CreateFromDefaults()
 	if err != nil {
 		return nil, err
@@ -59,6 +69,7 @@ func NewServerFromDefaults() (*Server, error) {
 		azure:  azureClient,
 		vmware: vmwareClient,
 		cmak8s: cmak8sClient,
+		ssh:    sshClient,
 	}, nil
 }
 

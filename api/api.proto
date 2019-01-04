@@ -137,6 +137,7 @@ enum Provider {
     aws = 1;
     azure = 2;
     vmware = 3;
+    ssh = 4;
 }
 
 enum ClusterStatus {
@@ -270,6 +271,7 @@ message CreateClusterProviderSpec {
         CreateClusterAWSSpec aws = 3;
         CreateClusterAKSSpec azure = 4;
         CreateClusterVMWareSpec vmware = 7;
+        CreateClusterSshSpec ssh = 8;
     }
 
     // Whether or not the cluster is HA
@@ -409,6 +411,16 @@ message CreateClusterVMWareSpec {
     string api_endpoint = 5;
 }
 
+message CreateClusterSshSpec {
+    // Machines which comprise the cluster
+    repeated SshMachineSpec control_plane_nodes = 3;
+    // Machines which comprise the cluster
+    repeated SshMachineSpec worker_nodes = 4;
+    // This should be a value like ip:port that will be a virtual IP/port
+    // Passed back to external customers to be able to communicate to the cluster
+    string api_endpoint = 5;
+}
+
 message KubernetesLabel {
     // The name of a label
     string name = 1;
@@ -418,6 +430,20 @@ message KubernetesLabel {
 
 // The specification for a specific node
 message VMWareMachineSpec {
+    // The username for SSH access
+    string username = 1;
+    // The host for SSH access
+    string host = 2;
+    // The port for SSH access
+    int32 port = 3;
+    // The k8s version for the control plane. This node is only a master if this field is defined.
+    string password = 4;
+    // The labels for the machines
+    repeated KubernetesLabel labels = 5;
+}
+
+// The specification for a specific node
+message SshMachineSpec {
     // The username for SSH access
     string username = 1;
     // The host for SSH access
@@ -588,6 +614,7 @@ message AdjustClusterMsg {
         //AdjustClusterAWSSpec aws = 5;
         AdjustClusterAKSSpec azure = 6;
         AdjustClusterVMWareSpec vmware = 7;
+        AdjustClusterSshSpec ssh = 9;
     }
     // Callback information
     Callback callback = 8;
@@ -599,8 +626,19 @@ message AdjustClusterMsg {
         repeated VMWareRemoveMachineSpec remove_nodes = 2;
     }
 
+    message AdjustClusterSshSpec {
+        // Machines which we want to add to the cluster
+        repeated SshMachineSpec add_nodes = 1;
+        // Machines which we want to remove from the cluster
+        repeated SshRemoveMachineSpec remove_nodes = 2;
+    }
+
     message VMWareRemoveMachineSpec {
         // The host for SSH access
+        string host = 1;
+    }
+
+    message SshRemoveMachineSpec {
         string host = 1;
     }
 
