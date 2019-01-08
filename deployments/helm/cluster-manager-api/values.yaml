@@ -39,3 +39,7 @@ helpers:
       enabled: false
       endpoint: cma-vmware-grpc.cnct.io:443
       insecure: false
+   ssh:
+      enabled: false
+      endpoint: cma-ssh-grpc.cnct.io:443
+      insecure: false

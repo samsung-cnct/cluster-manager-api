@@ -45,5 +45,11 @@ spec:
         - name: CLUSTERMANAGERAPI_CMAVMWARE_INSECURE
           value: "{{.Values.helpers.vmware.insecure }}"
         {{- end }}
+        {{- if .Values.helpers.ssh.enabled }}
+        - name: CLUSTERMANAGERAPI_CMASSH_ENDPOINT
+          value: "{{.Values.helpers.ssh.endpoint }}"
+        - name: CLUSTERMANAGERAPI_CMASSH_INSECURE
+          value: "{{.Values.helpers.ssh.insecure }}"
+        {{- end }}
         - name: CLUSTERMANAGERAPI_KUBERNETES_NAMESPACE
           value: "{{ .Release.Namespace}}"
