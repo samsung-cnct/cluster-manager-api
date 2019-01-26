@@ -3,6 +3,7 @@ package cmak8sutil
 import (
 	"github.com/samsung-cnct/cma-operator/pkg/apis/cma/v1alpha1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	runtimeSchema "k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 func (c *Client) CreateApplication(name string, packageManager string, application Application) error {
@@ -12,8 +13,22 @@ func (c *Client) CreateApplication(name string, packageManager string, applicati
 	annotations[CallbackURLAnnotation] = application.CallbackURL
 	annotations[RequestIDAnnotation] = application.RequestID
 
+	sdsCluster, clusterErr := c.getClusterRaw(application.Cluster)
+	if clusterErr != nil {
+		return clusterErr
+	}
+
+	ownerRefs := []v1.OwnerReference{
+		*v1.NewControllerRef(sdsCluster,
+			runtimeSchema.GroupVersionKind{
+				Group: v1alpha1.SchemeGroupVersion.Group,
+				Version: v1alpha1.SchemeGroupVersion.Version,
+				Kind: "SDSCluster",
+			}),
+	}
+
 	_, err := c.applicationClient.Create(&v1alpha1.SDSApplication{
-		ObjectMeta: v1.ObjectMeta{Name: adjustedName, Annotations: annotations},
+		ObjectMeta: v1.ObjectMeta{Name: adjustedName, Annotations: annotations, OwnerReferences: ownerRefs},
 		Spec: v1alpha1.SDSApplicationSpec{
 			PackageManager: v1alpha1.SDSPackageManagerRef{
 				Name: application.PackageManager,
@@ -72,9 +87,23 @@ func (c *Client) UpdateOrCreateApplication(name string, packageManager string, a
 		// Let's assume there is no application, so we create it
 		return c.CreateApplication(name, packageManager, application)
 	}
+	sdsCluster, clusterErr := c.getClusterRaw(application.Cluster)
+	if clusterErr != nil {
+		return clusterErr
+	}
+
+	ownerRefs := []v1.OwnerReference{
+		*v1.NewControllerRef(sdsCluster,
+			runtimeSchema.GroupVersionKind{
+				Group: v1alpha1.SchemeGroupVersion.Group,
+				Version: v1alpha1.SchemeGroupVersion.Version,
+				Kind: "SDSCluster",
+			}),
+	}
 
 	result.Annotations[CallbackURLAnnotation] = application.CallbackURL
 	result.Annotations[RequestIDAnnotation] = application.RequestID
+	result.OwnerReferences = ownerRefs
 	result.Spec = v1alpha1.SDSApplicationSpec{
 		PackageManager: v1alpha1.SDSPackageManagerRef{
 			Name: application.PackageManager,
