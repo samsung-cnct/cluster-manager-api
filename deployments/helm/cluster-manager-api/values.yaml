@@ -14,12 +14,12 @@ service:
 ingress:
    rest:
       name: cma
-      host: cma.ontario.cluster.cnct.io
+      host: cma.cnct.io
    grpc:
       name: cma-grpc
-      host: cma-grpc.ontario.cluster.cnct.io
+      host: cma-grpc.cnct.io
 issuer:
-   email: mvenezia@gmail.com
+   email: someone@cnct.io
    region: us-east-1
    accesskey:
       id: ""
@@ -29,17 +29,17 @@ issuer:
 helpers:
    aks:
       enabled: false
-      endpoint: cma-aks-grpc.cnct.io:443
-      insecure: false
+      endpoint: cma-aks-cma-aks:80
+      insecure: true
    aws:
       enabled: false
-      endpoint: cma-aws-grpc.cnct.io:443
-      insecure: false
+      endpoint: cma-aws-cma-aws:80
+      insecure: true
    vmware:
       enabled: false
-      endpoint: cma-vmware-grpc.cnct.io:443
-      insecure: false
+      endpoint: cma-vmware-cma-vmware:80
+      insecure: true
    ssh:
       enabled: false
-      endpoint: cma-ssh-grpc.cnct.io:443
-      insecure: false
+      endpoint: cma-ssh-cma-ssh:80
+      insecure: true
