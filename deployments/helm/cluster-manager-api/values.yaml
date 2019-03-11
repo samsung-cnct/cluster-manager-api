@@ -41,5 +41,5 @@ helpers:
       insecure: true
    ssh:
       enabled: false
-      endpoint: cma-ssh-cma-ssh:80
+      endpoint: cma-ssh:80
       insecure: true
