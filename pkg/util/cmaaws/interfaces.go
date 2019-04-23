@@ -1,7 +1,7 @@
 package cmaaws
 
 import (
-	pb "gitlab.com/mvenezia/cma-aws/pkg/generated/api"
+	pb "github.com/samsung-cnct/cma-aws/pkg/generated/api"
 )
 
 type ClientInterface interface {

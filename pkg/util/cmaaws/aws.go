@@ -3,7 +3,8 @@ package cmaaws
 import (
 	"context"
 	"crypto/tls"
-	pb "gitlab.com/mvenezia/cma-aws/pkg/generated/api"
+
+	pb "github.com/samsung-cnct/cma-aws/pkg/generated/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
@@ -58,6 +59,10 @@ func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, e
 			Type:        j.Type,
 			MinQuantity: int32(j.MinQuantity),
 			MaxQuantity: int32(j.MaxQuantity),
+			// DesiredQuantity could be greater than MinQuantity with cluster wide autoscaling.
+			DesiredQuantity: int32(j.MinQuantity),
+			// Defaulting SshAccess to true until we have a field for that here.
+			SshAccess: true,
 		})
 	}
 	result, err := a.client.CreateCluster(context.Background(), &pb.CreateClusterMsg{
@@ -107,6 +112,8 @@ func (a *Client) GetCluster(input GetClusterInput) (GetClusterOutput, error) {
 			SecretKeyId:     input.Credentials.SecretKeyID,
 			SecretAccessKey: input.Credentials.SecretAccessKey,
 		},
+		// Datacenter Region can be different from the credential Region, for now assuming the same.
+		Region: input.Credentials.Region,
 	})
 	if err != nil {
 		return GetClusterOutput{}, err
@@ -130,6 +137,8 @@ func (a *Client) DeleteCluster(input DeleteClusterInput) (DeleteClusterOutput, e
 			SecretKeyId:     input.Credentials.SecretKeyID,
 			SecretAccessKey: input.Credentials.SecretAccessKey,
 		},
+		// Datacenter Region can be different from the credential Region, for now assuming the same.
+		Region: input.Credentials.Region,
 	})
 	if err != nil {
 		return DeleteClusterOutput{}, err

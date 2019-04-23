@@ -2,7 +2,8 @@ package cmaaws_test
 
 import (
 	"fmt"
-	pb "gitlab.com/mvenezia/cma-aws/pkg/generated/api"
+
+	pb "github.com/samsung-cnct/cma-aws/pkg/generated/api"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )

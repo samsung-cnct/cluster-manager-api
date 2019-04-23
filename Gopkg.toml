@@ -84,7 +84,7 @@
 
 [[constraint]]
   branch = "master"
-  name = "gitlab.com/mvenezia/cma-aws"
+  name = "github.com/samsung-cnct/cma-aws"
 
 [[constraint]]
   branch = "master"
