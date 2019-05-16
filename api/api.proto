@@ -157,6 +157,15 @@ enum ClusterStatus {
     DEGRADED = 6;
 }
 
+enum KubernetesTaintEffect {
+    // Do not allow new pods to schedule onto the node unless they tolerate the taint.
+    NoSchedule = 0;
+    // Attempt to not schedule new pods onto the node unless no other node without taint is available.
+    PreferNoSchedule = 1;
+    // Evict any already-running pods that do not tolerate the taint.
+    NoExecute = 2;
+}
+
 message Callback {
     // The URL to call back to
     string url = 1;
@@ -428,6 +437,15 @@ message KubernetesLabel {
     string value = 2;
 }
 
+message KubernetesTaint {
+    // The name of a taint
+    string name = 1;
+    // The value of a taint
+    string value = 2;
+    // The effect of a taint
+    KubernetesTaintEffect effect = 3;
+}
+
 // The specification for a specific node
 message VMWareMachineSpec {
     // The username for SSH access
@@ -446,14 +464,12 @@ message VMWareMachineSpec {
 message SshMachineSpec {
     // The username for SSH access
     string username = 1;
-    // The host for SSH access
-    string host = 2;
-    // The port for SSH access
-    int32 port = 3;
-    // The k8s version for the control plane. This node is only a master if this field is defined.
-    string password = 4;
     // The labels for the machines
     repeated KubernetesLabel labels = 5;
+    // The list of kubernetes taints
+    repeated KubernetesTaint taints = 6;
+    // Type of machine to provision (small, medium, gpu, ...)
+    string instanceType = 7;
 }
 
 message ProvisionTillerMsg {

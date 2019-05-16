@@ -8,7 +8,7 @@ import (
 
 type Client struct {
 	cmaSshClient cmassh.ClientInterface
-	cmaK8sClient    cmak8sutil.ClientInterface
+	cmaK8sClient cmak8sutil.ClientInterface
 }
 
 type ClientInterface interface {

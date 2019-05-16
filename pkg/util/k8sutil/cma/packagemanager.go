@@ -21,9 +21,9 @@ func (c *Client) CreatePackageManager(name string, packageManager PackageManager
 	ownerRefs := []v1.OwnerReference{
 		*v1.NewControllerRef(sdsCluster,
 			runtimeSchema.GroupVersionKind{
-				Group: v1alpha1.SchemeGroupVersion.Group,
+				Group:   v1alpha1.SchemeGroupVersion.Group,
 				Version: v1alpha1.SchemeGroupVersion.Version,
-				Kind: "SDSCluster",
+				Kind:    "SDSCluster",
 			}),
 	}
 
@@ -87,9 +87,9 @@ func (c *Client) UpdateOrCreatePackageManager(name string, packageManager Packag
 	ownerRefs := []v1.OwnerReference{
 		*v1.NewControllerRef(sdsCluster,
 			runtimeSchema.GroupVersionKind{
-				Group: v1alpha1.SchemeGroupVersion.Group,
+				Group:   v1alpha1.SchemeGroupVersion.Group,
 				Version: v1alpha1.SchemeGroupVersion.Version,
-				Kind: "SDSCluster",
+				Kind:    "SDSCluster",
 			}),
 	}
 

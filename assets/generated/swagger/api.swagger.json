@@ -1411,6 +1411,33 @@
         }
       }
     },
+    "cluster_manager_apiKubernetesTaint": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "The name of a taint"
+        },
+        "value": {
+          "type": "string",
+          "title": "The value of a taint"
+        },
+        "effect": {
+          "$ref": "#/definitions/cluster_manager_apiKubernetesTaintEffect",
+          "title": "The effect of a taint"
+        }
+      }
+    },
+    "cluster_manager_apiKubernetesTaintEffect": {
+      "type": "string",
+      "enum": [
+        "NoSchedule",
+        "PreferNoSchedule",
+        "NoExecute"
+      ],
+      "default": "NoSchedule",
+      "description": " - NoSchedule: Do not allow new pods to schedule onto the node unless they tolerate the taint.\n - PreferNoSchedule: Attempt to not schedule new pods onto the node unless no other node without taint is available.\n - NoExecute: Evict any already-running pods that do not tolerate the taint."
+    },
     "cluster_manager_apiProvider": {
       "type": "string",
       "enum": [
@@ -1496,25 +1523,23 @@
           "type": "string",
           "title": "The username for SSH access"
         },
-        "host": {
-          "type": "string",
-          "title": "The host for SSH access"
-        },
-        "port": {
-          "type": "integer",
-          "format": "int32",
-          "title": "The port for SSH access"
-        },
-        "password": {
-          "type": "string",
-          "description": "The k8s version for the control plane. This node is only a master if this field is defined."
-        },
         "labels": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/cluster_manager_apiKubernetesLabel"
           },
           "title": "The labels for the machines"
+        },
+        "taints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cluster_manager_apiKubernetesTaint"
+          },
+          "title": "The list of kubernetes taints"
+        },
+        "instanceType": {
+          "type": "string",
+          "title": "Type of machine to provision (small, medium, gpu, ...)"
         }
       },
       "title": "The specification for a specific node"

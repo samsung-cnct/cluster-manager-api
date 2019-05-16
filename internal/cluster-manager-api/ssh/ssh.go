@@ -16,12 +16,19 @@ func (c *Client) CreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply,
 		for _, k := range j.Labels {
 			labels = append(labels, cmassh.KubernetesLabel{Name: k.Name, Value: k.Value})
 		}
+		var taints []cmassh.KubernetesTaint
+		for _, k := range j.Taints {
+			taints = append(taints, cmassh.KubernetesTaint{
+				Name:   k.Name,
+				Value:  k.Value,
+				Effect: int32(k.Effect),
+			})
+		}
 		controlPlaneNodes = append(controlPlaneNodes, cmassh.MachineSpec{
-			Host:     j.Host,
-			Username: j.Username,
-			Port:     int(j.Port),
-			Password: j.Password,
-			Labels:   labels,
+			Username:     j.Username,
+			Labels:       labels,
+			Taints:       taints,
+			InstanceType: j.InstanceType,
 		})
 	}
 	for _, j := range in.Provider.GetSsh().WorkerNodes {
@@ -29,12 +36,19 @@ func (c *Client) CreateCluster(in *pb.CreateClusterMsg) (*pb.CreateClusterReply,
 		for _, k := range j.Labels {
 			labels = append(labels, cmassh.KubernetesLabel{Name: k.Name, Value: k.Value})
 		}
+		var taints []cmassh.KubernetesTaint
+		for _, k := range j.Taints {
+			taints = append(taints, cmassh.KubernetesTaint{
+				Name:   k.Name,
+				Value:  k.Value,
+				Effect: int32(k.Effect),
+			})
+		}
 		workerNodes = append(workerNodes, cmassh.MachineSpec{
-			Host:     j.Host,
-			Username: j.Username,
-			Port:     int(j.Port),
-			Password: j.Password,
-			Labels:   labels,
+			Username:     j.Username,
+			Labels:       labels,
+			Taints:       taints,
+			InstanceType: j.InstanceType,
 		})
 	}
 
@@ -207,12 +221,19 @@ func (c *Client) AdjustCluster(in *pb.AdjustClusterMsg) (*pb.AdjustClusterReply,
 		for _, k := range j.Labels {
 			labels = append(labels, cmassh.KubernetesLabel{Name: k.Name, Value: k.Value})
 		}
+		var taints []cmassh.KubernetesTaint
+		for _, k := range j.Taints {
+			taints = append(taints, cmassh.KubernetesTaint{
+				Name:   k.Name,
+				Value:  k.Value,
+				Effect: int32(k.Effect),
+			})
+		}
 		addNodes = append(addNodes, cmassh.MachineSpec{
-			Host:     j.Host,
-			Username: j.Username,
-			Port:     int(j.Port),
-			Password: j.Password,
-			Labels:   labels,
+			Username:     j.Username,
+			Labels:       labels,
+			Taints:       taints,
+			InstanceType: j.InstanceType,
 		})
 	}
 	for _, j := range in.GetSsh().RemoveNodes {
