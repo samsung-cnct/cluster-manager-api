@@ -115,4 +115,4 @@ type ScaleClusterInput struct {
 	Count       int32
 }
 
-type ScaleClusterOutput struct {}
+type ScaleClusterOutput struct{}

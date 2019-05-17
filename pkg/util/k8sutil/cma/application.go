@@ -21,9 +21,9 @@ func (c *Client) CreateApplication(name string, packageManager string, applicati
 	ownerRefs := []v1.OwnerReference{
 		*v1.NewControllerRef(sdsCluster,
 			runtimeSchema.GroupVersionKind{
-				Group: v1alpha1.SchemeGroupVersion.Group,
+				Group:   v1alpha1.SchemeGroupVersion.Group,
 				Version: v1alpha1.SchemeGroupVersion.Version,
-				Kind: "SDSCluster",
+				Kind:    "SDSCluster",
 			}),
 	}
 
@@ -95,9 +95,9 @@ func (c *Client) UpdateOrCreateApplication(name string, packageManager string, a
 	ownerRefs := []v1.OwnerReference{
 		*v1.NewControllerRef(sdsCluster,
 			runtimeSchema.GroupVersionKind{
-				Group: v1alpha1.SchemeGroupVersion.Group,
+				Group:   v1alpha1.SchemeGroupVersion.Group,
 				Version: v1alpha1.SchemeGroupVersion.Version,
-				Kind: "SDSCluster",
+				Kind:    "SDSCluster",
 			}),
 	}
 

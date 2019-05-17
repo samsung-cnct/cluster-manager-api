@@ -419,6 +419,6 @@ func (c *Client) AdjustCluster(in *pb.AdjustClusterMsg) (output *pb.AdjustCluste
 	}
 
 	return &pb.AdjustClusterReply{
-		Ok:     true,
+		Ok: true,
 	}, nil
 }

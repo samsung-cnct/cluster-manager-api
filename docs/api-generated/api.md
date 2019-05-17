@@ -46,6 +46,7 @@
     - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
     - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
     - [KubernetesLabel](#cluster_manager_api.KubernetesLabel)
+    - [KubernetesTaint](#cluster_manager_api.KubernetesTaint)
     - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
     - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
     - [SshMachineSpec](#cluster_manager_api.SshMachineSpec)
@@ -58,6 +59,7 @@
     - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
   
     - [ClusterStatus](#cluster_manager_api.ClusterStatus)
+    - [KubernetesTaintEffect](#cluster_manager_api.KubernetesTaintEffect)
     - [Provider](#cluster_manager_api.Provider)
   
   
@@ -107,6 +109,7 @@
     - [InstallHelmChartMsg](#cluster_manager_api.InstallHelmChartMsg)
     - [InstallHelmChartReply](#cluster_manager_api.InstallHelmChartReply)
     - [KubernetesLabel](#cluster_manager_api.KubernetesLabel)
+    - [KubernetesTaint](#cluster_manager_api.KubernetesTaint)
     - [ProvisionTillerMsg](#cluster_manager_api.ProvisionTillerMsg)
     - [ProvisionTillerReply](#cluster_manager_api.ProvisionTillerReply)
     - [SshMachineSpec](#cluster_manager_api.SshMachineSpec)
@@ -119,6 +122,7 @@
     - [VMWareMachineSpec](#cluster_manager_api.VMWareMachineSpec)
   
     - [ClusterStatus](#cluster_manager_api.ClusterStatus)
+    - [KubernetesTaintEffect](#cluster_manager_api.KubernetesTaintEffect)
     - [Provider](#cluster_manager_api.Provider)
   
   
@@ -860,6 +864,23 @@ Reply for version request
 
 
 
+<a name="cluster_manager_api.KubernetesTaint"/>
+
+### KubernetesTaint
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | The name of a taint |
+| value | [string](#string) |  | The value of a taint |
+| effect | [KubernetesTaintEffect](#cluster_manager_api.KubernetesTaintEffect) |  | The effect of a taint |
+
+
+
+
+
+
 <a name="cluster_manager_api.ProvisionTillerMsg"/>
 
 ### ProvisionTillerMsg
@@ -910,10 +931,9 @@ The specification for a specific node
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | username | [string](#string) |  | The username for SSH access |
-| host | [string](#string) |  | The host for SSH access |
-| port | [int32](#int32) |  | The port for SSH access |
-| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
 | labels | [KubernetesLabel](#cluster_manager_api.KubernetesLabel) | repeated | The labels for the machines |
+| taints | [KubernetesTaint](#cluster_manager_api.KubernetesTaint) | repeated | The list of kubernetes taints |
+| instanceType | [string](#string) |  | Type of machine to provision (small, medium, gpu, ...) |
 
 
 
@@ -1052,6 +1072,19 @@ The specification for a specific node
 | STOPPING | 4 | The STOPPING state indicates the cluster is being deleted |
 | ERROR | 5 | The ERROR state indicates the cluster may be unusable |
 | DEGRADED | 6 | The DEGRADED state indicates the cluster requires user action to restore full functionality |
+
+
+
+<a name="cluster_manager_api.KubernetesTaintEffect"/>
+
+### KubernetesTaintEffect
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| NoSchedule | 0 | Do not allow new pods to schedule onto the node unless they tolerate the taint. |
+| PreferNoSchedule | 1 | Attempt to not schedule new pods onto the node unless no other node without taint is available. |
+| NoExecute | 2 | Evict any already-running pods that do not tolerate the taint. |
 
 
 
@@ -1830,6 +1863,23 @@ Reply for version request
 
 
 
+<a name="cluster_manager_api.KubernetesTaint"/>
+
+### KubernetesTaint
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | The name of a taint |
+| value | [string](#string) |  | The value of a taint |
+| effect | [KubernetesTaintEffect](#cluster_manager_api.KubernetesTaintEffect) |  | The effect of a taint |
+
+
+
+
+
+
 <a name="cluster_manager_api.ProvisionTillerMsg"/>
 
 ### ProvisionTillerMsg
@@ -1880,10 +1930,9 @@ The specification for a specific node
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | username | [string](#string) |  | The username for SSH access |
-| host | [string](#string) |  | The host for SSH access |
-| port | [int32](#int32) |  | The port for SSH access |
-| password | [string](#string) |  | The k8s version for the control plane. This node is only a master if this field is defined. |
 | labels | [KubernetesLabel](#cluster_manager_api.KubernetesLabel) | repeated | The labels for the machines |
+| taints | [KubernetesTaint](#cluster_manager_api.KubernetesTaint) | repeated | The list of kubernetes taints |
+| instanceType | [string](#string) |  | Type of machine to provision (small, medium, gpu, ...) |
 
 
 
@@ -2022,6 +2071,19 @@ The specification for a specific node
 | STOPPING | 4 | The STOPPING state indicates the cluster is being deleted |
 | ERROR | 5 | The ERROR state indicates the cluster may be unusable |
 | DEGRADED | 6 | The DEGRADED state indicates the cluster requires user action to restore full functionality |
+
+
+
+<a name="cluster_manager_api.KubernetesTaintEffect"/>
+
+### KubernetesTaintEffect
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| NoSchedule | 0 | Do not allow new pods to schedule onto the node unless they tolerate the taint. |
+| PreferNoSchedule | 1 | Attempt to not schedule new pods onto the node unless no other node without taint is available. |
+| NoExecute | 2 | Evict any already-running pods that do not tolerate the taint. |
 
 
 

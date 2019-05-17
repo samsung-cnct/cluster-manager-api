@@ -121,7 +121,7 @@ func (s *Server) GetClusterList(ctx context.Context, in *pb.GetClusterListMsg) (
 		} else {
 			return nil, status.Error(codes.Unimplemented, ssh.NotEnabledErrorMessage)
 		}
-		}
+	}
 	return nil, status.Error(codes.InvalidArgument, InvalidProviderErrorMessage)
 }
 

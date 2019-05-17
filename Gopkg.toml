@@ -90,6 +90,10 @@
   branch = "master"
   name = "github.com/samsung-cnct/cma-aks"
 
+[[constraint]]
+  branch = "master"
+  name = "github.com/samsung-cnct/cma-ssh"
+
 [[override]]
   source = "https://github.com/fsnotify/fsnotify/archive/v1.4.7.tar.gz"
   name = "gopkg.in/fsnotify.v1"

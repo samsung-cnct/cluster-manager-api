@@ -54,16 +54,21 @@ type ClusterDetailItem struct {
 }
 
 type MachineSpec struct {
-	Username string
-	Host     string
-	Port     int
-	Password string
-	Labels   []KubernetesLabel
+	Username     string
+	Labels       []KubernetesLabel
+	Taints       []KubernetesTaint
+	InstanceType string
 }
 
 type KubernetesLabel struct {
 	Name  string
 	Value string
+}
+
+type KubernetesTaint struct {
+	Name   string
+	Value  string
+	Effect int32
 }
 
 type AdjustClusterInput struct {

@@ -56,12 +56,19 @@ func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, e
 		for _, k := range j.Labels {
 			labels = append(labels, &pb.KubernetesLabel{Name: k.Name, Value: k.Value})
 		}
+		var taints []*pb.KubernetesTaint
+		for _, k := range j.Taints {
+			taints = append(taints, &pb.KubernetesTaint{
+				Name:   k.Name,
+				Value:  k.Value,
+				Effect: pb.KubernetesTaintEffect(k.Effect),
+			})
+		}
 		controlPlaneNodes = append(controlPlaneNodes, &pb.SshMachineSpec{
-			Host:     j.Host,
-			Port:     int32(j.Port),
-			Username: j.Username,
-			Password: j.Password,
-			Labels:   labels,
+			Username:     j.Username,
+			Labels:       labels,
+			Taints:       taints,
+			InstanceType: j.InstanceType,
 		})
 	}
 	for _, j := range input.WorkerNodes {
@@ -70,10 +77,7 @@ func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, e
 			labels = append(labels, &pb.KubernetesLabel{Name: k.Name, Value: k.Value})
 		}
 		workerNodes = append(workerNodes, &pb.SshMachineSpec{
-			Host:     j.Host,
-			Port:     int32(j.Port),
 			Username: j.Username,
-			Password: j.Password,
 			Labels:   labels,
 		})
 	}
@@ -158,12 +162,20 @@ func (a *Client) AdjustCluster(input AdjustClusterInput) (AdjustClusterOutput, e
 		for _, k := range j.Labels {
 			labels = append(labels, &pb.KubernetesLabel{Name: k.Name, Value: k.Value})
 		}
+
+		var taints []*pb.KubernetesTaint
+		for _, k := range j.Taints {
+			taints = append(taints, &pb.KubernetesTaint{
+				Name:   k.Name,
+				Value:  k.Value,
+				Effect: pb.KubernetesTaintEffect(k.Effect),
+			})
+		}
 		addNodes = append(addNodes, &pb.SshMachineSpec{
-			Host:     j.Host,
-			Port:     int32(j.Port),
-			Username: j.Username,
-			Password: j.Password,
-			Labels:   labels,
+			Username:     j.Username,
+			Labels:       labels,
+			Taints:       taints,
+			InstanceType: j.InstanceType,
 		})
 	}
 	for _, j := range input.RemoveNodes {

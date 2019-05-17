@@ -10,7 +10,7 @@ import (
 const (
 	CMASshEndpointViperVariableName = "cmassh-endpoint"
 	CMASshInsecureViperVariableName = "cmassh-insecure"
-	NotEnabledErrorMessage             = "ssh support is not enabled"
+	NotEnabledErrorMessage          = "ssh support is not enabled"
 )
 
 func CreateFromDefaults() (ClientInterface, error) {
