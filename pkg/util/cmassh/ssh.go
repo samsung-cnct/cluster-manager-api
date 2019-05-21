@@ -76,9 +76,19 @@ func (a *Client) CreateCluster(input CreateClusterInput) (CreateClusterOutput, e
 		for _, k := range j.Labels {
 			labels = append(labels, &pb.KubernetesLabel{Name: k.Name, Value: k.Value})
 		}
+		var taints []*pb.KubernetesTaint
+		for _, k := range j.Taints {
+			taints = append(taints, &pb.KubernetesTaint{
+				Name:   k.Name,
+				Value:  k.Value,
+				Effect: pb.KubernetesTaintEffect(k.Effect),
+			})
+		}
 		workerNodes = append(workerNodes, &pb.SshMachineSpec{
-			Username: j.Username,
-			Labels:   labels,
+			Username:     j.Username,
+			Labels:       labels,
+			Taints:       taints,
+			InstanceType: j.InstanceType,
 		})
 	}
 	result, err := a.client.CreateCluster(context.Background(), &pb.CreateClusterMsg{
