@@ -2,6 +2,7 @@ package cmak8sutil
 
 import (
 	"fmt"
+	"github.com/samsung-cnct/cluster-manager-api/pkg/util/k8sutil"
 	cmaVersioned "github.com/samsung-cnct/cma-operator/pkg/generated/cma/client/clientset/versioned"
 	"github.com/samsung-cnct/cma-operator/pkg/generated/cma/client/clientset/versioned/typed/cma/v1alpha1"
 	"github.com/spf13/viper"
@@ -58,7 +59,8 @@ func (c *Client) SetPackageManagerClient(client v1alpha1.SDSPackageManagerInterf
 
 func (c *Client) createNewConfig() error {
 	var err error
-	if c.kubeConfigLocation != "" {
+	if k8sutil.KubeConfigLocation != "" {
+		c.kubeConfigLocation = k8sutil.KubeConfigLocation
 		c.config, err = clientcmd.BuildConfigFromFlags("", c.kubeConfigLocation)
 	} else {
 		configPath := filepath.Join(homeDir(), kubeconfigDir, kubeconfigFile)
